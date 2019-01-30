@@ -1,0 +1,5 @@
+{
+    "require": {
+        "ko/json-cache": "^0.0.6"
+    }
+}

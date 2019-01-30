@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>Virtual Keyboard</title>
+
+	<!-- jQuery (required) & jQuery UI + theme (optional) -->
+	<link href="docs/css/jquery-ui.min.css" rel="stylesheet">
+	<script src="docs/js/jquery.min.js"></script>
+	<script src="docs/js/jquery-ui.min.js"></script>
+	<script src="docs/js/jquery-migrate-1.2.1.min.js"></script>
+
+	<!-- keyboard widget css & script (required) -->
+	<link href="css/keyboard.css" rel="stylesheet">
+	<script src="js/jquery.keyboard.js"></script>
+
+	<!-- keyboard extensions (optional) -->
+	<script src="js/jquery.mousewheel.js"></script>
+	<script src="js/jquery.keyboard.extension-typing.js"></script>
+	<script src="js/jquery.keyboard.extension-autocomplete.js"></script>
+	<script src="js/jquery.keyboard.extension-caret.js"></script>
+	
+</head>
+<body>
+
+
+<input type="text" name="item"  id="item" placeholder="Ingresa un artículo o de código de barras escaneado">
+
+<script type="text/javascript">
+	$(document).ready(function(){
+
+		var availableTags = [
+			"ActionScript",
+			"AppleScript",
+			"Asp",
+			"BASIC",
+			"C",
+			"C++",
+			"Clojure",
+			"COBOL",
+			"ColdFusion",
+			"Erlang",
+			"Fortran",
+			"Groovy",
+			"Haskell",
+			"Java",
+			"JavaScript",
+			"Lisp",
+			"Perl",
+			"PHP",
+			"Python",
+			"Ruby",
+			"Scala",
+			"Scheme"
+		];
+
+		$('input[type=text], input[type=email], input[type=password], textarea').keyboard({
+			autoAccept: true,
+			alwaysOpen: false,
+			openOn: 'focus',
+			usePreview: false,
+			enterNavigation : true,
+						 		
+			display: {
+				'bksp'   :  "\u2190",
+				'accept' : 'return',
+				'default': 'ABC',
+				'meta1'  : '.?123',
+				'meta2'  : '#+='
+			},
+
+			layout: 'custom',
+			css: {
+		        // input & preview
+		        input: 'form-control',
+		        // keyboard container
+		        container: 'center-block dropdown-menu', // jumbotron
+		        // default state
+		        buttonDefault: 'btn-custom-keyboard btn-default',
+		        // hovered button
+		        buttonHover: 'btn-success',
+		        // Action keys (e.g. Accept, Cancel, Tab, etc);
+		        // this replaces "actionClass" option
+		        buttonAction: 'active',
+		        // used when disabling the decimal button {dec}
+		        // when a decimal exists in the input area
+		        buttonDisabled: 'disabled'
+		    },
+			customLayout: {
+				'default': [
+				'q w e r t y u i o p {bksp}',
+				'a s d f g h j k l ñ {enter}',
+				'{s} z x c v b n m , . {s}',
+				'{meta1} {space} {cancel} {accept}'
+				],
+				'shift': [
+				'Q W E R T Y U I O P {bksp}',
+				'A S D F G H J K L {enter}',
+				'{s} Z X C V B N M / ? {s}',
+				'{meta1} {space} {meta1} {accept}'
+				],
+				'meta1': [
+				'1 2 3 4 5 6 7 8 9 0 {bksp}',
+				'- / : ; ( ) \u20ac & @ {enter}',
+				'{meta2} . , ? ! \' " {meta2}',
+				'{default} {space} {default} {accept}'
+				],
+				'meta2': [
+				'[ ] { } # % ^ * + = {bksp}',
+				'_ \\ | &lt; &gt; $ \u00a3 {enter}',
+				'{meta1} ~ . , ? ! \' " {meta1}',
+				'{default} {space} {default} {accept}'
+				]
+			}		
+		})
+		// activate the typing extension
+		.addTyping({
+		    showTyping: true,
+		    delay: 250
+		})  
+
+		.autocomplete({
+			source: availableTags
+		})
+		// keyboard autocomplete extension, there are no options.
+		.addAutocomplete();
+
+		$.extend($.keyboard.keyaction, {
+		  	enter : function(kb) {
+			    // accept the content and close the keyboard
+			    kb.accept();
+			    // submit the form
+		  	}
+		});     
+	});
+</script>
+</body>
+</html>

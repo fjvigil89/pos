@@ -1,0 +1,37 @@
+.flagstrap {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+}
+
+.flagstrap-icon {
+    display: inline-block;
+    width: 16px;
+    height: 11px;
+    background: url(flags.png) no-repeat
+}
+
+.flagstrap-icon.flagstrap-ar {background-position: -16px 0}
+.flagstrap-icon.flagstrap-bo {background-position: -33px 0}
+.flagstrap-icon.flagstrap-br {background-position: -48px 0}
+.flagstrap-icon.flagstrap-cl {background-position: -65px 0}
+.flagstrap-icon.flagstrap-co {background-position: 0 -11px}
+.flagstrap-icon.flagstrap-cr {background-position: -17px -12px}
+.flagstrap-icon.flagstrap-cu {background-position: -32px -12px}
+.flagstrap-icon.flagstrap-do {background-position: -48px -12px}
+.flagstrap-icon.flagstrap-ec {background-position: -64px -12px}
+.flagstrap-icon.flagstrap-es {background-position: 0 -22px}
+.flagstrap-icon.flagstrap-gt {background-position: -16px -23px}
+.flagstrap-icon.flagstrap-hn {background-position: -33px -22px}
+.flagstrap-icon.flagstrap-ht {background-position: -48px -23px}
+.flagstrap-icon.flagstrap-mx {background-position: -65px -23px}
+.flagstrap-icon.flagstrap-ni {background-position: 0 -33px}
+.flagstrap-icon.flagstrap-pa {background-position: -16px -33px}
+.flagstrap-icon.flagstrap-pe {background-position: -33px -34px}
+.flagstrap-icon.flagstrap-pr {background-position: -48px -33px}
+.flagstrap-icon.flagstrap-pt {background-position: -64px -33px}
+.flagstrap-icon.flagstrap-py {background-position: 0 -44px}
+.flagstrap-icon.flagstrap-sv {background-position: -16px -44px}
+.flagstrap-icon.flagstrap-us {background-position: -33px -44px}
+.flagstrap-icon.flagstrap-uy {background-position: -48px -44px}
+.flagstrap-icon.flagstrap-ve {background-position: -65px -44px}

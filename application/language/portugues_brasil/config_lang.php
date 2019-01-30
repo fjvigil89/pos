@@ -1,0 +1,255 @@
+<?php
+$lang['config_info']='Guardar informações de configuração';
+$lang['config_company']='Nome da companhia';
+$lang['config_address']='empresa Endereço';
+$lang['config_phone']='Empresa telefone';
+$lang['config_website']='Site web';
+$lang['config_fax']='Fax';
+$lang['config_default_tax_rate']='Padrão IVA %';
+$lang['config_default_tax_rate_1']='Taxa de Imposto 1';
+$lang['config_default_tax_rate_2']='Taxa de Imposto 2';
+$lang['config_company_required']='Nombre de la Compañía es requerido';
+$lang['config_address_required']='A administração da Companhia é necessária';
+$lang['config_phone_required']='Empresa Telefone necessário';
+$lang['config_default_tax_rate_required']='Padrão Taxa de imposto é necessária';
+$lang['config_default_tax_rate_number']='Padrão Taxa de imposto deve ser um número';
+$lang['config_company_website_url']='Web site não é um URL padrão (http://...)';
+$lang['config_saved_successfully']='Configurações salvas com sucesso';
+$lang['config_saved_unsuccessfully']='configuração não salva';
+$lang['config_return_policy_required']='Política de reembolso é necessária';
+$lang['config_print_after_sale']='¿Imprimir recibo após a venda?';
+$lang['config_language'] = "PAÍS";
+$lang['config_timezone'] = 'Fuso horário';
+$lang['config_currency_symbol'] = 'Símbolo de moeda';
+$lang['config_backup_database'] = 'Banco de dados de backup';
+$lang['config_restore_database'] = 'restaurar Banco de Dados';
+$lang['config_mailchimp_api_key'] = 'MailChimp API Key'; 
+$lang['config_number_of_items_per_page'] = 'Número de itens por página';
+$lang['config_date_format'] = 'Formato de data';
+$lang['config_time_format'] = 'Formato da hora';
+$lang['config_company_logo'] = 'Logotipo da empresa';
+$lang['config_delete_logo'] = '¿remover Logo?';
+$lang['config_track_cash'] = '¿Monitorar registo de dinheiro?';
+$lang['config_optimize_database'] = 'otimizar banco de dados';
+$lang['config_database_optimize_successfully'] = 'Banco de dados otimizado com sucesso';
+$lang['config_payment_types'] = 'Forma de pagamento';
+$lang['select_sql_file'] = 'selecionar. sql';
+$lang['restore_heading'] = 'Isso permite que você restaurar o banco de dados';
+
+$lang['type_file'] = 'selecionar. SQL de seu computador';
+
+$lang['restore'] = 'restaurar';
+
+$lang['required_sql_file'] = 'Não há nenhum arquivo SQL é selecionado';
+
+$lang['restore_db_success'] = 'Banco de dados é restaurado com sucesso';
+
+$lang['db_first_alert'] = '¿Você tem certeza de restaurar o banco de dados?';
+$lang['db_second_alert'] = 'Os dados atuais serão perdidos, ¿continuar?';
+$lang['password_error'] = 'senha incorreta';
+$lang['password_required'] = 'Campo de chave não pode estar em branco';
+$lang['restore_database_title'] = 'restaurar Banco de Dados';
+$lang['config_use_scale_barcode'] = 'O uso da escala de códigos de barras';
+$lang['config_enable_credit_card_processing'] = '¿Ative o processamento de cartão de crédito? (Apenas USA)';
+$lang['config_environment'] = 'meio Ambiente';
+$lang['config_merchant_id'] = 'Merchant ID';
+$lang['config_merchant_password'] = 'chave do negócio';
+$lang['config_sandbox'] = 'sandbox';
+$lang['config_production'] = 'produção';
+$lang['disable_confirmation_sale']='¿Desativar a confirmação da venda concluída?';
+$lang['receive_stock_alert'] = '¿Receba alertas de estoques baixos?';
+$lang['stock_alert_email'] = 'E-mail para alertas';
+$lang['sales_mercury_password_note'] = 'Key está na área de configurações da conta Mercurio seu site >>> Key Management HostedCheckout';
+$lang['config_default_payment_type'] = 'Estándar método de pago';
+$lang['config_speed_up_note'] = 'Só que eu recomendo se você tiver mais de 10.000 itens ou clientes';
+$lang['config_hide_signature'] = '¿Esconder assinatura?';
+$lang['config_automatically_email_receipt']='e-mail envio automático para o cliente';
+$lang['config_barcode_price_include_tax']='Adicionar IVA sobre o código de barras etiqueta impressa';
+$lang['config_round_cash_on_sales'] = 'Apenas 0,5 rodada para o Canadá';
+$lang['config_prefix'] = 'ID prefixo Venda';
+$lang['config_sale_prefix_required'] = 'Código de identificação da conta é um campo obrigatório';
+$lang['config_customers_store_accounts'] = 'Permitir crédito da loja';
+$lang['config_change_sale_date_when_suspending'] = 'Alterar a data de venda para suspender a venda';
+$lang['config_change_sale_date_when_completing_suspended_sale'] = 'Alterar a data de venda para completar a venda suspensa';
+$lang['config_price_tiers'] = 'Tipo Preço';
+$lang['config_add_tier'] = 'Adicione preço';
+$lang['config_show_receipt_after_suspending_sale'] = 'Mostrar a recepção depois de fazer uma citação ou suspensão da venda';
+$lang['config_backup_overview'] = 'backup de informações gerais';
+$lang['config_backup_overview_desc'] = 'Backup de seus dados é muito importante, mas pode ser um problema com a grande quantidade de dados. Se você tem um monte de imagens, objetos e vendas isso pode aumentar o tamanho do seu banco de dados.';
+$lang['config_backup_options'] = 'Nós oferecemos muitas opções de backup para ajudar você a decidir como proceder';
+$lang['config_backup_simple_option'] = 'Ao clicar em & quot; banco de dados Backup & quot;, tentará baixar todo seu banco de dados para um arquivo. Se você receber uma tela em branco ou você não pode baixar o arquivo, tente uma das outras opções.';
+$lang['config_backup_phpmyadmin_1'] = 'O phpMyAdmin é uma ferramenta popular para o gerenciamento de bancos de dados. Se você estiver usando a versão de download com o instalador pode ser acessado a partir do seguinte link';
+$lang['config_backup_phpmyadmin_2'] = 'Seu nome de usuário é root ea senha é usada durante a instalação inicial do POS Ingeniando Web PDV. Uma vez conectado, selecione o banco de dados do painel esquerdo. Em seguida, selecione Exportar e, em seguida, enviar o formulário.';
+$lang['config_backup_control_panel'] = 'Se você tiver instalado no seu próprio servidor que tem um painel de controle como o cPanel, localize o módulo de backup que muitas vezes permitem que você baixe o backup do seu banco de dados.';
+$lang['config_backup_mysqldump'] = 'Se você tiver acesso ao shell e mysqldump em seu servidor, você pode tentar executá-lo clicando no link abaixo. Caso contrário, você deve tentar outras opções.';
+$lang['config_mysqldump_failed'] = 'de backup mysqldump falhou. Isto poderia ser devido a uma restrição do servidor ou de comando pode não estar disponível. Por favor, tente outro método de backup';
+$lang['config_default_tax_rate_3'] = 'tax 3';
+$lang['config_default_tax_rate_4'] = 'tax 4';
+$lang['config_default_tax_rate_5'] = 'tax 5';
+$lang['config_looking_for_location_settings'] = '¿Está à procura de outras opções de configuração? visita';
+$lang['config_module'] = 'Módulo';
+$lang['config_automatically_calculate_average_cost_price_from_receivings'] = 'Calcular o custo médio de aquisição';
+$lang['config_averaging_method'] = 'Inventory Type';
+$lang['config_historical_average'] = 'Inventario histórico';
+$lang['config_moving_average'] = 'estoque médio';
+$lang['config_price_average'] = 'Custo de inventário - preço';
+$lang['config_timezone_required_field'] = 'Fuso Horário é um campo obrigatório';
+$lang['config_hide_dashboard_statistics'] = 'Painel Ocultar estatísticas';
+$lang['config_hide_store_account_payments_in_reports'] = 'Esconder contas a pagar relatórios em loja';
+$lang['config_id_to_show_on_sale_interface'] = 'Coluna para exibir Vendas de interface';
+$lang['config_auto_focus_on_item_after_sale_and_receiving'] = 'Posicione o cursor no campo de itens de interface e venda de bilhetes';
+$lang['config_automatically_show_comments_on_receipt'] = 'As observações mostram automaticamente após o recebimento';
+$lang['config_hide_customer_recent_sales'] = 'Esconder as vendas recentes de clientes';
+$lang['config_spreadsheet_format'] = 'Formato de planilha';
+$lang['config_csv'] = 'CSV';
+$lang['config_xlsx'] = 'XLSX';
+$lang['config_disable_giftcard_detection'] = 'Detecção Disable Gift Cards';
+$lang['config_disable_subtraction_of_giftcard_amount_from_sales'] = 'Subtração desativar usando cartões de presente para venda';
+$lang['config_always_show_item_grid'] = 'Sempre mostrar elemento de rede';
+$lang['config_legacy_detailed_report_export'] = 'Exportação Excel Legado Relatório';
+$lang['config_print_after_receiving'] = 'Imprimir recibo depois de receber';
+$lang['config_company_info'] = 'Informações sobre a empresa';
+$lang['config_tax_currency_info'] = 'Encargos e moeda';
+$lang['config_sales_receipt_info'] = 'Vendas e Receipt';
+$lang['config_suspended_sales_layaways_info'] = 'Vendas suspensa/ layawans';
+$lang['config_application_settings_info'] = 'Configurações do aplicativo';
+$lang['config_hide_barcode_on_sales_and_recv_receipt'] = 'Esconder código de barras em recibos';
+$lang['config_round_tier_prices_to_2_decimals'] = 'Preços camada redonda para 2 casas decimais';
+$lang['config_group_all_taxes_on_receipt'] = 'Grupo de recepção todos os impostos';
+$lang['config_receipt_text_size'] = 'Tamanho do texto Receipt';
+$lang['config_small'] = 'pequeno';
+$lang['config_medium'] = 'Medium';
+$lang['config_large'] = 'Grande';
+$lang['config_extra_large'] = 'Extra grande';
+$lang['config_select_sales_person_during_sale'] = 'Select pessoa de vendas para venda';
+$lang['config_default_sales_person'] = 'Padrão Pessoa vendas';
+$lang['config_require_customer_for_sale'] = 'Exigir do cliente para venda';
+$lang['config_commission_default_rate'] = 'Percentagem da Comissão de Empregado';
+$lang['config_hide_store_account_payments_from_report_totals'] = 'Esconder pagamentos conta o relatório da loja total de';
+$lang['config_disable_sale_notifications'] = 'Desativar as notificações para venda';
+
+
+//New Lines  - Ingeniando Web
+
+$lang['config_company_dni'] = 'NIT/RUT';
+$lang['config_company_regimen'] = 'regime';
+$lang['config_hide_balance_receipt_payment']='Esconder Receipt Balanço de Pagamento';
+$lang['config_system_point']='Ativar sistema de ponto';
+$lang['config_value_point']='Valor de ponto';
+$lang['config_value_point_accumulated']='pontos acumulados';
+$lang['config_show_point']='Mostrar pontos sobre o projeto';
+$lang['config_percent_point']='Valor do ponto em porcentagem da compra';
+$lang['config_error_value_points']='O valor deve ser um número';
+$lang['config_error_percent_points']='A percentagem deve ser um número';
+$lang['config_show_image']='Mostrar miniaturas em relatórios';
+$lang['config_round_value']='Utilize o sistema de arredondamento';
+$lang['config_hide_support_chat']='Apoio de chat Ocultar';
+$lang['config_denomination'] = 'tipo Designação';
+$lang['config_currency'] = 'bilhete / Moeda';
+$lang['config_currency1'] = 'bilhete';
+$lang['config_currency2'] = 'Moeda';
+$lang['config_sip_account'] = 'conta sip';
+$lang['config_sip_password'] = 'conta sip password';
+$lang['config_add_currency']='Adicionar denominação';
+$lang['config_value_denomination'] = 'valor denominação';
+$lang['config_type_denomination'] = 'A designação do tipo';
+$lang['config_in_suppliers']='Não atribuídos não tem permissão para comprar um fornecedor';
+$lang['config_thousand_separator']='Separador de milhares';
+$lang['config_remove_decimals']='remover decimais';
+$lang['config_decimal_separator']='Separador decimal';
+$lang['config_hide_description']='Ocultar descrição no recibo';
+$lang['config_more_options']='Veja as opções';
+$lang['config_hide_options']='esconder opções';
+$lang['config_active_keyboard']='Mostrar teclado na tela';
+$lang['config_limit_cash_flow']='Restringir o montante em dinheiro';
+$lang['config_value_max_cash_flow']='caixa máximo valor';
+$lang['config_sales_stock_inventory']='Não deixe que vender, se o inventário de um produto está esgotado';
+$lang['config_customers_account_number']='NIT';
+$lang['config_interface_personalization']='personalizar a interface';
+$lang['config_show_sales_price_without_tax']='Mostrar preço sem impostos';
+$lang['config_show_sales_price_iva']='Mostrar impostos';
+$lang['config_show_sales_num_item']='Exibição # Item';
+$lang['config_show_sales_discount']='Mostrar desconto';
+$lang['config_show_sales_inventory']='Mostrar inventario';
+$lang['config_show_sales_description']='Mostrar descrição';
+$lang['config_show_receivings_cost_without_tax']='Mostrar custo sem impostos';
+$lang['config_show_receivings_cost_iva']='Mostrar impostos';
+$lang['config_show_receivings_discount']='Mostrar desconto';
+$lang['config_show_receivings_inventory']='Mostrar inventario';
+$lang['config_show_receivings_cost_transport']='Mostrar custo de transporte';
+$lang['config_show_receivings_description']='Mostrar descrição';
+$lang['config_show_receivings_num_item']='Exibição # Item';
+$lang['config_show_inventory_isbn']='Mostrar UPC/EAN/ISBN';
+$lang['config_show_inventory_image']='Mostrar fotografia';
+$lang['config_show_inventory_size']='Mostrar tamanho';
+$lang['config_show_inventory_model']='Mostrar modelo';
+$lang['config_show_inventory_colour']='Mostrar cor';
+$lang['config_show_inventory_brand']='Mostrar marca';
+$lang['config_show_fullname_item'] = 'Mostrar nome completo do produto';
+$lang['config_message_remember_saved'] = 'Ao alterar as configurações de idioma do país definidas manualmente for perdida eo país-aloca o idioma selecionado.';
+$lang['config_send_txt_invoice'] = 'Enviar fatura em formato txt';
+$lang['config_ftp_hostname'] = 'Servidor';
+$lang['config_ftp_username'] = 'Nome de usuário';
+$lang['config_ftp_password'] = 'senha';
+$lang['config_ftp_route']    = 'rota';
+$lang['config_ticket_hide']  = 'ele permite Boleta ';
+$lang['sales_ticket_on_receipt']='bilhete';
+$lang['sales_invoice']='Factura';
+$lang['config_company_info_help_video'] = 'Dê clique para ver o vídeo';
+$lang['config_company_info_help'] = 'Este menu permite configurar os dados da empresa';
+$lang['config_company_info_logo_help'] = 'Clique em Procurar para procurar o logotipo ';
+$lang['config_company_regimen_help'] = 'Se o pagamento de impostos é simplificado regime sistema Caso contrário comum.';
+$lang['config_tax_currency_info_help'] ='Este menu permite que você defina impostos sobre os produtos';
+$lang['config_tax_currency_prices_include_help'] = 'Selecione somente se os preços já estão com impostos ';
+$lang['config_interface_personalization_help'] = 'Este menu permite que você defina as opções mostradas nos módulos de vendas, compras de estoque';
+$lang['config_sales_receipt_help'] = 'Este menu permite configurar a informação mostrada no recibo e vendas ';
+$lang['config_sales_receipt_prefix_help'] = 'Este é o nome de como o recibo impresso será chamada';
+$lang['config_sales_receipt_id_interface_help'] = 'Seleccionar como o produto que é identificado no módulo de vendas';
+$lang['config_sales_receipt_print_after_help'] = 'Selecione para imprimir recibo depois de completar a venda';
+$lang['config_sales_receipt_confirmation_sale_help'] = 'Selecione para que o sistema não dá a confirmação da venda';
+$lang['config_sales_receipt_track_cash_help'] = 'Selecione para o sistema de controlo da caixa registadora';
+
+$lang['config_application_settings_help'] = 'Este menu permite-lhe fazer as configurações gerais para a aplicação';
+$lang['config_application_settings_store_accounts_help'] = 'Selecione somente se você vender a crédito';
+$lang['config_application_settings_show_image_help'] = 'Selecione para exibir a imagem do produto em relatórios';
+$lang['config_application_settings_system_point_help'] = 'Selecione somente se pontos dados de vendas';
+$lang['config_application_settings_show_point_help'] = 'Selecione para exibir os itens da conta';
+$lang['config_ticket_hide_taxes']='Imposto oculto na boleta';
+$lang['receive_stock_alert_help'] = 'Selecione para receber alertas quando o estoque está baixo';
+$lang['stock_alert_email_help'] = 'Digite o e-mail onde recebeu pouco alertas de inventário';
+
+
+
+$lang['config_application_settings_info_st'] = 'Servicios Tecnico';
+$lang['config_st_correo'] = 'Enviar correo al cliente';
+$lang['config_st_correo_help'] = 'Esta opción activará el envio de correo cada vez que se cambie el estado del servicio.';
+
+
+
+ //////////////////////////////////////////////////Modulo de Servicio Tectico
+
+$lang['config_company_labeltservicio'] = 'Servicios creadas';
+$lang['config_company_labeltfallas'] = 'Tipo de fallas';
+$lang['config_company_etqservicio'] = 'Configuración de los Tipos de Servicios que Prestas';
+$lang['config_company_tservicio'] = 'Tipo de sevicios';
+$lang['config_company_addtservicio'] = 'AÑADIR TIPO DE SERVICIOS';
+$lang['config_company_tfallas'] = 'Tipo de fallas';
+$lang['config_company_addtfallas'] = 'AÑADIR TIPO DE FALLAS';
+
+$lang['config_company_ventetqtservicio'] = 'Lista de Servicios Creadas';
+$lang['config_company_ventlbltservicio'] = 'Servicio';
+$lang['config_company_ventetqtfallas'] = 'Lista de Fallas Creadas';
+$lang['config_company_ventlbltfallas'] = 'Fallas';
+
+$lang['config_company_vent_serv_titulo'] = 'Crear Nuevos Servicios';
+$lang['config_company_vent_serv_titulo_menj'] = 'Manejos de los servicios.';
+$lang['config_company_vent_serv_label'] = 'Servicio';
+$lang['config_company_vent_serv_boton'] = 'Enviar Datos';
+
+$lang['config_company_vent_falla_titulo'] = 'Crear Nuevos Fallas';
+$lang['config_company_vent_falla_titulo_menj'] = 'Manejos de los servicios segun fallas.';
+$lang['config_company_vent_falla_label'] = 'Falla';
+$lang['config_company_vent_falla_boton'] = 'Enviar Datos';
+$lang['config_application_settings_help_st'] = 'Este  menú te permite  hacer las configuraciones del modulo de servicio técnico ';
+?>
+

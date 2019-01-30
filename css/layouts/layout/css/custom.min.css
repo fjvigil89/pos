@@ -1,0 +1,186 @@
+.flag-custom {
+    margin: -10px 20px 0 0
+}
+
+.info-time {
+    margin: 7px 20px 4px 0
+}
+
+#time {
+    color: #7f96ac;
+}
+
+.link-custom-login {
+    text-shadow: none;
+    color: #01424A
+}
+
+#chart {
+    margin: 0 auto;
+    width: 90%;
+    height: 500px
+}
+
+body {
+    background-color: #ddd
+}
+
+
+input[type=checkbox].css-checkbox {
+    position: absolute;
+    z-index: -1000;
+    left: -1000px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    width: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0
+}
+
+input[type=checkbox].css-checkbox+label.css-label {
+    padding-left: 25px;
+    height: 20px;
+    display: inline-block;
+    line-height: 20px;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    font-size: 20px;
+    vertical-align: middle;
+    cursor: pointer
+}
+
+input[type=checkbox].css-checkbox:checked+label.css-label {
+    background-position: 0 -20px
+}
+
+label.css-label {
+    background-image: url(../img/checkbox_style1.png);
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none
+}
+
+.icheckbox_square-green,
+.iradio_square-green {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
+    width: 22px;
+    height: 22px;
+    background: url(../css/square/green.png) no-repeat;
+    border: none;
+    cursor: pointer
+}
+
+.icheckbox_square-green {
+    background-position: 0 0
+}
+
+.icheckbox_square-green.hover {
+    background-position: -24px 0
+}
+
+.icheckbox_square-green.checked {
+    background-position: -48px 0
+}
+
+.icheckbox_square-green.disabled {
+    background-position: -72px 0;
+    cursor: default
+}
+
+.icheckbox_square-green.checked.disabled {
+    background-position: -96px 0
+}
+
+.iradio_square-green {
+    background-position: -120px 0
+}
+
+.iradio_square-green.hover {
+    background-position: -144px 0
+}
+
+.iradio_square-green.checked {
+    background-position: -168px 0
+}
+
+.iradio_square-green.disabled {
+    background-position: -192px 0;
+    cursor: default
+}
+
+.iradio_square-green.checked.disabled {
+    background-position: -216px 0
+}
+
+@media (-o-min-device-pixel-ratio:5/4),
+(-webkit-min-device-pixel-ratio:1.25),
+(min-resolution:120dpi),
+(min-resolution:1.25dppx) {
+    .icheckbox_square-green,
+    .iradio_square-green {
+        background-image: url(../css/square/green@2x.png);
+        -webkit-background-size: 240px 24px;
+        background-size: 240px 24px
+    }
+}
+
+
+
+
+
+
+
+
+
+
+.page-header.navbar .page-logo .logo-default {
+margin: 5px 10px 0 0;
+max-width: 90px
+}
+
+
+
+.page-header.navbar {
+    height: 45px;
+    min-height: 45px;
+}
+
+.page-header.navbar .page-actions {
+    margin: 5px 0 5px 10px;
+    padding: 0;
+    float: left
+}
+
+.page-header.navbar .menu-toggler.sidebar-toggler {
+    float: right;
+    margin: 15px 0 0
+}
+
+.page-header.navbar .page-top {
+    height: 45px;
+    float: right
+}
+
+.page-header.navbar .top-menu .navbar-nav>li.dropdown {
+    margin: 0;
+    padding: 0;
+    height: 45px;
+    display: inline-block
+}
+
+.page-header.navbar .top-menu .navbar-nav>li.dropdown-user .dropdown-toggle {
+    padding: 10px 10px 3px
+}
+
+
+.page-header-fixed .page-container {
+    margin-top: 45px;
+}

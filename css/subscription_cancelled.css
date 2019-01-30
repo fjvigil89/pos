@@ -1,0 +1,143 @@
+/*--------------------------------------------------
+    [TRANSITION]
+----------------------------------------------------*/
+/* Cubic Bezier Transition */
+/***
+Subscription Cancelled Page
+***/
+body {
+  background-color: #ddd;
+  padding: 0;
+  margin: 0;
+}
+
+.page-subscription {
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  margin-top: -200px;
+  margin-left: -260px;
+}
+
+.page-subscription .page-logo {
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.page-subscription .page-logo img{
+  max-width: 170px;
+}
+
+.page-subscription .page-body {
+  width: 510px;
+  padding: 15px;
+  background: url(../assets/admin/pages/img/bg-white-Lock.png) repeat;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  -ms-border-radius: 7px;
+  -o-border-radius: 7px;
+  border-radius: 7px;
+}
+
+.page-subscription .page-body:after,
+.page-subscription .page-body:before {
+  display: table;
+  content: "";
+  line-height: 0;
+}
+
+.page-subscription .page-body:after {
+  clear: both;
+}
+
+.page-subscription .page-footer-custom {
+  margin-top: 10px;
+  text-align: left !important;
+  font-size: 12px;
+  color: #eaeaea;
+}
+
+.page-subscription img.page-subscription-img {
+  float: left;
+  width: 200px;
+  height: auto;
+}
+
+.page-subscription .page-subscription-info {
+  padding-left: 10px;
+  float: right;
+  width: 280px;
+}
+
+.page-subscription .page-subscription-info h1 {
+  margin-top: -5px;
+  font-weight: 300;
+  color: #fff;
+  font-size: 28px;
+  line-height: 32px;
+  margin-bottom: 5px;
+}
+
+.page-subscription .page-subscription-info .info {
+  color: #eee;
+  display: block;
+  font-size: 15px;
+  margin-bottom: 10px;
+}
+
+.page-subscription .page-subscription-info .subscriptioned {
+  color: #333;
+  font-size: 14px;
+  line-height: 14px;
+  font-style: normal;
+}
+
+.page-subscription .page-subscription-info form {
+  margin: 28px 0;
+}
+
+.page-subscription .page-subscription-info input {
+  background: #fff;
+}
+
+.page-subscription .relogin {
+  margin-top: 10px;
+}
+
+.page-subscription .relogin a {
+  color: #e1e1e1;
+}
+
+/*Responsive*/
+@media (max-width: 768px) {
+  .page-subscription {
+    top: 0px;
+    width: 280px;
+    margin-top: 20px;
+    margin-left: -140px;
+  }
+
+  .page-subscription .page-body {
+    padding: 20px 10px;
+    text-align: center;
+    width: 280px;
+  }
+
+  .page-subscription img.page-subscription-img {
+    float: none !important;
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+    margin-bottom: 15px;
+  }
+
+  .page-subscription .page-subscription-info {
+    float: none !important;
+    width: 260px;
+    margin: 0 auto;
+  }
+
+  .page-subscription .page-subscription-info input {
+    width: 200px !important;
+  }
+}

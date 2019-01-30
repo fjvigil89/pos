@@ -1,0 +1,327 @@
+
+.flagstrap {
+    width: 100%
+}
+
+.flagstrap-icon {
+    display: inline-block;
+    width: 16px;
+    height: 11px;
+    background: url(../css/flags/flags.png) no-repeat
+}
+
+.flagstrap-icon.flagstrap-ar {
+    background-position: -16px 0
+}
+
+.flagstrap-icon.flagstrap-bo {
+    background-position: -33px 0
+}
+
+.flagstrap-icon.flagstrap-br {
+    background-position: -48px 0
+}
+
+.flagstrap-icon.flagstrap-cl {
+    background-position: -65px 0
+}
+
+.flagstrap-icon.flagstrap-co {
+    background-position: 0 -11px
+}
+
+.flagstrap-icon.flagstrap-cr {
+    background-position: -17px -12px
+}
+
+.flagstrap-icon.flagstrap-cu {
+    background-position: -32px -12px
+}
+
+.flagstrap-icon.flagstrap-do {
+    background-position: -48px -12px
+}
+
+.flagstrap-icon.flagstrap-ec {
+    background-position: -64px -12px
+}
+
+.flagstrap-icon.flagstrap-es {
+    background-position: 0 -22px
+}
+
+.flagstrap-icon.flagstrap-gt {
+    background-position: -16px -23px
+}
+
+.flagstrap-icon.flagstrap-hn {
+    background-position: -33px -22px
+}
+
+.flagstrap-icon.flagstrap-ht {
+    background-position: -48px -23px
+}
+
+.flagstrap-icon.flagstrap-mx {
+    background-position: -65px -23px
+}
+
+.flagstrap-icon.flagstrap-ni {
+    background-position: 0 -33px
+}
+
+.flagstrap-icon.flagstrap-pa {
+    background-position: -16px -33px
+}
+
+.flagstrap-icon.flagstrap-pe {
+    background-position: -33px -34px
+}
+
+.flagstrap-icon.flagstrap-pr {
+    background-position: -48px -33px
+}
+
+.flagstrap-icon.flagstrap-pt {
+    background-position: -64px -33px
+}
+
+.flagstrap-icon.flagstrap-py {
+    background-position: 0 -44px
+}
+
+.flagstrap-icon.flagstrap-sv {
+    background-position: -16px -44px
+}
+
+.flagstrap-icon.flagstrap-us {
+    background-position: -33px -44px
+}
+
+.flagstrap-icon.flagstrap-uy {
+    background-position: -48px -44px
+}
+
+.flagstrap-icon.flagstrap-ve {
+    background-position: -65px -44px
+}
+
+.flag-icon,
+.flag-icon-background {
+    background-size: contain;
+    background-position: 50%;
+    background-repeat: no-repeat
+}
+
+.flag-icon {
+    width: 1.33333333em;
+    line-height: 1em
+}
+
+.flag-icon:before {
+    content: "\00a0"
+}
+
+.flag-icon.flag-icon-squared {
+    width: 1em
+}
+
+.flag-icon-ar {
+    background-image: url(../css/flags/4x3/ar.svg)
+}
+
+.flag-icon-ar.flag-icon-squared {
+    background-image: url(../css/flags/1x1/ar.svg)
+}
+
+.flag-icon-bo {
+    background-image: url(../css/flags/4x3/bo.svg)
+}
+
+.flag-icon-bo.flag-icon-squared {
+    background-image: url(../css/flags/1x1/bo.svg)
+}
+
+.flag-icon-br {
+    background-image: url(../css/flags/4x3/br.svg)
+}
+
+.flag-icon-br.flag-icon-squared {
+    background-image: url(../css/flags/1x1/br.svg)
+}
+
+.flag-icon-ca {
+    background-image: url(../css/flags/4x3/ca.svg)
+}
+
+.flag-icon-ca.flag-icon-squared {
+    background-image: url(../css/flags/1x1/ca.svg)
+}
+
+.flag-icon-cl {
+    background-image: url(../css/flags/4x3/cl.svg)
+}
+
+.flag-icon-cl.flag-icon-squared {
+    background-image: url(../css/flags/1x1/cl.svg)
+}
+
+.flag-icon-co {
+    background-image: url(../css/flags/4x3/co.svg)
+}
+
+.flag-icon-co.flag-icon-squared {
+    background-image: url(../css/flags/1x1/co.svg)
+}
+
+.flag-icon-cr {
+    background-image: url(../css/flags/4x3/cr.svg)
+}
+
+.flag-icon-cr.flag-icon-squared {
+    background-image: url(../css/flags/1x1/cr.svg)
+}
+
+.flag-icon-cu {
+    background-image: url(../css/flags/4x3/cu.svg)
+}
+
+.flag-icon-cu.flag-icon-squared {
+    background-image: url(../css/flags/1x1/cu.svg)
+}
+
+.flag-icon-do {
+    background-image: url(../css/flags/4x3/do.svg)
+}
+
+.flag-icon-do.flag-icon-squared {
+    background-image: url(../css/flags/1x1/do.svg)
+}
+
+.flag-icon-ec {
+    background-image: url(../css/flags/4x3/ec.svg)
+}
+
+.flag-icon-ec.flag-icon-squared {
+    background-image: url(../css/flags/1x1/ec.svg)
+}
+
+.flag-icon-es {
+    background-image: url(../css/flags/4x3/es.svg)
+}
+
+.flag-icon-es.flag-icon-squared {
+    background-image: url(../css/flags/1x1/es.svg)
+}
+
+.flag-icon-gt {
+    background-image: url(../css/flags/4x3/gt.svg)
+}
+
+.flag-icon-gt.flag-icon-squared {
+    background-image: url(../css/flags/1x1/gt.svg)
+}
+
+.flag-icon-hn {
+    background-image: url(../css/flags/4x3/hn.svg)
+}
+
+.flag-icon-hn.flag-icon-squared {
+    background-image: url(../css/flags/1x1/hn.svg)
+}
+
+.flag-icon-ht {
+    background-image: url(../css/flags/4x3/ht.svg)
+}
+
+.flag-icon-ht.flag-icon-squared {
+    background-image: url(../css/flags/1x1/ht.svg)
+}
+
+.flag-icon-mx {
+    background-image: url(../css/flags/4x3/mx.svg)
+}
+
+.flag-icon-mx.flag-icon-squared {
+    background-image: url(../css/flags/1x1/mx.svg)
+}
+
+.flag-icon-ni {
+    background-image: url(../css/flags/4x3/ni.svg)
+}
+
+.flag-icon-ni.flag-icon-squared {
+    background-image: url(../css/flags/1x1/ni.svg)
+}
+
+.flag-icon-pa {
+    background-image: url(../css/flags/4x3/pa.svg)
+}
+
+.flag-icon-pa.flag-icon-squared {
+    background-image: url(../css/flags/1x1/pa.svg)
+}
+
+.flag-icon-pe {
+    background-image: url(../css/flags/4x3/pe.svg)
+}
+
+.flag-icon-pe.flag-icon-squared {
+    background-image: url(../css/flags/1x1/pe.svg)
+}
+
+.flag-icon-pr {
+    background-image: url(../css/flags/4x3/pr.svg)
+}
+
+.flag-icon-pr.flag-icon-squared {
+    background-image: url(../css/flags/1x1/pr.svg)
+}
+
+.flag-icon-pt {
+    background-image: url(../css/flags/4x3/pt.svg)
+}
+
+.flag-icon-pt.flag-icon-squared {
+    background-image: url(../css/flags/1x1/pt.svg)
+}
+
+.flag-icon-py {
+    background-image: url(../css/flags/4x3/py.svg)
+}
+
+.flag-icon-py.flag-icon-squared {
+    background-image: url(../css/flags/1x1/py.svg)
+}
+
+.flag-icon-sv {
+    background-image: url(../css/flags/4x3/sv.svg)
+}
+
+.flag-icon-sv.flag-icon-squared {
+    background-image: url(../css/flags/1x1/sv.svg)
+}
+
+.flag-icon-us {
+    background-image: url(../css/flags/4x3/us.svg)
+}
+
+.flag-icon-us.flag-icon-squared {
+    background-image: url(../css/flags/1x1/us.svg)
+}
+
+.flag-icon-uy {
+    background-image: url(../css/flags/4x3/uy.svg)
+}
+
+.flag-icon-uy.flag-icon-squared {
+    background-image: url(../css/flags/1x1/uy.svg)
+}
+
+.flag-icon-ve {
+    background-image: url(../css/flags/4x3/ve.svg)
+}
+
+.flag-icon-ve.flag-icon-squared {
+    background-image: url(../css/flags/1x1/ve.svg)
+}

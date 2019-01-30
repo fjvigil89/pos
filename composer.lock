@@ -1,0 +1,51 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "04ec42c9275cc6eed59111986cfe92f8",
+    "packages": [
+        {
+            "name": "ko/json-cache",
+            "version": "0.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/peledies/ko-json-cache.git",
+                "reference": "c479d8007715e1f19bab578000efccd0fc1e73f4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/peledies/ko-json-cache/zipball/c479d8007715e1f19bab578000efccd0fc1e73f4",
+                "reference": "c479d8007715e1f19bab578000efccd0fc1e73f4",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "KO\\Cache\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Deac Karns",
+                    "email": "peledies@gmail.com"
+                }
+            ],
+            "description": "A caching module for storing data in a JSON file",
+            "time": "2018-04-06T03:29:35+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}
