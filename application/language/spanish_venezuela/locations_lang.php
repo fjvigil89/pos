@@ -8,6 +8,7 @@ $lang['locations_email'] = 'Email';
 $lang['locations_new'] = 'Nueva ubicación';
 $lang['locations_update'] = 'Actualización de Ubicación';
 $lang['locations_delete'] = 'Borrar';
+$lang['locations_code'] = 'Código de la empresa';
 $lang['locations_cleanup_old_locations'] = 'Limpiar registros viejos de Tiendas';
 $lang['locations_basic_information'] = 'Información de ubicación';
 $lang['locations_successful_adding'] = 'Ha agregado ubicación';

@@ -6,6 +6,7 @@ $lang['locations_phone'] = 'Phone';
 $lang['locations_fax'] = 'Fax';
 $lang['locations_email'] = 'Email';
 $lang['locations_new'] = 'New Location';
+$lang['locations_code'] = 'Company code';
 $lang['locations_update'] = 'Update Location';
 $lang['locations_delete'] = 'Delete';
 $lang['locations_cleanup_old_locations'] = 'Clean up Old Locations';
