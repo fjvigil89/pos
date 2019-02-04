@@ -19,10 +19,10 @@ application/controllers/config.php
 application/views/config.php
 
 #------items 
-application/controllers/items.php
-application/views/items/form.php
-application/views/items/inventary.php
-application/views/items/manage.php
+#application/controllers/items.php
+#application/views/items/form.php
+#application/views/items/inventary.php
+#application/views/items/manage.php
 
 #------sales---
 #application/controllers/sales.php
@@ -30,9 +30,9 @@ application/views/items/manage.php
 #application/views/sales/register.php
 #application/views/sales/receipt.php
 application/views/sales/receipt_quote.php
-application/views/sales/receipt_email.php
+#application/views/sales/receipt_email.php
 application/views/sales/sale_seriales_modal.php
-application/views/sales/shortcuts_sales.php
+#application/views/sales/shortcuts_sales.php
 #application/views/sales/closing_amount.php
 #application/views/sales/opening_amount.php
 #application/views/sales/choose_register.php
@@ -56,9 +56,9 @@ application/controllers/employees.php
 application/views/employees/form.php
 
 #-------clientes ----------
-application/controllers/customers.php
-application/views/customers/form.php
-application/views/customers/redeempoints.php
+#application/controllers/customers.php
+#application/views/customers/form.php
+#application/views/customers/redeempoints.php
 application/views/customers/excel_import.php
 
 # ---- tarjeta de regalo 
@@ -101,10 +101,10 @@ application/models/reports/detailed_inventory.php
 application/models/reports/detailed_profit_and_loss.php
 application/models/reports/detailed_receivings.php
 application/models/reports/sales_consolidation.php
-application/models/reports/specific_customer.php
+#application/models/reports/specific_customer.php
 application/models/reports/specific_employee.php
 application/models/reports/summary_commissions.php
-application/models/reports/summary_customers.php
+#application/models/reports/summary_customers.php
 application/models/reports/summary_employees.php
 application/models/reports/deleted_sales.php
 application/models/reports/summary_sales.php
