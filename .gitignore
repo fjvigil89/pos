@@ -38,18 +38,18 @@ application/views/sales/sale_seriales_modal.php
 #application/views/sales/choose_register.php
 #// -------offline--------
 
-application/controllers/sincronizar.php
-application/controllers/offline.php
-application/controllers/appcache.php
-application/views/offline_data
-application/views/sales/offline.php
+#application/controllers/sincronizar.php
+#application/controllers/offline.php
+#application/controllers/appcache.php
+#application/views/offline_data
+#application/views/sales/offline.php
 application/views/sales/closing_amount_offline.php
 application/views/sales/opening_amount_offline.php
 application/views/sales/choose_register_offline.php
 application/models/synchronization_offline.php
-js/offline/sales.js
-js/offline/sale.js
-js/offline
+#js/offline/sales.js
+#js/offline/sale.js
+#js/offline
 
 #//---empleados-----------
 application/controllers/employees.php
