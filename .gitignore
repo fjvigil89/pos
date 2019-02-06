@@ -15,8 +15,8 @@ web.config
 sftp-config.json
 
 #-------configuracion-----------
-application/controllers/config.php
-application/views/config.php
+#application/controllers/config.php
+#application/views/config.php
 
 #------items 
 #application/controllers/items.php
