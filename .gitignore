@@ -118,7 +118,7 @@ application/views/item_kits/manage.php
 #application/controllers/registers_movement.php
 #application/views/registers_movement/form.php
 #application/views/registers_movement/manage.php
-application/views/registers_movement/receipt.php
+#application/views/registers_movement/receipt.php
 
 #--movimiento de caja-------
 application/controllers/technical_supports.php
