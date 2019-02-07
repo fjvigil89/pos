@@ -38,7 +38,7 @@ application/views/sales/sale_seriales_modal.php
 #application/views/sales/choose_register.php
 #// -------offline--------
 
-application/controllers/sincronizar.php
+#application/controllers/sincronizar.php
 #application/controllers/offline.php
 #application/controllers/appcache.php
 #application/views/offline_data
@@ -71,7 +71,7 @@ application/views/giftcards/print.php
  application/controllers/recharges.php
 
 # ----- reportes 
-application/controllers/reports.php
+#application/controllers/reports.php
 application/views/reports/custom_input_excel_export.php
 application/views/reports/custom_serial_input_excel_export.php
 application/views/reports/date_input_excel_export.php
