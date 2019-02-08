@@ -266,6 +266,7 @@
 								</div>
 							</a>
 						<?php } ?>
+
 						
 						<?php if ($this->Employee->has_module_action_permission('reports', 'view_movement_cash', $this->Employee->get_logged_in_employee_info()->person_id)) { ?>
 							<a href="#" class="icon-btn" id="movement_cash">
@@ -275,6 +276,7 @@
 								</div>
 							</a>
 						<?php } ?>
+
 
 						<!--corte diario-->
 						<?php if($this->config->item("mostrar_reportes_personalizados1")==1):?>
@@ -287,6 +289,7 @@
 								</a>
 							<?php } ?>
 						<?php endif; ?>
+
 
 						<?php
 						if ($this->Employee->has_module_action_permission('reports', 'view_tables',  $this->Employee->get_logged_in_employee_info()->person_id) &&  $this->config->item('enabled_for_Restaurant')) { ?>
@@ -816,7 +819,13 @@
 							<a href="<?php echo site_url('reports/specific_movement_cash');?>" class="btn icon-btn letter-space">
 								<i class="fa fa-calendar"></i>
 								<div>
-									<?php echo lang('reports_detailed_reports'); ?>
+									<?php echo lang('only_cash'); ?>
+								</div>
+							</a>
+							<a href="<?php echo site_url('reports/specific_movement_cash');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-calendar"></i>
+								<div>
+									<?php echo lang('detailed_report_all_means_of_payment'); ?>
 								</div>
 							</a>
 						</div>						
