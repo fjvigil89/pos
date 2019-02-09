@@ -255,7 +255,7 @@ $lang['reports_consolidated'] = 'Reporte Consolidado';
 $lang['reports_select_by_empleados']='Seleccione Empleado';
 
 //Language Graphics Home (Charts)
-$lang['quantity_module_total'] = 'Cantidad total por módulo';
+$lang['quantity_module_total'] = 'Cantidad total por módulo'; 
 $lang['best_sellers_items'] = 'Los 10 productos más vendidos del mes';
 $lang['best_seller_item'] = 'El producto más vendido es: ';
 $lang['sales_by_employees'] = 'Ventas por empleado';

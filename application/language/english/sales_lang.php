@@ -203,9 +203,27 @@ $lang['sales_quarters'] = 'Quarters';
 $lang['sales_dimes'] = 'Dimes';
 $lang['sales_nickels'] = 'Nickels';
 $lang['sales_pennies'] = 'Pennies';
+$lang['sales_quotes_create']='Create a Quote';
 $lang['sales_denomination'] = 'Denomination';
 $lang['sales_over_credit_limit_warning'] = 'Customer is over credit limit. Are you sure you want to complete sale?';
 $lang['ntable'] = 'Table';
 $lang['sales_crdit'] = 'Credit';
+$lang['sale_not_print_invoice']="Do not print invoice";
+$lang['sale_go_to_offline_sales']="Go to Offline sales";
+$lang['sale_search_by_serial']="Search by Serial";
+$lang['sales_quotes']="Quotations";
+$lang['sale_sales_day']="Sales of the day";
+$lang['sale_more_options']="More options";
+$lang['more_options_help'] = 'Click to see more options';
 
+$lang['sale_select_table'] = 'Select table';
+$lang['sales_summary'] = 'Summary of the sale';
+$lang['sales_without'] = 'Without';
+$lang['sales_with'] = 'With';
+$lang['sales_details_payments']="PAYMENT METHODS";
+$lang["sales_details_tax"]="TAX DETAILS";
+$lang['sales_stock'] = 'Inventory';
+$lang['sales_price_without_tax'] = 'Price without tax';
+$lang['sales_price_tax'] = 'Tax';
+$lang["sales_tier"]="Tiers";
 ?>

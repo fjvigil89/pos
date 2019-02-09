@@ -88,7 +88,7 @@ application/views/reports/employees_date_input_excel_export.php
 application/views/reports/employees_date_input.php
 application/views/reports/tabular_details.php
 application/views/reports/tabular_details.php
-application/views/reports/tabular_movement.php
+#application/views/reports/tabular_movement.php
 application/views/reports/tabular.php
 application/views/reports/profit_and_loss_details.php
 application/views/reports/profit_and_loss_summary.php

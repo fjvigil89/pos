@@ -60,7 +60,7 @@ $lang['module_action_search_locations'] = 'Buscar Tiendas';
 $lang['module_action_assign_all_locations'] = 'Asignar todos las Tiendas';
 $lang['module_action_delete_taxes'] = 'Eliminar Impuestos';
 $lang['statistics'] = 'Estadísticas';
-
+ 
 $lang['module_sales_see_sales_uniqued'] = 'Incluir otros empleados en el reporte';
 
 $lang['module_recharges'] = 'Recargas';
@@ -80,7 +80,6 @@ $lang["module_edit_tier_all"]="Editar tier para toda la venta";
 $lang["module_cancel_sale_suspend"]="No cancelar ventas despues de desuspender(No eliminar)";
 $lang['module_delete_payments_to_credit'] = 'Eliminar pagos de crédito';
 $lang["module_include_other_employees_report"]="Incluir otros empleados en el reporte";
-$lang["module_change_house"]="Casa de cambio";
 
 $lang["module_changes_house"]="Casa de cambio";
 $lang["module_refuse_approve"]="Aprobar, rechazar";

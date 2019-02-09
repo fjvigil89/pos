@@ -8,6 +8,7 @@ $lang['common_logout']='Logout';
 $lang['common_list_of']='List of';
 $lang['common_first_name']='First Name';
 $lang['common_last_name']='Last Name';
+$lang['numer_table'] = 'Table number';
 $lang['common_email']='E-Mail';
 $lang['common_phone_number']='Phone Number';
 $lang['common_address_1']='Address 1';

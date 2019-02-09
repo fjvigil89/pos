@@ -235,4 +235,17 @@ $lang["gage"]="Page";
 $lang["total"]="Total";
 $lang['reports_costo_proveedor'] ="Cost of provider";
 $lang['reports_precio_factura']="Invoice price";
+$lang['best_sellers_items'] = 'The 10 best-selling products of the month.';
+
+$lang['quantity_module_total'] = 'Total amount by module'; 
+$lang['best_seller_item'] = 'The best-selling product is: ';
+$lang['sales_by_employees'] = 'Sales by employee';
+
+$lang['weekly_sales'] = 'Daily sales (Monday to Sunday)';
+$lang['weekly_sales_message_filter'] = 'Select the range of days of the week you want to view: ';
+$lang['reports_fixed_range_help'] = 'Select a fixed date to generate a report';
+$lang['reports_custom_range_help'] = 'Select start and end date to generate report';
+$lang['reports_sale_type_help'] = 'Select the type of report';
+$lang['reports_export_to_excel_help'] = 'Select YES if you want to export the report to Excel or select NO to see the report in the POS ';
+
 ?>

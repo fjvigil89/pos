@@ -141,8 +141,6 @@ $lang['config_hide_store_account_payments_from_report_totals'] = 'Ocultar pagos 
 $lang['config_disable_sale_notifications'] = 'Desactivar las notificaciones de venta';
 
 
-//New Lines  - Ingeniando Web
-
 $lang['config_company_dni'] = 'NIT/RUT';
 $lang['config_company_regimen'] = 'Régimen';
 $lang['config_hide_balance_receipt_payment']='Ocultar Balance en el Recibo de Pago';

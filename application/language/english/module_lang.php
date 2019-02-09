@@ -68,3 +68,7 @@ $lang['module_warehouse_desc']='Edit, Update, Delete and orders';
 
 $lang['module_offline']='OffLine';
 $lang['module_offline_desc']='';
+$lang['module_campaigns']='Campaign';
+$lang["module_changes_house"]="Change house";
+$lang['module_licenses']='License';
+$lang['module_recharges'] = 'Recharges';

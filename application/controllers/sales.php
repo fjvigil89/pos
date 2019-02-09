@@ -1837,7 +1837,7 @@ class Sales extends Secure_area
 		$person_info = $this->Employee->get_logged_in_employee_info();
 		$data["employee_logueado"]=$person_info;
 		//$modes = array('sale'=>lang('sales_sale'),'return'=>lang('sales_return'));
-		$modes = array('sale'=>lang('sales_sale'),'return'=>lang('sales_return'). " sin ".strtolower ($this->config->item('sale_prefix')),'return_ticket'=>("Devolución con ".strtolower ($this->config->item('sale_prefix'))));
+		$modes = array('sale'=>lang('sales_sale'),'return'=>lang('sales_return'). " ".lang("sales_without")." ".strtolower ($this->config->item('sale_prefix')),'return_ticket'=>(lang('sales_return')." ".lang("sales_with")." ".strtolower ($this->config->item('sale_prefix'))));
 
 		if($this->config->item('customers_store_accounts'))
 		{

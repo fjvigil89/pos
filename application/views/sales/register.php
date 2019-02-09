@@ -103,14 +103,14 @@
 									if($this->appconfig->get('enabled_for_Restaurant') == '1'){
 
 										$cantmensa = $this->appconfig->get('table_acount');
-										$data_mesa = array("Seleccione Mesa");
+										$data_mesa = array(lang("sale_select_table"));
 										for ($i = 1; $i <= $cantmensa; $i++) {
-											array_push($data_mesa, "Mesa # " . $i);
+											array_push($data_mesa, lang("ntable")." #" . $i);
 										}
 										echo form_dropdown('table_number',$data_mesa,0,'id="table_number" class="bs-select form-control"');
 									}
 								?>
-								<button  style="width: 100%" class="btn btn-sm btn-success dropdown-toggle tooltips " data-original-title="<?php echo lang('more_options_help') ?>" data-toggle="dropdown">Más opciones<i class="fa fa-angle-down"></i>
+								<button  style="width: 100%" class="btn btn-sm btn-success dropdown-toggle tooltips " data-original-title="<?php echo lang('more_options_help') ?>" data-toggle="dropdown"><?php echo lang("sale_more_options"); ?><i class="fa fa-angle-down"></i>
 								</button>
 								<ul class="dropdown-menu pull-right">
 									<?php if ($this->config->item('track_cash')) { ?>
@@ -124,14 +124,14 @@
 									<?php if ($this->Appconfig->is_offline_sales()) { ?>
 										<li>
 											<?php echo anchor(site_url('sales/offline'),
-												"Ir a ventas OffLine",
+												lang("sale_go_to_offline_sales"),
 												array('class'=>''));
 											?>
 										</li>
 									<?php } ?>
 									<li>
 										<?php echo anchor(site_url('sales/sale_seriales_modal'),
-											"Busqueda por Serial",
+											lang("sale_search_by_serial"),
 											array('class'=>'', "id"=>"modal-serial", 'data-toggle'=>"modal",
 											'data-target'=>'#myModal'));
 										?>
@@ -185,7 +185,7 @@
 
 									<li>
 									    <?php echo anchor("reports/detailed_sales/".date('Y-m-d').' 00:00:00'. '/' .date('Y-m-d').' 23:59:59/all/0/0/-1',
-									        "Ventas del día",
+									        lang('sale_sales_day'),
 									        array('class'=>'','target'=>'_blank','title'=>'Ventas realizadas hoy'));
 									    ?>
 									</li>
@@ -854,7 +854,7 @@
 							echo '<span></span>';
 							echo '<span class="check"></span>';
 							echo '<span class="box"></span>';
-							echo 'No imprimir factura';
+							echo lang("sale_not_print_invoice"); 
 							echo '</label>';
 							echo '</div>';
 							echo '</div>';
@@ -880,7 +880,7 @@
                             echo '<span></span>';
                             echo '<span class="check"></span>';
                             echo '<span class="box"></span>';
-                            echo lang('sales_ticket_on_receipt');
+                            echo  lang('sales_ticket_on_receipt');
                             echo '</label>';
                             echo '</div>';
                             echo '</div>';
@@ -1343,9 +1343,9 @@
 									if($this->appconfig->get('enabled_for_Restaurant') == '1'){
 
 										$cantmensa = $this->appconfig->get('table_acount');
-										$data_mesa = array("Seleccione Mesa");
+										$data_mesa = array(lang("sale_select_table"));
 										for ($i = 1; $i <= $cantmensa; $i++) {
-											array_push($data_mesa, "Mesa # " . $i);
+											array_push($data_mesa,  lang("ntable")." #"  . $i);
 										}
 										echo '<div class="title-heading"';
 										echo '<label id="comment_label" for="comment">';

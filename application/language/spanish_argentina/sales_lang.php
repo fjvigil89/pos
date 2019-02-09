@@ -198,10 +198,14 @@ $lang['sales_nickels'] = 'Nickels';
 $lang['sales_pennies'] = 'Centavos';
 $lang['sales_denomination'] = 'Denominación';
 $lang['sales_over_credit_limit_warning'] = 'El cliente es por encima del límite de crédito. ¿Seguro que deseas completar la venta?';
-$lang['sales_supplier_credit'] = 'Crédito Proveedores';
-
-
-//*
+$lang['sales_supplier_credit'] = 'Crédito Proveedores';$lang['sale_not_print_invoice']="No imprimir factura";
+$lang['sale_go_to_offline_sales']="Ir a ventas OffLine";
+$lang['sale_search_by_serial']="Búsqueda por Serial";
+$lang['sale_sales_day']="Ventas del día";
+$lang['sale_more_options']="Más opciones";
+$lang['sale_select_table'] = 'Seleccionar mesa';
+$lang['sales_without'] = 'Sin';
+$lang['sales_with'] = 'Con';
 $lang['sales_quotes']='Cotizaciones';
 $lang['sales_quotes_create']='Crear Cotización';
 $lang['sales_quotes_id']='Nª de Cotización';

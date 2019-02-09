@@ -346,7 +346,7 @@
 				</div>
 				<div class="portlet-body">
 					<div id="chartdiv_profit_and_loss" class="chart_custom">
-						<?php $this->load->view("charts/profit_and_loss"); ?>
+						<?php //$this->load->view("charts/profit_and_loss"); ?>
 					</div>
 				</div>
 			</div>

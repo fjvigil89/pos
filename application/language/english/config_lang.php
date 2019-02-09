@@ -8,6 +8,7 @@ $lang['config_phone']='Company Phone';
 $lang['config_prefix']='Sale ID Prefix';
 $lang['config_website']='Website';
 $lang['config_fax']='Fax';
+$lang['sales_ticket_on_receipt']='Ticket';
 $lang['config_default_tax_rate']='Default Tax Rate %';
 $lang['config_default_tax_rate_1']='Tax 1 Rate';
 $lang['config_default_tax_rate_2']='Tax 2 Rate';
@@ -134,4 +135,19 @@ $lang['config_hide_store_account_payments_from_report_totals'] = 'Hide store acc
 $lang['config_disable_sale_notifications'] = 'Disable sale notifications';
 
 $lang['config_company_regimen_help'] = 'If it is a simplified regime, it does not pay tax';
+
+$lang['config_company_dni'] = 'NIT/RUT';
+$lang['config_company_regimen'] = 'Regime';
+$lang['config_enabled_for_Restaurant'] = 'Activate sale for restaurant';
+$lang['config_table_acount'] = 'Number of tables available';
+$lang['config_ticket_hide']  = 'Allows Ticket ';
+$lang['config_default_sales_type'] = 'Type of Ticket';
+$lang['sales_invoice']='Factura';
+$lang['config_ticket_hide_taxes']='Hide tax on the ballot';
+$lang['config_invoice_hide_taxes']='Hide invoice tax';
+$lang['config_ocultar_forma_pago']="Hide forms of payments";
+$lang['config_hide_balance_receipt_payment']='Hide Balance in the Payment Receipt';
+$lang['config_sales_stock_inventory']='Do not let sell if the inventory of a product is exhausted';
+
+
 ?>
