@@ -840,7 +840,7 @@
 									<?php echo lang('only_cash'); ?>
 								</div>
 							</a>
-							<a href="<?php echo site_url('reports/specific_movement_cash');?>" class="btn icon-btn letter-space">
+							<a href="<?php echo site_url('reports/detailed_of_payment');?>" class="btn icon-btn letter-space">
 								<i class="fa fa-calendar"></i>
 								<div>
 
