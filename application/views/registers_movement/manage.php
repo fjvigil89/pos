@@ -93,14 +93,19 @@
 									<input type="text" placeholder="yyyy-mm-dd" value="<?php echo $hasta;?>" class="datepicker form-control" id="dateend" name="hasta">			
 								</div>								
 								<div class="col-md-2">
-									Categoría: 
-									<select class="form-control" id="categoryfilter" name="categoryfilter">
-										<option value="1">Categoria 1</option>
-										<option value="2">Categoria 2</option>
-										<option value="3">Categoria 3</option>
+									Filtrar: 
+									<select class="form-control" id="filter" name="filter">
+										<option value="">Seleccione</option>
+										<option <?php if($filter == 'register_movement_id'){ ?> selected <?php } ?> value="register_movement_id">ID</option>
+										<option <?php if($filter == 'categorias_gastos'){ ?> selected <?php } ?> value="categorias_gastos">Categoría</option>
 									</select>
 		
 								</div>
+								<div class="col-md-2">
+									Busqueda: 
+									<input type="text" name="search" id="search" class="form-control" placeholder="Buscar" value="<?php echo $search ?> ">
+		
+								</div>								
 								<?php if(!$this->Employee->has_module_action_permission('registers_movement','see_cash_flows_uniqued',  $this->session->userdata('person_id'))):?>
 
 									<div class="col-md-4">
@@ -155,7 +160,7 @@
 
 												?>
 												<tr>
-													<td align='center'><?=$movement->register_id;?></td>
+													<td align='center'><?=$movement->register_movement_id;?></td>
 													<td align='center'><?=$movement->register_date;?></td>
 													<td align='center'><?=$movement->description;?></td>
 
@@ -191,6 +196,7 @@
 
 				$(document).ready(function(){
 
+
 				// se traduce al español y se cambia el formato	al datepicker
 					$('.datepicker').datepicker({
 						dateFormat: "yy-mm-dd",
@@ -219,6 +225,8 @@
 				var strdatestart = $("#datestart").val();
 				var strdateend = $("#dateend").val();
 				var id_empleado = $("#empleado").val();
+				var filter = $("#filter").val();
+				var search = $("#search").val();
 				if (strdatestart === null || strdatestart === ""){
 					alert("Debe llenar la fecha de inicio con la que quiere hacer la busqueda");
 					return false;
@@ -245,7 +253,7 @@
 					}
 				}
 				if (Aceptar === true){
-					$("#findbydate").attr("href", "index.php/registers_movement?desde=" + strdatestart + "&hasta=" + strdateend + "&empleado=" + id_empleado);
+					$("#findbydate").attr("href", "index.php/registers_movement?desde=" + strdatestart + "&hasta=" + strdateend + "&empleado=" + id_empleado + "&filter=" + filter + "&search=" + search);
 					return true;
 				}else{
 					return false;
@@ -282,7 +290,6 @@
 				},
 				"order": [[ 0, "desc" ]]
 			});
-
 
 
 		});

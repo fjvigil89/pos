@@ -7,9 +7,9 @@
 		{
 			$row[] = strip_tags($header['data']);
 		}
-		
+
 		$rows[] = $row;
-		
+		 
 		foreach($data as $datarow)
 		{
 			$row = array();
@@ -87,6 +87,7 @@
 			<?php }  ?>
 
 			<div class="portlet light">
+
 				<div class="portlet-title">
 					<div class="caption">
 						<i class="icon-bar-chart font-green-haze"></i>
@@ -103,7 +104,9 @@
 					<div class="table-responsive">
 						<table class="table table-bordered table-striped table-hover data-table tablesorter" id="sortable_table">
 							<thead>
+							
 								<tr>
+									
 									<?php foreach ($headers as $header) { ?>
 										<th align="<?php echo $header['align'];?>"><?php echo $header['data']; ?></th>
 									<?php } ?>
@@ -113,10 +116,12 @@
 								<?php foreach ($data as $row) { ?>
 									<tr>
 										<?php foreach ($row as $cell) { ?>
+											
 											<td align="<?php echo $cell['align'];?>"><?php echo ($cell['data']); ?></td>
 										<?php } ?>
 									</tr>
 								<?php } ?>
+				
 							</tbody>
 						</table>
 					</div>

@@ -2004,6 +2004,8 @@ class Reports extends Secure_area {
     }
     //
     function movement_cash_date_input_excel_export() {
+
+       
         $data = $this->_get_common_report_data(TRUE);
         $cajas=array("all"=>"Todo");
         $location_id=$this->Employee->get_logged_in_employee_current_location_id();
@@ -2278,6 +2280,7 @@ class Reports extends Secure_area {
     
     function specific_movement_cash($start_date, $end_date,$register_id, $export_excel = 0, $export_pdf = 0, $offset = 0)
     {
+
         $start_date = rawurldecode($start_date);
         $end_date = rawurldecode($end_date);
         $this->check_action_permission('view_movement_cash');
@@ -2300,31 +2303,38 @@ class Reports extends Secure_area {
         
         $tabular_data = array();
         $report_data = $model->getData();
-
+       
         foreach ($report_data["details"] as $row) {
             $data_row = array();
             $data_row[] = array('data' => anchor('registers_movement/receipt/' . $row['register_movement_id'], '<i class="fa fa-print fa fa-2x vertical-align"></i>', array('target' => '_blank', 'class' => 'hidden-print')) ,'align' => 'left' );
-
+            
+             $data_row[] = array('data' => $row['register_movement_id'], 'align' => 'right');
 
             $data_row[] = array('data' => date(get_date_format() . ' ' . get_time_format(), strtotime($row['register_date'])), 'align' => 'right');
+
             $data_row[] = array('data' => $row['description'], 'align' => 'right');
 
             if($row['type_movement']==1){
+                $data_row[] = array('data' => 'INGRESO', 'align' => 'right');
                 $data_row[] = array('data' => to_currency($row['mount']), 'align' => 'right');
                 $data_row[] = array('data' => "", 'align' => 'right');
             }
            else{
-           
+                $data_row[] = array('data' => 'FACTURA', 'align' => 'right');
                 $data_row[] = array('data' => "", 'align' => 'right');
                 $data_row[] = array('data' => to_currency($row['mount']), 'align' => 'right');                
                
            }
             $data_row[] = array('data' =>$row['categorias_gastos'], 'align' => 'right');
+            $data_row[] = array('data' =>$row['username'], 'align' => 'right');
             $data_row[] = array('data' => to_currency($row['mount_cash']), 'align' => 'right');
             
             $tabular_data[] = $data_row;
         }
-        
+   //     echo '<pre>';
+    //    print_r($report_data);
+     //   die;
+
 
         $data = array(
             "title" => "Movimiento de caja detallado",
@@ -2337,8 +2347,11 @@ class Reports extends Secure_area {
             "pagination" => $this->pagination->create_links(),
         );
 
+        
+       
         $this->load->view("reports/tabular", $data);
     }
+    
     function specific_employee($start_date, $end_date, $employee_id, $sale_type, $payment_types = null, $employee_type, $export_excel = 0, $export_pdf = 0, $offset = 0) {
         $this->check_action_permission('view_employees');
         $start_date = rawurldecode($start_date);

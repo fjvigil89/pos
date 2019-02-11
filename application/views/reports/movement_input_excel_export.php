@@ -211,6 +211,7 @@
 					if($("#export_pdf_yes").prop('checked'))
 						window.open(url);
 					else
+						alert(url)
 						window.location =url;
 				}
 				
