@@ -71,7 +71,6 @@ application/views/giftcards/print.php
  application/controllers/recharges.php
 
 # ----- reportes 
-application/controllers/reports.php
 application/views/reports/custom_input_excel_export.php
 application/views/reports/custom_serial_input_excel_export.php
 application/views/reports/date_input_excel_export.php
@@ -87,14 +86,10 @@ application/views/reports/detailed_payment.php
 application/views/reports/employees_date_input_excel_export.php
 application/views/reports/employees_date_input.php
 application/views/reports/tabular_details.php
-application/views/reports/tabular_details.php
-application/views/reports/tabular_movement.php
-application/views/reports/tabular.php
 application/views/reports/profit_and_loss_details.php
 application/views/reports/profit_and_loss_summary.php
 application/views/reports/sales_generator_tabular_details.php
 application/views/reports/store_account_statements.php
-
 application/models/reports/detailed_commissions.php
 application/models/reports/detailed_consolidated.php
 application/models/reports/detailed_inventory.php
