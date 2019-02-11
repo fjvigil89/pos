@@ -91,6 +91,15 @@
 								<div class="col-md-2">
 									Hasta: 
 									<input type="text" placeholder="yyyy-mm-dd" value="<?php echo $hasta;?>" class="datepicker form-control" id="dateend" name="hasta">			
+								</div>								
+								<div class="col-md-2">
+									Categoría: 
+									<select class="form-control" id="categoryfilter" name="categoryfilter">
+										<option value="1">Categoria 1</option>
+										<option value="2">Categoria 2</option>
+										<option value="3">Categoria 3</option>
+									</select>
+		
 								</div>
 								<?php if(!$this->Employee->has_module_action_permission('registers_movement','see_cash_flows_uniqued',  $this->session->userdata('person_id'))):?>
 
@@ -98,7 +107,7 @@
 										Empleado:
 										<?php echo form_dropdown('empleado', $empleados, $id_empleado, 'id="empleado" class="bs-select form-control"'); ?>
 									</div>
-									<?php endif; ?>
+								<?php endif; ?>
 								<div class="col-md-1">
 									<br>
 									<a id="findbydate" class="btn btn-primary dropdown-toggle" href="#">
@@ -126,6 +135,7 @@
 									<table id="table-registers_movement" class="table tablesorter table-striped table-bordered table-hover">
 										<thead>
 											<tr>
+												<th>ID</th>
 												<th>Fecha</th>
 												<th>Descripción</th>
 												<th>Entrada</th>
@@ -145,6 +155,7 @@
 
 												?>
 												<tr>
+													<td align='center'><?=$movement->register_id;?></td>
 													<td align='center'><?=$movement->register_date;?></td>
 													<td align='center'><?=$movement->description;?></td>
 
@@ -243,6 +254,7 @@
 			});
 
 			$("#table-registers_movement").DataTable({
+				"searching":       false,
 				"language": {
 					"sProcessing":     "Procesando...",
 					"sLengthMenu":     "Mostrar _MENU_ registros",
@@ -252,7 +264,7 @@
 					"sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
 					"sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
 					"sInfoPostFix":    "",
-					"sSearch":         "Buscar:",
+					"sSearch":         "",
 					"sUrl":            "",
 					"sInfoThousands":  ",",
 					"sLoadingRecords": "Cargando...",
