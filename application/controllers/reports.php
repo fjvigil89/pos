@@ -2265,7 +2265,7 @@ class Reports extends Secure_area {
 
         $this->load->view("reports/tabular", $data);
     }
-    function specific_movement_cash_input($type) {
+    function specific_movement_cash_input() {
 
         $data = $this->_get_common_report_data(TRUE);
         $cajas=array("all"=>"Todo");
@@ -2281,7 +2281,7 @@ class Reports extends Secure_area {
         $this->load->view("reports/movement_input_excel_export", $data);
     }
     
-    function only_cash($start_date, $end_date,$register_id, $export_excel = 0, $export_pdf = 0, $type, $offset = 0)
+    function only_cash($start_date, $end_date,$register_id, $export_excel = 0, $export_pdf = 0, $offset = 0)
     {
        
         $start_date = rawurldecode($start_date);
@@ -2352,9 +2352,27 @@ class Reports extends Secure_area {
         $this->load->view("reports/tabular", $data);
     }
 
+    function detailed_of_payment_input() {
 
+        $data = $this->_get_common_report_data(TRUE);
+        $cajas=array("all"=>"Todo");
+        $location_id=$this->Employee->get_logged_in_employee_current_location_id();
+        foreach($this->Register-> get_all_store() as $caja){
+            if($location_id==$caja->location_id){
+                $cajas[$caja->register_id]= $caja->name;
+            }
+        }
+        $empleados=array("all"=>"Todo");
+        $employees= $this->Employee->get_all()->result();
+        foreach($employees as $empleado){
+            $empleados[$empleado->person_id]=$empleado->first_name." ".$empleado->last_name;
+        }
+        $data["empleados"]=$empleados;
+       $data["cajas"]=$cajas;
 
-    
+        $this->load->view("reports/detaile_of_payment_excel_export", $data);
+    }
+
     function detailed_of_payment($start_date, $end_date,$register_id, $export_excel = 0, $export_pdf = 0, $type, $offset = 0)
     {
        
@@ -2423,7 +2441,7 @@ class Reports extends Secure_area {
 
         
        
-        $this->load->view("reports/tabular", $data);
+        $this->load->view("reports/tabular_detailed_of_payment", $data);
     }
 
 
