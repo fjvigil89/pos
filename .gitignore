@@ -15,50 +15,50 @@ web.config
 sftp-config.json
 
 #-------configuracion-----------
-application/controllers/config.php
-application/views/config.php
+#application/controllers/config.php
+#application/views/config.php
 
 #------items 
-application/controllers/items.php
-application/views/items/form.php
-application/views/items/inventary.php
-application/views/items/manage.php
+#application/controllers/items.php
+#application/views/items/form.php
+#application/views/items/inventary.php
+#application/views/items/manage.php
 
 #------sales---
-application/controllers/sales.php
-application/views/sales/register_initial.php
-application/views/sales/register.php
-application/views/sales/receipt.php
+#application/controllers/sales.php
+#application/views/sales/register_initial.php
+#application/views/sales/register.php
+#application/views/sales/receipt.php
 application/views/sales/receipt_quote.php
-application/views/sales/receipt_email.php
+#application/views/sales/receipt_email.php
 application/views/sales/sale_seriales_modal.php
-application/views/sales/shortcuts_sales.php
-application/views/sales/closing_amount.php
-application/views/sales/opening_amount.php
-application/views/sales/choose_register.php
+#application/views/sales/shortcuts_sales.php
+#application/views/sales/closing_amount.php
+#application/views/sales/opening_amount.php
+#application/views/sales/choose_register.php
 #// -------offline--------
 
-application/controllers/sincronizar.php
-application/controllers/offline.php
-application/controllers/appcache.php
-application/views/offline_data
-application/views/sales/offline.php
+#application/controllers/sincronizar.php
+#application/controllers/offline.php
+#application/controllers/appcache.php
+#application/views/offline_data
+#application/views/sales/offline.php
 application/views/sales/closing_amount_offline.php
 application/views/sales/opening_amount_offline.php
 application/views/sales/choose_register_offline.php
 application/models/synchronization_offline.php
-js/offline/sales.js
-js/offline/sale.js
-js/offline
+#js/offline/sales.js
+#js/offline/sale.js
+#js/offline
 
 #//---empleados-----------
 application/controllers/employees.php
 application/views/employees/form.php
 
 #-------clientes ----------
-application/controllers/customers.php
-application/views/customers/form.php
-application/views/customers/redeempoints.php
+#application/controllers/customers.php
+#application/views/customers/form.php
+#application/views/customers/redeempoints.php
 application/views/customers/excel_import.php
 
 # ---- tarjeta de regalo 
@@ -96,10 +96,10 @@ application/models/reports/detailed_inventory.php
 application/models/reports/detailed_profit_and_loss.php
 application/models/reports/detailed_receivings.php
 application/models/reports/sales_consolidation.php
-application/models/reports/specific_customer.php
+#application/models/reports/specific_customer.php
 application/models/reports/specific_employee.php
 application/models/reports/summary_commissions.php
-application/models/reports/summary_customers.php
+#application/models/reports/summary_customers.php
 application/models/reports/summary_employees.php
 application/models/reports/deleted_sales.php
 application/models/reports/summary_sales.php
@@ -110,10 +110,10 @@ application/views/item_kits/form.php
 application/views/item_kits/manage.php
 
 #--movimiento de caja-------
-application/controllers/registers_movement.php
-application/views/registers_movement/form.php
-application/views/registers_movement/manage.php
-application/views/registers_movement/receipt.php
+#application/controllers/registers_movement.php
+#application/views/registers_movement/form.php
+#application/views/registers_movement/manage.php
+#application/views/registers_movement/receipt.php
 
 #--movimiento de caja-------
 application/controllers/technical_supports.php
@@ -135,8 +135,8 @@ application/controllers/campaigns
 application/controllers/warehouse
 
 #-- compras  -------
-application/controllers/receivings.php
-application/views/receivings
+#application/controllers/receivings.php
+#application/views/receivings
 
 
 

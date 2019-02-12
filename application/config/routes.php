@@ -99,7 +99,11 @@ $route['reports/detailed_inventory'] = "reports/detailed_inventory_input";
 $route['reports/detailed_suspended_sales'] = "reports/suspended_date_input_excel_export";
 $route['reports/detailed_payments'] = "reports/date_input_excel_export";
 $route['reports/detailed_commissions'] = "reports/specific_employee_input";
+
 $route['reports/specific_movement_cash'] = "reports/specific_movement_cash_input";
+$route['reports/only_cash'] = "reports/specific_movement_cash_input/cash";
+$route['reports/detailed_of_payment'] = "reports/specific_movement_cash_input/detailed";
+
 $route['reports/summary_movement_cash'] = "reports/movement_cash_date_input_excel_export";
 $route['reports/specific_transfer_location'] = "reports/specific_transfer_location_date_input_excel_export";
 $route['reports/depostos_salidas'] = "reports/depostos_salidas_input_excel_export";

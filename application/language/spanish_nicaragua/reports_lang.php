@@ -1,6 +1,5 @@
 <?php
-$lang['reports_daily_cut']="detallado";
-$lang['daily_cut']="Corte Diario";
+$lang['reports_daily_cut']="Corte Diario";
 $lang['reports_data_product'] = 'Datos productos';
 $lang['reports_reports'] = 'Reportes';
 $lang['reports_report'] = 'Reporte';

@@ -118,7 +118,7 @@ class Register_movement extends CI_Model
 	
 	//function find by date
 	//funcion que busca por fecha
-	function get_by_date($register_id, $date_start, $date_end, $categoria="", $employee=false){
+	function get_by_date($register_id, $date_start, $date_end, $categoria="", $employee=false, $filter="", $search=""){
 		if ($date_start == null){
 			$datestring = '%Y-%m-%d';
 			$date_start1 = now();
@@ -150,8 +150,12 @@ class Register_movement extends CI_Model
 				 if($permision){
 					$this->db->where('registers_movement.id_employee', 	$employee_id);
 				 }
+				 if($filter != "" && $search != ""){
+					$this->db->like('registers_movement.'.$filter, $search);
+				 }
 
-		return $this->db->get();
+		 return $this->db->get();
+
 	}
 
 	function save_operation($register_id, $cash, $description,$categorias_gastos )
@@ -308,11 +312,15 @@ class Register_movement extends CI_Model
 		$this->db->dbprefix('registers_movement').".register_log_id as register_log_id,  register_date, 
 		".$this->db->dbprefix('registers_movement').".mount, description,detailed_description, type_movement, 
 		".$this->db->dbprefix('registers_movement').".mount_cash as mount_cash, "
-		.$this->db->dbprefix('registers_movement').".categorias_gastos as categorias_gastos, ".$this->db->dbprefix('registers_movement').".id_employee as id_employee
-		FROM ".$this->db->dbprefix('registers_movement')."
+		.$this->db->dbprefix('registers_movement').".categorias_gastos as categorias_gastos, ".$this->db->dbprefix('registers_movement').".id_employee as id_employee,".$this->db->dbprefix('employees').".username as username
+		FROM ".$this->db->dbprefix('registers_movement')."		
 		JOIN ".$this->db->dbprefix('register_log')." ON  ".$this->db->dbprefix('register_log').'.register_log_id='.$this->db->dbprefix('registers_movement').'.register_log_id'."
-		JOIN ".$this->db->dbprefix('registers')." ON  ".$this->db->dbprefix('registers').'.register_id='.$this->db->dbprefix('register_log').'.register_id'."	
+		JOIN ".$this->db->dbprefix('registers')." ON  ".$this->db->dbprefix('registers').'.register_id='.$this->db->dbprefix('register_log').'.register_id'."
+		JOIN ".$this->db->dbprefix('employees')." ON  ".$this->db->dbprefix('employees').'.id='.$this->db->dbprefix('registers_movement').'.id_employee'."  
+		
 		$where )");
+	
+	
 	}
 	
 	function where_categoria(){

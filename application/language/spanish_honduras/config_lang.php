@@ -140,7 +140,7 @@ $lang['config_disable_sale_notifications'] = 'Desactivar las notificaciones de v
 
 //New Lines  - Ingeniando Web
 
-$lang['config_company_dni'] = 'NIT/RUT';
+$lang['config_company_dni'] = 'RTN';
 $lang['config_company_regimen'] = 'Régimen';
 $lang['config_hide_balance_receipt_payment']='Ocultar Balance en el Recibo de Pago';
 $lang['config_system_point']='Activar sistema de puntos';

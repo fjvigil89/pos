@@ -15,14 +15,17 @@ class specific_movement extends Report
 		
 	
 		$columns = array();
-		
 		$columns[] = array('data'=>"", 'align'=> 'left');
+		$columns[] = array('data'=>"ID", 'align'=> 'left');
 		$columns[] = array('data'=>"Fecha", 'align'=> 'left');
-	
+
+		
 		$columns[] = array('data'=>"Descripción", 'align'=> 'left');
+	    $columns[] = array('data'=>"Tipo de documento", 'align'=> 'left');
 		$columns[] = array('data'=>"Entrada", 'align'=> 'left');
 		$columns[] = array('data'=>"Salida", 'align'=> 'left');
 		$columns[] = array('data'=>"Categoría", 'align'=> 'left');
+		$columns[] = array('data'=>"Cajero", 'align'=> 'left');
 		$columns[] = array('data'=>"En caja", 'align'=> 'right');
 				
 		
@@ -39,6 +42,8 @@ class specific_movement extends Report
 
 		$this->db->order_by('register_movement_id','DESC');
 		$data['details']=$this->db->get()->result_array();
+		       
+        
 		return $data;
 	}
 

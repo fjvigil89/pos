@@ -1419,6 +1419,7 @@ class Sale_lib
 		$this->set_divisa($this->CI->Sale->get_divisa($sale_id));
 		$this->set_opcion_sale($this->CI->Sale->get_opcion_sale($sale_id));
 		$this->set_pagar_otra_moneda($this->CI->Sale->get_otra_moneda($sale_id));
+		$this->set_serie_number($this->CI->Sale->get_serie_number($sale_id));
 		
 
 	}
@@ -1466,6 +1467,16 @@ class Sale_lib
 	function get_suspended_sale_id()
 	{
 		return $this->CI->session->userdata('suspended_sale_id');
+	}
+	function get_serie_number(){
+		if($this->CI->session->userdata('serie_number')==false){
+			$location = $this->CI->Employee->get_current_location_info();
+			$this->set_serie_number($location->serie_number!="" ? $location->serie_number:1);
+		}
+		return $this->CI->session->userdata('serie_number');
+	}
+	function set_serie_number($serie_number){
+		$this->CI->session->set_userdata('serie_number',$serie_number);		
 	}
 	
 	function set_suspended_sale_id($suspended_sale_id)
@@ -1523,6 +1534,9 @@ class Sale_lib
 	{
 		$this->CI->session->unset_userdata('sale_mode');
 	}
+	function clear_serie_number(){
+		$this->CI->session->unset_userdata('serie_number');
+	}
 	
 	function clear_cc_info()
 	{
@@ -1561,6 +1575,7 @@ class Sale_lib
 		$this->clear_rate_price();
 		$this->clear_total_price_transaction_previous();
 		$this->clear_pagar_otra_moneda();
+		$this->clear_serie_number();
 		
 	}
 	

@@ -64,7 +64,7 @@ class Login extends CI_Controller
 		{
 			$data['ie_browser_warning'] = FALSE;
 		}
-		if(APPLICATION_VERSION==$this->config->item('version'))
+		if(APPLICATION_VERSION=='5.6.40')
 		{
 			$data['application_mismatch']=false;
 		}

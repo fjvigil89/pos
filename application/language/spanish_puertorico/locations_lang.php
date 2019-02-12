@@ -4,6 +4,7 @@ $lang['locations_name'] = 'Nombre';
 $lang['locations_address'] = 'Dirección';
 $lang['locations_phone'] = 'Teléfono';
 $lang['locations_fax'] = 'Fax';
+$lang['locations_code'] = 'Código de la empresa';
 $lang['locations_email'] = 'Email';
 $lang['locations_new'] = 'Nueva ubicación';
 $lang['locations_update'] = 'Actualización de Ubicación';

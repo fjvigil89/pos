@@ -243,17 +243,17 @@ class Sale extends CI_Model
            
         $data=array();
         foreach ($locations->result() as $location) {
-            $serie=$this->Invoice_number->get_info($location->location_id);   
+           
             $this->db->select('MAX(invoice_number) as invoice_number,MAX(ticket_number) as ticket_number,location_id',false);
             $this->db->from('sales');          
-            $this->db->where('serie_number_invoice', $serie->serie_number==""?"1":$serie->serie_number);
+            $this->db->where('serie_number_invoice', $location->serie_number);
             $this->db->where('location_id',$location->location_id);                
             $result = $this->db->get()->row_array();  
             if($result["invoice_number"]==null){
-                $result["invoice_number"]=$serie->start_range==""?"0":"".($serie->start_range-1);
+                $result["invoice_number"]="".($location->start_range-1);
             } 
             if($result["ticket_number"]==null){
-                $result["ticket_number"]=$serie->start_range==""?"0":"".($serie->start_range-1);
+                $result["ticket_number"]="".($location->start_range-1);
             }  
             if($result["location_id"]==null){
                 $result["location_id"]=$location->location_id;
@@ -267,16 +267,11 @@ class Sale extends CI_Model
     public function get_next_sale_number($sale_type = 0, $location_id)
     {
         
-        $invoice_number_info=$this->Invoice_number->get_info($location_id);
-        if($invoice_number_info->id_invoice_number!=""){
+        $invoice_number_info=$this->Location->get_info($location_id);       
             $serie_number=$invoice_number_info->serie_number;
             $increment=(int)$invoice_number_info->increment;
             $start_range=(int) $invoice_number_info->start_range;
-        }else{
-            $serie_number=1;
-            $increment=1;
-            $start_range=1;
-        }
+
         if ($sale_type == 1) {
             $this->db->select_max('invoice_number');
             $this->db->from('sales');
@@ -520,8 +515,9 @@ class Sale extends CI_Model
                 //$respuesta[]=$mensaje;
                 //break;
             }
-            $serie_number=$this->Invoice_number->get_serie_number($sale["location_id"]);
-
+           
+            $location = $this->Location->get_info($sale["location_id"]);
+            $serie_number = $location->serie_number==""?1:$location->serie_number;
             if($sale["is_invoice"] == 1)
             {               
                 $sale['ticket_number']  = $this->Sale->get_next_sale_number(0,$sale["location_id"]);
@@ -2498,6 +2494,12 @@ class Sale extends CI_Model
         $this->db->from('sales');
         $this->db->where('sale_id', $sale_id);
         return $this->db->get()->row()->another_currency;
+    }
+    public function get_serie_number($sale_id)
+    {
+        $this->db->from('sales');
+        $this->db->where('sale_id', $sale_id);
+        return $this->db->get()->row()->serie_number_invoice;
     }
     
     public function get_comment_on_receipt_quotes($quote_id)

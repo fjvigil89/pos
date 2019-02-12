@@ -1,5 +1,6 @@
 <?php $this->load->view("partial/header"); ?>
 
+
 		<!-- BEGIN PAGE TITLE -->
 		<div class="page-title">
 			<h1>
@@ -43,7 +44,7 @@
 				</div>
 				<div class="panel-body">
 					<div class="parent-list">
-                        
+               
                         <!--artículos-->
 						<?php if ($this->Employee->has_module_action_permission('reports', 'view_items', $this->Employee->get_logged_in_employee_info()->person_id)) { ?>					
 							<a href="#" class="icon-btn" id="items">
@@ -56,6 +57,7 @@
                         
                         <!--categorias-->
 						<?php if ($this->Employee->has_module_action_permission('reports', 'view_categories', $this->Employee->get_logged_in_employee_info()->person_id)) { ?>
+
 							<a href="#" class="icon-btn" id="categories">
 								<i class="fa fa-th"></i>
 								<div>
@@ -67,6 +69,7 @@
                         
                         <!--clientes-->
 						<?php if ($this->Employee->has_module_action_permission('reports', 'view_customers', $this->Employee->get_logged_in_employee_info()->person_id)) { ?>
+
 							<a href="#" class="icon-btn" id="customers">
 								<i class="fa fa-user"></i>	
 								<div>
@@ -77,6 +80,7 @@
                         
                         <!--comisión-->
 						<?php if ($this->Employee->has_module_action_permission('reports', 'view_commissions', $this->Employee->get_logged_in_employee_info()->person_id)) { ?>
+
 							<a href="#" class="icon-btn" id="commissions">
 								<i class="fa fa-money"></i>	
 								<div>
@@ -87,6 +91,7 @@
                         <!--compras-->
 						<?php
 						if ($this->Employee->has_module_action_permission('reports', 'view_receivings', $this->Employee->get_logged_in_employee_info()->person_id)) { ?>
+
 							<a href="#" class="icon-btn" id="receivings">
 								<i class="fa fa-cloud-download"></i>
 								<div>
@@ -98,6 +103,7 @@
                         <!--descuentos-->
 						<?php if ($this->Employee->has_module_action_permission('reports', 'view_discounts', $this->Employee->get_logged_in_employee_info()->person_id)) { ?>
 							<a href="#" class="icon-btn" id="discounts">
+
 								<i class="fa fa-magic"></i>	
 								<div>
 									<?php echo lang('reports_discounts'); ?>
@@ -107,6 +113,7 @@
                         
                         <!--empleados-->
 						<?php if ($this->Employee->has_module_action_permission('reports', 'view_employees', $this->Employee->get_logged_in_employee_info()->person_id)) { ?>
+
 							<a href="#" class="icon-btn" id="employees">
 								<i class="fa fa-user"></i>	
 								<div>
@@ -234,7 +241,8 @@
 						<?php } ?>
                         
                         <!--ventas eliminadas-->
-						<?php if ($this->Employee->has_module_action_permission('reports', 'view_deleted_sales', $this->Employee->get_logged_in_employee_info()->person_id)) { ?>	
+						<?php if ($this->Employee->has_module_action_permission('reports', 'view_deleted_sales', $this->Employee->get_logged_in_employee_info()->person_id)) { ?>
+					
 							<a href="#" class="icon-btn" id="deleted-sales">
 								<i class="fa fa-trash-o"></i>
 								<div>
@@ -245,7 +253,9 @@
 						
                         <!-- Linea de credito-->
 						<?php
+
 						if ($this->Employee->has_module_action_permission('reports', 'view_store_account', $this->Employee->get_logged_in_employee_info()->person_id)) { ?>
+
 							<?php if($this->config->item('customers_store_accounts')) { ?>
 								<a href="#" class="icon-btn" id="store-accounts">
 									<i class="fa fa-credit-card"></i> 
@@ -258,6 +268,7 @@
 						
 
                         <!--ventas suspendidos-->
+
 						<?php if ($this->Employee->has_module_action_permission('reports', 'view_suspended_sales', $this->Employee->get_logged_in_employee_info()->person_id)) { ?>
 							<a href="#" class="icon-btn" id="suspended_sales">
 								<i class="fa fa-download"></i>	
@@ -265,8 +276,11 @@
 									<?php echo lang('reports_suspended_sales'); ?>
 								</div>
 							</a>
+
 						<?php } ?>
-						
+
+					
+						 <!--Movimiento de caja-->
 						<?php if ($this->Employee->has_module_action_permission('reports', 'view_movement_cash', $this->Employee->get_logged_in_employee_info()->person_id)) { ?>
 							<a href="#" class="icon-btn" id="movement_cash">
 								<i class="fa fa-money"></i>	
@@ -276,6 +290,7 @@
 							</a>
 						<?php } ?>
 
+
 						<!--corte diario-->
 						<?php if($this->config->item("mostrar_reportes_personalizados1")==1):?>
 							<?php if ($this->Employee->has_module_action_permission('reports', 'daily_cut', $this->Employee->get_logged_in_employee_info()->person_id)) { ?>
@@ -284,9 +299,11 @@
 									<div>
 										<?php echo lang('reports_daily_cut'); ?>
 									</div>
+
 								</a>
 							<?php } ?>
 						<?php endif; ?>
+
 
 						<?php
 						if ($this->Employee->has_module_action_permission('reports', 'view_tables',  $this->Employee->get_logged_in_employee_info()->person_id) &&  $this->config->item('enabled_for_Restaurant')) { ?>
@@ -300,12 +317,14 @@
 							
 						<?php } ?>
 						<?php
+
 						if ($this->Employee->has_module_action_permission('reports', 'view_change_house',  $this->Employee->get_logged_in_employee_info()->person_id) &&  $this->config->item('activar_casa_cambio')) { ?>
 							
 								<a href="#" class="icon-btn" id="view_change_house">
 									<i class="fa fa-exchange"></i> 
 									<div>
-										<?php echo lang('reports_change_house'); ?>
+
+										<?php echo lang('reports_change_house');  ?>
 									</div>
 								</a>
 							
@@ -806,6 +825,7 @@
 					</div>
 					
 					<div class="list-group movement_cash hidden">
+
 						<div class="btn-group btn-group-justified">
 							<a href="<?php echo site_url('reports/summary_movement_cash');?>" class="btn icon-btn letter-space">
 								<i class="fa fa-building-o"></i>
@@ -813,10 +833,18 @@
 									<?php echo lang('reports_summary_reports'); ?>
 								</div>
 							</a>
-							<a href="<?php echo site_url('reports/specific_movement_cash');?>" class="btn icon-btn letter-space">
+							<a href="<?php echo site_url('reports/only_cash');?>" class="btn icon-btn letter-space">
 								<i class="fa fa-calendar"></i>
 								<div>
-									<?php echo lang('reports_detailed_reports'); ?>
+									
+									<?php echo lang('only_cash'); ?>
+								</div>
+							</a>
+							<a href="<?php echo site_url('reports/detailed_of_payment');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-calendar"></i>
+								<div>
+
+									<?php echo lang('detailed_report_all_means_of_payment');  ?>
 								</div>
 							</a>
 						</div>						
