@@ -2,7 +2,7 @@
 require_once(APPPATH.'libraries/barcode/BCGFontFile.php');
 require_once(APPPATH.'libraries/barcode/BCGColor.php');
 require_once(APPPATH.'libraries/barcode/BCGDrawing.php');
-require_once (APPPATH."libraries/barcode/BCGcode128.barcode.php");
+require_once(APPPATH."libraries/barcode/BCGcode128.barcode.php"); 
 
 class Barcode extends CI_Controller 
 {

@@ -200,7 +200,7 @@
 			//Buscar todos los movimientos de la caja seleccionada
 			$('#location_registers').change(function(){
 
-				window.location = "<?=base_url()?>/index.php/registers_movement/index/"+$(this).val();
+				window.location = "<?=site_url("registers_movement/index")?>/"+$(this).val();
 
 			});
 

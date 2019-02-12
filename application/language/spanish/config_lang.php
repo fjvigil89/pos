@@ -149,12 +149,12 @@ $lang['config_value_point']='Valor por punto';
 $lang['config_value_point_accumulated']='Puntos acumulado';
 $lang['config_show_point']='Mostrar puntos en la factura';
 $lang['config_percent_point']='Valor del punto en porcentaje de la compra';
-$lang['config_error_value_points']='El valor debe ser un numero';
-$lang['config_error_percent_points']='El porcentaje debe ser un numero';
+$lang['config_error_value_points']='El valor debe ser un número';
+$lang['config_error_percent_points']='El porcentaje debe ser un número';
 $lang['config_show_image']='Mostrar imagen miniatura en reportes';
 $lang['config_round_value']='Usar sistema de redondeo ';
 $lang['config_hide_support_chat']='Ocultar chat de soporte';
-$lang['config_denomination'] = 'Tipo  de denominacion';
+$lang['config_denomination'] = 'Tipo de denominación';
 $lang['config_currency'] = 'Billete/Moneda';
 $lang['config_currency1'] = 'Billete';
 $lang['config_currency2'] = 'Moneda';
@@ -249,7 +249,7 @@ $lang['config_ocultar_forma_pago']="Ocultar formas de pagos";
 $lang['config_categoria_gastos']="Categoría de gastos e ingresos";
 $lang['config_categoria']="Categoría";
 $lang['config_categoria_gastos_help']="Categorías que se mostraran cuando quiera retirar o ingresar dinero de caja";
-
+ 
 
 $lang['config_application_settings_info_st'] = 'Servicios Tecnico';
 $lang['config_st_correo'] = 'Enviar correo al cliente';

@@ -63,7 +63,7 @@ $(document).ready(function(){
 				<!--<a class="icon fa fa-youtube-play help_button" id='maxitems' data-toggle="modal" data-target="#stack888"></a>-->
 				<?php 
 					$extra="";
-					$url_video_ver="#";
+					$url_video_ver="https://www.youtube.com/watch?v=4cnV1nv0las&feature=youtu.be";
 					if($this->Appconfig->es_franquicia()){
 						$url_video=	$this->Appconfig->get_video("BODEGA");
 						if($url_video!=null){

@@ -13,10 +13,11 @@ function load_config()
 		$CI->config->set_item($app_config->key,$app_config->value);
 	}
 	
-	if($CI->Employee->is_logged_in() and $CI->Employee->get_logged_in_employee_info()->language)
+	if($CI->Employee->is_logged_in() /*and $CI->Employee->get_logged_in_employee_info()->language*/)
 	{
-//	$CI->lang->switch_to($CI->Employee->get_logged_in_employee_info()->language);
-		$CI->lang->switch_to($CI->config->item('language'));
+		//	$CI->lang->switch_to($CI->Employee->get_logged_in_employee_info()->language);
+		//if($CI->config->item('language')!="english")
+			$CI->lang->switch_to($CI->config->item('language'));
 	}
 	else if ($CI->config->item('language'))
 	{

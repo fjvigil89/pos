@@ -321,8 +321,7 @@ class Appconfig extends CI_Model
 	function get_categorias_gastos()
 	{
 		$return = array();
-		$categoria_gastos = $this->get('categoria_gastos');
-		
+		$categoria_gastos = $this->get('categoria_gastos');	
 		
 		if ($categoria_gastos)
 		{

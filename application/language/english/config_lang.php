@@ -135,6 +135,7 @@ $lang['config_hide_store_account_payments_from_report_totals'] = 'Hide store acc
 $lang['config_disable_sale_notifications'] = 'Disable sale notifications';
 
 $lang['config_company_regimen_help'] = 'If it is a simplified regime, it does not pay tax';
+$lang['config_send_txt_invoice'] = 'Send invoice in txt format';
 
 $lang['config_company_dni'] = 'NIT/RUT';
 $lang['config_company_regimen'] = 'Regime';
@@ -148,6 +149,57 @@ $lang['config_invoice_hide_taxes']='Hide invoice tax';
 $lang['config_ocultar_forma_pago']="Hide forms of payments";
 $lang['config_hide_balance_receipt_payment']='Hide Balance in the Payment Receipt';
 $lang['config_sales_stock_inventory']='Do not let sell if the inventory of a product is exhausted';
+
+$lang['config_ftp_hostname'] = 'Server';
+$lang['config_ftp_username'] = 'Username';
+$lang['config_ftp_password'] = 'Password';
+$lang['config_ftp_route']    = 'Route';
+$lang['config_show_fullname_item'] = 'Show full product name';
+
+$lang['config_show_sales_price_iva']='Show taxes';
+$lang['config_show_sales_num_item']='Show item #';
+$lang['config_show_sales_discount']='Show discount';
+$lang['config_show_sales_inventory']='Show inventory';
+$lang['config_show_sales_description']='Show description';
+$lang['config_show_receivings_cost_without_tax']='Show cost without taxes';
+$lang['config_show_receivings_cost_iva']='Show taxes';
+$lang['config_show_receivings_discount']='Show discount';
+$lang['config_show_receivings_inventory']='Show inventory';
+$lang['config_show_receivings_cost_transport']='Show transportation cost';
+$lang['config_show_receivings_description']='Show description';
+$lang['config_show_receivings_num_item']='Show item #';
+$lang['config_show_inventory_isbn']='Show UPC/EAN/ISBN';
+$lang['config_show_inventory_image']='Show image';
+$lang['config_show_inventory_size']='Show size';
+$lang['config_show_inventory_model']='Show model';
+$lang['config_show_inventory_colour']='Show color';
+$lang['config_show_inventory_brand']='Show brand';
+$lang['config_show_sales_price_without_tax']='Show price without taxes';
+$lang['config_show_image']='Show thumbnail in reports';
+$lang['config_round_value']='Use rounding system ';
+$lang['config_hide_support_chat']='Hide support chat';
+$lang['config_denomination'] = 'Tipo de denominacion';
+$lang['config_system_point']='Activate points system';
+$lang['config_value_point']='Value by point';
+
+$lang['config_show_point']='Show points on the invoice';
+$lang['config_percent_point']='Value of the percentage point of the purchase';
+$lang['config_error_value_points']='The value must be a number';
+$lang['config_error_percent_points']='The percentage must be a number';
+$lang['config_categoria_gastos']="Category of expenses and income";
+
+$lang['config_thousand_separator']='Thousands separator';
+$lang['config_remove_decimals']='Decimals Remover';
+$lang['config_decimal_separator']='Decimals separator';
+$lang['config_hide_description']='Hide Description in the Receipt';
+$lang['config_more_options']='See options';
+$lang['config_hide_options']='Hide options';
+$lang['config_sip_account'] = 'Sip account';
+$lang['config_sip_password'] = 'Sip password account';
+$lang['config_add_currency']='Add denomination';
+$lang['config_value_denomination'] = 'Valor denominación';
+$lang['config_type_denomination'] = 'Tipo denominación';
+$lang['config_in_suppliers']='No permite comprar sin asignar un proveedor';
 
 
 ?>
