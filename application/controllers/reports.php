@@ -2275,7 +2275,6 @@ class Reports extends Secure_area {
                 $cajas[$caja->register_id]= $caja->name;
             }
         }
-        $data['type']=$type;
         $data["cajas"]=$cajas;
 
         $this->load->view("reports/movement_input_excel_export", $data);
@@ -2373,7 +2372,7 @@ class Reports extends Secure_area {
         $this->load->view("reports/detaile_of_payment_excel_export", $data);
     }
 
-    function detailed_of_payment($start_date, $end_date,$register_id, $export_excel = 0, $export_pdf = 0, $type, $offset = 0)
+    function detailed_of_payment($start_date, $end_date,$register_id,$empleado_id, $export_excel = 0, $export_pdf = 0, $offset = 0)
     {
        
         $start_date = rawurldecode($start_date);
@@ -2386,7 +2385,7 @@ class Reports extends Secure_area {
 
         $model->setParams(array('start_date' => $start_date, 'end_date' => $end_date,"register_id"=>$register_id, 'export_excel' => $export_excel, 'export_pdf' => $export_pdf, 'offset' => $offset));
 
-        $this->Register_movement->create_movement_items_temp_table(array('start_date' => $start_date, 'end_date' => $end_date, "register_id"=>$register_id));
+        $this->Register_movement->create_movement_all_temp_table(array('start_date' => $start_date, 'end_date' => $end_date, "register_id"=>$register_id, "empleado_id" => $empleado_id));
 
         $config = array();
         $config['base_url'] = site_url("reports/specific_movement_cash/" . rawurlencode($start_date) . '/' . rawurlencode($end_date) . "/$register_id/$export_excel/$export_pdf");

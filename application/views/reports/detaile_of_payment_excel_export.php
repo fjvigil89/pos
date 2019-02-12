@@ -91,7 +91,7 @@
 							<div class="form-group">
 								<?php echo form_label('<a class="help_config_options  tooltips " data-placement="left" title="'.lang("reports_empleado_help").'">Empleado</a>'.' :', 'reports_empleado_label', array('class'=>'col-md-3 control-label')); ?> 
 								<div class="col-md-9">
-									<?php echo form_dropdown('empleado',$empleados, '0', 'id="empleado" class="form-control"'); ?>
+									<?php echo form_dropdown('empleado',$empleados, '0', 'id="empleado_id" class="form-control"'); ?>
 								</div>
 							</div>
 							<div class="form-group">
@@ -172,8 +172,7 @@
 
 
 	<script type="text/javascript" language="javascript">
-        var type = '<?=$type ?>';
-		var JS_DATE_FORMAT = 'YYYY-MM-DD';
+        var JS_DATE_FORMAT = 'YYYY-MM-DD';
 		var JS_TIME_FORMAT = "H:mm";
 
 		$('#start_date').datetimepicker({
@@ -200,9 +199,9 @@
 			$("#generate_report").click(function()
 			{
 				var register_id= $("#register_id").val();
+				var empleado_id= $("#empleado_id").val();
 				var export_excel = 0;
 				var export_pdf = 0;
-		
 
 				if ($("#export_excel_yes").prop('checked'))
 				{
@@ -216,7 +215,7 @@
 				if ($("#simple_radio").prop('checked'))
 				{   
 					
-					var url= window.location+'/'+$("#report_date_range_simple option:selected").val() +'/'+register_id+"/"+export_excel+'/'+export_pdf+'/'+type;
+					var url= window.location+'/'+$("#report_date_range_simple option:selected").val() +'/'+register_id+"/"+empleado_id+"/"+export_excel+'/'+export_pdf;
 					if($("#export_pdf_yes").prop('checked'))
 						window.open(url);
 					else
@@ -229,7 +228,7 @@
 					var start_date = $("#start_date").val();
 					var end_date = $("#end_date").val();
 
-					var url= window.location+'/'+start_date + '/'+ end_date +'/'+register_id+"/"+ export_excel+'/'+ export_pdf+'/'+type;
+					var url= window.location+'/'+start_date + '/'+ end_date +'/'+register_id+"/"+empleado_id+"/"+ export_excel+'/'+ export_pdf;
 					if($("#export_pdf_yes").prop('checked'))
 						window.open(url);
 					else

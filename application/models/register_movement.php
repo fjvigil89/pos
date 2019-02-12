@@ -13,7 +13,8 @@ class Register_movement extends CI_Model
 	}
 
 	function save($cash, $description=" ", $register_id = false, $valid_greater_than_zero_cash = true,$categorias_gastos="",$id_employee=false,$retorna_id=false,$date=null,$register_log_id=null)
-	{  
+	{ 
+
 		if($id_employee==false){
 			$id_employee= $this->CI->Employee->get_logged_in_employee_info()->person_id;
 		}
@@ -39,6 +40,7 @@ class Register_movement extends CI_Model
 
 				$cash = abs($cash);
 				$type_movement = 0;
+				
 			}
 
 			if ($cash > 0 && $valid_greater_than_zero_cash || !$valid_greater_than_zero_cash) {
@@ -55,7 +57,7 @@ class Register_movement extends CI_Model
 				);
 
 				if ($this->db->insert('registers_movement', $register_movement)) {
-					$id_tem= $this->db->insert_id();
+				$id_tem= $this->db->insert_id();
 					$data['cash_sales_amount'] = $new_cash_amount;
 					$this->db->where('register_log_id', $register_log_id);
 					$this->db->update('register_log', $data);
@@ -64,9 +66,10 @@ class Register_movement extends CI_Model
 					
 				}
 
+		
 				return true;
 			} 
-			
+			die;
 			return false;
 		}
 	}
@@ -319,7 +322,51 @@ class Register_movement extends CI_Model
 		JOIN ".$this->db->dbprefix('employees')." ON  ".$this->db->dbprefix('employees').'.id='.$this->db->dbprefix('registers_movement').'.id_employee'."  
 		
 		$where )");
+
 	
+	}
+
+	public function create_movement_all_temp_table($params)
+	{
+		set_time_limit(0);
+		
+		$location_id = $this->Employee->get_logged_in_employee_current_location_id();
+
+		$where = '';
+		
+		if (isset($params['start_date']) && isset($params['end_date']))
+		{
+			$where = 'WHERE register_date BETWEEN "'.$params['start_date'].'" and "'.$params['end_date'].'"'.
+			' and '.$this->db->dbprefix('registers').'.location_id='.$this->db->escape($location_id);
+		}
+		if (isset($params['register_id']) && $params['register_id']!="all")
+		{
+			$where .= ' and '.$this->db->dbprefix('registers').'.register_id='.$this->db->escape($params["register_id"]);
+		}
+
+		if(isset($params['categoris']) && $params['categoris']!="all"){
+			$where .= ' and '.$this->db->dbprefix('registers_movement').'.categorias_gastos='.$this->db->escape($params["categoris"]);
+
+		}
+		if(isset($params['empleado_id']) && $params['empleado_id']!="all"){
+			$where .= ' and '.$this->db->dbprefix('registers_movement').'.id_employee='.$this->db->escape($params["empleado_id"]);
+
+		}
+		//$where .= $this->where_categoria();
+		$this->db->query("CREATE TEMPORARY TABLE ".$this->db->dbprefix('movement_items_temp')."
+
+		(SELECT ".$this->db->dbprefix('registers_movement').".register_movement_id as register_movement_id,".
+		$this->db->dbprefix('registers_movement').".register_log_id as register_log_id,  register_date, 
+		".$this->db->dbprefix('registers_movement').".mount, description,detailed_description, type_movement, 
+		".$this->db->dbprefix('registers_movement').".mount_cash as mount_cash, "
+		.$this->db->dbprefix('registers_movement').".categorias_gastos as categorias_gastos, ".$this->db->dbprefix('registers_movement').".id_employee as id_employee,".$this->db->dbprefix('employees').".username as username
+		FROM ".$this->db->dbprefix('registers_movement')."		
+		JOIN ".$this->db->dbprefix('register_log')." ON  ".$this->db->dbprefix('register_log').'.register_log_id='.$this->db->dbprefix('registers_movement').'.register_log_id'."
+		JOIN ".$this->db->dbprefix('registers')." ON  ".$this->db->dbprefix('registers').'.register_id='.$this->db->dbprefix('register_log').'.register_id'."
+		JOIN ".$this->db->dbprefix('employees')." ON  ".$this->db->dbprefix('employees').'.id='.$this->db->dbprefix('registers_movement').'.id_employee'."  
+		
+		$where )");
+
 	
 	}
 	
