@@ -2381,6 +2381,8 @@ class Reports extends Secure_area {
 
         $this->load->model('reports/specific_movement');
         $model = $this->specific_movement;
+        $datos = $this->Register_movement->get_sale();
+       // echo "<pre>";print_r($datos);die;
          $params=array('start_date' => $start_date, 'end_date' => $end_date, "register_id"=>$register_id, 'export_excel' => $export_excel, 'export_pdf' => $export_pdf, 'offset' => $offset);
 
         $model->setParams(array('start_date' => $start_date, 'end_date' => $end_date,"register_id"=>$register_id, 'export_excel' => $export_excel, 'export_pdf' => $export_pdf, 'offset' => $offset));

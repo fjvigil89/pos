@@ -369,6 +369,14 @@ class Register_movement extends CI_Model
 
 	
 	}
+
+	function get_sale()
+	{
+		
+        $query = $this->db->query("SELECT * FROM ".$this->db->dbprefix('sales')."");
+   
+       return $query->result_array();
+	}
 	
 	function where_categoria(){
 		$where= "";
