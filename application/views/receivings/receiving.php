@@ -68,6 +68,9 @@
 					</div>
 				</div>
 
+				<?php // cundo se va a realizar una venta
+				 if ($mode != 'store_account_payment')
+				{ ?>
 				<div class="register-items-holder">
 					<div class="table-scrollable">
 						<table id="register" class="table table-advance table-bordered table-custom">
@@ -209,12 +212,10 @@
 														
 																	<?php echo form_hidden('id',$line); ?>
 																</form>
-															<?php } ?>
-														</td>
-
-												<?php endif; ?>
-
-											<?php if ($show_receivings_num_item) { ?>
+								<?php } ?>
+								</td>
+								<?php endif; ?>
+								<?php if ($show_receivings_num_item) { ?>
 												<td class="text-center text-info sales_item" id="reg_item_number">
 													<?php switch($this->config->item('id_to_show_on_sale_interface'))
 													{
@@ -376,10 +377,102 @@
 						</table>
 					</div>
 				</div>
+				
+				
+				<?php }
+				// para los pagos
+				else
+				{ /*Store Account Mode*/ ?>
+					<div class="margin-top-15">
+						<table id="register"  class="tablesorter table table-bordered">
+							<thead>
+								<tr>
+									<th ><?php echo lang('receivings_item_name'); ?></th>
+									<th ><?php echo lang('receivings_payment_amount'); ?></th>
+								</tr>
+							</thead>
+							<tbody id="cart_contents">
+								<?php foreach(array_reverse($cart, true) as $line=>$item)
+								{
+									$cur_item_location_info = isset($item['item_id']) ? $this->Item_location->get_info($item['item_id']) : $this->Item_kit_location->get_info($item['item_kit_id']);
+									?>
+									<tr id="reg_item_top" bgcolor="#eeeeee" >
+										<td class="text text-success">
+
+											<select id="id_credito"  name="id_credito" class="
+											bs-select form-control" >
+											<option value="1"><?php echo"Pago personalizado"  ?></option>
+											<option value="2"><?php echo"Pagar Todo"  ?></option>
+
+											</select>
+
+
+
+										</td>
+										<td>
+											<?php echo form_open("receivings/edit_item/$line", array('class' => 'line_item_form', 'autocomplete'=> 'off'));
+
+												echo form_input(array('name'=>'price','value'=>to_currency_no_money($item['price'], 10),'class'=>'form-control form-inps-sale input-small', 'id' => 'price_'.$line));
+												 
+												echo form_hidden('quantity',to_quantity($item['quantity']));
+												echo form_hidden('description','');
+												echo form_hidden('serialnumber', '');
+											echo form_close(); ?>
+										</td>
+									</tr>
+								<?php } /*Foreach*/?>
+							</tbody>
+						</table>
+					</div>
+				<?php } ?>
+				
+			</div>
+			
+	<?php if (isset($supplier)) { ?>
+		<div class="portlet light register-items-table margin-bottom-15">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-info-circle"></i>
+					<span class="caption-subject bold">
+					<?php echo lang('receivings_recent_receivings').' '.H($supplier);?>
+					</span>
+				
+						<a href="<?php echo site_url('receivings/receiving_details_modal')."/". (isset($supplier_id) ? $supplier_id: 0 ); ?>" data-toggle="modal" data-target="#myModal" > - Ver pagos de Cuentas por Pagar</a>
+					
+				</div>
+			</div>
+			<div class="table-responsive">
+				<table id="recent_receivings" class="table table-advance">
+					<thead>
+						<tr>
+							<th align="center"><?php echo lang('items_date');?></th>
+							<th align="center"><?php echo lang('reports_payments');?></th>
+							<th align="center"><?php echo lang('reports_items_purchased');?></th>
+							<th align="center"><?php echo lang('receivings_receipt');?></th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php foreach($recent_receivings as $receiving) {
+								?>
+							<tr>
+								<td align="center"><?php echo date(get_date_format().' @ '.get_time_format(), strtotime($receiving['receiving_time']));?></td>
+								<td align="center">
+									<?php echo $receiving['payment_type'];?>
+									</td>
+								<td align="center"><?php echo to_quantity($receiving['items_purchased']);?></td>
+								<td align="center"><?php echo anchor('receivings/receipt/'.$receiving['receiving_id'], lang('receivings_receipt'), array('target' =>'_blank')); ?></td>
+							</tr>
+						<?php } ?>
+					</tbody>
+				</table>
 			</div>
 		</div>
+	<?php } ?>			
+			
+		</div>
+		
 
-
+	
 		<!-- BEGIN RIGHT SMALL BOX  -->
 		<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12 no-padding-left sale_register_rightbox" id="box-customers">
 			<!-- BEGIN SMALL BOX SUPPLIERS -->
@@ -453,7 +546,7 @@
 							<i class="fa fa-group"></i>
 							<span class="caption-subject bold">
 								<?php if(isset($supplier)) { 
-									echo "Proveedor se añadió"; 
+									echo lang('receivings_supplier_was_added');
 								} 
 								else 
 								{  
@@ -465,13 +558,16 @@
 
 					<div class="portlet-body padding">
 						<?php if(isset($supplier)) { ?>
-							<?php echo '<div class="name-receivings" id="customer_name">'.character_limiter(H($supplier), 50).'</div>'; ?>
-							<div class="customer-buttons">
+						<div class="supplier-box">
+							<?php echo '<div class="name_receiving" id="supplier_name"><h4 class="text-info text-capitalize bold">'.character_limiter(H($supplier), 50).'</h4></div>'; ?>
+							<span class="credit_limit_warning">(<?php echo lang('suppliers_balance').': '.to_currency($supplier_balance); ?>)</span>
+							<div class="supplier-buttons">
 								<div class="btn-group btn-group-justified">
 									<?php 
 									echo anchor("suppliers/view/$supplier_id/", lang('common_edit'),  array('class'=>'btn btn-success','title'=>lang('suppliers_update')));
 									echo anchor("receivings/delete_supplier", lang('sales_detach'),array('id' => 'delete_supplier','class'=>'btn btn-danger')); ?>
 								</div>
+							</div>
 							</div>
 						<?php }
 						else
@@ -590,7 +686,7 @@
 										<div class="row">		
 											<div class="col-md-6">	
 												<span class="name-addpay">
-													<?php echo lang('sales_payment').':   ';?>
+													<?php echo lang('receivings_payment').':   ';?>
 												</span>
 											</div>
 											<div class="col-md-6">
@@ -599,11 +695,11 @@
 												</span>
 											</div>
 										</div>
-										<div class="row margin-top-10">
+										<!--<div class="row margin-top-10">
 											<div class="col-md-12">
 												<?php echo form_input(array('name'=>'amount_tendered', 'value'=>'', 'size'=>'10', 'class'=>'form-control form-inps', 'placeholder'=> lang('common_enter_amount_tendered'))); ?>
 											</div>
-										</div>
+										</div>-->
 									</li>
 								</ul>
 							</div>

@@ -2,6 +2,7 @@
 $lang['receivings_register']='Compra de Productos';
 $lang['receivings_mode']='Modo de Compras';
 $lang['receivings_receiving']='Recibir';
+
 $lang['receivings_return']='Regresar';
 $lang['receivings_total']='Total';
 $lang['receivings_cost']='Costo';
@@ -88,4 +89,11 @@ $lang['receivings_cost_without_tax']='Costo sin impuesto';
 $lang['receivings_item_tax']='Impuesto';
 $lang['receivings_than_zero']='La cantidad a transferir no puede ser mayor a la del inventario';
 $lang['receivings_more_options_help']='Dar clic para ver  opciones  de compras';
+$lang['receivings_recent_receivings'] = 'Compras recientes a';
+$lang['receivings_store_account_payment'] = 'Abono a línea de crédito a Proveedores';
+$lang['receivings_supplier_was_added'] = 'Proveedor se añadió';
+$lang['receivings_store_account'] = 'Línea de crédito';
+$lang['receivings_payment_amount'] = 'Cantidad de pago';
+$lang['receivings_payment']='Método de Pago';
+$lang['receivings_cash'] = 'Efectivo';
 ?>

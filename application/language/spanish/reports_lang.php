@@ -193,6 +193,7 @@ $lang['reports_balance'] = 'Saldo';
 $lang['reports_balance_to_pay'] = 'equilibrar';
 $lang['reports_comment'] = 'Comentario';
 $lang['reports_detailed_store_account_report'] = 'Cuenta detallado Tienda ';
+$lang['reports_detailed_store_payment_report'] = 'Cuenta detallado Proveedor ';
 $lang['reports_store_account_statements'] = 'Reporte de Transacciones por Cliente';
 $lang['reports_sales_generator_selectField_12'] = 'Venta Descripción del Artículo';
 $lang['reports_profit_and_loss'] = 'Pérdidas y Ganancias';
@@ -293,5 +294,8 @@ $lang["reports_entrada"]="Entrada";
 $lang["reports_salida"]="Salida";
 $lang['reports_costo_proveedor'] ="Costo de proveedor";
 $lang['reports_precio_factura']="Precio factura";
-
+$lang['reports_summary_store_payments']="Reporte resumido de pagos a Proveedores";
+$lang['reports_detailed_store_payments']="Reporte detallado de pagos a Proveedores";
+$lang['reports_store_payment_summary_report'] = 'Tienda Informe de pagos resumido';
+$lang['reports_by_supplier'] = 'Reporte Por Proveedor';
 ?>

@@ -64,7 +64,7 @@ if($this->Appconfig->es_franquicia()==true){
         <script src="js/publics.js"></script>
         <script src="js/confirm/jquery-confirm.js"></script>
         <script src="js/bootstrap-validator/bootstrapValidator.min.js"></script>
-		<?php if($this->Appconfig->is_offline_sales()):?>
+		 <?php if($this->Appconfig->is_offline_sales()):?>
 			<script src="<?php echo base_url();?>js/offline/helper_data_sesion.js" type="text/javascript"></script>
 
 		    <script src="<?php echo base_url();?>js/offline/sale.js" type="text/javascript"></script>

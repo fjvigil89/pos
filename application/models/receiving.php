@@ -26,11 +26,16 @@ class Receiving extends CI_Model
 	}
 
 
-	function save ($items,$supplier_id,$employee_id,$comment,$payment_type,$receiving_id=false, $suspended = 0, $mode,$location_id=-1)
+	function save ($items,$supplier_id,$employee_id,$comment,$payment_type,$receiving_id=false, $suspended = 0, $mode,$location_id=-1,$payments)
 	{
 		if(count($items)==0)
 			return -1;
-
+		$credit=0;
+		$compra_credito=lang("sales_supplier_credit");
+		if ($payment_type == $compra_credito){
+			$credit=1;
+		};
+		
 		$receivings_data = array(
 		'receiving_time' => date('Y-m-d H:i:s'),
 		'supplier_id'=> $supplier_id > 0 ? $supplier_id : null,
@@ -42,8 +47,11 @@ class Receiving extends CI_Model
 		'transfer_to_location_id' => $location_id > 0 ? $location_id : NULL,
 		'deleted' => 0,
 		'deleted_by' => NULL,
+		'credit' => $credit,
+		'mount' =>  $this->receiving_lib->get_total()
 		);
 
+		
 		if ($suspended != 1 && $this->config->item('track_cash') == 1 && $payment_type == "Efectivo") {
 
 			$cash = $this->receiving_lib->get_total();
@@ -53,7 +61,8 @@ class Receiving extends CI_Model
 				$this->Register_movement->save($cash, "Compra retornada",false,true,"Compra retornada",false);
 			}
 		}
-			
+		
+		
 		$this->db->query("SET autocommit=0");	
 		//Lock tables invovled in sale transaction so we don't have deadlock
 		$this->db->query('LOCK TABLES '.$this->db->dbprefix('customers').' WRITE, '.$this->db->dbprefix('receivings').' WRITE, 
@@ -97,6 +106,11 @@ class Receiving extends CI_Model
 			$receiving_id = $this->db->insert_id();
 		}
 		
+		if ($suspended != 1 && $payment_type == $compra_credito) {
+			$store_account_payment_amount  = $this->receiving_lib->get_total(); 
+			/* $this->actualiza_balance_proveedor($supplier_id); */
+			/* var_dump($store_account_payment_amount);			 */
+		}	
 		foreach($items as $line=>$item)
 		{
 			$cur_item_info = $this->Item->get_info($item['item_id']);
@@ -327,6 +341,54 @@ class Receiving extends CI_Model
 		
 		$this->db->query("COMMIT");			
 		$this->db->query('UNLOCK TABLES');	
+		
+		$amount_change=0;
+		$amount_change_aux = $amount_change;
+       /*  foreach ($payments as $payment_id => $payment) { */
+            //Only update giftcard payments if we are NOT an estimate (suspended = 2)
+            /* if ($suspended != 2) {
+                if (substr($payment['payment_type'], 0, strlen(lang('sales_giftcard'))) == lang('sales_giftcard')) {
+                  
+                    $splitpayment = explode(':', $payment['payment_type']);
+                    $cur_giftcard_value = $this->Giftcard->get_giftcard_value($splitpayment[1]);
+
+                    $this->Giftcard->update_giftcard_value($splitpayment[1], $cur_giftcard_value - $payment['payment_amount']);
+                    $total_giftcard_payments += $payment['payment_amount'];
+                }
+            } */
+			$payment_types = '';
+			$monton = $this->receiving_lib->get_total();
+                $payment_types = lang('receivings_cash') . ': ' . to_currency($monton) . '<br />';
+ 
+            $receiving_payments_data = array
+                (
+                'receiving_id' => $receiving_id,
+                'payment_type' => $payment_types,
+                'payment_amount' =>$monton,
+                 'payment_date' => date('Y-m-d H:i:s'),
+            );
+            // si se permite solo $amount_change en efectivo se coloca el if, de lo contrario no
+            if ($payments['payment_type'] == lang('receivings_cash')) {
+
+                if ($payments['payment_amount'] <= $amount_change_aux) {
+
+                    $amount_change_aux = $amount_change_aux - $payments['payment_amount'];
+                    $receiving_payments_data['payment_amount'] = 0;
+
+                } else if ($payments['payment_amount'] > $amount_change_aux) {
+
+                    $receiving_payments_data["payment_amount"] = $receiving_payments_data["payment_amount"] - $amount_change_aux;
+                    $amount_change_aux = 0;
+                }
+            }
+
+            if (!$this->db->insert('receivings_payments', $receiving_payments_data)) {
+                $this->db->query("ROLLBACK");
+                $this->db->query('UNLOCK TABLES');
+                return -1;
+            }
+
+        /* } */
 
 		return $receiving_id;
 	}
@@ -647,6 +709,401 @@ class Receiving extends CI_Model
 		$this->db->where('receivings_items.item_id', $item_id);
 		
 		return $this->db->get()->result_array();
+	}
+	
+	public function get_recent_receivings_for_supplier($supplier_id)
+    {
+        $return = array();
+
+        $this->db->select('receivings.*, SUM(quantity_purchased) as items_purchased');
+        $this->db->from('receivings');
+        $this->db->join('receivings_items', 'receivings.receiving_id = receivings_items.receiving_id');
+        $this->db->where('supplier_id', $supplier_id);
+        $this->db->where('deleted', 0);
+        $this->db->order_by('receiving_time DESC');
+        $this->db->group_by('receivings.receiving_id');
+        $this->db->limit(10);
+
+        foreach ($this->db->get()->result_array() as $row) {
+            $return[] = $row;
+        }
+
+        return $return;
+    }
+	
+	 public function get_pay_cash($supplier_id,$location_id=false,$limit=20)
+    {
+       if($location_id==false){
+            $location_id= $this->Employee->get_logged_in_employee_current_location_id();
+       }
+        $this->db->from('pay_cash');
+        $this->db->where('supplier_id', $supplier_id);
+        $this->db->where('location_id', $location_id);        
+        $this->db->where('deleted', 0);
+        $this->db->order_by('pay_cash_id DESC');
+        $this->db->limit($limit);
+        $query = $this->db->get();
+
+        return $query->result();
+    }
+    function delete_pay_cash($pay_cash_id,$delte_all=false){
+        $data=array(
+            "deleted"=>1,
+            "deleted_by"=>$this->Employee->get_logged_in_employee_info()->person_id
+         );
+         $this->db->where('pay_cash_id', $pay_cash_id);
+         $result = $this->db->update('pay_cash', $data);
+         $this->update_store_account_by_pay_cash($pay_cash_id); 
+        /*  $this->update_giftcard_balance_by_pay_cash($pay_cash_id);  */
+         return $result;
+    }
+	
+	public function get_pay_cash_by_id($pay_cash_id)
+    {
+        $this->db->from('pay_cash');
+        $this->db->where('pay_cash_id', $pay_cash_id);
+        return $this->db->get()->row();
+    }
+	
+	public function get_supplier_by_pay_cash($pay_cash_id)
+    {
+        $this->db->from('pay_cash');
+        $this->db->where('pay_cash_id', $pay_cash_id);
+        return $this->Supplier->get_info($this->db->get()->row()->supplier_id);
+    }
+	
+	public function update_store_account_by_pay_cash($pay_cash_id, $undelete = 0)
+    {
+        $pay_cash_info=$this->get_pay_cash_by_id($pay_cash_id);
+        if($pay_cash_info->monton_total){
+            //update if Store account payment exists
+            $this->db->from('pay_cash_payments');       
+            $this->db->where('pay_cash_id', $pay_cash_id);
+        
+            $to_be_paid_result = $this->db->get();
+
+            $supplier_id = $this->get_supplier_by_pay_cash($pay_cash_id)->person_id;
+
+            if ($to_be_paid_result->num_rows >= 1) {
+                foreach ($to_be_paid_result->result() as $to_be_paid) {
+                    if($to_be_paid->payment_type==lang('receivings_cash')){
+                        if ($to_be_paid->payment_amount) {
+                    
+                            if ($undelete == 0) {
+                                $description ="Abono  de crédito eliminado";
+                                $categorias_gastos="Abono  de crédito eliminado";
+                                $result=  $this->Register_movement->save($to_be_paid->payment_amount, $description,false,true,$categorias_gastos,false);
+                                
+                        
+                            } else {
+                                $description ="Abono  de crédito restaurado";
+                                $categorias_gastos="Abono  de crédito restaurado";
+                                $result=  $this->Register_movement->save(-$to_be_paid->payment_amount, $description,false,true,$categorias_gastos,false);
+                                
+                            }
+                        
+                        }
+                    }   
+                }
+            }
+			$total_balance=$this->total_balance($supplier_id);
+            $store_account_payment_amount=$pay_cash_info->monton_total;
+            $movement_type=0;
+            $category="";
+            if ($undelete == 0) {
+                $this->db->set('balance', $total_balance+$store_account_payment_amount, false);
+                //$store_account_payment_amount=-$store_account_payment_amount;
+                    $movement_type=0;
+                    $category="Abono  de crédito eliminado";
+                    
+            }else{
+                $this->db->set('balance', $total_balance-$store_account_payment_amount, false);
+                $movement_type=1;
+                $category="Abono  de crédito restaurado";
+            }
+            $this->db->where('person_id', $supplier_id);
+            $result=  $this->db->update('suppliers');
+
+            $store_payments_transaction = array(
+                'supplier_id'=>$supplier_id,
+                'pay_cash_id'=>$pay_cash_id,
+                'comment'=>"",
+                'transaction_amount'=>$store_account_payment_amount*-1,
+                'balance'=>$total_balance,
+                'date' => date('Y-m-d H:i:s'),
+                "movement_type"=>$movement_type,// 0 agregar al la cuenta 1 restar de la cuenta
+				"abono"=>1,
+                "category"=>$category
+            );   
+		
+           $result= $this->db->insert('store_payments',$store_payments_transaction);            
+        }        
+    }  
+	
+	public function add_pay_cash_supplier($supplier_id, $balance, $total_venta,$suspended = 0)
+    {
+        //we need to check the sale library for deleted taxes during sale
+        $this->load->library('receiving_lib');
+        $this->db->query("SET autocommit=0");
+        //Lock tables invovled in sale transaction so we don't have deadlock
+        $this->db->query('LOCK TABLES ' . $this->db->dbprefix('suppliers') . ' WRITE, ' . $this->db->dbprefix('suppliers') . 'Read');
+        //Update supplier store account balance
+        if ($supplier_id > 0 ) {
+			$balance=$this->total_balance($supplier_id);
+            $this->db->set('balance', $balance+$total_venta,false);
+            $this->db->where('person_id', $supplier_id);
+            if (!$this->db->update('suppliers')) {
+
+                $this->db->query("ROLLBACK");
+                $this->db->query('UNLOCK TABLES');
+                return -1;
+            }
+		}
+		$balance=$this->total_balance($supplier_id);
+            $store_account_transaction = array( 
+                'supplier_id'=>$supplier_id,            
+                'comment'=>"",
+                'transaction_amount'=> $total_venta,
+                'balance'=>$balance,
+                'date' => date('Y-m-d H:i:s'),
+                "movement_type"=>0, //0 add al saldo 
+                "category"=>lang("receivings_receiving")
+              );
+              if (!$this->db->insert('store_payments',$store_account_transaction))
+              {
+                  $this->db->query("ROLLBACK");
+                  $this->db->query('UNLOCK TABLES');
+                  return -1;
+              }	
+        
+        
+        $this->db->query("COMMIT");
+        $this->db->query('UNLOCK TABLES');
+        return true;
+    }
+	
+	    /* receiving_id_abono id de la compra que se le desea a gregar un abaono
+     */
+    public function save_pay_cash($items, $supplier_id, $employee_id, $sold_by_employee_id, $comment, $show_comment_on_receipt, $payments, $receiving_id = false, $suspended = 0, $cc_ref_no = '', $auth_code = '', $change_receiving_date = false, $balance = 0, $store_account_payment = 0, $total = 0, $amount_change, $id_receiving = -1)
+    {
+      
+      
+        $this->load->library('receiving_lib');
+
+        $payment_types = '';
+        // cuanto pago
+        $monton = $this->receiving_lib->get_total();
+			
+        $payment_types = $payment_types .$payments['payment_type'] . ': ' . to_currency($payments['payment_amount']) . '<br />';
+
+        $receivings_data = array(
+            "receiving_id" => null,
+            'supplier_id' => $supplier_id > 0 ? $supplier_id : null,
+            'employee_id' => $employee_id,
+            'sold_by_employee_id' => $sold_by_employee_id,
+            'payment_type' => $payment_types,
+            'comment' => $comment,
+            'show_comment_on_receipt' => $show_comment_on_receipt ? $show_comment_on_receipt : 0,
+            'suspended' => $suspended,
+            'deleted' => 0,
+            'deleted_by' => null,
+            'cc_ref_no' => $cc_ref_no,
+            'auth_code' => $auth_code,
+            'location_id' => $this->Employee->get_logged_in_employee_current_location_id(),
+            'register_id' => $this->Employee->get_logged_in_employee_current_register_id(),
+            'store_account_payment' => $store_account_payment,
+            "monton_total" => $monton,
+        );
+        $receivings_data['pay_cash_time'] = date('Y-m-d H:i:s');
+        $supplier_info=$this->Supplier->get_info($supplier_id);
+        $balence_previos=$supplier_info->balance;
+		$balance=$this->Receiving->total_balance($supplier_id);
+		$value=0;
+		$this->db->query("SET autocommit=0");
+		//Lock tables invovled in receiving transaction so we don't have deadlock
+        $this->db->query('LOCK TABLES '.$this->db->dbprefix('suppliers').' WRITE, '.$this->db->dbprefix('store_accounts').
+        ' WRITE, '.$this->db->dbprefix('pay_cash_payments').' WRITE, '.$this->db->dbprefix('pay_cash'));
+			
+		$store_account_payment_amount  = $this->receiving_lib->get_total();
+
+	
+		//Only update balance + store account payments if we are NOT an estimate (suspended = 2)
+		
+		     //Update supplier store account if payment made
+			if($supplier_id > 0 && $store_account_payment_amount)
+			{
+				$this->db->set('balance',$balance,false);
+				$this->db->where('person_id', $supplier_id);
+				if (!$this->db->update('suppliers'))
+				{
+				
+					$this->db->query("ROLLBACK");
+					$this->db->query('UNLOCK TABLES');
+					return -1;
+				}
+			 }
+			
+			if (!$this->db->insert('pay_cash',$receivings_data))
+			{
+	
+				$this->db->query("ROLLBACK");
+				$this->db->query('UNLOCK TABLES');
+				return -1;
+			}
+			$receiving_id = $this->db->insert_id();
+	
+			 //insert store account transaction 
+
+			if($supplier_id > 0 && $store_account_payment_amount)
+			{
+			 	
+
+				//if($store_account_payment_amount>$balence_previos)
+				//{
+				//	$store_account_payment_amount=-$store_account_payment_amount;
+				//}
+				$balance=$this->total_balance($supplier_id);
+			 	$store_payment_transaction = array( 
+			      'supplier_id'=>$supplier_id,
+			      'pay_cash_id'=>$receiving_id,
+				  'comment'=>$comment,
+			      'transaction_amount'=>$store_account_payment_amount,
+				  'balance'=>$balance,
+                  'date' => date('Y-m-d H:i:s'),
+                  "movement_type"=>1,// restal del saldo
+				  "abono" =>1,
+                  "category"=>lang("receivings_store_account_payment")
+				);
+					 
+				if (!$this->db->insert('store_payments',$store_payment_transaction))
+				{
+					$this->db->query("ROLLBACK");
+					$this->db->query('UNLOCK TABLES');
+					return -1;
+				}			
+			 }	 		 
+         
+          // se actualiza la caja y los registros
+         /*  foreach ($payments as $payment_id => $payment) {  */
+        /*  $payment_types = $payment_types .$payments['payment_type'] . ': ' . to_currency($payments['payment_amount']) . '<br />'; */
+            $pay_cash_payments = array
+                (
+                'pay_cash_id' => $receiving_id,
+                'payment_type' => $payments['payment_type'],
+                'payment_amount' =>$monton,
+                'payment_date' => date('Y-m-d H:i:s'),              
+                );
+				
+                if (!$this->db->insert('pay_cash_payments', $pay_cash_payments)) {
+                    $this->db->query("ROLLBACK");
+                    $this->db->query('UNLOCK TABLES');
+                    return -1;
+                }
+       
+		 
+		  $receiving_payments_data = array
+                (
+                'receiving_id' => $receiving_id,
+                'payment_type' => $payment_types,
+                'payment_amount' => $monton,
+				'payment_date' =>date('Y-m-d H:i:s')                
+            );
+            // si se permite solo $amount_change en efectivo se coloca el if, de lo contrario no
+            if ($payments['payment_type'] == lang('receiving_cash')) {
+
+                if ($payment['payment_amount'] <= $amount_change_aux) {
+
+                    $amount_change_aux = $amount_change_aux - $payment['payment_amount'];
+                    $receiving_payments_data['payment_amount'] = 0;
+
+                } else if ($payment['payment_amount'] > $amount_change_aux) {
+
+                    $receiving_payments_data["payment_amount"] = $receiving_payments_data["payment_amount"] - $amount_change_aux;
+                    $amount_change_aux = 0;
+                }
+            }
+
+            if (!$this->db->insert('receivings_payments', $receiving_payments_data)) {
+                $this->db->query("ROLLBACK");
+                $this->db->query('UNLOCK TABLES');
+                return -1;
+            }
+/* 		} */
+		if ($payments['payment_type']==lang('receivings_cash')){
+          $description =lang("receivings_store_account_payment");
+          $categorias_gastos=lang("receivings_store_account_payment");
+          $cash = $monton*-1;
+          if ($amount_change > 0) {
+              $cash = $cash - $amount_change;
+          }
+          if ($cash < 0 && !$this->Register_movement->save($cash, $description,false,true,$categorias_gastos,false)) {
+              $this->db->query("ROLLBACK");
+              $this->db->query('UNLOCK TABLES');
+              return -1;
+          }	
+		}  	
+		
+		$this->db->query("COMMIT");			
+		$this->db->query('UNLOCK TABLES');	
+	
+		return $receiving_id;
+    }
+	
+	public function get_payment_cash($payments)
+    {
+        $total_cash = 0;
+
+        foreach ($payments as $value) {
+
+            if ($value['payment_type'] == lang('receivings_cash')) {
+
+                $total_cash += (float) $value['payment_amount'];
+            }
+        }
+
+        return $total_cash;
+    }
+	
+	function total_debitos($supplier_id){
+		$this->db->select("sum(mount) as debitos");
+		$this->db->from("receivings");
+		$this->db->where('supplier_id', $supplier_id);
+		$this->db->where('deleted', 0);
+		$this->db->where('credit', 1);
+		$consulta = $this->db->get();
+		if($consulta->num_rows() == 1)
+		{
+	        $row = $consulta->row();
+	        return $row->debitos;
+		}
+	}
+	
+	function total_creditos($supplier_id){
+		$this->db->select("sum(transaction_amount) as creditos");
+		$this->db->from("store_payments");
+		$this->db->where('store_payments.supplier_id', $supplier_id);
+	/* 	$this->db->where('movement_type', 1); */
+		$this->db->where('abono', 1);
+		$consulta = $this->db->get();
+		if($consulta->num_rows() == 1)
+		{
+	        $row = $consulta->row();
+			/* var_dump($row->creditos); */
+	        return $row->creditos;
+		}
+	}
+	
+	function total_balance($supplier_id){
+		$debitos=$this->total_debitos($supplier_id);
+		$creditos=$this->total_creditos($supplier_id);
+        return $debitos-$creditos;
+	}
+	
+	function actualiza_balance_proveedor($supplier_id){
+		$total_balance= $this->total_balance($supplier_id);
+		$this->db->set('balance', $total_balance);
+		$this->db->where('person_id', $supplier_id);
+        $result=$this->db->update('suppliers');
 	}
 /*
 	function delete_receipt()
