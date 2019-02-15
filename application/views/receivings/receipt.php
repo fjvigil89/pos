@@ -95,10 +95,8 @@
 							<td class="left_text_align"><?php echo character_limiter(H($item['name']),40); ?></td>
 							<td class="left_text_align"><?php echo to_currency($item['price'], 2); ?></td>		
 							<?php if (isset($type_supplier)){?>
-							{
 								<td class="left_text_align"><?php echo to_currency($value_tax, 2); ?></td>
 								<td class="left_text_align"><?php echo to_currency($cost_with_tax, 2);?></td>
-							}					
 						    <?php } 
 						    else{?>
 						    	<td class="left_text_align"><?php echo to_currency(0, 2); ?></td>
@@ -186,7 +184,19 @@
 							<td class="right_text_align" colspan="2"><?php echo $amount_change; ?></td>
 						</tr>
 					<?php } ?>
+					<?php if (isset($supplier_balance_for_receiving) && $supplier_balance_for_receiving !== FALSE && !$this->config->item('hide_balance_receipt_payment')) {?>
+						<tr>
+							<td class="right_text_align" colspan="6">
+								<?php echo lang('receivings_supplier_account_balance'); ?>
+							</td>
+							<td class="right_text_align" colspan="2">
+								<?php echo to_currency($supplier_balance_for_receiving); ?> 
+							</td>
+						</tr>
+					<?php } ?>
 				</table>
+				
+
 				<!-- </div> -->
 
 				<div id="sale_return_policy">

@@ -409,6 +409,7 @@
 
 
 										</td>
+										
 										<td>
 											<?php echo form_open("receivings/edit_item/$line", array('class' => 'line_item_form', 'autocomplete'=> 'off'));
 
@@ -1011,6 +1012,32 @@
 			setTimeout(function(){$('#item').focus();}, 10);
 		}
 
+			$( "#id_credito" ).change(function() {
+			var opt= $("#id_credito").val();
+			if(opt==2){
+				$.ajax(
+					{
+					url :'<?php echo base_url();?>index.php/receivings/get_monton_pendiente/'+<?php echo isset($supplier_id) ? $supplier_id: 0; ?>,
+					type: "GET"
+
+					})
+					.done(function(data) {
+
+					$("input[name='price']").val(data);
+					$("input[name='price']").focus();					
+
+					})
+					.fail(function(data) {
+						alert( "error al consultar el Monto" );
+					})
+					.always(function(data) {
+
+				});
+			}
+
+
+  			
+		});
 	</script>
 
 	<script>

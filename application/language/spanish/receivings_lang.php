@@ -96,4 +96,9 @@ $lang['receivings_store_account'] = 'Línea de crédito';
 $lang['receivings_payment_amount'] = 'Cantidad de pago';
 $lang['receivings_payment']='Método de Pago';
 $lang['receivings_cash'] = 'Efectivo';
+$lang['receivings_check'] = 'Cheque';
+$lang['receivings_debit'] = 'Tarjeta de Débito';
+$lang['receivings_credit'] = 'Tarjeta de Crédito';
+$lang['receivings_supplier_credit'] = 'Crédito de Proveedores';
+$lang['receivings_supplier_account_balance'] = 'Balance en la cuenta del Proveedor';
 ?>
