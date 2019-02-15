@@ -75,7 +75,10 @@
 							{
 								$prev_tax[$item['item_id']][$i]=$tax['percent']/100;
 								$i++;
-							}												
+							}		
+							$cost_with_tax=0;
+							$value_tax=0;
+							if (isset($prev_tax)){
 							$sum_tax=array_sum($prev_tax[$item['item_id']]);
 							$value_tax=$item['price']*$sum_tax;
 							if (isset($type_supplier)) 
@@ -85,7 +88,8 @@
 							else
 							{
 								$cost_with_tax=$item['price']+$item['cost_transport'];																					
-							}															
+							}									
+						}
 						?>
 						<tr>
 							<td class="left_text_align"><?php echo character_limiter(H($item['name']),40); ?></td>

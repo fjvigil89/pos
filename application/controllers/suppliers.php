@@ -478,5 +478,16 @@ class Suppliers extends Person_controller
 		$this->Supplier->cleanup();
 		echo json_encode(array('success'=>true,'message'=>lang('customers_cleanup_sucessful')));
 	}
+	
+	function pay_now($supplier_id)
+	{
+		$this->load->library('receiving_lib');
+    	$this->receiving_lib->clear_all();
+		$this->receiving_lib->set_supplier($supplier_id);
+		$this->receiving_lib->set_mode('store_account_payment');
+		$store_account_payment_item_id = $this->Item->create_or_update_store_account_item();
+		$this->receiving_lib->add_item($store_account_payment_item_id,1);
+		redirect('receivings');
+	}
 }
 ?>

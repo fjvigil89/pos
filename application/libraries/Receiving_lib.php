@@ -645,5 +645,52 @@ class Receiving_lib
 	{
 		$this->CI->session->unset_userdata('deleted_taxes');
 	}
+	
+	//Alain Multiple Payments
+	function get_payments()
+	{
+		if($this->CI->session->userdata('rec_payments') === false)
+			$this->set_payments(array());
+
+		return $this->CI->session->userdata('rec_payments');
+	}
+	
+	function set_payments($rec_payments_data)
+	{
+		$this->CI->session->set_userdata('rec_payments',$rec_payments_data);
+	}
+	
+	public function get_payment_ids($payment_type)
+	{
+		$payment_ids = array();
+		
+		$rec_payments=$this->get_payments();
+		
+		for($k=0;$k<count($rec_payments);$k++)
+		{
+			if ($rec_payments[$k]['payment_type'] == $payment_type)
+			{
+				$payment_ids[] = $k;
+			}
+		}
+		
+		return $payment_ids;
+	}
+	
+	public function get_payment_amount($payment_type)
+	{
+		$payment_amount = 0;
+		if (($payment_ids = $this->get_payment_ids($payment_type)) !== FALSE)
+		{
+			$rec_payments=$this->get_payments();
+			
+			foreach($payment_ids as $payment_id)
+			{
+				$payment_amount += $rec_payments[$payment_id]['payment_amount'];
+			}
+		}
+		
+		return $payment_amount;
+	}
 }
 ?>
