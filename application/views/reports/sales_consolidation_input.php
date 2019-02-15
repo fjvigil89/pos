@@ -155,12 +155,12 @@
 		var JS_TIME_FORMAT = "H:mm";
 
 		$('#start_date').datetimepicker({
-			format: JS_DATE_FORMAT+" "+JS_TIME_FORMAT,
+			format: JS_DATE_FORMAT,//+" "+JS_TIME_FORMAT,
 			locale: "es"
 		});
 
 		$('#end_date').datetimepicker({
-			format: JS_DATE_FORMAT+" "+JS_TIME_FORMAT,
+			format: JS_DATE_FORMAT,//+" "+JS_TIME_FORMAT,
 			locale: "es"
 		});
 	
