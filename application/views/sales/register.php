@@ -136,6 +136,13 @@
 											'data-target'=>'#myModal'));
 										?>
 									</li>
+									<li>
+										<?php echo anchor(site_url('sales/modal_range'),
+											lang("sale_range"),
+											array('class'=>'', "id"=>"modal_range", 'data-toggle'=>"modal",
+											'data-target'=>'#myModal'));
+										?>
+									</li>
 									
 									<?php if ($this->Register->count_all($this->Employee->get_logged_in_employee_current_location_id()) > 1) {?>
 										<li>

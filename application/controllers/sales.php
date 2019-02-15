@@ -105,6 +105,16 @@ class Sales extends Secure_area
 	function sale_return_modal(){
 		$this->load->view("sales/sale_return_modal");
 	}
+	function modal_range(){
+		$_items= $this->Item->get_items_activate_range();
+		$register_log=$this->Sale->get_current_register_log();
+		$item_ranges_tem= $this->Item->get_range_by_register_log_id($register_log->register_log_id);
+		$item_ranges=array();
+		foreach ($item_ranges_tem as $item_range) {
+			$item_ranges[$item_range["item_id"]]=$item_range;
+		}
+		$this->load->view("sales/sale_range_modal",array("items"=>$_items,"item_ranges"=>$item_ranges));
+	}
 	
 	function modal_cart(){
 		$data=array();
@@ -189,8 +199,7 @@ class Sales extends Secure_area
 		{
 			if ($this->input->post('opening_amount') != '')
 			{
-				$now = date('Y-m-d H:i:s');
-
+				$now = date('Y-m-d H:i:s');				
 				$cash_register = new stdClass();
 				$cash_register->register_id = $this->Employee->get_logged_in_employee_current_register_id();
 				$cash_register->employee_id_open = $this->session->userdata('person_id');
@@ -198,11 +207,15 @@ class Sales extends Secure_area
 				$cash_register->open_amount = $this->input->post('opening_amount');
 				$cash_register->close_amount = 0;
 				$cash_register->cash_sales_amount = 0;
-				$this->Sale->insert_register($cash_register);
-				$this->Register_movement->save($cash_register->open_amount, "Apertura de caja", false, false,"Apertura de caja");
-
+				$register_log_id= $this->Sale->insert_register($cash_register);
+				$this->Register_movement->save($cash_register->open_amount, "Apertura de caja", false, false,"Apertura de caja");								
+				$item_ids= $this->input->post('item_id');
+				if($item_ids){
+					$start_range=  $this->input->post('item_rango');
+					$this->Item->save_ranges($register_log_id,$item_ids,$start_range,null);
+				}
 				echo json_encode( array('success'=>true) );
-			}
+			} 
 			else if ($this->Sale->is_register_log_open())
 			{				
 				$this->_reload(array(), false);			
@@ -210,7 +223,8 @@ class Sales extends Secure_area
 			else
 			{
 				$currency = $this->Denomination_currency->get_all();
-				$this->load->view('sales/opening_amount',array('currency'=>$currency));
+				$_items= $this->Item->get_items_activate_range();
+				$this->load->view('sales/opening_amount',array('currency'=>$currency,"items"=>$_items ));
 			}
 		} else {
 			/*if($this->config->item('activar_casa_cambio')==true){

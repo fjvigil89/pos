@@ -473,7 +473,7 @@ class Items extends Secure_area implements iData_controller
             'override_default_tax' => $this->input->post('override_default_tax') ? $this->input->post('override_default_tax') : 0,
             'costo_tax' => 0,
             'subcategory' => $this->input->post('subcategory') ? $this->input->post('subcategory') : 0,
-            
+            'activate_range'=>(int) $this->input->post('activate_range')
 
         );
 

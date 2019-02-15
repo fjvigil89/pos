@@ -226,4 +226,5 @@ $lang['sales_stock'] = 'Inventory';
 $lang['sales_price_without_tax'] = 'Price without tax';
 $lang['sales_price_tax'] = 'Tax';
 $lang["sales_tier"]="Tiers";
+$lang["sale_range"]="Close range"
 ?>

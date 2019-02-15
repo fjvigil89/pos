@@ -211,4 +211,5 @@ $lang['items_quantity_stock_help']='Ingresar la cantidad correspondiente que se 
 $lang['items_more_name']='Nombre del campo';
 $lang['items_more_field']='Personalizar Campo';
 $lang['config_add_items']='Añadir Campo';
+$lang["items_activate_range"]="Monitorear rango de venta";
 ?>

@@ -14,6 +14,7 @@ $lang['items_update']='Actualizar Artículo';
 $lang['items_item']='Artículo';
 $lang['items_edit_multiple_items']='Editando Múltiple de Artículos';
 $lang['items_name']='Nombre';
+$lang["items_activate_range"]="Monitorear rango de venta";
 $lang['items_category']='Categoría';
 $lang['items_cost_price']='Costo';
 $lang['items_unit_price']='Precio de venta';
