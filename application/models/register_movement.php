@@ -14,7 +14,7 @@ class Register_movement extends CI_Model
 
 	function save($cash, $description=" ", $register_id = false, $valid_greater_than_zero_cash = true,$categorias_gastos="",$id_employee=false,$retorna_id=false,$date=null,$register_log_id=null)
 	{ 
-
+        
 		if($id_employee==false){
 			$id_employee= $this->CI->Employee->get_logged_in_employee_info()->person_id;
 		}
@@ -42,7 +42,7 @@ class Register_movement extends CI_Model
 				$type_movement = 0;
 				
 			}
-
+          
 			if ($cash > 0 && $valid_greater_than_zero_cash || !$valid_greater_than_zero_cash) {
 				
 				$register_movement = array(
@@ -66,10 +66,11 @@ class Register_movement extends CI_Model
 					
 				}
 
-		
+	
 				return true;
 			} 
-			die;
+
+			//die;
 			return false;
 		}
 	}
@@ -366,7 +367,7 @@ class Register_movement extends CI_Model
 		JOIN ".$this->db->dbprefix('employees')." ON  ".$this->db->dbprefix('employees').'.id='.$this->db->dbprefix('registers_movement').'.id_employee'."  
 		
 		$where )");
-
+		
 	
 	}
 

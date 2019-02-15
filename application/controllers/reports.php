@@ -2378,17 +2378,18 @@ class Reports extends Secure_area {
         $start_date = rawurldecode($start_date);
         $end_date = rawurldecode($end_date);
         $this->check_action_permission('view_movement_cash');
-
         $this->load->model('reports/specific_movement');
+
         $model = $this->specific_movement;
         $datos = $this->Register_movement->get_sale();
-       // echo "<pre>";print_r($datos);die;
-         $params=array('start_date' => $start_date, 'end_date' => $end_date, "register_id"=>$register_id, 'export_excel' => $export_excel, 'export_pdf' => $export_pdf, 'offset' => $offset);
 
+    
+         $params=array('start_date' => $start_date, 'end_date' => $end_date, "register_id"=>$register_id, "empleado_id"=>$empleado_id, 'export_excel' => $export_excel, 'export_pdf' => $export_pdf, 'offset' => $offset);
+         
         $model->setParams(array('start_date' => $start_date, 'end_date' => $end_date,"register_id"=>$register_id, 'export_excel' => $export_excel, 'export_pdf' => $export_pdf, 'offset' => $offset));
-
+        
         $this->Register_movement->create_movement_all_temp_table(array('start_date' => $start_date, 'end_date' => $end_date, "register_id"=>$register_id, "empleado_id" => $empleado_id));
-
+        
         $config = array();
         $config['base_url'] = site_url("reports/specific_movement_cash/" . rawurlencode($start_date) . '/' . rawurlencode($end_date) . "/$register_id/$export_excel/$export_pdf");
         $config['total_rows'] = $model->getTotalRows();
@@ -2396,43 +2397,59 @@ class Reports extends Secure_area {
         $config['uri_segment'] = 8;
 
         $this->pagination->initialize($config);
+      
+          $tabular_data = array();
+      //  $report_data = $model->getData();
+
+        $report_data=$model->getData_sale_especific($params);
+        $report_data2=$model->getData_reicivings_especific($params);
+        $i=0;
+        $data_row = array();
         
-        $tabular_data = array();
-        $report_data = $model->getData();
-       
-        foreach ($report_data["details"] as $row) {
-            $data_row = array();
-            $data_row[] = array('data' => anchor('registers_movement/receipt/' . $row['register_movement_id'], '<i class="fa fa-print fa fa-2x vertical-align"></i>', array('target' => '_blank', 'class' => 'hidden-print')) ,'align' => 'left' );
+        foreach ($report_data as $row) {
+            $data_row[$i][] = array('data' => anchor('registers_movement/receipt/' . $row['sale_id'], '<i class="fa fa-print fa fa-2x vertical-align"></i>', array('target' => '_blank', 'class' => 'hidden-print')) ,'align' => 'left' );
             
-             $data_row[] = array('data' => $row['register_movement_id'], 'align' => 'right');
+             $data_row[$i][] = array('data' => $row['sale_id'], 'align' => 'right');
 
-            $data_row[] = array('data' => date(get_date_format() . ' ' . get_time_format(), strtotime($row['register_date'])), 'align' => 'right');
+            $data_row[$i][] = array('data' => date(get_date_format() . ' ' . get_time_format(), strtotime($row['sale_time'])), 'align' => 'right');
 
-            $data_row[] = array('data' => $row['description'], 'align' => 'right');
 
-            if($row['type_movement']==1){
-                $data_row[] = array('data' => 'INGRESO', 'align' => 'right');
-                $data_row[] = array('data' => to_currency($row['mount']), 'align' => 'right');
-                $data_row[] = array('data' => "", 'align' => 'right');
-            }
-           else{
-                $data_row[] = array('data' => 'FACTURA', 'align' => 'right');
-                $data_row[] = array('data' => "", 'align' => 'right');
-                $data_row[] = array('data' => to_currency($row['mount']), 'align' => 'right');                
-               
-           }
-            $data_row[] = array('data' =>$row['categorias_gastos'], 'align' => 'right');
-            $data_row[] = array('data' =>$row['username'], 'align' => 'right');
-            $data_row[] = array('data' => to_currency($row['mount_cash']), 'align' => 'right');
+            $data_row[$i][] = array('data' => $row['payment_type'], 'align' => 'right');
             
-            $tabular_data[] = $data_row;
+            //if($row['type_movement']==1){
+                $data_row[$i][] = array('data' => $row['is_invoice'], 'align' => 'right');
+                $data_row[$i][] = array('data' => $row['item_unit_price'], 'align' => 'right');
+                $data_row[$i][] = array('data' => "", 'align' => 'right');
+                $data_row[$i][] = array('data' =>$row['username'], 'align' => 'right');
+                $i++;
+                
+            
+        }
+    
+        foreach ($report_data2 as $row) {
+            $data_row[$i][] = array('data' => anchor('registers_movement/receipt/' . $row['receiving_id'], '<i class="fa fa-print fa fa-2x vertical-align"></i>', array('target' => '_blank', 'class' => 'hidden-print')) ,'align' => 'left' );
+            
+            $data_row[$i][] = array('data' => $row['receiving_id'], 'align' => 'right');
+
+            $data_row[$i][] = array('data' => date(get_date_format() . ' ' . get_time_format(), strtotime($row['receiving_time'])), 'align' => 'right');
+
+            $data_row[$i][] = array('data' => $row['payment_type'], 'align' => 'right');
+
+            //if($row['type_movement']==1){
+                $data_row[$i][] = array('data' => $row['is_invoice'], 'align' => 'right');
+                $data_row[$i][] = array('data' => "", 'align' => 'right');
+                $data_row[$i][] = array('data' => $row['item_unit_price'], 'align' => 'right');
+                $data_row[$i][] = array('data' =>$row['username'], 'align' => 'right');
+                $i++;
+            
         }
 
-
+        
+        $tabular_data=$data_row;
         $data = array(
             "title" => "Movimiento de caja detallado",
             "subtitle" => date(get_date_format(), strtotime($start_date)) . '-' . date(get_date_format(), strtotime($end_date)),
-            "headers" => $model->getDataColumns(),
+            "headers" => $model->getDataColumns('all'),
             "data" => $tabular_data,
             "summary_data" => $model->getSummaryData(),
             "export_excel" => $export_excel,
@@ -2442,8 +2459,11 @@ class Reports extends Secure_area {
 
         
        
-        $this->load->view("reports/tabular_detailed_of_payment", $data);
+         $this->load->view("reports/tabular_detailed_of_payment", $data);
     }
+
+
+
 
 
 
