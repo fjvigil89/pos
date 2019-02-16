@@ -119,10 +119,33 @@ class Sales extends Secure_area
 		}
 		foreach ($item_ids as $key=>$item_id) {
 			if(isset($item_ranges[$item_id])){
-				$quantity=  $item_ranges[$item_id]["start_range"]-(double)$item_final_ranges[$item_id];
+				$quantity=  abs((double)$item_final_ranges[$item_id]-($item_ranges[$item_id]["start_range"]+$item_ranges[$item_id]["extra_charge"]));
+				if($quantity!=0){
 				$this->sale_lib->add_item($item_id,$quantity);
+				}
 			}
 		}
+		echo "ok";
+	}
+	function add_cash(){
+		
+		$item_id= $this->input->post('item_id');
+		$cash= $this->input->post('cash');
+		if(is_numeric($cash)){
+			$register_log=$this->Sale->get_current_register_log();
+			$this->Item->add_balance($register_log->register_log_id,$item_id,$cash);
+		}
+
+	}
+	function add_balance(){
+		$register_log=$this->Sale->get_current_register_log();
+		$items_ranges= $this->Item->get_items_range($register_log->register_log_id);
+		$items=array();
+		foreach ($items_ranges as $item) {
+			$items["$item->item_id"]=$item->name."  -  ".(double)$item->extra_charge;
+		}
+		$data=array("items"=>$items);
+		$this->load->view("sales/sale_add_balance_modal",$data);
 	}
 	function modal_range(){
 		$_items= $this->Item->get_items_activate_range();
@@ -318,6 +341,8 @@ class Sales extends Secure_area
 
 				$data = $this->Register_movement->report_register($cash_register->register_log_id);
 				$data["credito_tienda"]=$this->appconfig->get("customers_store_accounts");
+				$data["items_range"]=$this->Item->get_items_range($cash_register->register_log_id);
+				
 				$this->load->view("registers_movement/report_register",$data);
 
 			} else {

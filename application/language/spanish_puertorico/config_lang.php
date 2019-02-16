@@ -10,6 +10,7 @@ $lang['config_website']='Sitio Web';
 $lang['config_fax']='Fax';
 $lang["config_custom2_subcategory"]="Campo personalizado 2 subcategoría";
 $lang['config_giros']='Giros';
+$lang['config_product_rank']='Monitorear rango de producto';
 $lang['config_default_tax_rate']='% de Impuestos Predeterminada';
 $lang['config_default_tax_rate_1']='Tasa de Impuestos 1';
 $lang['config_default_tax_rate_2']='Tasa de Impuestos 2';

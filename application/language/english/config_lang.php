@@ -201,5 +201,7 @@ $lang['config_value_denomination'] = 'Valor denominación';
 $lang['config_type_denomination'] = 'Tipo denominación';
 $lang['config_in_suppliers']='No permite comprar sin asignar un proveedor';
 
+$lang['config_product_rank']='Monitor product rank';
+
 
 ?>

@@ -8,6 +8,7 @@ $lang['config_address']='Dirección de la Compañía';
 $lang['config_phone']='Teléfono de la Compañía';
 $lang['config_website']='Sitio Web';
 $lang['config_fax']='Fax';
+$lang['config_product_rank']='Monitorear rango de producto';
 $lang['config_giros']='Giros';
 $lang["config_custom2_subcategory"]="Campo personalizado 2 subcategoría";
 $lang['config_default_tax_rate']='% de Impuestos Predeterminada';

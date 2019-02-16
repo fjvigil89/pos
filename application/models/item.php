@@ -21,6 +21,13 @@ class Item extends CI_Model
 		$this->db->where('activate_range',1);
 		return $this->db->get()->result();
 	}
+	function get_items_range($register_log_id){
+		$this->db->select('items.name,items.item_id,range_id,final_range,extra_charge,start_range');
+		$this->db->from('item_range');
+		$this->db->join('items','items.item_id=item_range.item_id  ','left');
+		$this->db->where('register_log_id',$register_log_id);
+		return $this->db->get()->result();
+	}
 	function get_range_by_register_log_id($register_log_id){
 		$this->db->from('item_range');
 		$this->db->where('register_log_id',$register_log_id);
@@ -47,6 +54,14 @@ class Item extends CI_Model
 			
 		}
 
+	}
+	function add_balance($register_log_id,$item_id,$balance){
+		
+		$this->db->where('register_log_id',$register_log_id);
+		$this->db->where('item_id',$item_id);
+		$this->db->set('extra_charge', 'extra_charge + ' . $balance, false);
+		$this->db->set('employee_id_recharge', $this->session->userdata('person_id'), false);
+		return $this->db->update('item_range');
 	}
 	function get_all_for_indexedDb($limit=100000, $offset=0,$date)
 	{

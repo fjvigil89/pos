@@ -2944,6 +2944,7 @@
 							</div>
 
 							</div>
+							
 							<div class="form-group">	
 								<?php echo form_label('<a class="help_config_options  tooltips " data-placement="left" title="'.lang("config_custom1_subcategory_help").'">'.lang('config_custom2_subcategory').'</a>'.':', 'custom_subcategory2_name', array('class'=>'col-md-3 control-label')); ?> 						
 								<div class='col-md-9'>
@@ -2974,6 +2975,28 @@
 									?>
 							</div>						
 						</div>
+						<div class="form-group">	
+								<?php echo form_label('<a class="help_config_options  tooltips " data-placement="left" title="'.lang("").'">'.lang('config_product_rank').'</a>'.':', 'monitor_product_rank', array('class'=>'col-md-3 control-label')); ?> 						
+						
+									<div class="col-md-1">
+										<div class="md-checkbox-inline">
+											<div class="md-checkbox">
+												<?php echo form_checkbox(array(
+													'name'=>'monitor_product_rank',
+													'id'=>'monitor_product_rank',
+													'value'=>'1',
+													'class'=>'md-check',
+													'checked'=>$this->config->item('monitor_product_rank')));
+												?>
+												<label for="monitor_product_rank">
+												<span></span>
+												<span class="check"></span>
+												<span class="box"></span>
+												</label>
+											</div>
+										</div>
+									</div>							
+							</div>
 						<div class="form-group">	
 							<?php echo form_label(lang('config_price_tiers').':', 'tiers',array('class'=>'col-md-3 control-label')); ?>
 							<div class="col-md-9 table-responsive">

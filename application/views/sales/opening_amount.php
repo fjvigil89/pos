@@ -121,14 +121,14 @@
 									</div>								      
 								
 							</div>
-							<?php if(isset($items ) and count($items)>0):?>
+							<?php if(isset($items ) and count($items)>0 and $this->config->item("monitor_product_rank")==1):?>
 							<div class="col-md-6">
 								<div class="table-responsive">
 									<table class="table table-bordered table-hover table-striped text-center">
 										<thead>
 											<tr>
-												<th style="text-align: center;"><?php echo "Producto"?></th>
-												<th style="text-align: center;"><?php echo "Rango de inicio";?></th>
+											<th style="text-align: center;"><?php echo lang("items_item")?></th>
+											<th style="text-align: center;"><?php echo lang("sales_start_range");?></th>
 											</tr>
 										</thead>
 										<tbody>																			 
@@ -253,15 +253,15 @@
 						required: true,
 						number: true
 					},
-					<?php if(isset($items ) and count($items)>0){
-					$j=0;
+					<?php if(isset($items ) and count($items)>0 and $this->config->item("monitor_product_rank")==1){
+					
 					foreach($items as $item) { ?>
 						"item_rango[<?php echo $item->item_id ?>]": {
 							required: true,
 							number: true,
 							min:0
 						},
-				<?php $j ++;}}?>
+				<?php }}?>
 		   		},
 				
 				errorClass: "text-danger",
@@ -278,15 +278,15 @@
 						required: <?php echo json_encode(lang('sales_amount_required')); ?>,
 						number: <?php echo json_encode(lang('sales_amount_number')); ?>
 					},
-					<?php if(isset($items ) and count($items)>0){
-					$j=0;
+					<?php if(isset($items ) and count($items)>0 and $this->config->item("monitor_product_rank")==1){
+					
 					foreach($items as $item) { ?>
 						"item_rango[<?php echo $item->item_id; ?>]": {
 						required: " Ingrese todos los rangos. ",
 						number: " Los rangos deben de ser numerico. ",
 						min: " El valor minimo del ranfo es 0. ",
 						},
-					<?php $j ++;}}?>
+					<?php }}?>
 		   		}
 			});
 			

@@ -7,6 +7,7 @@ $lang['config_company']='Nombre de la Compañía';
 $lang['config_address']='Dirección de la Compañía';
 $lang['config_phone']='Teléfono de la Compañía';
 $lang['config_website']='Sitio Web';
+$lang['config_product_rank']='Monitorear rango de producto';
 $lang['config_fax']='Fax';
 $lang['config_giros']='Giros';
 $lang['config_default_tax_rate']='% de Impuestos Predeterminada';
