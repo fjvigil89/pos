@@ -110,7 +110,18 @@ class Sales extends Secure_area
 		$item_ids= $this->input->post('item_id');
 		$register_log=$this->Sale->get_current_register_log();
 		$this->Item->save_ranges($register_log->register_log_id,$item_ids,null,$item_final_ranges);
+		$this->sale_lib->clear_all();
+		$register_log=$this->Sale->get_current_register_log();
+		$item_ranges_tem= $this->Item->get_range_by_register_log_id($register_log->register_log_id);
+		$item_ranges=array();
+		foreach ($item_ranges_tem as $item_range) {
+			$item_ranges[$item_range["item_id"]]=$item_range;
+		}
 		foreach ($item_ids as $key=>$item_id) {
+			if(isset($item_ranges[$item_id])){
+				$quantity=  $item_ranges[$item_id]["start_range"]-(double)$item_final_ranges[$item_id];
+				$this->sale_lib->add_item($item_id,$quantity);
+			}
 		}
 	}
 	function modal_range(){
