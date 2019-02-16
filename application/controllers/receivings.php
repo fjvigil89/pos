@@ -92,7 +92,7 @@ class Receivings extends Secure_area
 			
 			$this->receiving_lib->add_item($store_account_payment_item_id,1);
 		}
-		
+
 		$this->_reload();
 	}
 	
@@ -189,6 +189,8 @@ class Receivings extends Secure_area
 		{
 			$data['error']=lang('receivings_error_editing_item');
 		}
+		
+
 
 		$this->_reload($data);
 	}
@@ -349,6 +351,16 @@ class Receivings extends Secure_area
 			$data['error_message'] = lang('receivings_transaction_failed')." <br> ".$error_message;
 		}
 		
+		if($supplier_id != -1)
+		{
+			$cust_info=$this->Customer->get_info($supplier_id);
+			$balance_total=$this->Receiving->total_balance($supplier_id);
+			if ($balance_total !=0)
+			{
+				$data['supplier_balance_for_receiving'] = $balance_total;
+			}
+		}
+
 		$this->load->view("receivings/receipt",$data);
 		$this->receiving_lib->clear_all();
 	}
@@ -794,16 +806,25 @@ class Receivings extends Secure_area
 			$data['modes']['transfer']= lang('receivings_transfer');
 		}
 		$data['mode']=$this->receiving_lib->get_mode();
-	
+			
 		$data['items_in_cart'] = $this->receiving_lib->get_items_in_cart();
 		$data['items_module_allowed'] = $this->Employee->has_module_permission('items', $person_info->person_id);
 		$data['payment_options']=array(
-			lang('sales_cash') => lang('sales_cash'),
-			lang('sales_check') => lang('sales_check'),
-			lang('sales_debit') => lang('sales_debit'),
-			lang('sales_credit') => lang('sales_credit'),
-			lang('sales_supplier_credit') => lang('sales_supplier_credit')
+			lang('receivings_cash') => lang('receivings_cash'),
+			lang('receivings_check') => lang('receivings_check'),
+			lang('receivings_debit') => lang('receivings_debit'),
+			lang('receivings_credit') => lang('receivings_credit'),
 		);
+		
+		if ($this->receiving_lib->get_mode() != 'store_account_payment')
+			{
+				$data['payment_options']=array(
+				lang('receivings_cash') => lang('receivings_cash'),
+				lang('receivings_check') => lang('receivings_check'),
+				lang('receivings_debit') => lang('receivings_debit'),
+				lang('receivings_credit') => lang('receivings_credit'),
+				lang('receivings_supplier_credit') => lang('receivings_supplier_credit'));
+				}
 		
 		foreach($this->Appconfig->get_additional_payment_types() as $additional_payment_type)
 		{
@@ -868,6 +889,7 @@ class Receivings extends Secure_area
 		
 		$data["pay_cash"]=$this->Receiving->get_pay_cash($id_supplier,false,20);
 		$data["supplier"] = $this->Supplier->get_info($id_supplier);
+		$data["balance_total"]=$this->Receiving->total_balance($id_supplier);
 		$this->load->view("receivings/receiving_details_pay_modal",$data);
 	}
 
@@ -889,7 +911,6 @@ class Receivings extends Secure_area
 		else{
 			$pay_cash_id=$this->input->post("pay_cash_id");
 			$data=array();
-			$this->check_action_permission('delete_receiving');
 			$result=$this->Receiving->delete_pay_cash($pay_cash_id);
 			if(!$result){
 				$data['error']="No pude eliminar el registro";
@@ -898,6 +919,8 @@ class Receivings extends Secure_area
 		$this->_reload($data);
 
 	}
+	
+
 
 }
 ?>

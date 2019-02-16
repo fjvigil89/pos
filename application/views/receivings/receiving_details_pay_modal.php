@@ -20,7 +20,7 @@
             <div class="portlet-body">
             	<div class="row">
 				<div class="col-sm-12 margin-bottom-05">
-				<h4><strong>Balance : </strong> <?php  echo to_currency( $supplier->balance);?></h4>
+				<h4><strong>Balance : </strong> <?php  echo to_currency( $balance_total);?></h4>
 				</div>
 					<div class="col-sm-12 margin-bottom-05">
 						<div class="table-responsive">
