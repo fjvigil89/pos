@@ -846,7 +846,7 @@ class Receiving extends CI_Model
         $this->load->library('receiving_lib');
         $this->db->query("SET autocommit=0");
         //Lock tables invovled in sale transaction so we don't have deadlock
-        $this->db->query('LOCK TABLES ' . $this->db->dbprefix('suppliers') . ' WRITE, ' . $this->db->dbprefix('suppliers') . 'Read');
+        $this->db->query('LOCK TABLES ' . $this->db->dbprefix('suppliers') . ' WRITE, ' . $this->db->dbprefix('suppliers') . ' READ');
         //Update supplier store account balance
         if ($supplier_id > 0 ) {
 			$balance=$this->total_balance($supplier_id);
