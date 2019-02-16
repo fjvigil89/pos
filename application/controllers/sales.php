@@ -105,6 +105,14 @@ class Sales extends Secure_area
 	function sale_return_modal(){
 		$this->load->view("sales/sale_return_modal");
 	}
+	public function save_range(){
+		$item_final_ranges= $this->input->post('item_final_range');
+		$item_ids= $this->input->post('item_id');
+		$register_log=$this->Sale->get_current_register_log();
+		$this->Item->save_ranges($register_log->register_log_id,$item_ids,null,$item_final_ranges);
+		foreach ($item_ids as $key=>$item_id) {
+		}
+	}
 	function modal_range(){
 		$_items= $this->Item->get_items_activate_range();
 		$register_log=$this->Sale->get_current_register_log();

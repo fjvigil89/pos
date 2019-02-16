@@ -17,7 +17,7 @@
             <div class="portlet-body">
             	<div class="row">				
 					<div class="col-md-12">
-					<?php echo form_open('sale/save_range/',array('id'=>'item_form','class'=>'form-horizontal ')); ?>
+					<?php echo form_open('sales/save_range/',array('id'=>'item_form','class'=>'form-horizontal ')); ?>
 
 						<div class="table-responsive">
 							<table class="table table-bordered table-hover table-striped text-center">
@@ -34,7 +34,8 @@
 								<tbody>																			 
 									<?php 
 										$i=0;
-										foreach($items as $item) { ?>	
+										foreach($items as $item) { 
+											if(isset($item_ranges[$item->item_id])){?>	
 											<tr>						
 												<td>
 													<?php echo form_label($item->name, 'item_rango'.$item->item_id); ?>
@@ -58,11 +59,12 @@
 														'id'=>"item_final_range$item->item_id",
 														'class'=>'form-control form-inps item_final_range',
 														'name'=>"item_final_range[$item->item_id]",
-														"type"=>"number",
+														"type"=>"number",														
 														"required"=>"",
 														"id_total_sale"=>"total_sale$item->item_id",
 														"start_range"=>$item_ranges[$item->item_id]["start_range"],
-														"min"=>$item_ranges[$item->item_id]["start_range"]
+														"value"=>(double)$item_ranges[$item->item_id]["final_range"]
+														//"min"=>$item_ranges[$item->item_id]["start_range"]
 														));?>
 												</td>  
 												<td>
@@ -72,11 +74,11 @@
 														'name'=>"total_sale[$item->item_id]",
 														"type"=>"number",
 														"readonly"=>"",
-														"min"=>$item_ranges[$item->item_id]["start_range"]
+														
 														));?>
 												</td> 										   
 											</tr>
-										<?php $i++;} ?>										
+										<?php $i++;} } ?>								
 									</tbody>
 								</table>
 								<input type="submit" value="Facturar" class="btn"/>
@@ -95,7 +97,7 @@
 		$( ".item_final_range" ).change(function(e) {
 			let elemento_id= $(this).attr( 'id_total_sale' );
 			let start_range= $(this).attr( 'start_range' );
-			$("#"+elemento_id).val($(this).val()-start_range);
+			$("#"+elemento_id).val(Math.abs($(this).val()-start_range));
 		});		
 		
 	});

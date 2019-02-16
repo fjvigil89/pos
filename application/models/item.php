@@ -37,7 +37,12 @@ class Item extends CI_Model
 				);
 				$this->db->insert('item_range',$data);
 			}else{
-
+				$data=array(					
+					"final_range"=>(double)$final_range[$key]					
+				);
+				$this->db->where('register_log_id',$register_log_id);
+				$this->db->where('item_id',$item_id);
+				$this->db->update('item_range',$data);
 			}
 			
 		}
