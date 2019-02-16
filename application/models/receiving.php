@@ -31,7 +31,7 @@ class Receiving extends CI_Model
 		if(count($items)==0)
 			return -1;
 		$credit=0;
-		$compra_credito=lang("sales_supplier_credit");
+		$compra_credito=lang("receivings_supplier_credit");
 		if ($payment_type == $compra_credito){
 			$credit=1;
 		};
@@ -846,7 +846,7 @@ class Receiving extends CI_Model
         $this->load->library('receiving_lib');
         $this->db->query("SET autocommit=0");
         //Lock tables invovled in sale transaction so we don't have deadlock
-        $this->db->query('LOCK TABLES ' . $this->db->dbprefix('suppliers') . ' WRITE, ' . $this->db->dbprefix('suppliers') . ' READ');
+        /* $this->db->query('LOCK TABLES ' . $this->db->dbprefix('suppliers') . ' WRITE, ' . $this->db->dbprefix('suppliers') . 'Read'); */
         //Update supplier store account balance
         if ($supplier_id > 0 ) {
 			$balance=$this->total_balance($supplier_id);
@@ -855,7 +855,7 @@ class Receiving extends CI_Model
             if (!$this->db->update('suppliers')) {
 
                 $this->db->query("ROLLBACK");
-                $this->db->query('UNLOCK TABLES');
+                /* $this->db->query('UNLOCK TABLES'); */
                 return -1;
             }
 		}
@@ -878,7 +878,7 @@ class Receiving extends CI_Model
         
         
         $this->db->query("COMMIT");
-        $this->db->query('UNLOCK TABLES');
+    // $this->db->query('UNLOCK TABLES');
         return true;
     }
 	
