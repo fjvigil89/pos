@@ -71,7 +71,7 @@ application/views/giftcards/print.php
  application/controllers/recharges.php
 
 # ----- reportes 
-application/controllers/reports.php
+#application/controllers/reports.php
 application/views/reports/custom_input_excel_export.php
 application/views/reports/custom_serial_input_excel_export.php
 application/views/reports/date_input_excel_export.php
