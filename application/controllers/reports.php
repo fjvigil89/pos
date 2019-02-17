@@ -2015,22 +2015,22 @@ class Reports extends Secure_area {
             }
         }
         $categorias_gastos=array("no establecido"=>"no establecido");
-			foreach($this->Appconfig->get_categorias_gastos() as $categoria){
-				$categorias_gastos[$categoria]=$categoria;
+            foreach($this->Appconfig->get_categorias_gastos() as $categoria){
+                $categorias_gastos[$categoria]=$categoria;
             }
             /*$categorias_gastos["Venta"]="Venta";
             $categorias_gastos["Devolución"]="Devolución";
             $categorias_gastos[lang("sales_store_account_payment")]=lang("sales_store_account_payment");
             $categorias_gastos["Venta eliminada"]="Venta eliminada";
-            $categorias_gastos["Cierre de caja"]="Cierre de caja	";
+            $categorias_gastos["Cierre de caja"]="Cierre de caja    ";
             $categorias_gastos["Apertura de caja"]="Apertura de caja";
             $categorias_gastos["Venta"]="Venta";*/
             $categorias_gastos["all"]="Todo";
             $data["categorias_gastos"]=$categorias_gastos;
             $empleados=array("all"=>"Todo");
-		$employees= $this->Employee->get_all()->result();
-		foreach($employees as $empleado){
-			$empleados[$empleado->person_id]=$empleado->first_name." ".$empleado->last_name;
+        $employees= $this->Employee->get_all()->result();
+        foreach($employees as $empleado){
+            $empleados[$empleado->person_id]=$empleado->first_name." ".$empleado->last_name;
         }
         $data["empleados"]=$empleados;
         $data["cajas"]=$cajas;
@@ -2118,7 +2118,7 @@ class Reports extends Secure_area {
            $empleados[$id_employee]= $empleado->first_name." ".$empleado->last_name;
 
        }
-		
+        
         $data["empleados"]=$empleados;
         $this->load->view("reports/depostos_salidas_input_excel_export", $data);
     }
@@ -2139,7 +2139,7 @@ class Reports extends Secure_area {
            $empleados[$id_employee]= $empleado->first_name." ".$empleado->last_name;
 
        }
-		
+        
         $data["empleados"]=$empleados;
         $this->load->view("reports/input_data_input_excel_export", $data);
     }
@@ -4139,7 +4139,7 @@ class Reports extends Secure_area {
         //$end_date=rawurldecode($end_date);
         //$this->load->model('reports/detailed_consolidated');
         //$model = $this->Detailed_commissions;
-        //	$model->setParams(array('start_date'=>$start_date, 'end_date'=>$end_date, 'employee_id' =>$employee_id));
+        //  $model->setParams(array('start_date'=>$start_date, 'end_date'=>$end_date, 'employee_id' =>$employee_id));
         //$this->Sale->create_sales_items_temp_table(array('start_date'=>$start_date, 'end_date'=>$end_date, 'employee_id' =>$employee_id));
         //$config = array();
         //$config['base_url'] = site_url("reports/detailed_consolidated/".rawurlencode($start_date).'/'.rawurlencode($end_date)."/$employee_id/");
