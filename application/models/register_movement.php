@@ -135,11 +135,13 @@ class Register_movement extends CI_Model
 		$permision=$this->CI->Employee->has_module_action_permission('registers_movement','see_cash_flows_uniqued', $employee_id);
 		
 		$this->db->select(
-						'registers_movement.*')
+						'registers_movement.*, people.first_name, people.last_name')
 				 
 				 ->from('registers')
 				 ->join('register_log', 'register_log.register_id=registers.register_id')
 				 ->join('registers_movement', 'registers_movement.register_log_id=register_log.register_log_id')
+				 ->join('employees', 'employees.id=registers_movement.id_employee')
+				 ->join('people', 'people.person_id=employees.person_id')
 				 ->where('registers.location_id', $this->current_location_id)
 				 ->where('registers.register_id', $register_id)
 				 ->where('FROM_unixtime(UNIX_TIMESTAMP(register_date),"%Y-%m-%d") >=', $date_start)
@@ -157,7 +159,8 @@ class Register_movement extends CI_Model
 					$this->db->like('registers_movement.'.$filter, $search);
 				 }
 
-		 return $this->db->get();
+		return $this->db->get();
+				
 
 	}
 
@@ -315,11 +318,12 @@ class Register_movement extends CI_Model
 		$this->db->dbprefix('registers_movement').".register_log_id as register_log_id,  register_date, 
 		".$this->db->dbprefix('registers_movement').".mount, description,detailed_description, type_movement, 
 		".$this->db->dbprefix('registers_movement').".mount_cash as mount_cash, "
-		.$this->db->dbprefix('registers_movement').".categorias_gastos as categorias_gastos, ".$this->db->dbprefix('registers_movement').".id_employee as id_employee,".$this->db->dbprefix('employees').".username as username
+		.$this->db->dbprefix('registers_movement').".categorias_gastos as categorias_gastos, ".$this->db->dbprefix('registers_movement').".id_employee as id_employee,".$this->db->dbprefix('people').".first_name,".$this->db->dbprefix('people').".last_name
 		FROM ".$this->db->dbprefix('registers_movement')."		
 		JOIN ".$this->db->dbprefix('register_log')." ON  ".$this->db->dbprefix('register_log').'.register_log_id='.$this->db->dbprefix('registers_movement').'.register_log_id'."
 		JOIN ".$this->db->dbprefix('registers')." ON  ".$this->db->dbprefix('registers').'.register_id='.$this->db->dbprefix('register_log').'.register_id'."
-		JOIN ".$this->db->dbprefix('employees')." ON  ".$this->db->dbprefix('employees').'.id='.$this->db->dbprefix('registers_movement').'.id_employee'."  
+		JOIN ".$this->db->dbprefix('employees')." ON  ".$this->db->dbprefix('employees').'.id='.$this->db->dbprefix('registers_movement').'.id_employee'."
+		JOIN ".$this->db->dbprefix('people')." ON  ".$this->db->dbprefix('people').'.person_id='.$this->db->dbprefix('employees').'.person_id'."   
 		
 		$where )");
 
@@ -359,11 +363,12 @@ class Register_movement extends CI_Model
 		$this->db->dbprefix('registers_movement').".register_log_id as register_log_id,  register_date, 
 		".$this->db->dbprefix('registers_movement').".mount, description,detailed_description, type_movement, 
 		".$this->db->dbprefix('registers_movement').".mount_cash as mount_cash, "
-		.$this->db->dbprefix('registers_movement').".categorias_gastos as categorias_gastos, ".$this->db->dbprefix('registers_movement').".id_employee as id_employee,".$this->db->dbprefix('employees').".username as username
+		.$this->db->dbprefix('registers_movement').".categorias_gastos as categorias_gastos, ".$this->db->dbprefix('registers_movement').".id_employee as id_employee,".$this->db->dbprefix('people').".first_name,".$this->db->dbprefix('people').".last_name
 		FROM ".$this->db->dbprefix('registers_movement')."		
 		JOIN ".$this->db->dbprefix('register_log')." ON  ".$this->db->dbprefix('register_log').'.register_log_id='.$this->db->dbprefix('registers_movement').'.register_log_id'."
 		JOIN ".$this->db->dbprefix('registers')." ON  ".$this->db->dbprefix('registers').'.register_id='.$this->db->dbprefix('register_log').'.register_id'."
-		JOIN ".$this->db->dbprefix('employees')." ON  ".$this->db->dbprefix('employees').'.id='.$this->db->dbprefix('registers_movement').'.id_employee'."  
+		JOIN ".$this->db->dbprefix('employees')." ON  ".$this->db->dbprefix('employees').'.id='.$this->db->dbprefix('registers_movement').'.id_employee'." 
+		JOIN ".$this->db->dbprefix('people')." ON  ".$this->db->dbprefix('people').'.person_id='.$this->db->dbprefix('employees').'.person_id'." 
 		
 		$where )");
 

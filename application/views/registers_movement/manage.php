@@ -145,7 +145,9 @@
 												<th>Descripción</th>
 												<th>Entrada</th>
 												<th>Salida</th>
+												<th>Tipo de Documento</th>
 												<th>Categoría</th>
+												<th>Cajero</th>
 												<th>En Caja</th>
 											</tr>
 										</thead>
@@ -167,15 +169,18 @@
 													<?php if ($movement->type_movement == 1) {?>
 
 													<td align='center'><?=$amount;?></td>
-													<td align='center'></td>
+													<td></td>
+													<td align='center'>INGRESO</td>
 
 													<?php } 
 													else {?>
 														<td align='center'></td>
 														<td align='center'><?=$amount;?></td>
 
+													<td align='center'>GASTO</td>
 													<?php }?>
 													<td align='center'><?=$movement->categorias_gastos;?></td>
+													<td><?=$movement->first_name;?> <?=$movement->last_name;?></td>
 													<td align='center'><?=$amount_cash;?></td>
 													
 												</tr>

@@ -2322,13 +2322,13 @@ class Reports extends Secure_area {
                 $data_row[] = array('data' => "", 'align' => 'right');
             }
            else{
-                $data_row[] = array('data' => 'FACTURA', 'align' => 'right');
+                $data_row[] = array('data' => 'GASTOS', 'align' => 'right');
                 $data_row[] = array('data' => "", 'align' => 'right');
                 $data_row[] = array('data' => to_currency($row['mount']), 'align' => 'right');                
                
            }
             $data_row[] = array('data' =>$row['categorias_gastos'], 'align' => 'right');
-            $data_row[] = array('data' =>$row['username'], 'align' => 'right');
+            $data_row[] = array('data' =>$row['first_name']." ".$row['last_name'], 'align' => 'right');
             $data_row[] = array('data' => to_currency($row['mount_cash']), 'align' => 'right');
             
             $tabular_data[] = $data_row;
@@ -2416,13 +2416,13 @@ class Reports extends Secure_area {
                 $data_row[] = array('data' => "", 'align' => 'right');
             }
            else{
-                $data_row[] = array('data' => 'FACTURA', 'align' => 'right');
+                $data_row[] = array('data' => 'GASTOS', 'align' => 'right');
                 $data_row[] = array('data' => "", 'align' => 'right');
                 $data_row[] = array('data' => to_currency($row['mount']), 'align' => 'right');                
                
            }
             $data_row[] = array('data' =>$row['categorias_gastos'], 'align' => 'right');
-            $data_row[] = array('data' =>$row['username'], 'align' => 'right');
+            $data_row[] = array('data' =>$row['first_name']." ".$row['last_name'], 'align' => 'right');
             $data_row[] = array('data' => to_currency($row['mount_cash']), 'align' => 'right');
             
             $tabular_data[] = $data_row;
