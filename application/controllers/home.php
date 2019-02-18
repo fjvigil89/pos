@@ -43,7 +43,7 @@ class Home extends Secure_area
 		{
 			$end_date;
 		}
-
+ 
         $this->load->model('Statistics');
         $this->load->model('reports/Summary_profit_and_loss');
         $profit_and_loss = $this->Summary_profit_and_loss;
@@ -72,6 +72,10 @@ class Home extends Secure_area
         $profit_and_loss->setParams(array('start_date'=>$pnl_start_date, 'end_date'=>$pnl_end_date));
         $this->Sale->create_sales_items_temp_table(array('start_date'=>$pnl_start_date, 'end_date'=>$pnl_end_date));
         $this->Receiving->create_receivings_items_temp_table(array('start_date'=>$pnl_start_date, 'end_date'=>$pnl_end_date));
+
+		$this->Receiving->create_store_payments_temp_table(array('start_date' => $pnl_start_date, 'end_date' => $pnl_end_date));
+
+    
 
         $data['profit_and_loss'] = $this->Statistics->profit_and_loss($profit_and_loss->getData()); 
 
