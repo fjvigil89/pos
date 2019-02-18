@@ -507,13 +507,17 @@ class Receiving extends CI_Model
 		
 		$location_id = $this->Employee->get_logged_in_employee_current_location_id();
 
-		
+		$store_account_payment_item_id = $this->Item->create_or_update_store_account_item();
 
 		$where = '';
 		
 		if (isset($params['start_date']) && isset($params['end_date']))
 		{
 			$where = 'WHERE receiving_time BETWEEN "'.$params['start_date'].'" and "'.$params['end_date'].'"';
+			$where .= ' and credit=0';
+			$where .= ' and '.$this->db->dbprefix('receivings_items').'.item_id not like '.$store_account_payment_item_id;
+			
+
 			if(!isset($params['store_id'])){
 				$where .=' and '.$this->db->dbprefix('receivings').'.location_id= '.$this->db->escape($location_id);
 			}else{
@@ -527,7 +531,7 @@ class Receiving extends CI_Model
 			//If we don't pass in a date range, we don't need data from the temp table
 			$where = 'WHERE location_id='.$this->db->escape($location_id);
 		}
-		$where = 'WHERE credit=0';
+		/* $this->db->not_like('receivings_items.item_id', $store_account_payment_item_id); */
 		$this->db->query("CREATE TEMPORARY TABLE ".$this->db->dbprefix('receivings_items_temp')."
 		(SELECT ".$this->db->dbprefix('receivings').".location_id as location_id,"
 		.$this->db->dbprefix('receivings').".transfer_to_location_id as transfer_to_location_id,".
@@ -540,8 +544,28 @@ class Receiving extends CI_Model
 		FROM ".$this->db->dbprefix('receivings_items')."
 		INNER JOIN ".$this->db->dbprefix('receivings')." ON  ".$this->db->dbprefix('receivings_items').'.receiving_id='.$this->db->dbprefix('receivings').'.receiving_id'."
 		INNER JOIN ".$this->db->dbprefix('items')." ON  ".$this->db->dbprefix('receivings_items').'.item_id='.$this->db->dbprefix('items').'.item_id'."	$where	GROUP BY receiving_id, item_id, line)"); 
+		
 	}
 	
+	public function create_store_payments_temp_table($params)
+	{
+		set_time_limit(0);
+		
+	
+		$where = '';
+		
+		if (isset($params['start_date']) && isset($params['end_date']))
+		{
+			$where = 'WHERE date BETWEEN "'.$params['start_date'].'" and "'.$params['end_date'].'"';
+			$where .= ' and abono=1';
+		}
+		
+		$this->db->query("CREATE TEMPORARY TABLE ".$this->db->dbprefix('store_payments_temp')."
+		(SELECT ".$this->db->dbprefix('store_payments').".transaction_amount as total
+		FROM ".$this->db->dbprefix('store_payments')." $where	GROUP BY pay_cash_id)");
+			/* var_dump($where); */
+	}
+
 	function calculate_and_update_average_cost_price_for_item($item_id,$current_receivings_items_data)
 	{
 		//Dont calculate averages unless we receive quanitity > 0

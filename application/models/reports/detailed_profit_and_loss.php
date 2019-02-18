@@ -1,6 +1,6 @@
 <?php
 require_once("report.php");
-class Summary_profit_and_loss extends Report
+class Detailed_profit_and_loss extends Report
 {
 	function __construct()
 	{
@@ -20,9 +20,10 @@ class Summary_profit_and_loss extends Report
 		
 		$data = array();
 		
-		$sales_total = 0;
+		$sales_totals = array();
 		$this->db->select('sale_id, sum(total) as total', false);
 		$this->db->from('sales_items_temp');
+		$this->db->where('total >= 0');
 		$this->db->group_by('sale_id');
 			
 		foreach($this->db->get()->result_array() as $sale_total_row)
@@ -39,12 +40,13 @@ class Summary_profit_and_loss extends Report
 		$this->db->where('payment_amount > 0');
 		
 		$this->db->where($this->db->dbprefix('sales').'.deleted', 0);
-		$this->db->order_by('sale_id, payment_type');
 		$this->db->where('location_id', $location_id);
 		
+		$this->db->order_by('sale_id, payment_type');
 		$sales_payments = $this->db->get()->result_array();
 		
 		$payments_by_sale = array();
+		
 		foreach($sales_payments as $row)
 		{
         	$payments_by_sale[$row['sale_id']][] = $row;
@@ -74,67 +76,91 @@ class Summary_profit_and_loss extends Report
 				
 				$total_sale_balance-=$payment_amount;
 			}
-		}		
+		}
+				
+		$data['sales_by_payments'] = $payment_data;
 		
-		foreach($payment_data as $payment_data)
+		
+		foreach($data['sales_by_payments'] as $payment_data)
 		{
-			$sales_total+=$payment_data['payment_amount'];
 			$total+=$payment_data['payment_amount'];
 		}
-		
-		$data['sales_total'] = $sales_total;
 		
 		
 		$this->db->select('category, sum(total) as total', false);
 		$this->db->from('sales_items_temp');
+		
 		$this->db->where($this->db->dbprefix('sales_items_temp').'.deleted', 0);
 		$this->db->where('total < 0');
-		$suppliers_row = $this->db->get()->row_array();
-		$total+=$suppliers_row['total'];
-		$data['returns_total'] = $suppliers_row['total'];
+		$this->db->group_by('category');
+		$this->db->order_by('category');
 		
-		$this->db->select('sum(total) as total', false);
-		$this->db->from('store_payments_temp');
-		$store_payments_row = $this->db->get()->row_array();
-		$total+=$store_payments_row['total'];
-		$data['store_payments_total'] = $store_payments_row['total'];
+		$data['returns_by_category'] = $this->db->get()->result_array();
+		
+		foreach($data['returns_by_category'] as $return)
+		{
+			$total+=$return['total'];
+		}
 		
 		$this->db->select('category, sum(total) as total', false);
 		$this->db->from('receivings_items_temp');
 		
 		$this->db->where($this->db->dbprefix('receivings_items_temp').'.deleted', 0);
-		$receivings_row = $this->db->get()->row_array();
-		$total+=$receivings_row['total'];
-		$data['receivings_total'] = $receivings_row['total'] + $store_payments_row['total'];
+		$this->db->group_by('category');
+		$this->db->order_by('category');
+
+		$data['receivings_by_category'] = $this->db->get()->result_array();
 		
-		
-		
+		foreach($data['receivings_by_category'] as $receiving)
+		{
+			$total+=$receiving['total'];
+		}	
 		
 		$this->db->select('SUM(item_unit_price * ( discount_percent /100 )) as discount');
 		$this->db->from('sales_items_temp');
 		$this->db->where('discount_percent > 0');
 		$this->db->where($this->db->dbprefix('sales_items_temp').'.deleted', 0);
 		
-		$discount_row = $this->db->get()->row_array();
-		$data['discount_total'] = $discount_row['discount'];
-		$total-=$discount_row['discount'];
+		$data['discount_total'] = $this->db->get()->row_array();
+		$total-=$data['discount_total']['discount'];
 		
 		$this->db->select('sum(tax) as tax', false);
 		$this->db->from('sales_items_temp');
 		$this->db->where('deleted', 0);
-		$tax_row = $this->db->get()->row_array();
-		$data['taxes_total'] = $tax_row['tax'];
+		$data['taxes'] = $this->db->get()->row_array();
 		
-		$total-=$tax_row['tax'];
+		$total-=$data['taxes']['tax'];
 		$data['total'] = $total;
-		
-		
+	
 		$this->db->select('sum(profit) as profit', false);
 		$this->db->from('sales_items_temp');
 		$this->db->where('deleted', 0);
+
+		
 		$profit_row = $this->db->get()->row_array();
 		
 		$data['profit'] = $profit_row['profit'];
+
+		$this->db->select('SUM(total) as total');
+		$this->db->from('store_payments_temp');
+		$ret = $this->db->get()->row_array();
+		$data["total_pagos"]= $ret["total"]==null? 0 : $ret["total"];
+		
+		
+		$this->db->select(' SUM(mount) as suma');
+		$this->db->from('movement_items_temp');
+		$this->db->where('type_movement', 1);
+		$ret = $this->db->get()->row_array();
+		$data["total_ingresos"]= $ret["suma"]==null? 0 : $ret["suma"];	
+		
+		$this->db->select(' SUM(mount) as suma');
+		$this->db->from('movement_items_temp');
+		$this->db->where('type_movement', 0);
+		$ret = $this->db->get()->row_array();
+		$data["total_egresos"]= $ret["suma"]==null? 0 : $ret["suma"];		 
+		$ganacias_neta= $data['profit'] -($data["total_egresos"]+$data["total_pagos"]);
+		$data["ganacias_neta"]=$ganacias_neta;	
+		
 		return $data;
 	}
 	

@@ -3884,6 +3884,7 @@ class Reports extends Secure_area {
         $model->setParams(array('start_date' => $start_date, 'end_date' => $end_date));
         $this->Sale->create_sales_items_temp_table(array('start_date' => $start_date, 'end_date' => $end_date));
         $this->Receiving->create_receivings_items_temp_table(array('start_date' => $start_date, 'end_date' => $end_date));
+		$this->Receiving->create_store_payments_temp_table(array('start_date' => $start_date, 'end_date' => $end_date));
         $this->Register_movement->create_movement_items_temp_table(array('start_date' => $start_date, 'end_date' => $end_date));
 
         $data = array(
@@ -3905,6 +3906,7 @@ class Reports extends Secure_area {
 
         $this->Sale->create_sales_items_temp_table(array('start_date' => $start_date, 'end_date' => $end_date));
         $this->Receiving->create_receivings_items_temp_table(array('start_date' => $start_date, 'end_date' => $end_date));
+		$this->Receiving->create_store_payments_temp_table(array('start_date' => $start_date, 'end_date' => $end_date));
 
         $data = array(
             "title" => lang('reports_detailed_profit_and_loss'),
