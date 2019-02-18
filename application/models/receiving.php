@@ -28,6 +28,7 @@ class Receiving extends CI_Model
 
 	function save ($items,$supplier_id,$employee_id,$comment,$payment_type,$receiving_id=false, $suspended = 0, $mode,$location_id=-1,$payments)
 	{
+		var_dump($mode);
 		if(count($items)==0)
 			return -1;
 		$credit=0;
@@ -412,7 +413,7 @@ class Receiving extends CI_Model
 			{
 				$this->Item_location->save_quantity($cur_item_location_info->quantity - $receiving_item_row['quantity_purchased'],$receiving_item_row['item_id']);
 
-				$subcategory = $this->items_subcategory->get_info($receiving_item_row['item_id'], $receiving_location_id, $item['custom1_subcategory'], $item['custom2_subcategory']);
+				$subcategory = $this->items_subcategory->get_info($receiving_item_row['item_id'], $receiving_location_id, $receiving_item_row['custom1'], $receiving_item_row['custom2']);
 				$quantity_subcategory = $subcategory->quantity;
 				$this->items_subcategory->save_quantity(($quantity_subcategory-$receiving_item_row['quantity_subcategory']), 
 						$receiving_item_row['item_id'], $receiving_location_id, $receiving_item_row['custom1_subcategory'],$receiving_item_row['custom2_subcategory']);
@@ -526,7 +527,7 @@ class Receiving extends CI_Model
 			//If we don't pass in a date range, we don't need data from the temp table
 			$where = 'WHERE location_id='.$this->db->escape($location_id);
 		}
-		
+		$where = 'WHERE credit=0';
 		$this->db->query("CREATE TEMPORARY TABLE ".$this->db->dbprefix('receivings_items_temp')."
 		(SELECT ".$this->db->dbprefix('receivings').".location_id as location_id,"
 		.$this->db->dbprefix('receivings').".transfer_to_location_id as transfer_to_location_id,".
@@ -731,7 +732,7 @@ class Receiving extends CI_Model
         return $return;
     }
 	
-	 public function get_pay_cash($supplier_id,$location_id=false,$limit=20)
+	 public function get_pay_cash($supplier_id,$location_id=false,$limit=100)
     {
        if($location_id==false){
             $location_id= $this->Employee->get_logged_in_employee_current_location_id();
@@ -746,6 +747,29 @@ class Receiving extends CI_Model
 
         return $query->result();
     }
+	
+	 public function get_receiving($supplier_id,$location_id=false,$limit=100)
+    {
+		$store_account_payment_item_id = $this->Item->create_or_update_store_account_item();
+		/* var_dump($store_account_payment_item_id); */
+       if($location_id==false){
+            $location_id= $this->Employee->get_logged_in_employee_current_location_id();
+       }
+	    $this->db->select('a.*');
+        $this->db->from('receivings a');
+		$this->db->join('receivings_items b', ' b.receiving_id = a.receiving_id','left');
+        $this->db->where('a.supplier_id', $supplier_id);
+        $this->db->where('a.location_id', $location_id);        
+        $this->db->where('a.deleted', 0);
+		$this->db->not_like('b.item_id', $store_account_payment_item_id);		
+        $this->db->order_by('a.receiving_time DESC');
+        $this->db->limit($limit);
+        $query = $this->db->get();
+		
+		if($query->num_rows() > 0)
+               return $query->result();
+    }
+	
     function delete_pay_cash($pay_cash_id,$delte_all=false){
         $data=array(
             "deleted"=>1,

@@ -736,6 +736,26 @@ class Receivings extends Secure_area
 		
 	}
 	
+	function delete_receivings()
+	{
+		$receiving_id=$this->input->post("receiving_id");
+		$receiving_info = $this->Receiving->get_info($receiving_id)->row_array();
+		
+		$data = array();
+		
+		if ($this->Receiving->delete($receiving_id, false, $receiving_info['suspended'] == 0))
+		{
+			$data['success'] = true;
+		}
+		else
+		{
+			$data['success'] = false;
+		}
+		
+		$this->load->view('receivings/delete', $data);
+		
+	}
+	
 	function undelete($receiving_id)
 	{
 		$data = array();
@@ -887,10 +907,18 @@ class Receivings extends Secure_area
 	
 	function receiving_details_modal($id_supplier=0){
 		
-		$data["pay_cash"]=$this->Receiving->get_pay_cash($id_supplier,false,20);
+		$data["pay_cash"]=$this->Receiving->get_pay_cash($id_supplier,false,100);
 		$data["supplier"] = $this->Supplier->get_info($id_supplier);
 		$data["balance_total"]=$this->Receiving->total_balance($id_supplier);
 		$this->load->view("receivings/receiving_details_pay_modal",$data);
+	}
+	
+	function receiving_purchases_modal($id_supplier=0){
+		
+		$data["receivings"]=$this->Receiving->get_receiving($id_supplier,false,100);
+		$data["supplier"] = $this->Supplier->get_info($id_supplier);
+		$data["balance_total"]=$this->Receiving->total_balance($id_supplier);
+		$this->load->view("receivings/receiving_purchases_pay_modal",$data);
 	}
 
 	function get_monton_pendiente($id_persona=0){

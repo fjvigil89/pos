@@ -438,7 +438,9 @@
 					<?php echo lang('receivings_recent_receivings').' '.H($supplier);?>
 					</span>
 				
-						<a href="<?php echo site_url('receivings/receiving_details_modal')."/". (isset($supplier_id) ? $supplier_id: 0 ); ?>" data-toggle="modal" data-target="#myModal" > - Ver pagos de Cuentas por Pagar</a>
+						<a href="<?php echo site_url('receivings/receiving_purchases_modal')."/". (isset($supplier_id) ? $supplier_id: 0 ); ?>" data-toggle="modal" data-target="#myModal" > | <?=lang('receivings_see_purchases')?></a>
+						<a href="<?php echo site_url('receivings/receiving_details_modal')."/". (isset($supplier_id) ? $supplier_id: 0 ); ?>" data-toggle="modal" data-target="#myModal" > | <?=lang('receivings_see_payments')?></a> 
+						
 					
 				</div>
 			</div>
