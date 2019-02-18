@@ -412,6 +412,29 @@
 								</div>
 							</div>
 						</div>
+						<?php if($this->config->item("monitor_product_rank")==1): ?>
+							<div class="form-group">
+								<?php echo form_label(lang('items_activate_range').':', 'activate_range',array('class'=>'col-md-3 control-label wide')); ?>
+								<div class="col-md-8">
+									<div class="md-checkbox-inline">
+										<div class="md-checkbox">
+											<?php echo form_checkbox(array(
+												'name'=>'activate_range',
+												'id'=>'activate_range',
+												'class'=>'delete-checkbox md-check',
+												'value'=>1,
+												'checked'=>($item_info->activate_range)? 1 : 0)
+											);?>
+											<label for="activate_range">
+											<span></span>
+											<span class="check"></span>
+											<span class="box"></span>
+											</label>
+										</div>
+									</div>
+								</div>
+							</div>
+						<?php endif; ?>
 						
 						<div class="form-group">
 							<?php echo form_label(lang('items_images').':', 'image_id',array('class'=>'col-md-3 control-label')); ?>

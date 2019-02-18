@@ -282,4 +282,17 @@ $lang["sales_VEF"]="BS";
 $lang["sales_EUR"]="EUR";
 $lang["sales_USD"]="USD";
 $lang["sales_tier"]="Tiers";
+
+$lang["sales_range"]="Cerrar rango";
+$lang["sales_add_balance"]="Agregar saldo";
+$lang["sales_start_range"]="Rango inicial";
+$lang["sales_added_balance"]="Saldo agregado";
+$lang["sales_final_rank"]="Rango final";
+$lang["sales_invoice"]="Factura";
+$lang["sales_reload_product"]="Recargar producto";
+$lang["sales_closing_ranges"]="Cierre de rango";
+$lang["sales_ranks"]="Rangos";
+$lang["sales_payments"]="Pagos";
+$lang["sales_opening_date"]="Fecha de apertura";
+$lang["sales_date_closing"]="Fecha de cierre";
 ?>

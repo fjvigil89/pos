@@ -238,6 +238,7 @@ class Config extends Secure_area
 			"ocultar_forma_pago"=>$this->input->post('ocultar_forma_pago')?$this->input->post('ocultar_forma_pago'):0,
             'st_correo_of_items'=>$this->input->post('st_correo_of_items') ? $this->input->post('st_correo_of_items') : 0,
 			"categoria_gastos"=>$this->input->post('categoria_gastos')?$this->input->post('categoria_gastos'):"",
+			"monitor_product_rank"=>(int)$this->input->post('monitor_product_rank')
 
  
 

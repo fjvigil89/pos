@@ -226,4 +226,19 @@ $lang['sales_stock'] = 'Inventory';
 $lang['sales_price_without_tax'] = 'Price without tax';
 $lang['sales_price_tax'] = 'Tax';
 $lang["sales_tier"]="Tiers";
+
+$lang["sales_range"]="Close rank";
+$lang["sales_add_balance"]="Add balance";
+$lang["sales_start_range"]="Start range";
+$lang["sales_added_balance"]="Added balance";
+$lang["sales_final_rank"]="Final rank";
+$lang["sales_invoice"]="Invoice";
+$lang["sales_reload_product"]="Reload product";
+$lang["sales_closing_ranges"]="Closing of ranges";
+$lang["sales_ranks"]="Ranks";
+$lang["sales_payments"]="Payments";
+$lang["sales_opening_date"]="Opening date";
+$lang["sales_date_closing"]="Date of closing";
+$lang["reports_entrada"]="Input"; 
+$lang["reports_salida"]="Exit";
 ?>

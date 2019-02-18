@@ -15,6 +15,54 @@ class Item extends CI_Model
 		$result= 	$this->db->get();	
 		return $result;
 	}
+	function get_items_activate_range(){
+		$this->db->from('items');
+		$this->db->where('deleted',0);
+		$this->db->where('activate_range',1);
+		return $this->db->get()->result();
+	}
+	function get_items_range($register_log_id){
+		$this->db->select('items.name,items.item_id,range_id,final_range,extra_charge,start_range');
+		$this->db->from('item_range');
+		$this->db->join('items','items.item_id=item_range.item_id  ','left');
+		$this->db->where('register_log_id',$register_log_id);
+		return $this->db->get()->result();
+	}
+	function get_range_by_register_log_id($register_log_id){
+		$this->db->from('item_range');
+		$this->db->where('register_log_id',$register_log_id);
+		return  $this->db->get()->result_array();
+	}
+	function save_ranges($register_log_id,$item_ids,$start_range=null,$final_range=null){
+		
+		foreach ($item_ids as $key=>$item_id) {
+			if($start_range!=null){
+				$data=array(
+					"item_id"=>$item_id,
+					"start_range"=>$start_range[$key],
+					"register_log_id"=>$register_log_id
+				);
+				$this->db->insert('item_range',$data);
+			}else{
+				$data=array(					
+					"final_range"=>(double)$final_range[$key]					
+				);
+				$this->db->where('register_log_id',$register_log_id);
+				$this->db->where('item_id',$item_id);
+				$this->db->update('item_range',$data);
+			}
+			
+		}
+
+	}
+	function add_balance($register_log_id,$item_id,$balance){
+		
+		$this->db->where('register_log_id',$register_log_id);
+		$this->db->where('item_id',$item_id);
+		$this->db->set('extra_charge', 'extra_charge + ' . $balance, false);
+		$this->db->set('employee_id_recharge', $this->session->userdata('person_id'), false);
+		return $this->db->update('item_range');
+	}
 	function get_all_for_indexedDb($limit=100000, $offset=0,$date)
 	{
 		$this->db->from('items');		

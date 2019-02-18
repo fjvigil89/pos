@@ -105,6 +105,58 @@ class Sales extends Secure_area
 	function sale_return_modal(){
 		$this->load->view("sales/sale_return_modal");
 	}
+	public function save_range(){
+		$item_final_ranges= $this->input->post('item_final_range');
+		$item_ids= $this->input->post('item_id');
+		$register_log=$this->Sale->get_current_register_log();
+		$this->Item->save_ranges($register_log->register_log_id,$item_ids,null,$item_final_ranges);
+		$this->sale_lib->clear_all();
+		$register_log=$this->Sale->get_current_register_log();
+		$item_ranges_tem= $this->Item->get_range_by_register_log_id($register_log->register_log_id);
+		$item_ranges=array();
+		foreach ($item_ranges_tem as $item_range) {
+			$item_ranges[$item_range["item_id"]]=$item_range;
+		}
+		foreach ($item_ids as $key=>$item_id) {
+			if(isset($item_ranges[$item_id])){
+				$quantity=  abs((double)$item_final_ranges[$item_id]-($item_ranges[$item_id]["start_range"]+$item_ranges[$item_id]["extra_charge"]));
+				if($quantity!=0){
+				$this->sale_lib->add_item($item_id,$quantity);
+				}
+			}
+		}
+		echo "ok";
+	}
+	function add_cash(){
+		
+		$item_id= $this->input->post('item_id');
+		$cash= $this->input->post('cash');
+		if(is_numeric($cash)){
+			$register_log=$this->Sale->get_current_register_log();
+			$this->Item->add_balance($register_log->register_log_id,$item_id,$cash);
+		}
+
+	}
+	function add_balance(){
+		$register_log=$this->Sale->get_current_register_log();
+		$items_ranges= $this->Item->get_items_range($register_log->register_log_id);
+		$items=array();
+		foreach ($items_ranges as $item) {
+			$items["$item->item_id"]=$item->name."  -  ".(double)$item->extra_charge;
+		}
+		$data=array("items"=>$items);
+		$this->load->view("sales/sale_add_balance_modal",$data);
+	}
+	function modal_range(){
+		$_items= $this->Item->get_items_activate_range();
+		$register_log=$this->Sale->get_current_register_log();
+		$item_ranges_tem= $this->Item->get_range_by_register_log_id($register_log->register_log_id);
+		$item_ranges=array();
+		foreach ($item_ranges_tem as $item_range) {
+			$item_ranges[$item_range["item_id"]]=$item_range;
+		}
+		$this->load->view("sales/sale_range_modal",array("items"=>$_items,"item_ranges"=>$item_ranges));
+	}
 	
 	function modal_cart(){
 		$data=array();
@@ -189,8 +241,7 @@ class Sales extends Secure_area
 		{
 			if ($this->input->post('opening_amount') != '')
 			{
-				$now = date('Y-m-d H:i:s');
-
+				$now = date('Y-m-d H:i:s');				
 				$cash_register = new stdClass();
 				$cash_register->register_id = $this->Employee->get_logged_in_employee_current_register_id();
 				$cash_register->employee_id_open = $this->session->userdata('person_id');
@@ -198,11 +249,15 @@ class Sales extends Secure_area
 				$cash_register->open_amount = $this->input->post('opening_amount');
 				$cash_register->close_amount = 0;
 				$cash_register->cash_sales_amount = 0;
-				$this->Sale->insert_register($cash_register);
-				$this->Register_movement->save($cash_register->open_amount, "Apertura de caja", false, false,"Apertura de caja");
-
+				$register_log_id= $this->Sale->insert_register($cash_register);
+				$this->Register_movement->save($cash_register->open_amount, "Apertura de caja", false, false,"Apertura de caja");								
+				$item_ids= $this->input->post('item_id');
+				if($item_ids){
+					$start_range=  $this->input->post('item_rango');
+					$this->Item->save_ranges($register_log_id,$item_ids,$start_range,null);
+				}
 				echo json_encode( array('success'=>true) );
-			}
+			} 
 			else if ($this->Sale->is_register_log_open())
 			{				
 				$this->_reload(array(), false);			
@@ -210,7 +265,8 @@ class Sales extends Secure_area
 			else
 			{
 				$currency = $this->Denomination_currency->get_all();
-				$this->load->view('sales/opening_amount',array('currency'=>$currency));
+				$_items= $this->Item->get_items_activate_range();
+				$this->load->view('sales/opening_amount',array('currency'=>$currency,"items"=>$_items ));
 			}
 		} else {
 			/*if($this->config->item('activar_casa_cambio')==true){
@@ -285,6 +341,8 @@ class Sales extends Secure_area
 
 				$data = $this->Register_movement->report_register($cash_register->register_log_id);
 				$data["credito_tienda"]=$this->appconfig->get("customers_store_accounts");
+				$data["items_range"]=$this->Item->get_items_range($cash_register->register_log_id);
+				
 				$this->load->view("registers_movement/report_register",$data);
 
 			} else {

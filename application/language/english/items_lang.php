@@ -166,4 +166,6 @@ $lang['common_prices_include_tax_help']='Select only if the prices already have 
 $lang['items_reorder_level_help']='Put minimum quantity of products so that the system alerts you when inventory is scarce';
 $lang['items_is_service_help']='Select if you offer a service and not a product';
 $lang['items_override_default_tax_help']='If the product has another type of tax, select and enter the corresponding tax';
+$lang["items_activate_range"]="Monitor sale range";
+
 ?>

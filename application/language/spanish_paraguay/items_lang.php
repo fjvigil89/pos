@@ -12,6 +12,7 @@ $lang['items_number_information']='Número del Artículo';
 $lang['items_new']='Nuevo Artículo';
 $lang['items_update']='Actualizar Artículo';
 $lang['items_item']='Artículo';
+$lang["items_activate_range"]="Monitorear rango de venta";
 $lang['items_edit_multiple_items']='Editando Múltiple de Artículos';
 $lang['items_name']='Nombre';
 $lang['items_category']='Categoría';

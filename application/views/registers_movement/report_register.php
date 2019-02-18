@@ -58,10 +58,10 @@
  				<table>
  					<tr class="fondo">
  						<th>
- 							Fecha de apertura
+ 							<?php echo lang("sales_opening_date");?>
  						</th>
  						<th  width="50%">
- 							Fecha de cierre
+ 							<?php echo lang("sales_date_closing")?>
  						</th>
  					</tr>
  					<tr  class="border">
@@ -75,10 +75,10 @@
  					</tr>
  					<tr class="fondo">
  						<th>
- 							Monto de apertura
+ 							<?php echo lang("sales_opening_amount");?>
  						</th>
  						<th>
- 							Monto de cierre
+						 <?php echo lang("sales_closing_amount");?>
  						</th>
  					</tr>
  					<tr>
@@ -148,10 +148,10 @@
 					<table>
 						<tr class="fondo">
 							<th >
-								Entrada/salida
+								<?php echo lang("reports_entrada")."/".lang("reports_salida") ?>
 							</th>
 							<th>
-								Totales
+								<?php echo lang("reports_total")?>
 							</th>
 						</tr>
 						<tr>
@@ -179,15 +179,14 @@
  			<div>
 
  				<div style="border-bottom:1px solid #111;">
- 					<label style="font-size:18px;padding:5px 7px;"><b>Pagos</b></label>
+ 					<label style="font-size:18px;padding:5px 7px;"><b><?php echo lang("sales_payments")?></b></label>
  				</div>
  				<div>
-
  					<table id="payments">
 
  						<tr style="background:#eee;">
- 							<th>Método de pago</th>
- 							<th>Cantidad</th>
+ 							<th><?php echo lang("config_payment_types") ?></th>
+ 							<th><?php echo lang("items_quantity") ?></th>
  							<th>Monto total</th>
  						</tr>
 
@@ -237,24 +236,59 @@
  					</table>
  				</div>
  			</div>
-			 <div class="border">
-					<table>	
-						<tr class="fondo">
-							<th ><a class="help_config_options tooltips" data-placement="right" title="" data-original-title="La diferencia es la cantidad de dinero del sistema menos la física, normalmente representa un descuadre del cajero.">
-								<?= lang("reports_difference") ?><span class="hidden-sm hidden-xs">&nbsp;</span><i class="fa fa-question-circle"></i></a>
-							</th>
-							
-						</tr>					
-						<tr>
-							 
-							<td>
-								<?= $currency_symbol.number_format($difference, 2, $decimal_separator, $thousand_separator); ?>
-							</td>
-						</tr>					
+			 <?php if($this->config->item("monitor_product_rank")==1 and isset($items_range) and count($items_range)>0): ?>
+				<div>
+					<div style="border-bottom:1px solid #111;">
+						<label style="font-size:18px;padding:5px 7px;"><b><?php echo lang("sales_ranks"); ?></b></label>
+					</div>
+					<div>
+						<table id="payments">
+							<tr style="background:#eee;">
+								<th><?php echo lang("items_item")?></th>
+								<th><?php echo lang("sales_start_range")?></th>
+								<th><?php echo lang("sales_added_balance")?></th>
+								<th><?php echo lang("sales_final_rank")?></th>
+								<!--<th><?php echo lang("sales_sale")?></th>-->
+							</tr>
+							<?php foreach ($items_range as $item_range) {	?>
+								<tr>
+									<td>
+										<?php echo $item_range->name?>
+									</td>
+									<td>
+										<?php echo (double) $item_range->start_range?>
+									</td>
+									<td>
+										<?php echo (double) $item_range->extra_charge?>
+									</td>
+									<td>
+										<?php echo (double) $item_range->final_range?>
+									</td>
+									<!--<td>
+										<?php echo (double) abs($item_range->final_range-($item_range->extra_charge+$item_range->start_range));?>
+									</td> -->
+								</tr>
+							<?php }?>
+						</table>
+					</div>
+				</div><br>
+			<?php endif; ?>
+			<div class="border">
+				<table>	
+					<tr class="fondo">
+						<th ><a class="help_config_options tooltips" data-placement="right" title="" data-original-title="La diferencia es la cantidad de dinero del sistema menos la física, normalmente representa un descuadre del cajero.">
+							<?= lang("reports_difference") ?><span class="hidden-sm hidden-xs">&nbsp;</span><i class="fa fa-question-circle"></i></a>
+						</th>							
+					</tr>					
+					<tr>							 
+						<td>
+							<?= $currency_symbol.number_format($difference, 2, $decimal_separator, $thousand_separator); ?>
+						</td>
+					</tr>		
 
-					</table>
-
-				</div>
+				</table>
+			</div>
+			
  		</div>
 		<div id="domain_ing">
 

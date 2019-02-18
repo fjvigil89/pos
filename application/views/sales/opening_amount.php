@@ -79,48 +79,88 @@
 								</table>
 							</div>
 						</div>
+						<?php	echo form_open('sales', array('id'=>'opening_amount_form', 'class'=>'form-horizontal')); ?>
 
-						<div class="col-md-6">
-							<?php
-							$reg_info = $this->Register->get_info($this->Employee->get_logged_in_employee_current_register_id());
-							$reg_name = '<span class="btn btn-success btn-circle btn-sm">'.$reg_info->name .'&nbsp;&nbsp;&nbsp;('.lang('sales_change_register').')</span>';
-							echo form_open('sales', array('id'=>'opening_amount_form', 'class'=>'form-horizontal')); ?>
-								<div class="form-group">
-									<?php echo form_label(lang('sales_opening_amount').':', 'opening_amount',array('class'=>'col-lg-4 col-md-5 control-label')); ?>
-									<div class="col-lg-8 col-md-7">
-										<div class="input-group">
-											<span class="input-group-addon">
-											<i class="fa fa-dollar"></i>
-											</span>
-											<?php echo form_input(array(
-										        'name'=>'opening_amount',
-										        'id'=>'opening_amount',
-										        'class'=>'form-control form-inps',
-										        'value'=>'')
-										    );?>
-										    <span class="input-group-btn">
-												<?php echo form_button(array(
-													'name'=>'submit',
-													'type'=>'submit',
-													'id'=>'submit',
-													'content'=>lang('common_submit'),
-													'class'=>'btn btn-success')
+							<div class="col-md-6">
+								<?php
+								$reg_info = $this->Register->get_info($this->Employee->get_logged_in_employee_current_register_id());
+								$reg_name = '<span class="btn btn-success btn-circle btn-sm">'.$reg_info->name .'&nbsp;&nbsp;&nbsp;('.lang('sales_change_register').')</span>';
+								?>
+									<div class="form-group">
+										<?php echo form_label(lang('sales_opening_amount').':', 'opening_amount',array('class'=>'col-lg-4 col-md-5 control-label')); ?>
+										<div class="col-lg-8 col-md-7">
+											<div class="input-group">
+												<span class="input-group-addon">
+												<i class="fa fa-dollar"></i>
+												</span>
+												<?php echo form_input(array(
+													'name'=>'opening_amount',
+													'id'=>'opening_amount',
+													'class'=>'form-control form-inps',
+													'value'=>'')
 												);?>
-											</span>
+												<span class="input-group-btn">
+													<?php echo form_button(array(
+														'name'=>'submit',
+														'type'=>'submit',
+														'id'=>'submit',
+														'content'=>lang('common_submit'),
+														'class'=>'btn btn-success')
+													);?>
+												</span>
+											</div>
+											<span id="error"></span>
 										</div>
-										<span id="error"></span>
 									</div>
-								</div>
 
-								<!-- TERMINAR -->
-								<div class="form-group text-center">
-									<h2><?php echo lang('common_or'); ?></h2>
-											<?php echo lang('locations_register_name');?>:  <?php echo anchor('sales/clear_register', $reg_name);?>
-									<br /><br />
-								</div>
-								      
-							<?php echo form_close(); ?>
-						</div>
+									<!-- TERMINAR -->
+									<div class="form-group text-center">
+										<h2><?php echo lang('common_or'); ?></h2>
+												<?php echo lang('locations_register_name');?>:  <?php echo anchor('sales/clear_register', $reg_name);?>
+										<br /><br />
+									</div>								      
+								
+							</div>
+							<?php if(isset($items ) and count($items)>0 and $this->config->item("monitor_product_rank")==1):?>
+							<div class="col-md-6">
+								<div class="table-responsive">
+									<table class="table table-bordered table-hover table-striped text-center">
+										<thead>
+											<tr>
+											<th style="text-align: center;"><?php echo lang("items_item")?></th>
+											<th style="text-align: center;"><?php echo lang("sales_start_range");?></th>
+											</tr>
+										</thead>
+										<tbody>																			 
+											<?php 
+											$i=0;
+											foreach($items as $item) { ?>	
+											<tr>						
+												<td>
+													<?php echo form_label($item->name, 'item_rango'.$item->item_id); ?>
+												</td>
+												<td>
+													<?php echo form_input(array(
+														'id'=>"item_rango$item->item_id",
+														'class'=>'form-control form-inps',
+														'name'=>"item_rango[$item->item_id]",
+													));?>
+													<?php echo form_input(array(
+														'id'=>"item_id$item->item_id",
+														'class'=>'',
+														'value'=>$item->item_id,
+														'type'=>"hidden",
+														'name'=>"item_id[$item->item_id]",
+													));?>				
+												</td>  										   
+											</tr>
+											<?php $i++;} ?>										
+										</tbody>
+									</table>
+								</div>							
+							</div>
+							<?php endif; ?>
+						<?php echo form_close(); ?>
 					</div>
 				</div>
 			</div>
@@ -212,8 +252,18 @@
 					opening_amount: {
 						required: true,
 						number: true
-					}
+					},
+					<?php if(isset($items ) and count($items)>0 and $this->config->item("monitor_product_rank")==1){
+					
+					foreach($items as $item) { ?>
+						"item_rango[<?php echo $item->item_id ?>]": {
+							required: true,
+							number: true,
+							min:0
+						},
+				<?php }}?>
 		   		},
+				
 				errorClass: "text-danger",
 				errorElement: "span",
 				errorLabelContainer: "#error",
@@ -227,7 +277,16 @@
 			   		opening_amount: {
 						required: <?php echo json_encode(lang('sales_amount_required')); ?>,
 						number: <?php echo json_encode(lang('sales_amount_number')); ?>
-					}
+					},
+					<?php if(isset($items ) and count($items)>0 and $this->config->item("monitor_product_rank")==1){
+					
+					foreach($items as $item) { ?>
+						"item_rango[<?php echo $item->item_id; ?>]": {
+						required: " Ingrese todos los rangos. ",
+						number: " Los rangos deben de ser numerico. ",
+						min: " El valor minimo del ranfo es 0. ",
+						},
+					<?php }}?>
 		   		}
 			});
 			

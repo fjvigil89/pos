@@ -353,6 +353,7 @@ class Sale extends CI_Model
         }
 
     }
+    
 
     public function get_current_register_log($register_id = false)
     {

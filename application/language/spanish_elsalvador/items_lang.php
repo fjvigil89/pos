@@ -18,6 +18,7 @@ $lang['items_category']='Categoría';
 $lang['items_cost_price']='Costo';
 $lang['items_unit_price']='Precio de venta';
 $lang['items_tax_1']='Impuesto 1';
+$lang["items_activate_range"]="Monitorear rango de venta";
 $lang['items_tax_2']='Impuesto 2';
 $lang['items_sales_tax_1'] = 'Impuesto de Ventas 1';
 $lang['items_sales_tax_2'] = 'Impuesto de Ventas 2';
