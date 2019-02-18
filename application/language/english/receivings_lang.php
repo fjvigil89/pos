@@ -5,6 +5,7 @@ $lang['receivings_receiving']='Receive';
 $lang['receivings_return']='Return';
 $lang['receivings_transfer']='Transfer';
 $lang['receivings_total']='Total';
+$lang["receivings_store_account_payment"]="Credit to suppliers credit line";
 $lang['receivings_cost']='Cost';
 $lang['receivings_quantity']='Quantity';
 $lang['receivings_discount']='Disc %';

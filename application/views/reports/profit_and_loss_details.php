@@ -112,6 +112,25 @@
 							<a class="help_config_options tooltips"
 							 data-placement="left"
 							  title=""
+							 data-original-title="Abonos en Línea de Crédito a Proveedores">
+							 Total Pagos</a>
+						</strong>
+					</h3>
+					<div class="table-responsive">
+						<table class="table table-bordered table-striped table-hover">
+							<tr>
+								<td><?php echo lang('reports_total'); ?></td>
+								<td style="text-align: right;"><?php echo to_currency($details_data['total_pagos']); ?></td>
+							</tr>
+						</table>
+					</div>
+				
+				
+					<h3 >
+						<strong>
+							<a class="help_config_options tooltips"
+							 data-placement="left"
+							  title=""
 							 data-original-title="Gastos registrados por otros conceptos diferentes a ventas y compras (estos se registran en movimientos de caja) ">
 							 Total gastos</a>
 						</strong>

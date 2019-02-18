@@ -93,6 +93,11 @@ class Summary_profit_and_loss extends Report
 		$total+=$suppliers_row['total'];
 		$data['returns_total'] = $suppliers_row['total'];
 		
+		$this->db->select('sum(total) as total', false);
+		$this->db->from('store_payments_temp');
+		$store_payments_row = $this->db->get()->row_array();
+		$total+=$store_payments_row['total'];
+		$data['store_payments_total'] = $store_payments_row['total'];
 		
 		$this->db->select('category, sum(total) as total', false);
 		$this->db->from('receivings_items_temp');
@@ -100,7 +105,9 @@ class Summary_profit_and_loss extends Report
 		$this->db->where($this->db->dbprefix('receivings_items_temp').'.deleted', 0);
 		$receivings_row = $this->db->get()->row_array();
 		$total+=$receivings_row['total'];
-		$data['receivings_total'] = $receivings_row['total'];
+		$data['receivings_total'] = $receivings_row['total'] + $store_payments_row['total'];
+		
+		
 		
 		
 		$this->db->select('SUM(item_unit_price * ( discount_percent /100 )) as discount');

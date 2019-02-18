@@ -141,6 +141,11 @@ class Detailed_profit_and_loss extends Report
 		
 		$data['profit'] = $profit_row['profit'];
 
+		$this->db->select('SUM(total) as total');
+		$this->db->from('store_payments_temp');
+		$ret = $this->db->get()->row_array();
+		$data["total_pagos"]= $ret["total"]==null? 0 : $ret["total"];
+		
 		
 		$this->db->select(' SUM(mount) as suma');
 		$this->db->from('movement_items_temp');
@@ -153,7 +158,7 @@ class Detailed_profit_and_loss extends Report
 		$this->db->where('type_movement', 0);
 		$ret = $this->db->get()->row_array();
 		$data["total_egresos"]= $ret["suma"]==null? 0 : $ret["suma"];		 
-		$ganacias_neta= $data['profit'] -$data["total_egresos"];
+		$ganacias_neta= $data['profit'] -($data["total_egresos"]+$data["total_pagos"]);
 		$data["ganacias_neta"]=$ganacias_neta;	
 		
 		return $data;
