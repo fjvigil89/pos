@@ -678,14 +678,14 @@
 										<?php echo lang('reports_detailed_reports'); ?>
 									</div>
 								</a>
-								<?php if($this->config->item("mostrar_reportes_personalizados1")==1):?>
+							
 									<a href="<?php echo site_url('reports/purchase_provider');?>" class="btn icon-btn letter-space">
 										<i class="fa fa-calendar"></i>
 										<div>
 											<?php echo "Compra proveedor" ?>
 										</div>
 									</a>
-								<?php endif; ?>							
+														
 							</div>							
 						</div>
 					
