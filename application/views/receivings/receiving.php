@@ -938,9 +938,16 @@
 					return false;
 				}
 			});
+			
+		
 		    $("#finish_sale_button").click(function()
 		    {
-				$('#finish_sale_form').submit();
+				var supplier = '<?php echo isset($supplier_id) ? $supplier_id: 0; ?>';
+				if (supplier!=0){
+					$('#finish_sale_form').submit();
+				} else {
+					alert('Seleccione un Proveedor');
+				}
 			});
 			$( ".select_custom_subcategory" ).change(function() {
 				$($(this).parent()).submit();
