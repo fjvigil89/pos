@@ -312,7 +312,8 @@ class Appconfig extends CI_Model
 			"Apertura de caja",
 			"Compra retornada",
 			"Compra realizada",
-			"Venta restaurada"
+			"Venta restaurada",
+			lang("receivings_store_account_payment")
 		);		
 		
 		return $data;

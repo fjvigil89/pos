@@ -3877,7 +3877,7 @@ class Reports extends Secure_area {
     }
 
     function detailed_profit_and_loss($start_date, $end_date) {
-        $this->check_action_permission('view_profit_and_loss');
+        $this->check_action_permission('view_profit_and_loss'); 
         $this->load->model('reports/Detailed_profit_and_loss');
         $model = $this->Detailed_profit_and_loss; 
         $end_date = date('Y-m-d 23:59:59', strtotime($end_date)); 

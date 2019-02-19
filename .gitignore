@@ -15,8 +15,8 @@ web.config
 sftp-config.json
 
 #-------configuracion-----------
-application/controllers/config.php
-application/views/config.php
+#application/controllers/config.php
+#application/views/config.php
 
 #------items 
 #application/controllers/items.php
@@ -90,15 +90,15 @@ application/views/reports/tabular_details.php
 application/views/reports/tabular_details.php
 application/views/reports/tabular_movement.php
 application/views/reports/tabular.php
-# application/views/reports/profit_and_loss_details.php
-# application/views/reports/profit_and_loss_summary.php
+#application/views/reports/profit_and_loss_details.php
+#application/views/reports/profit_and_loss_summary.php
 application/views/reports/sales_generator_tabular_details.php
 application/views/reports/store_account_statements.php
 
 application/models/reports/detailed_commissions.php
 application/models/reports/detailed_consolidated.php
 application/models/reports/detailed_inventory.php
-# application/models/reports/detailed_profit_and_loss.php
+#application/models/reports/detailed_profit_and_loss.php
 application/models/reports/detailed_receivings.php
 application/models/reports/sales_consolidation.php
 #application/models/reports/specific_customer.php
