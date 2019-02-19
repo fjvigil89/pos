@@ -82,7 +82,6 @@ $lang['receivings_transfer_from'] = 'Traslado Desde';
 $lang['receivings_transfer_to'] = 'Transferencia Para';
 $lang['receivings_cost_transport'] = 'Costo transporte';
 $lang['receivings_total_cost_transport'] = 'Total transporte';
-
 $lang['receivings_summary'] = 'Resumen de la compra';
 $lang['receivings_in_suppliers']='No puede realizar la comprar sin tener un proveedor asignado';
 $lang['receivings_cost_without_tax']='Costo sin impuesto';
