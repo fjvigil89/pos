@@ -503,7 +503,7 @@ class Receiving extends CI_Model
 	//We create a temp table that allows us to do easy report/receiving queries
 	public function create_receivings_items_temp_table($params)
 	{
-		set_time_limit(0);
+		set_time_limit(0); 
 		
 		$location_id = $this->Employee->get_logged_in_employee_current_location_id();
 
@@ -513,10 +513,16 @@ class Receiving extends CI_Model
 		
 		if (isset($params['start_date']) && isset($params['end_date']))
 		{
+
+
 			$where = 'WHERE receiving_time BETWEEN "'.$params['start_date'].'" and "'.$params['end_date'].'"';
-			$where .= ' and credit=0';
+			if(isset($params['listar_contado']) and $params['listar_contado']==true){
+				$where .= ' and credit=0';
+
+			}
 			$where .= ' and '.$this->db->dbprefix('receivings_items').'.item_id not like '.$store_account_payment_item_id;
-			
+
+
 
 			if(!isset($params['store_id'])){
 				$where .=' and '.$this->db->dbprefix('receivings').'.location_id= '.$this->db->escape($location_id);
