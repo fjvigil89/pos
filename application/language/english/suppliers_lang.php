@@ -28,4 +28,14 @@ $lang['suppliers_step_2_desc'] = 'Upload the file from step 1 to complete your s
 $lang['suppliers_cleanup_old_customers'] = 'Cleanup old Suppliers';
 $lang['suppliers_confirm_cleanup'] = 'Are you sure you want to cleanup suppliers? (This will remove account numbers from deleted suppliers)';
 $lang['suppliers_are_you_sure_cancel'] = 'Are you sure you want to cancel adding this supplier?';
+
+$lang['suppliers_price']='Suppliers price';
+$lang['suppliers_type']='Suppliers type';
+$lang['suppliers_legal']='Legal';
+$lang['suppliers_natural']='Natural';
+$lang['suppliers_company_name_help']='Suppliers company name help';
+$lang['suppliers_account_number_help']='Suppliers account number help'; 
+$lang['suppliers_type_help']='Suppliers type help legal or natural ';
+$lang['suppliers_balance'] = 'Balance';
+$lang['suppliers_pay'] = 'Pay';
 ?>

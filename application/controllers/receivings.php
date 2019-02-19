@@ -738,10 +738,15 @@ class Receivings extends Secure_area
 	
 	function delete_receivings()
 	{
+		$data = array();
+		if(!$this->Employee->has_module_action_permission('receivings', 'delete_receiving', $this->Employee->get_logged_in_employee_info()->person_id)){
+			$data['error_access']=true;
+			$this->load->view('receivings/delete', $data);
+		}		
+		else{
+		$data['error_access'] = false;
 		$receiving_id=$this->input->post("receiving_id");
 		$receiving_info = $this->Receiving->get_info($receiving_id)->row_array();
-		
-		$data = array();
 		
 		if ($this->Receiving->delete($receiving_id, false, $receiving_info['suspended'] == 0))
 		{
@@ -751,8 +756,10 @@ class Receivings extends Secure_area
 		{
 			$data['success'] = false;
 		}
-		
 		$this->load->view('receivings/delete', $data);
+		}
+		
+		
 		
 	}
 	

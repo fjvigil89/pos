@@ -84,6 +84,7 @@
 					<?php } ?>
 				</div>
 
+								
 				<div class="col-md-6">
 					<h3><strong><?php echo lang('reports_receivings'); ?></strong></h3>
 					<div class="table-responsive">
@@ -97,23 +98,13 @@
 						</table>
 					</div>
 
-					<h3><strong><?php echo lang('reports_total'); ?></strong></h3>
-					<div class="table-responsive">
-						<table class="table table-bordered table-striped table-hover">
-							<tr>
-								<td><?php echo lang('reports_total'); ?></td>
-								<td style="text-align: right;"><?php echo to_currency($details_data['total']); ?></td>
-							</tr>
-						</table>
-					</div>
-				
 					<h3 >
 						<strong>
 							<a class="help_config_options tooltips"
 							 data-placement="left"
 							  title=""
 							 data-original-title="Abonos en Línea de Crédito a Proveedores">
-							 Total Pagos</a>
+							 Pagos a Proveedores</a>
 						</strong>
 					</h3>
 					<div class="table-responsive">
@@ -124,7 +115,17 @@
 							</tr>
 						</table>
 					</div>
-				
+					
+					<h3><strong><?php echo lang('reports_total'); ?></strong></h3>
+					<div class="table-responsive">
+						<table class="table table-bordered table-striped table-hover">
+							<tr>
+								<td><?php echo lang('reports_total'); ?></td>
+								<td style="text-align: right;"><?php echo to_currency($details_data['total']); ?></td>
+							</tr>
+						</table>
+					</div>
+			
 				
 					<h3 >
 						<strong>

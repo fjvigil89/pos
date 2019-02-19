@@ -28,7 +28,7 @@ class Receiving extends CI_Model
 
 	function save ($items,$supplier_id,$employee_id,$comment,$payment_type,$receiving_id=false, $suspended = 0, $mode,$location_id=-1,$payments)
 	{
-		var_dump($mode);
+		/* var_dump($mode); */
 		if(count($items)==0)
 			return -1;
 		$credit=0;
@@ -413,7 +413,7 @@ class Receiving extends CI_Model
 			{
 				$this->Item_location->save_quantity($cur_item_location_info->quantity - $receiving_item_row['quantity_purchased'],$receiving_item_row['item_id']);
 
-				$subcategory = $this->items_subcategory->get_info($receiving_item_row['item_id'], $receiving_location_id, $receiving_item_row['custom1'], $receiving_item_row['custom2']);
+				$subcategory = $this->items_subcategory->get_info($receiving_item_row['item_id'], $receiving_location_id, $receiving_item_row['custom1_subcategory'], $receiving_item_row['custom2_subcategory']);
 				$quantity_subcategory = $subcategory->quantity;
 				$this->items_subcategory->save_quantity(($quantity_subcategory-$receiving_item_row['quantity_subcategory']), 
 						$receiving_item_row['item_id'], $receiving_location_id, $receiving_item_row['custom1_subcategory'],$receiving_item_row['custom2_subcategory']);
@@ -514,7 +514,9 @@ class Receiving extends CI_Model
 		if (isset($params['start_date']) && isset($params['end_date']))
 		{
 			$where = 'WHERE receiving_time BETWEEN "'.$params['start_date'].'" and "'.$params['end_date'].'"';
+			if (isset($params['listar_contado']) && $params['listar_contado']==true){
 			$where .= ' and credit=0';
+			}
 			$where .= ' and '.$this->db->dbprefix('receivings_items').'.item_id not like '.$store_account_payment_item_id;
 			
 

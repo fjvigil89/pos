@@ -235,4 +235,9 @@ $lang["gage"]="Page";
 $lang["total"]="Total";
 $lang['reports_costo_proveedor'] ="Cost of provider";
 $lang['reports_precio_factura']="Invoice price";
+
+$lang['reports_summary_store_payments']="Reports summary store payments";
+$lang['reports_detailed_store_payments']="Reports detailed store payments";
+$lang['reports_store_payment_summary_report'] = 'Reports store payment summary report';
+$lang['reports_by_supplier'] = 'Reports by supplier';
 ?>

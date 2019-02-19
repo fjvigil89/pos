@@ -3883,7 +3883,7 @@ class Reports extends Secure_area {
         $end_date = date('Y-m-d 23:59:59', strtotime($end_date)); 
         $model->setParams(array('start_date' => $start_date, 'end_date' => $end_date));
         $this->Sale->create_sales_items_temp_table(array('start_date' => $start_date, 'end_date' => $end_date));
-        $this->Receiving->create_receivings_items_temp_table(array('start_date' => $start_date, 'end_date' => $end_date));
+        $this->Receiving->create_receivings_items_temp_table(array('start_date' => $start_date, 'end_date' => $end_date,'listar_contado'=>true));
 		$this->Receiving->create_store_payments_temp_table(array('start_date' => $start_date, 'end_date' => $end_date));
         $this->Register_movement->create_movement_items_temp_table(array('start_date' => $start_date, 'end_date' => $end_date));
 
@@ -3905,7 +3905,7 @@ class Reports extends Secure_area {
         $model->setParams(array('start_date' => $start_date, 'end_date' => $end_date));
 
         $this->Sale->create_sales_items_temp_table(array('start_date' => $start_date, 'end_date' => $end_date));
-        $this->Receiving->create_receivings_items_temp_table(array('start_date' => $start_date, 'end_date' => $end_date));
+        $this->Receiving->create_receivings_items_temp_table(array('start_date' => $start_date, 'end_date' => $end_date,'listar_contado'=>true));
 		$this->Receiving->create_store_payments_temp_table(array('start_date' => $start_date, 'end_date' => $end_date));
 
         $data = array(

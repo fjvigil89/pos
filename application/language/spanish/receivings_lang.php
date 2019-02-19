@@ -106,6 +106,6 @@ $lang['receivings_see_payments'] = 'Ver Pagos';
 $lang['receivings_see_purchases'] = 'Ver Compras';
 $lang['receivings_last_100_purchases'] = 'Últimas 100 Compras';
 $lang['receivings_If_you_delete_this_record_the_supplier'] = 'Si elimina este registro el saldo del Proveedor se actualizará y el efectivo de  caja. ¿Realmente desea eliminar este registro?';
-
+$lang['receivings_delete_receiving'] = 'Eliminar Compras';
 
 ?>
