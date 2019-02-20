@@ -972,16 +972,17 @@ class Sales extends Secure_area
 
 	function complete()
 	{ 
-
+        
 		$data['is_sale'] = TRUE;
 		$data['cart'] = $this->sale_lib->get_cart();
         $suspended_change_sale_id = $this->sale_lib->get_suspended_sale_id() ? $this->sale_lib->get_suspended_sale_id() : $this->sale_lib->get_change_sale_id();
         $location_id = $this->Employee->get_logged_in_employee_current_location_id();
-		
+	
 		$serie_number =$this->sale_lib->get_serie_number(); 
         if($suspended_change_sale_id)
         {
             $sale_data = $this->Sale->get_info($suspended_change_sale_id)->row();
+
 
             if( $this->sale_lib->get_comment_ticket() == 1 and  $sale_data->is_invoice == 1)
             {
@@ -1087,6 +1088,7 @@ class Sales extends Secure_area
 				}
 			}
 		}
+
 		//sales_store_account
 		$tier_id = $this->sale_lib->get_selected_tier_id();
 		$tier_info = $this->Tier->get_info($tier_id);
@@ -1196,21 +1198,26 @@ class Sales extends Secure_area
 
 			
 		}
+
 		if($data['store_account_payment']==1  && isset($data['balance']) && $customer_id)
 		{				
             $sale_id_raw = $this->Sale->save_petty_cash($data['cart'], $customer_id, $employee_id, $sold_by_employee_id, $data['comment'],$data['show_comment_on_receipt'],$data['payments'], $suspended_change_sale_id, 0,$data['ref_no'],$data['auth_code'], $data['change_sale_date'], $data['balance'], $data['store_account_payment'],$data['total'],$data['amount_change'],-1);
 			if($sale_id_raw<0){
+
 				$this->load->view("sales/error_pagos");
 				return;
 			}
 		}
 		else
 		{
+
 			$mode=$this->sale_lib->get_mode() ;
 			$tier_id = $this->sale_lib->get_selected_tier_id();
 			$deleted_taxes=$this->sale_lib->get_deleted_taxes();
+
 			if($this->config->item('subcategory_of_items') && !$this->sale_lib->is_select_subcategory_items()){
 				$sale_id_raw=-1;
+
 			}
 			else{
 				$sale_id_raw = $this->Sale->save($data['cart'], $customer_id, $employee_id, $sold_by_employee_id, 
@@ -1219,10 +1226,13 @@ class Sales extends Secure_area
 				$deleted_taxes,
 				$data['store_account_payment'],$data['total'],$data['amount_change'],$invoice_type, null,$data["divisa"],$data["opcion_sale"],
 				$data["transaction_rate"],$data["transaction_cost"],$data["another_currency"],$data["currency"],$data["total_other_currency"]);
+				
+           
 			}
 
-		}
 
+		}
+		
 		if($data['store_account_payment']==1)
 		{
 			$data['sale_id']=$sale_id_raw;
@@ -1348,7 +1358,7 @@ class Sales extends Secure_area
 		if($customer_id!=-1 and  $data['store_account_payment'] ==1 and $this->config->item('show_payments_ticket') == 1  ){
 			$data['payments_petty_cashes']=$this->Sale->get_petty_cash($customer_id,false,5);			
 		}
-
+      
         if( $this->sale_lib->get_show_receipt() )
         {
             $this->sale_lib->clear_all();

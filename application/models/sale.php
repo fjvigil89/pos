@@ -765,6 +765,7 @@ class Sale extends CI_Model
         if (count($items) == 0) {
             return -1;
         }
+
         $payment_types = '';
         foreach ($payments as $payment_id => $payment) {
             $payment_types = $payment_types . $payment['payment_type'] . ': ' . to_currency($payment['payment_amount']) . '<br />';
@@ -804,7 +805,7 @@ class Sale extends CI_Model
         );
 
         $sale_info = $this->get_info($sale_id)->row();
-        
+
         if ($this->config->item('track_cash') == 1 && $sales_data['suspended'] != 1) {
 
             $cash = $this->get_payment_cash($payments); //Obtener pagos en efectivo de la venta/devolucion actual
@@ -825,8 +826,11 @@ class Sale extends CI_Model
             if ($amount_change > 0) {
                 $cash = $cash - $amount_change;
             }
+
 // se registran los movimiento de la caja
-            $this->Register_movement->save($cash, $description,false,true,$categorias_gastos,false); //Registrar movimiento
+            
+            $this->Register_movement->save($cash, $description,false,true,$categorias_gastos,false); 
+                     //Registrar movimiento
         }
 
         if ($sale_id) {
@@ -844,7 +848,7 @@ class Sale extends CI_Model
             $sales_data['location_id'] = $this->Employee->get_logged_in_employee_current_location_id();
             //$sales_data['register_id'] = $this->Employee->get_logged_in_employee_current_register_id();
         }
-      
+            
         $this->db->query("SET autocommit=0");
         //Lock tables invovled in sale transaction so we don't have deadlock 
         $this->db->query('LOCK TABLES ' . $this->db->dbprefix('customers') . ' WRITE, ' . $this->db->dbprefix('sales') . ' WRITE,

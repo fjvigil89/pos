@@ -2004,6 +2004,8 @@ class Reports extends Secure_area {
     }
     //
     function movement_cash_date_input_excel_export() {
+
+       
         $data = $this->_get_common_report_data(TRUE);
         $cajas=array("all"=>"Todo");
         $location_id=$this->Employee->get_logged_in_employee_current_location_id();
@@ -2013,22 +2015,22 @@ class Reports extends Secure_area {
             }
         }
         $categorias_gastos=array("no establecido"=>"no establecido");
-			foreach($this->Appconfig->get_categorias_gastos() as $categoria){
-				$categorias_gastos[$categoria]=$categoria;
+            foreach($this->Appconfig->get_categorias_gastos() as $categoria){
+                $categorias_gastos[$categoria]=$categoria;
             }
             /*$categorias_gastos["Venta"]="Venta";
             $categorias_gastos["Devolución"]="Devolución";
             $categorias_gastos[lang("sales_store_account_payment")]=lang("sales_store_account_payment");
             $categorias_gastos["Venta eliminada"]="Venta eliminada";
-            $categorias_gastos["Cierre de caja"]="Cierre de caja	";
+            $categorias_gastos["Cierre de caja"]="Cierre de caja    ";
             $categorias_gastos["Apertura de caja"]="Apertura de caja";
             $categorias_gastos["Venta"]="Venta";*/
             $categorias_gastos["all"]="Todo";
             $data["categorias_gastos"]=$categorias_gastos;
             $empleados=array("all"=>"Todo");
-		$employees= $this->Employee->get_all()->result();
-		foreach($employees as $empleado){
-			$empleados[$empleado->person_id]=$empleado->first_name." ".$empleado->last_name;
+        $employees= $this->Employee->get_all()->result();
+        foreach($employees as $empleado){
+            $empleados[$empleado->person_id]=$empleado->first_name." ".$empleado->last_name;
         }
         $data["empleados"]=$empleados;
         $data["cajas"]=$cajas;
@@ -2116,7 +2118,7 @@ class Reports extends Secure_area {
            $empleados[$id_employee]= $empleado->first_name." ".$empleado->last_name;
 
        }
-		
+        
         $data["empleados"]=$empleados;
         $this->load->view("reports/depostos_salidas_input_excel_export", $data);
     }
@@ -2137,7 +2139,7 @@ class Reports extends Secure_area {
            $empleados[$id_employee]= $empleado->first_name." ".$empleado->last_name;
 
        }
-		
+        
         $data["empleados"]=$empleados;
         $this->load->view("reports/input_data_input_excel_export", $data);
     }
@@ -2264,6 +2266,7 @@ class Reports extends Secure_area {
         $this->load->view("reports/tabular", $data);
     }
     function specific_movement_cash_input() {
+
         $data = $this->_get_common_report_data(TRUE);
         $cajas=array("all"=>"Todo");
         $location_id=$this->Employee->get_logged_in_employee_current_location_id();
@@ -2273,11 +2276,13 @@ class Reports extends Secure_area {
             }
         }
         $data["cajas"]=$cajas;
+
         $this->load->view("reports/movement_input_excel_export", $data);
     }
     
-    function specific_movement_cash($start_date, $end_date,$register_id, $export_excel = 0, $export_pdf = 0, $offset = 0)
+    function only_cash($start_date, $end_date,$register_id, $export_excel = 0, $export_pdf = 0, $offset = 0)
     {
+       
         $start_date = rawurldecode($start_date);
         $end_date = rawurldecode($end_date);
         $this->check_action_permission('view_movement_cash');
@@ -2300,31 +2305,35 @@ class Reports extends Secure_area {
         
         $tabular_data = array();
         $report_data = $model->getData();
-
+       
         foreach ($report_data["details"] as $row) {
             $data_row = array();
             $data_row[] = array('data' => anchor('registers_movement/receipt/' . $row['register_movement_id'], '<i class="fa fa-print fa fa-2x vertical-align"></i>', array('target' => '_blank', 'class' => 'hidden-print')) ,'align' => 'left' );
-
+            
+             $data_row[] = array('data' => $row['register_movement_id'], 'align' => 'right');
 
             $data_row[] = array('data' => date(get_date_format() . ' ' . get_time_format(), strtotime($row['register_date'])), 'align' => 'right');
+
             $data_row[] = array('data' => $row['description'], 'align' => 'right');
 
             if($row['type_movement']==1){
+                $data_row[] = array('data' => 'INGRESO', 'align' => 'right');
                 $data_row[] = array('data' => to_currency($row['mount']), 'align' => 'right');
                 $data_row[] = array('data' => "", 'align' => 'right');
             }
            else{
-           
+                $data_row[] = array('data' => 'GASTOS', 'align' => 'right');
                 $data_row[] = array('data' => "", 'align' => 'right');
                 $data_row[] = array('data' => to_currency($row['mount']), 'align' => 'right');                
                
            }
             $data_row[] = array('data' =>$row['categorias_gastos'], 'align' => 'right');
+            $data_row[] = array('data' =>$row['first_name']." ".$row['last_name'], 'align' => 'right');
             $data_row[] = array('data' => to_currency($row['mount_cash']), 'align' => 'right');
             
             $tabular_data[] = $data_row;
         }
-        
+
 
         $data = array(
             "title" => "Movimiento de caja detallado",
@@ -2337,8 +2346,109 @@ class Reports extends Secure_area {
             "pagination" => $this->pagination->create_links(),
         );
 
+        
+       
         $this->load->view("reports/tabular", $data);
     }
+
+    function detailed_of_payment_input() {
+
+        $data = $this->_get_common_report_data(TRUE);
+        $cajas=array("all"=>"Todo");
+        $location_id=$this->Employee->get_logged_in_employee_current_location_id();
+        foreach($this->Register-> get_all_store() as $caja){
+            if($location_id==$caja->location_id){
+                $cajas[$caja->register_id]= $caja->name;
+            }
+        }
+        $empleados=array("all"=>"Todo");
+        $employees= $this->Employee->get_all()->result();
+        foreach($employees as $empleado){
+            $empleados[$empleado->person_id]=$empleado->first_name." ".$empleado->last_name;
+        }
+        $data["empleados"]=$empleados;
+       $data["cajas"]=$cajas;
+
+        $this->load->view("reports/detaile_of_payment_excel_export", $data);
+    }
+
+    function detailed_of_payment($start_date, $end_date,$register_id,$empleado_id, $export_excel = 0, $export_pdf = 0, $offset = 0)
+    {
+       
+        $start_date = rawurldecode($start_date);
+        $end_date = rawurldecode($end_date);
+        $this->check_action_permission('view_movement_cash');
+
+        $this->load->model('reports/specific_movement');
+        $model = $this->specific_movement;
+        $datos = $this->Register_movement->get_sale();
+       // echo "<pre>";print_r($datos);die;
+         $params=array('start_date' => $start_date, 'end_date' => $end_date, "register_id"=>$register_id, 'export_excel' => $export_excel, 'export_pdf' => $export_pdf, 'offset' => $offset);
+
+        $model->setParams(array('start_date' => $start_date, 'end_date' => $end_date,"register_id"=>$register_id, 'export_excel' => $export_excel, 'export_pdf' => $export_pdf, 'offset' => $offset));
+
+        $this->Register_movement->create_movement_all_temp_table(array('start_date' => $start_date, 'end_date' => $end_date, "register_id"=>$register_id, "empleado_id" => $empleado_id));
+
+        $config = array();
+        $config['base_url'] = site_url("reports/specific_movement_cash/" . rawurlencode($start_date) . '/' . rawurlencode($end_date) . "/$register_id/$export_excel/$export_pdf");
+        $config['total_rows'] = $model->getTotalRows();
+        $config['per_page'] = $this->config->item('number_of_items_per_page') ? (int) $this->config->item('number_of_items_per_page') : 20;
+        $config['uri_segment'] = 8;
+
+        $this->pagination->initialize($config);
+        
+        $tabular_data = array();
+        $report_data = $model->getData();
+       
+        foreach ($report_data["details"] as $row) {
+            $data_row = array();
+            $data_row[] = array('data' => anchor('registers_movement/receipt/' . $row['register_movement_id'], '<i class="fa fa-print fa fa-2x vertical-align"></i>', array('target' => '_blank', 'class' => 'hidden-print')) ,'align' => 'left' );
+            
+             $data_row[] = array('data' => $row['register_movement_id'], 'align' => 'right');
+
+            $data_row[] = array('data' => date(get_date_format() . ' ' . get_time_format(), strtotime($row['register_date'])), 'align' => 'right');
+
+            $data_row[] = array('data' => $row['description'], 'align' => 'right');
+
+            if($row['type_movement']==1){
+                $data_row[] = array('data' => 'INGRESO', 'align' => 'right');
+                $data_row[] = array('data' => to_currency($row['mount']), 'align' => 'right');
+                $data_row[] = array('data' => "", 'align' => 'right');
+            }
+           else{
+                $data_row[] = array('data' => 'GASTOS', 'align' => 'right');
+                $data_row[] = array('data' => "", 'align' => 'right');
+                $data_row[] = array('data' => to_currency($row['mount']), 'align' => 'right');                
+               
+           }
+            $data_row[] = array('data' =>$row['categorias_gastos'], 'align' => 'right');
+            $data_row[] = array('data' =>$row['first_name']." ".$row['last_name'], 'align' => 'right');
+            $data_row[] = array('data' => to_currency($row['mount_cash']), 'align' => 'right');
+            
+            $tabular_data[] = $data_row;
+        }
+
+
+        $data = array(
+            "title" => "Movimiento de caja detallado",
+            "subtitle" => date(get_date_format(), strtotime($start_date)) . '-' . date(get_date_format(), strtotime($end_date)),
+            "headers" => $model->getDataColumns(),
+            "data" => $tabular_data,
+            "summary_data" => $model->getSummaryData(),
+            "export_excel" => $export_excel,
+            "export_pdf" => $export_pdf,
+            "pagination" => $this->pagination->create_links(),
+        );
+
+        
+       
+        $this->load->view("reports/tabular_detailed_of_payment", $data);
+    }
+
+
+
+
+
     function specific_employee($start_date, $end_date, $employee_id, $sale_type, $payment_types = null, $employee_type, $export_excel = 0, $export_pdf = 0, $offset = 0) {
         $this->check_action_permission('view_employees');
         $start_date = rawurldecode($start_date);
@@ -4029,7 +4139,7 @@ class Reports extends Secure_area {
         //$end_date=rawurldecode($end_date);
         //$this->load->model('reports/detailed_consolidated');
         //$model = $this->Detailed_commissions;
-        //	$model->setParams(array('start_date'=>$start_date, 'end_date'=>$end_date, 'employee_id' =>$employee_id));
+        //  $model->setParams(array('start_date'=>$start_date, 'end_date'=>$end_date, 'employee_id' =>$employee_id));
         //$this->Sale->create_sales_items_temp_table(array('start_date'=>$start_date, 'end_date'=>$end_date, 'employee_id' =>$employee_id));
         //$config = array();
         //$config['base_url'] = site_url("reports/detailed_consolidated/".rawurlencode($start_date).'/'.rawurlencode($end_date)."/$employee_id/");

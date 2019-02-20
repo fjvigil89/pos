@@ -91,14 +91,28 @@
 								<div class="col-md-2">
 									Hasta: 
 									<input type="text" placeholder="yyyy-mm-dd" value="<?php echo $hasta;?>" class="datepicker form-control" id="dateend" name="hasta">			
+								</div>								
+								<div class="col-md-2">
+									Filtrar: 
+									<select class="form-control" id="filter" name="filter">
+										<option value="">Seleccione</option>
+										<option <?php if($filter == 'register_movement_id'){ ?> selected <?php } ?> value="register_movement_id">ID</option>
+										<option <?php if($filter == 'categorias_gastos'){ ?> selected <?php } ?> value="categorias_gastos">Categoría</option>
+									</select>
+		
 								</div>
+								<div class="col-md-2">
+									Busqueda: 
+									<input type="text" name="search" id="search" class="form-control" placeholder="Buscar" value="<?php echo $search ?> ">
+		
+								</div>								
 								<?php if(!$this->Employee->has_module_action_permission('registers_movement','see_cash_flows_uniqued',  $this->session->userdata('person_id'))):?>
 
 									<div class="col-md-4">
 										Empleado:
 										<?php echo form_dropdown('empleado', $empleados, $id_empleado, 'id="empleado" class="bs-select form-control"'); ?>
 									</div>
-									<?php endif; ?>
+								<?php endif; ?>
 								<div class="col-md-1">
 									<br>
 									<a id="findbydate" class="btn btn-primary dropdown-toggle" href="#">
@@ -126,11 +140,14 @@
 									<table id="table-registers_movement" class="table tablesorter table-striped table-bordered table-hover">
 										<thead>
 											<tr>
+												<th>ID</th>
 												<th>Fecha</th>
 												<th>Descripción</th>
 												<th>Entrada</th>
 												<th>Salida</th>
+												<th>Tipo de Documento</th>
 												<th>Categoría</th>
+												<th>Cajero</th>
 												<th>En Caja</th>
 											</tr>
 										</thead>
@@ -145,21 +162,25 @@
 
 												?>
 												<tr>
+													<td align='center'><?=$movement->register_movement_id;?></td>
 													<td align='center'><?=$movement->register_date;?></td>
 													<td align='center'><?=$movement->description;?></td>
 
 													<?php if ($movement->type_movement == 1) {?>
 
 													<td align='center'><?=$amount;?></td>
-													<td align='center'></td>
+													<td></td>
+													<td align='center'>INGRESO</td>
 
 													<?php } 
 													else {?>
 														<td align='center'></td>
 														<td align='center'><?=$amount;?></td>
 
+													<td align='center'>GASTO</td>
 													<?php }?>
 													<td align='center'><?=$movement->categorias_gastos;?></td>
+													<td><?=$movement->first_name;?> <?=$movement->last_name;?></td>
 													<td align='center'><?=$amount_cash;?></td>
 													
 												</tr>
@@ -179,6 +200,7 @@
 
 
 				$(document).ready(function(){
+
 
 				// se traduce al español y se cambia el formato	al datepicker
 					$('.datepicker').datepicker({
@@ -208,6 +230,8 @@
 				var strdatestart = $("#datestart").val();
 				var strdateend = $("#dateend").val();
 				var id_empleado = $("#empleado").val();
+				var filter = $("#filter").val();
+				var search = $("#search").val();
 				if (strdatestart === null || strdatestart === ""){
 					alert("Debe llenar la fecha de inicio con la que quiere hacer la busqueda");
 					return false;
@@ -234,7 +258,7 @@
 					}
 				}
 				if (Aceptar === true){
-					$("#findbydate").attr("href", "index.php/registers_movement?desde=" + strdatestart + "&hasta=" + strdateend + "&empleado=" + id_empleado);
+					$("#findbydate").attr("href", "index.php/registers_movement?desde=" + strdatestart + "&hasta=" + strdateend + "&empleado=" + id_empleado + "&filter=" + filter + "&search=" + search);
 					return true;
 				}else{
 					return false;
@@ -243,6 +267,7 @@
 			});
 
 			$("#table-registers_movement").DataTable({
+				"searching":       false,
 				"language": {
 					"sProcessing":     "Procesando...",
 					"sLengthMenu":     "Mostrar _MENU_ registros",
@@ -252,7 +277,7 @@
 					"sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
 					"sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
 					"sInfoPostFix":    "",
-					"sSearch":         "Buscar:",
+					"sSearch":         "",
 					"sUrl":            "",
 					"sInfoThousands":  ",",
 					"sLoadingRecords": "Cargando...",
@@ -270,7 +295,6 @@
 				},
 				"order": [[ 0, "desc" ]]
 			});
-
 
 
 		});

@@ -167,8 +167,7 @@
 
 
 	<script type="text/javascript" language="javascript">
-
-		var JS_DATE_FORMAT = 'YYYY-MM-DD';
+        var JS_DATE_FORMAT = 'YYYY-MM-DD';
 		var JS_TIME_FORMAT = "H:mm";
 
 		$('#start_date').datetimepicker({
@@ -183,6 +182,7 @@
 
 		$(document).ready(function()
 		{
+			
 			$('#export_excel_yes').change(function () {
 			 	
 			 	$("#export_pdf_no").prop("checked", true);
@@ -196,6 +196,8 @@
 				var register_id= $("#register_id").val();
 				var export_excel = 0;
 				var export_pdf = 0;
+		
+
 				if ($("#export_excel_yes").prop('checked'))
 				{
 					export_excel = 1;
@@ -206,11 +208,13 @@
 				}
 
 				if ($("#simple_radio").prop('checked'))
-				{
+				{   
+
 					var url= window.location+'/'+$("#report_date_range_simple option:selected").val() +'/'+register_id+"/"+export_excel+'/'+export_pdf;
 					if($("#export_pdf_yes").prop('checked'))
 						window.open(url);
 					else
+
 						window.location =url;
 				}
 				

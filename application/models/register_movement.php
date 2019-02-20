@@ -13,7 +13,8 @@ class Register_movement extends CI_Model
 	}
 
 	function save($cash, $description=" ", $register_id = false, $valid_greater_than_zero_cash = true,$categorias_gastos="",$id_employee=false,$retorna_id=false,$date=null,$register_log_id=null)
-	{  
+	{ 
+        
 		if($id_employee==false){
 			$id_employee= $this->CI->Employee->get_logged_in_employee_info()->person_id;
 		}
@@ -39,8 +40,9 @@ class Register_movement extends CI_Model
 
 				$cash = abs($cash);
 				$type_movement = 0;
+				
 			}
-
+          
 			if ($cash > 0 && $valid_greater_than_zero_cash || !$valid_greater_than_zero_cash) {
 				
 				$register_movement = array(
@@ -55,7 +57,7 @@ class Register_movement extends CI_Model
 				);
 
 				if ($this->db->insert('registers_movement', $register_movement)) {
-					$id_tem= $this->db->insert_id();
+				$id_tem= $this->db->insert_id();
 					$data['cash_sales_amount'] = $new_cash_amount;
 					$this->db->where('register_log_id', $register_log_id);
 					$this->db->update('register_log', $data);
@@ -64,9 +66,11 @@ class Register_movement extends CI_Model
 					
 				}
 
+	
 				return true;
 			} 
-			
+
+			//die;
 			return false;
 		}
 	}
@@ -118,7 +122,7 @@ class Register_movement extends CI_Model
 	
 	//function find by date
 	//funcion que busca por fecha
-	function get_by_date($register_id, $date_start, $date_end, $categoria="", $employee=false){
+	function get_by_date($register_id, $date_start, $date_end, $categoria="", $employee=false, $filter="", $search=""){
 		if ($date_start == null){
 			$datestring = '%Y-%m-%d';
 			$date_start1 = now();
@@ -132,11 +136,13 @@ class Register_movement extends CI_Model
 		$permision=$this->CI->Employee->has_module_action_permission('registers_movement','see_cash_flows_uniqued', $employee_id);
 		
 		$this->db->select(
-						'registers_movement.*')
+						'registers_movement.*, people.first_name, people.last_name')
 				 
 				 ->from('registers')
 				 ->join('register_log', 'register_log.register_id=registers.register_id')
 				 ->join('registers_movement', 'registers_movement.register_log_id=register_log.register_log_id')
+				 ->join('employees', 'employees.id=registers_movement.id_employee')
+				 ->join('people', 'people.person_id=employees.person_id')
 				 ->where('registers.location_id', $this->current_location_id)
 				 ->where('registers.register_id', $register_id)
 				 ->where('FROM_unixtime(UNIX_TIMESTAMP(register_date),"%Y-%m-%d") >=', $date_start)
@@ -150,8 +156,13 @@ class Register_movement extends CI_Model
 				 if($permision){
 					$this->db->where('registers_movement.id_employee', 	$employee_id);
 				 }
+				 if($filter != "" && $search != ""){
+					$this->db->like('registers_movement.'.$filter, $search);
+				 }
 
 		return $this->db->get();
+				
+
 	}
 
 	function save_operation($register_id, $cash, $description,$categorias_gastos )
@@ -308,11 +319,69 @@ class Register_movement extends CI_Model
 		$this->db->dbprefix('registers_movement').".register_log_id as register_log_id,  register_date, 
 		".$this->db->dbprefix('registers_movement').".mount, description,detailed_description, type_movement, 
 		".$this->db->dbprefix('registers_movement').".mount_cash as mount_cash, "
-		.$this->db->dbprefix('registers_movement').".categorias_gastos as categorias_gastos, ".$this->db->dbprefix('registers_movement').".id_employee as id_employee
-		FROM ".$this->db->dbprefix('registers_movement')."
+		.$this->db->dbprefix('registers_movement').".categorias_gastos as categorias_gastos, ".$this->db->dbprefix('registers_movement').".id_employee as id_employee,".$this->db->dbprefix('people').".first_name,".$this->db->dbprefix('people').".last_name
+		FROM ".$this->db->dbprefix('registers_movement')."		
 		JOIN ".$this->db->dbprefix('register_log')." ON  ".$this->db->dbprefix('register_log').'.register_log_id='.$this->db->dbprefix('registers_movement').'.register_log_id'."
-		JOIN ".$this->db->dbprefix('registers')." ON  ".$this->db->dbprefix('registers').'.register_id='.$this->db->dbprefix('register_log').'.register_id'."	
+		JOIN ".$this->db->dbprefix('registers')." ON  ".$this->db->dbprefix('registers').'.register_id='.$this->db->dbprefix('register_log').'.register_id'."
+		JOIN ".$this->db->dbprefix('employees')." ON  ".$this->db->dbprefix('employees').'.id='.$this->db->dbprefix('registers_movement').'.id_employee'."
+		JOIN ".$this->db->dbprefix('people')." ON  ".$this->db->dbprefix('people').'.person_id='.$this->db->dbprefix('employees').'.person_id'."   
+		
 		$where )");
+
+	
+	}
+
+	public function create_movement_all_temp_table($params)
+	{
+		set_time_limit(0);
+		
+		$location_id = $this->Employee->get_logged_in_employee_current_location_id();
+
+		$where = '';
+		
+		if (isset($params['start_date']) && isset($params['end_date']))
+		{
+			$where = 'WHERE register_date BETWEEN "'.$params['start_date'].'" and "'.$params['end_date'].'"'.
+			' and '.$this->db->dbprefix('registers').'.location_id='.$this->db->escape($location_id);
+		}
+		if (isset($params['register_id']) && $params['register_id']!="all")
+		{
+			$where .= ' and '.$this->db->dbprefix('registers').'.register_id='.$this->db->escape($params["register_id"]);
+		}
+
+		if(isset($params['categoris']) && $params['categoris']!="all"){
+			$where .= ' and '.$this->db->dbprefix('registers_movement').'.categorias_gastos='.$this->db->escape($params["categoris"]);
+
+		}
+		if(isset($params['empleado_id']) && $params['empleado_id']!="all"){
+			$where .= ' and '.$this->db->dbprefix('registers_movement').'.id_employee='.$this->db->escape($params["empleado_id"]);
+
+		}
+		//$where .= $this->where_categoria();
+		$this->db->query("CREATE TEMPORARY TABLE ".$this->db->dbprefix('movement_items_temp')."
+
+		(SELECT ".$this->db->dbprefix('registers_movement').".register_movement_id as register_movement_id,".
+		$this->db->dbprefix('registers_movement').".register_log_id as register_log_id,  register_date, 
+		".$this->db->dbprefix('registers_movement').".mount, description,detailed_description, type_movement, 
+		".$this->db->dbprefix('registers_movement').".mount_cash as mount_cash, "
+		.$this->db->dbprefix('registers_movement').".categorias_gastos as categorias_gastos, ".$this->db->dbprefix('registers_movement').".id_employee as id_employee,".$this->db->dbprefix('people').".first_name,".$this->db->dbprefix('people').".last_name
+		FROM ".$this->db->dbprefix('registers_movement')."		
+		JOIN ".$this->db->dbprefix('register_log')." ON  ".$this->db->dbprefix('register_log').'.register_log_id='.$this->db->dbprefix('registers_movement').'.register_log_id'."
+		JOIN ".$this->db->dbprefix('registers')." ON  ".$this->db->dbprefix('registers').'.register_id='.$this->db->dbprefix('register_log').'.register_id'."
+		JOIN ".$this->db->dbprefix('employees')." ON  ".$this->db->dbprefix('employees').'.id='.$this->db->dbprefix('registers_movement').'.id_employee'." 
+		JOIN ".$this->db->dbprefix('people')." ON  ".$this->db->dbprefix('people').'.person_id='.$this->db->dbprefix('employees').'.person_id'." 
+		
+		$where )");
+		
+	
+	}
+
+	function get_sale()
+	{
+		
+        $query = $this->db->query("SELECT * FROM ".$this->db->dbprefix('sales')."");
+   
+       return $query->result_array();
 	}
 	
 	function where_categoria(){

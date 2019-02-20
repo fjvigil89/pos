@@ -39,7 +39,10 @@ class Registers_movement extends Secure_area
 		$data['register_id'] = $register_id;
 		$desde = $this->input->get("desde");
 		$hasta = $this->input->get("hasta");
-		$id_empleado = $this->input->get("empleado")? $this->input->get("empleado"):false;
+
+		$id_empleado = $this->input->get("empleado")? $this->input->get("empleado"): false;
+		$filter = $this->input->get('filter')? $this->input->get('filter') : "";
+		$search = $this->input->get('search')? $this->input->get('search') : "";
 
 		if( $this->validate_date($desde)== false){
 			$desde = null;
@@ -49,14 +52,19 @@ class Registers_movement extends Secure_area
 				$hasta = null;
 			}
 		}
+
 		$data["desde"]=$desde;
 		$data["hasta"]=$hasta;
 		$data["id_empleado"]=$id_empleado;
 		$data["empleados"]=$empleados;
+		$data["filter"]=$filter;
+		$data["search"]=$search;
 
 		//$data['registers_movement'] = $this->Register_movement->get_all($register_id); //Obtener todos los movimientos de la caja seleccionada
 		
-		$data['registers_movement'] = $this->Register_movement->get_by_date($register_id,$desde,$hasta,"",$id_empleado); //obtener todos los movimiento comprendidos en un rango de fecha o si es null los ultimos 30 dias
+
+		$data['registers_movement'] = $this->Register_movement->get_by_date($register_id,$desde,$hasta,"",$id_empleado, $filter, $search); //obtener todos los movimiento comprendidos en un rango de fecha o si es null los ultimos 30 dias
+		// print_r($data['registers_movement']->result());die;
 		$this->load->view('registers_movement/manage',$data);
 	}
 

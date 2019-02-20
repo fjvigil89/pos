@@ -44,7 +44,7 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 |
 */
  
-define('APPLICATION_VERSION', '5.0.0'); 
+define('APPLICATION_VERSION', '5.6.40'); 
 define('DATABASE_VERSION', '0');
 define('DB_NAME_PREFIX','inpos_');
 define('URL_LICENCIA','https://panel.accesopos.com/index.php/login');
