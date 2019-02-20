@@ -3,7 +3,7 @@
 		$(document).ready(function() 
 		{ 
 			<?php if ($controller_name == 'suppliers') { ?>
-				var table_columns = ['','company_name','last_name','first_name','email','phone_number'];
+				var table_columns = ['','company_name','last_name','first_name','email','phone_number','balance'];
 				
 			<?php } else { ?>
 				var table_columns = ['','<?php echo $this->db->dbprefix('people'); ?>'+'.person_id','last_name','first_name','email','phone_number'];
