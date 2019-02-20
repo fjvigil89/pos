@@ -1,4 +1,3 @@
- <link href="<?php echo base_url('css/notifIt.min.css')?>" rel="stylesheet" type="text/css">
 	<div class="row">
 		<div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
 			<div class="portlet light register-items margin-bottom-15">		
@@ -725,7 +724,7 @@
 			</div>
 		</div>
 	</div>
-<script src="<?php echo base_url('js/notifIt.min.js')?>"></script>
+
 		
 	<script type="text/javascript">
 		<?php
