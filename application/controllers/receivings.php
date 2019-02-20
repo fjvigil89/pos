@@ -270,7 +270,7 @@ class Receivings extends Secure_area
 			
 		}
 	
-		if ($this->config->item('track_cash') == 1 && $payment_type == "Efectivo") { //Validar registro de movimientos
+		if ($this->config->item('track_cash') == 1 && $payment_type == lang('receivings_cash')) { //Validar registro de movimientos
 
 			$cash = $this->receiving_lib->get_total();			 
 			$register_log_id = $this->Sale->get_current_register_log();
