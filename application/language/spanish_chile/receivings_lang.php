@@ -89,4 +89,22 @@ $lang['receivings_item_tax']='Impuesto';
 $lang['receivings_than_zero']='La cantidad a transferir no puede ser mayor a la del inventario';
 $lang['receivings_more_options_help']='Dar clic para ver  opciones  de compras';
 
+$lang['receivings_recent_receivings'] = 'Compras recientes a';
+$lang['receivings_store_account_payment'] = 'Abono a línea de crédito a Proveedores';
+$lang['receivings_supplier_was_added'] = 'Proveedor se añadió';
+$lang['receivings_store_account'] = 'Línea de crédito';
+$lang['receivings_payment_amount'] = 'Cantidad de pago';
+$lang['receivings_payment']='Método de Pago';
+$lang['receivings_cash'] = 'Efectivo';
+$lang['receivings_check'] = 'Cheque';
+$lang['receivings_debit'] = 'Tarjeta de Débito';
+$lang['receivings_credit'] = 'Tarjeta de Crédito';
+$lang['receivings_supplier_credit'] = 'Crédito de Proveedores';
+$lang['receivings_supplier_account_balance'] = 'Balance en la cuenta del Proveedor';
+$lang['receivings_see_payments'] = 'Ver Pagos';
+$lang['receivings_see_purchases'] = 'Ver Compras';
+$lang['receivings_last_100_purchases'] = 'Últimas 100 Compras';
+$lang['receivings_If_you_delete_this_record_the_supplier'] = 'Si elimina este registro el saldo del Proveedor se actualizará y el efectivo de  caja. ¿Realmente desea eliminar este registro?';
+$lang['receivings_delete_receiving'] = 'Eliminar Compras';
+
 ?>

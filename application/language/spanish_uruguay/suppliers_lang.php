@@ -11,7 +11,7 @@ $lang['suppliers_successful_deleted']='Se ha borrado correctamente el(los)';
 $lang['suppliers_one_or_multiple']='proveedor(es)';
 $lang['suppliers_cannot_be_deleted']='No se pudo borrar a los proveedores seleccionados. Hay ventas para uno o mas de los seleccionados.';
 $lang['suppliers_basic_information']='Información de Proveedores';
-$lang['suppliers_account_number']='NIT/CIF/DNI/IGV/RIF/RUT';
+$lang['suppliers_account_number']='NIT';
 $lang['suppliers_company_name']='Compañía/Empresa';
 $lang['suppliers_company_name_required'] = 'Nombre de la Compañía es requerido';
 $lang['suppliers_id'] = 'Identificación del proveedor';
@@ -36,6 +36,6 @@ $lang['suppliers_natural']='Natural';
 $lang['suppliers_company_name_help']='Ingresar el nombre de la empresa de su proveedor, este campo es obligatorio ';
 $lang['suppliers_account_number_help']='Ingrese el número de identificación tributaria '; 
 $lang['suppliers_type_help']='Seleccione el  tipo de proveedor jurídico o natural ';
-$lang["technical_supports_marca"]="Marca";
-
+$lang['suppliers_balance'] = 'Saldo';
+$lang['suppliers_pay'] = 'Pagar';
 ?>

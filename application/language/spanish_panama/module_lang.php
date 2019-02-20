@@ -2,9 +2,7 @@
 $lang["module_action_delete_sale_offline"]="Eliminar ventas OffLine";
 
 $lang['module_home']='Inicio';
-
 $lang['module_technical_supports']='Servicio Técnico';
-
 $lang['module_customers']='Clientes';
 $lang['module_customers_desc']='Agregar, Actualizar, Borrar y Buscar clientes';
 
@@ -32,11 +30,11 @@ $lang['module_receivings_desc']='Procesar nuevas Entradas';
 $lang['module_giftcards']='Tarjeta de Regalo';
 $lang['module_giftcards_desc']='Agregar, Actualizar, Borrar y Buscar Tarjetas de Regalo';
 
-$lang['module_item_kits']='Kits';
-$lang['module_item_kits_desc']='Agregar, Actualizar, Borrar y Buscar Kits de Artículos';
-
 $lang['module_offline']='OffLine';
 $lang['module_offline_desc']='';
+
+$lang['module_item_kits']='Kits';
+$lang['module_item_kits_desc']='Agregar, Actualizar, Borrar y Buscar Kits de Artículos';
 
 $lang['module_action_add_update'] = 'Agregar, actualizar';
 $lang["module_rate_transition"]="Editar tasa de transacción durante la venta";
@@ -62,11 +60,8 @@ $lang['module_action_search_locations'] = 'Buscar Tiendas';
 $lang['module_action_assign_all_locations'] = 'Asignar todos las Tiendas';
 $lang['module_action_delete_taxes'] = 'Eliminar Impuestos';
 $lang['statistics'] = 'Estadísticas';
-$lang['module_delete_payments_to_credit'] = 'Eliminar pagos de crédito';
 
 $lang['module_sales_see_sales_uniqued'] = 'Incluir otros empleados en el reporte';
-$lang["module_include_other_employees_report"]="Incluir otros empleados en el reporte";
-$lang["module_change_house"]="Casa de cambio";
 
 $lang['module_recharges'] = 'Recargas';
 $lang['module_name'] = 'Módulos';
@@ -77,15 +72,16 @@ $lang['module_registers_movement_desc']='Agregar, Actualizar, Borrar y Buscar ';
 $lang['sales_price_iva']='Precio Sin Iva';
 $lang['module_licenses']='Licencia';
 $lang['module_locations_online']='Tienda virtual';
-
-$lang["module_action_delete_technical_supports"]="Borrar";
-$lang["module_action_search_technical_supports"]="Buscar Soportes";
-
+//nuevos 
 $lang["module_action_delete_technical_supports"]="Borrar";
 $lang["module_action_search_technical_supports"]="Buscar Soportes";
 $lang["module_edit_tier"]="Editar tier por producto";
 $lang["module_edit_tier_all"]="Editar tier para toda la venta";
 $lang["module_cancel_sale_suspend"]="No cancelar ventas despues de desuspender(No eliminar)";
+$lang['module_delete_payments_to_credit'] = 'Eliminar pagos de crédito';
+$lang["module_include_other_employees_report"]="Incluir otros empleados en el reporte";
+$lang["module_change_house"]="Casa de cambio";
+
 $lang["module_changes_house"]="Casa de cambio";
 $lang["module_refuse_approve"]="Aprobar, rechazar";
 $lang['module_technical_supports_desc']='Agregar, Actualizar, Borrar y Buscar servicios';
@@ -95,7 +91,9 @@ $lang["module_action_edit_quantity"]="Editar cantidad en inventario";
 $lang["module_return_item"]="Devoluciones";
 $lang["module_select_seller_during_sale"]="Elegir vendedor durante la venta";
 
+
 $lang['module_warehouse']='Bodega';
 $lang['module_warehouse_desc']='Ediar, Actualizar, Borrar y ordenes';
 
+$lang['module_action_delete_receivings'] = 'Eliminar Compra';
 ?>

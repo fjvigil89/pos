@@ -582,22 +582,23 @@
 
 					<div class="list-group payments no-border-bottom hidden">
 						<div class="btn-group btn-group-justified">
+						<!--
 							<a href="<?php echo site_url('reports/graphical_summary_payments');?>" class="btn icon-btn letter-space">
 								<i class="fa fa-bar-chart-o"></i>
 								<div>
 									<?php echo lang('reports_graphical_reports'); ?>
 								</div>
-							</a>
-							<a href="<?php echo site_url('reports/summary_payments');?>" class="btn icon-btn letter-space">
+							</a>-->
+							<a href="<?php echo site_url('reports/summary_store_payments');?>" class="btn icon-btn letter-space">
 								<i class="fa fa-building-o"></i>
 								<div>
-									<?php echo lang('reports_summary_reports'); ?>
+									<?php echo lang('reports_summary_store_payments'); ?>
 								</div>
 							</a>							
-							<a href="<?php echo site_url('reports/detailed_payment');?>" class="btn icon-btn letter-space">
-								<i class="fa fa-calendar"></i> 
+							<a href="<?php echo site_url('reports/specific_supplier_store_payment');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-calendar"></i>
 								<div>
-									<?php echo lang('reports_detailed_reports'); ?>
+									<?php echo lang('reports_detailed_store_payments'); ?>
 								</div>
 							</a>
 						</div>						
@@ -696,14 +697,14 @@
 										<?php echo lang('reports_detailed_reports'); ?>
 									</div>
 								</a>
-								<?php if($this->config->item("mostrar_reportes_personalizados1")==1):?>
+							
 									<a href="<?php echo site_url('reports/purchase_provider');?>" class="btn icon-btn letter-space">
 										<i class="fa fa-calendar"></i>
 										<div>
 											<?php echo "Compra proveedor" ?>
 										</div>
 									</a>
-								<?php endif; ?>							
+														
 							</div>							
 						</div>
 					

@@ -35,7 +35,7 @@ class Receivings extends Secure_area
 	{
 		$data = array();
 		$supplier_id = $this->input->post("supplier");
-
+		
 		
 		if ($this->Supplier->exists($supplier_id))
 		{
@@ -84,6 +84,15 @@ class Receivings extends Secure_area
 	{
 		$mode = $this->input->post("mode");
 		$this->receiving_lib->set_mode($mode);
+		
+		if ($mode == 'store_account_payment')
+		{
+			$store_account_payment_item_id = $this->Item->create_or_update_store_account_item();
+			$this->receiving_lib->empty_cart();
+			
+			$this->receiving_lib->add_item($store_account_payment_item_id,1);
+		}
+
 		$this->_reload();
 	}
 	
@@ -180,6 +189,8 @@ class Receivings extends Secure_area
 		{
 			$data['error']=lang('receivings_error_editing_item');
 		}
+		
+
 
 		$this->_reload($data);
 	}
@@ -224,8 +235,13 @@ class Receivings extends Secure_area
 		$emp_info=$this->Employee->get_info($employee_id);
 		$payment_type = $this->input->post('payment_type');
 		$data['payment_type']=$this->input->post('payment_type');
+		$data['payments']=$this->receiving_lib->get_payments();
+		$data['payment_amount']=$this->receiving_lib->get_total();
 		$data['mode']=$this->receiving_lib->get_mode();
+		$data['balance']=$this->Receiving->total_balance($supplier_id);
+		/* $data['payments']=$this->receiving_lib->get_payments(); */
 		$data['receiving_id'] = "RECV -1";
+		
 		
 		if ($this->input->post('amount_tendered'))
 		{
@@ -233,24 +249,28 @@ class Receivings extends Secure_area
 			$data['amount_change'] = to_currency($data['amount_tendered'] - round($data['total'], 2));
 		}
 		$data['employee']=$emp_info->first_name.' '.$emp_info->last_name;
-
+		
 		if($supplier_id!=-1)
 		{	
 			$suppl_info=$this->Supplier->get_info($supplier_id);		
 			$data['supplier']=$suppl_info->company_name;
+			
+
 			if ($suppl_info->first_name || $suppl_info->last_name)
 			{
 				$data['supplier'] .= ' ('.$suppl_info->first_name.' '.$suppl_info->last_name.')';
+
 			}
 			if($suppl_info->type=='Jurídico')
 			{
 				$this->receiving_lib->get_type_supplier('Jurídico');
 				$data['taxes']=$this->receiving_lib->get_taxes();
 				$data['type_supplier']=	$suppl_info->type;
-			}			
+			}	
+			
 		}
-
-		if ($this->config->item('track_cash') == 1 && $payment_type == "Efectivo") { //Validar registro de movimientos
+	
+		if ($this->config->item('track_cash') == 1 && $payment_type == lang('receivings_cash')) { //Validar registro de movimientos
 
 			$cash = $this->receiving_lib->get_total();			 
 			$register_log_id = $this->Sale->get_current_register_log();
@@ -269,14 +289,53 @@ class Receivings extends Secure_area
 				}
 			}
 		}
+			
+		$data['store_account_payment'] = $this->receiving_lib->get_mode() == 'store_account_payment' ? 1 : 0;
+		//SAVE receiving to database 
+		$suppl_info=$this->Supplier->get_info($supplier_id);		
+		$data['balance'] = $this->Receiving->total_balance($supplier_id);
+		$total_venta=$this->receiving_lib->get_total();
+		//$this->Receiving->total_balance($supplier_id);
+		
+		if($this->receiving_lib->get_mode() == 'receive'  && isset($data['balance']) && $supplier_id)
+		{
+			/* var_dump($data['balance']); */
+			$add_supplier=$this->Receiving->add_pay_cash_supplier($supplier_id, $data['balance'],$total_venta);
+
+			
+		}
+		$this->receiving_lib->set_payments($data);
+		if($data['store_account_payment']==1  && isset($data['balance']) && $supplier_id)
+		{	
+		$sold_by_employee_id=0;
+		$comment='';
+		$show_comment_on_receipt=0;
+		$data['payments']=$this->receiving_lib->get_payments();
+	
+		$suspended_change_receiving_id=0;
+		$ref_no='';
+		$auth_code='';
+		$change_receiving_date=0;
+		$amount_change=0;
+            $receiving_id_raw = $this->Receiving->save_pay_cash($data['cart'], $supplier_id, $employee_id, $sold_by_employee_id, $comment,$show_comment_on_receipt,$data['payments'], $suspended_change_receiving_id, 0,$ref_no,$auth_code, $change_receiving_date, $data['balance'], $data['store_account_payment'],$data['total'],$amount_change,-1);
+			if($receiving_id_raw<0){
+				/* var_dump($receiving_id_raw); */
+				$this->load->view("receivings/error_pagos");
+				return;
+			} else {
+				$data['receiving_id'] ='RECV '.$receiving_id_raw;
+			}
+		}
+		
 		if(!$this->receiving_lib->is_select_subcategory_items()){
 			$error_message = "Debe ingresar los datos de la(s) subcategoría(s).";	
 
 		}
-
-		if (empty($error_message)) {
+		/* var_dump($data['receiving_id']); */
+		if (empty($error_message) and $data['receiving_id']=="RECV -1") {
 			//SAVE receiving to database
-			$data['receiving_id'] ='RECV '.$this->Receiving->save($data['cart'], $supplier_id,$employee_id,$comment,$payment_type,$this->receiving_lib->get_suspended_receiving_id(),0,$data['mode'],$location_id);
+			$data['payments']=$this->receiving_lib->get_payments();
+			$data['receiving_id'] ='RECV '.$this->Receiving->save($data['cart'], $supplier_id,$employee_id,$comment,$payment_type,$this->receiving_lib->get_suspended_receiving_id(),0,$data['mode'],$location_id,$data['payments']);
 		} 
 		
 		$current_location_id = $this->Employee->get_logged_in_employee_current_location_id();
@@ -292,6 +351,16 @@ class Receivings extends Secure_area
 		if (!empty($error_message) || $data['receiving_id'] == 'RECV -1') {
 
 			$data['error_message'] = lang('receivings_transaction_failed')." <br> ".$error_message;
+		}
+		
+		if($supplier_id != -1)
+		{
+			$cust_info=$this->Customer->get_info($supplier_id);
+			$balance_total=$this->Receiving->total_balance($supplier_id);
+			if ($balance_total !=0)
+			{
+				$data['supplier_balance_for_receiving'] = $balance_total;
+			}
 		}
 
 		$this->load->view("receivings/receipt",$data);
@@ -312,6 +381,7 @@ class Receivings extends Secure_area
 		$emp_info=$this->Employee->get_info($employee_id);
 		$payment_type = '';
 		$data['payment_type']='';
+		$data['payments']=$this->receiving_lib->get_payments();
 		$data['mode']=$this->receiving_lib->get_mode();
 		$data['employee']=$emp_info->first_name.' '.$emp_info->last_name;
 
@@ -326,7 +396,8 @@ class Receivings extends Secure_area
 		}
 
 		//SAVE receiving to database
-		$receiving_id = $this->Receiving->save($data['cart'], $supplier_id,$employee_id,$comment,$payment_type,$this->receiving_lib->get_suspended_receiving_id(), 1, $data['mode'],$location_id);
+		/* $payments=$this->receiving_lib->get_payments(); */
+		$receiving_id = $this->Receiving->save($data['cart'], $supplier_id,$employee_id,$comment,$payment_type,$this->receiving_lib->get_suspended_receiving_id(), 1, $data['mode'],$location_id,$data['payments']);
 		$data['receiving_id']='RECV '.$receiving_id;
 		if ($data['receiving_id'] == 'RECV -1')
 		{
@@ -584,6 +655,7 @@ class Receivings extends Secure_area
 		$supplier_id=$this->receiving_lib->get_supplier();
 		$emp_info=$this->Employee->get_info($receiving_info['employee_id']);
 		$data['payment_type']=$receiving_info['payment_type'];
+		$data['payments']=$this->receiving_lib->get_payments();
 
 		$data['subtotal']=$this->receiving_lib->get_subtotal($receiving_id);
 		$data['total_cost_transport']=$this->receiving_lib->get_total_cost_transport($receiving_id);
@@ -666,6 +738,33 @@ class Receivings extends Secure_area
 		
 	}
 	
+	function delete_receivings()
+	{
+		$data = array();
+		if(!$this->Employee->has_module_action_permission('receivings', 'delete_receiving', $this->Employee->get_logged_in_employee_info()->person_id)){
+			$data['error_access']=true;
+			$this->load->view('receivings/delete', $data);
+		}		
+		else{
+		$data['error_access'] = false;
+		$receiving_id=$this->input->post("receiving_id");
+		$receiving_info = $this->Receiving->get_info($receiving_id)->row_array();
+		
+		if ($this->Receiving->delete($receiving_id, false, $receiving_info['suspended'] == 0))
+		{
+			$data['success'] = true;
+		}
+		else
+		{
+			$data['success'] = false;
+		}
+		$this->load->view('receivings/delete', $data);
+		}
+		
+		
+		
+	}
+	
 	function undelete($receiving_id)
 	{
 		$data = array();
@@ -728,7 +827,7 @@ class Receivings extends Secure_area
 		$data['subtotal']=$this->receiving_lib->get_subtotal();
 		$data['total_cost_transport']=$this->receiving_lib->get_total_cost_transport();
 		$data['cart']=$this->receiving_lib->get_cart();
-		$data['modes']=array('receive'=>lang('receivings_receiving'),'return'=>lang('receivings_return'));
+		$data['modes']=array('receive'=>lang('receivings_receiving'),'return'=>lang('receivings_return'),'store_account_payment'=>lang('receivings_store_account_payment'));
 		$data['comment'] = $this->receiving_lib->get_comment();
 
 		if ($this->Location->count_all() > 1)
@@ -736,16 +835,25 @@ class Receivings extends Secure_area
 			$data['modes']['transfer']= lang('receivings_transfer');
 		}
 		$data['mode']=$this->receiving_lib->get_mode();
-	
+			
 		$data['items_in_cart'] = $this->receiving_lib->get_items_in_cart();
 		$data['items_module_allowed'] = $this->Employee->has_module_permission('items', $person_info->person_id);
 		$data['payment_options']=array(
-			lang('sales_cash') => lang('sales_cash'),
-			lang('sales_check') => lang('sales_check'),
-			lang('sales_debit') => lang('sales_debit'),
-			lang('sales_credit') => lang('sales_credit'),
-			lang('sales_supplier_credit') => lang('sales_supplier_credit')
+			lang('receivings_cash') => lang('receivings_cash'),
+			lang('receivings_check') => lang('receivings_check'),
+			lang('receivings_debit') => lang('receivings_debit'),
+			lang('receivings_credit') => lang('receivings_credit'),
 		);
+		
+		if ($this->receiving_lib->get_mode() != 'store_account_payment')
+			{
+				$data['payment_options']=array(
+				lang('receivings_cash') => lang('receivings_cash'),
+				lang('receivings_check') => lang('receivings_check'),
+				lang('receivings_debit') => lang('receivings_debit'),
+				lang('receivings_credit') => lang('receivings_credit'),
+				lang('receivings_supplier_credit') => lang('receivings_supplier_credit'));
+				}
 		
 		foreach($this->Appconfig->get_additional_payment_types() as $additional_payment_type)
 		{
@@ -759,6 +867,8 @@ class Receivings extends Secure_area
 		{
 			$info=$this->Supplier->get_info($supplier_id);
 			$data['supplier']=$info->company_name;
+			/* $data['supplier_balance']=$info->balance;	 */
+			$data['supplier_balance']=$this->Receiving->total_balance($supplier_id);
 			if ($info->first_name || $info->last_name)
 			{
 				$data['supplier'] .= ' ('.$info->first_name.' '.$info->last_name.')';
@@ -770,6 +880,7 @@ class Receivings extends Secure_area
 				$data['type_supplier']=	$info->type;
 			}
 			$data['supplier_id']=$supplier_id;
+			$data['recent_receivings'] = $this->Receiving->get_recent_receivings_for_supplier($supplier_id);
 		}
 		$data['total']=$this->receiving_lib->get_total();	
 		$location_id=$this->receiving_lib->get_location();
@@ -802,6 +913,51 @@ class Receivings extends Secure_area
     	$this->receiving_lib->clear_all();
     	$this->_reload();
     }
+	
+	function receiving_details_modal($id_supplier=0){
+		
+		$data["pay_cash"]=$this->Receiving->get_pay_cash($id_supplier,false,100);
+		$data["supplier"] = $this->Supplier->get_info($id_supplier);
+		$data["balance_total"]=$this->Receiving->total_balance($id_supplier);
+		$this->load->view("receivings/receiving_details_pay_modal",$data);
+	}
+	
+	function receiving_purchases_modal($id_supplier=0){
+		
+		$data["receivings"]=$this->Receiving->get_receiving($id_supplier,false,100);
+		$data["supplier"] = $this->Supplier->get_info($id_supplier);
+		$data["balance_total"]=$this->Receiving->total_balance($id_supplier);
+		$this->load->view("receivings/receiving_purchases_pay_modal",$data);
+	}
+
+	function get_monton_pendiente($id_persona=0){
+		if(! is_numeric($id_persona) ||$id_persona==0 ){
+			echo 0;
+
+		}else{
+			$supplier = $this->Supplier->get_info($id_persona);
+			echo to_currency_no_money($supplier->balance);
+		}
+	}
+	
+	function delete_pay_cash()
+	{
+		if(!$this->Employee->has_module_action_permission('receivings', 'delete_payments_to_credit', $this->Employee->get_logged_in_employee_info()->person_id)){
+			$data['error']="No tiene permiso para eliminar el registro";
+		}		
+		else{
+			$pay_cash_id=$this->input->post("pay_cash_id");
+			$data=array();
+			$result=$this->Receiving->delete_pay_cash($pay_cash_id);
+			if(!$result){
+				$data['error']="No pude eliminar el registro";
+			}
+		}
+		$this->_reload($data);
+
+	}
+	
+
 
 }
 ?>

@@ -1958,7 +1958,7 @@ class Sale extends CI_Model
         $this->load->library('sale_lib');
         $this->db->query("SET autocommit=0");
         //Lock tables invovled in sale transaction so we don't have deadlock
-        $this->db->query('LOCK TABLES ' . $this->db->dbprefix('customers') . ' WRITE, ' . $this->db->dbprefix('customers') . 'Read');
+        $this->db->query('LOCK TABLES ' . $this->db->dbprefix('customers') . ' WRITE, ' . $this->db->dbprefix('customers') . ' READ ');
         //Update customer store account balance
         if ($customer_id > 0 && $balance) {
 

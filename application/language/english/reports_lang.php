@@ -248,4 +248,9 @@ $lang['reports_custom_range_help'] = 'Select start and end date to generate repo
 $lang['reports_sale_type_help'] = 'Select the type of report';
 $lang['reports_export_to_excel_help'] = 'Select YES if you want to export the report to Excel or select NO to see the report in the POS ';
 
+
+$lang['reports_summary_store_payments']="Reports summary store payments";
+$lang['reports_detailed_store_payments']="Reports detailed store payments";
+$lang['reports_store_payment_summary_report'] = 'Reports store payment summary report';
+$lang['reports_by_supplier'] = 'Reports by supplier';
 ?>

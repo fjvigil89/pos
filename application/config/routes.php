@@ -56,6 +56,7 @@ $route['reports/summary_discounts'] = "reports/date_input_excel_export";
 $route['reports/summary_payments'] = "reports/date_input_excel_export";
 $route['reports/summary_giftcards'] = "reports/excel_export";
 $route['reports/summary_store_accounts'] = "reports/excel_export";
+$route['reports/summary_store_payments'] = "reports/excel_export";
 $route['reports/summary_profit_and_loss'] = "reports/date_input_profit_and_loss";
 $route['reports/summary_commissions'] = "reports/employees_date_input_excel_export";
 
@@ -90,6 +91,7 @@ $route['reports/suppliers_credit'] = "reports/suppliers_credit_specific_input";
 $route['reports/detailed_giftcards'] = "reports/detailed_giftcards_input";
 $route['reports/specific_customer'] = "reports/specific_customer_input";
 $route['reports/specific_customer_store_account'] = "reports/specific_customer_store_account_input";
+$route['reports/specific_supplier_store_payment'] = "reports/specific_supplier_store_payment_input";
 $route['reports/store_account_statements'] = "reports/store_account_statements_input";
 $route['reports/specific_employee'] = "reports/specific_employee_input";
 $route['reports/specific_supplier'] = "reports/specific_supplier_input";

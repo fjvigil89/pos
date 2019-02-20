@@ -36,5 +36,6 @@ $lang['suppliers_natural']='Natural';
 $lang['suppliers_company_name_help']='Ingresar el nombre de la empresa de su proveedor, este campo es obligatorio ';
 $lang['suppliers_account_number_help']='Ingrese el número de identificación tributaria '; 
 $lang['suppliers_type_help']='Seleccione el  tipo de proveedor jurídico o natural ';
-
+$lang['suppliers_balance'] = 'Saldo';
+$lang['suppliers_pay'] = 'Pagar';
 ?>

@@ -74,4 +74,23 @@ $lang['receivings_suspended_search'] = 'Search through suspended receivings';
 $lang['receivings_error_editing_item'] = 'Error editing Item';
 $lang['receivings_transfer_from'] = 'Transfer From';
 $lang['receivings_transfer_to'] = 'Transfer To';
+
+$lang['receivings_recent_receivings'] = 'Recent Receivings';
+$lang['receivings_store_account_payment'] = 'Payments to credit provider line';
+$lang['receivings_supplier_was_added'] = 'Supplier was added';
+$lang['receivings_store_account'] = 'Store account';
+$lang['receivings_payment_amount'] = 'Payment amount';
+$lang['receivings_payment']='Payment';
+$lang['receivings_cash'] = 'Cash';
+$lang['receivings_total_cost_transport'] = 'Total transport';
+$lang['receivings_check'] = 'Check';
+$lang['receivings_debit'] = 'Debit card';
+$lang['receivings_credit'] = 'Credit card';
+$lang['receivings_supplier_credit'] = 'Supplier credit';
+$lang['receivings_supplier_account_balance'] = 'Supplier account balance';
+$lang['receivings_see_payments'] = 'See Payments';
+$lang['receivings_see_purchases'] = 'See Purchases';
+$lang['receivings_last_100_purchases'] = 'Last 100 Purchases';
+$lang['receivings_If_you_delete_this_record_the_supplier'] = 'If you delete this record the supplier';
+$lang['receivings_delete_receiving'] = 'Delete Receiving';
 ?>

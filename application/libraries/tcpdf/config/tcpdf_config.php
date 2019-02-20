@@ -69,7 +69,7 @@ define ('K_PATH_IMAGES', base_url());
  * Deafult image logo used be the default Header() method.
  * Please set here your own logo or an empty string to disable it.
  */
-define ('PDF_HEADER_LOGO', ''/*remplazar por la url $this->Appconfig->get_logo_image()*/);
+define ('PDF_HEADER_LOGO', 'img/pdf.png'/*remplazar por la url $this->Appconfig->get_logo_image()*/);
 
 /**
  * Header logo image width in user units.

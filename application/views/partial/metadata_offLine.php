@@ -17,14 +17,14 @@
     <script src="<?php echo base_url();?>js/compatible_browser.js" type="text/javascript"></script>
     <script>    
     
-			$(document).ready(function(){
-				if(!validation_indexedDB_browser()){
+	     $(document).ready(function(){
+			if(!validation_indexedDB_browser()){
                     document.getElementById("btn-offline").style.display = "block";
                     sessionStorage.setItem("person_id", <?php echo $this->Employee->get_logged_in_employee_info()->person_id?>);
                     window.addEventListener('offline', handleConnectionChange);
 
                 }
 			
-			});
+		});
 	</script>
 <?php } else{ echo "<script>localStorage.setItem('sales_offline','0');</script>";}?>

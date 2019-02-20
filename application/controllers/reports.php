@@ -1763,6 +1763,13 @@ class Reports extends Secure_area {
         $data['search_suggestion_url'] = site_url('reports/customer_search');
         $this->load->view("reports/specific_input", $data);
     }
+	
+	function specific_supplier_store_payment_input() {
+        $data = $this->_get_common_report_data(TRUE);
+        $data['specific_input_name'] = lang('reports_supplier');
+        $data['search_suggestion_url'] = site_url('reports/supplier_search');
+        $this->load->view("reports/specific_supplier_input", $data);
+    }
 
     function specific_customer($start_date, $end_date, $customer_id, $sale_type, $export_excel = 0, $export_pdf = 0, $offset = 0) {
         $this->check_action_permission('view_customers');
@@ -1904,11 +1911,78 @@ class Reports extends Secure_area {
         $this->load->view("reports/tabular", $data);
     }
 
-    function store_account_statements_input() {
+	 function specific_supplier_store_payment($start_date, $end_date, $supplier_id, $receiving_type, $export_excel = 0,$export_pdf = 0, $offset = 0) {
+        $this->check_action_permission('view_store_payment');
+        $start_date = rawurldecode($start_date);
+        $end_date = rawurldecode($end_date);
+
+        $this->load->model('reports/Specific_supplier_store_payment');
+        $model = $this->Specific_supplier_store_payment;
+        $model->setParams(array('start_date' => $start_date, 'end_date' => $end_date, 'supplier_id' => $supplier_id, 
+        'receiving_type' => $receiving_type, 'offset' => $offset, 'export_excel' => $export_excel,'export_pdf' => $export_pdf));
+        $config = array();
+        $config['base_url'] = site_url("reports/specific_supplier_store_payment/" . rawurlencode($start_date) . '/' . rawurlencode($end_date) . "/$supplier_id/$receiving_type/$export_excel/$export_pdf");
+        $config['total_rows'] = $model->getTotalRows();
+        $config['per_page'] = $this->config->item('number_of_items_per_page') ? (int) $this->config->item('number_of_items_per_page') : 20;
+        $config['uri_segment'] = 8;
+        $this->pagination->initialize($config);
+
+
+
+        $headers = $model->getDataColumns();
+        $report_data = $model->getData();
+
+        $tabular_data = array();
+		$balance=0;
+        foreach ($report_data as &$row) {
+			 $row     = get_object_vars($row);
+			 /* var_export($row); */
+			if($row['monto'] !=0){
+            $tabular_data[] = array(array('data' => ($row['monto']>0?"FAC: ":"ABO: ").str_pad($row['num'],6,'0', STR_PAD_LEFT), 'align' => 'left'),
+                array('data' => date(get_date_format() . '-' . get_time_format(), strtotime($row['fecha'])), 'align' => 'left'),
+                array('data' => $row['monto'] < 0 ? to_currency($row['monto']) : to_currency(0), 'align' => 'right'),
+                array('data' => $row['monto'] > 0 ? to_currency($row['monto'] ) :to_currency(0), 'align' => 'right'),
+                array('data' => to_currency($balance+$row['monto']), 'align' => 'right'),
+                array('data' => $row['comment'], 'align' => 'left'));
+				$balance=$balance+$row['monto'];
+			}
+        }
+
+
+        $supplier_info = $this->Supplier->get_info($supplier_id);
+		$this->actualiza_balance_proveedor($supplier_id);
+        if ($supplier_info->company_name) {
+            $supplier_title = $supplier_info->company_name . ' (' . $supplier_info->first_name . ' ' . $supplier_info->last_name . ')';
+        } else {
+            $supplier_title = $supplier_info->first_name . ' ' . $supplier_info->last_name;
+        }
+        $data = array(
+            "title" => lang('reports_detailed_store_payment_report'). $supplier_title ,
+			"supplier" =>  $supplier_title,
+            "subtitle" =>  date("j-m-Y  g:i a"),
+            "headers" => $headers,
+            "data" => $tabular_data,
+            "summary_data" => $model->getSummaryData(),
+            "export_excel" => $export_excel,
+            "export_pdf" => $export_pdf,
+            "pagination" => $this->pagination->create_links(),
+        );
+
+        $this->load->view("reports/tabular_payments", $data);
+    }
+	
+	function store_account_statements_input() {
         $data = $this->_get_common_report_data();
 
         $data['search_suggestion_url'] = site_url('reports/customer_search');
         $this->load->view('reports/store_account_statements_input', $data);
+    }
+	
+    function store_payment_statements_input() {
+        $data = $this->_get_common_report_data();
+
+        $data['search_suggestion_url'] = site_url('reports/customer_search');
+        $this->load->view('reports/store_payment_statements_input', $data);
     }
 
     function store_account_statements($customer_id = -1, $start_date, $end_date, $hide_items = 0, $pull_payments_by = 'payment_date', $offset = 0) {
@@ -1936,6 +2010,33 @@ class Reports extends Secure_area {
         );
 
         $this->load->view("reports/store_account_statements", $data);
+    }
+	
+	 function store_payment_statements($supplier_id = -1, $start_date, $end_date, $hide_items = 0, $pull_payments_by = 'payment_date', $offset = 0) {
+        $this->check_action_permission('view_store_payment');
+        $this->load->model('reports/Store_payment_statements');
+        $model = $this->Store_payment_statements;
+        $model->setParams(array('supplier_id' => $supplier_id, 'offset' => $offset, 'start_date' => $start_date, 'end_date' => $end_date, 'pull_payments_by' => $pull_payments_by));
+        $config = array();
+        $config['base_url'] = site_url("reports/store_payment_statements/$supplier_id/$start_date/$end_date/$hide_items/$pull_payments_by");
+        $config['total_rows'] = $model->getTotalRows();
+        $config['per_page'] = $this->config->item('number_of_items_per_page') ? (int) $this->config->item('number_of_items_per_page') : 20;
+        $config['uri_segment'] = 8;
+        $this->pagination->initialize($config);
+
+        $report_data = $model->getData();
+
+        $supplier_info = $this->Supplier->get_info($supplier_id);
+        $data = array(
+            "title" => lang('reports_store_payment_statements'),
+            "subtitle" => date(get_date_format(), strtotime($start_date)) . '-' . date(get_date_format(), strtotime($end_date)),
+            'report_data' => $report_data,
+            'hide_items' => $hide_items,
+            "pagination" => $this->pagination->create_links(),
+            'date_column' => $pull_payments_by == 'payment_date' ? 'date' : 'sale_time',
+        );
+
+        $this->load->view("reports/store_payment_statements", $data);
     }
 
     function specific_employee_input() {
@@ -2004,8 +2105,6 @@ class Reports extends Secure_area {
     }
     //
     function movement_cash_date_input_excel_export() {
-
-       
         $data = $this->_get_common_report_data(TRUE);
         $cajas=array("all"=>"Todo");
         $location_id=$this->Employee->get_logged_in_employee_current_location_id();
@@ -2022,7 +2121,7 @@ class Reports extends Secure_area {
             $categorias_gastos["Devolución"]="Devolución";
             $categorias_gastos[lang("sales_store_account_payment")]=lang("sales_store_account_payment");
             $categorias_gastos["Venta eliminada"]="Venta eliminada";
-            $categorias_gastos["Cierre de caja"]="Cierre de caja    ";
+            $categorias_gastos["Cierre de caja"]="Cierre de caja	";
             $categorias_gastos["Apertura de caja"]="Apertura de caja";
             $categorias_gastos["Venta"]="Venta";*/
             $categorias_gastos["all"]="Todo";
@@ -2118,7 +2217,7 @@ class Reports extends Secure_area {
            $empleados[$id_employee]= $empleado->first_name." ".$empleado->last_name;
 
        }
-        
+		
         $data["empleados"]=$empleados;
         $this->load->view("reports/depostos_salidas_input_excel_export", $data);
     }
@@ -2139,7 +2238,7 @@ class Reports extends Secure_area {
            $empleados[$id_employee]= $empleado->first_name." ".$empleado->last_name;
 
        }
-        
+		
         $data["empleados"]=$empleados;
         $this->load->view("reports/input_data_input_excel_export", $data);
     }
@@ -2266,7 +2365,6 @@ class Reports extends Secure_area {
         $this->load->view("reports/tabular", $data);
     }
     function specific_movement_cash_input() {
-
         $data = $this->_get_common_report_data(TRUE);
         $cajas=array("all"=>"Todo");
         $location_id=$this->Employee->get_logged_in_employee_current_location_id();
@@ -2283,6 +2381,76 @@ class Reports extends Secure_area {
     function only_cash($start_date, $end_date,$register_id, $export_excel = 0, $export_pdf = 0, $offset = 0)
     {
        
+        $start_date = rawurldecode($start_date);
+        $end_date = rawurldecode($end_date);
+        $this->check_action_permission('view_movement_cash');
+
+        $this->load->model('reports/specific_movement');
+        $model = $this->specific_movement;
+         $params=array('start_date' => $start_date, 'end_date' => $end_date, "register_id"=>$register_id, 'export_excel' => $export_excel, 'export_pdf' => $export_pdf, 'offset' => $offset);
+
+        $model->setParams(array('start_date' => $start_date, 'end_date' => $end_date,"register_id"=>$register_id, 'export_excel' => $export_excel, 'export_pdf' => $export_pdf, 'offset' => $offset));
+
+        $this->Register_movement->create_movement_items_temp_table(array('start_date' => $start_date, 'end_date' => $end_date, "register_id"=>$register_id));
+
+        $config = array();
+        $config['base_url'] = site_url("reports/specific_movement_cash/" . rawurlencode($start_date) . '/' . rawurlencode($end_date) . "/$register_id/$export_excel/$export_pdf");
+        $config['total_rows'] = $model->getTotalRows();
+        $config['per_page'] = $this->config->item('number_of_items_per_page') ? (int) $this->config->item('number_of_items_per_page') : 20;
+        $config['uri_segment'] = 8;
+
+        $this->pagination->initialize($config);
+        
+        $tabular_data = array();
+        $report_data = $model->getData();
+       
+        foreach ($report_data["details"] as $row) {
+            $data_row = array();
+            $data_row[] = array('data' => anchor('registers_movement/receipt/' . $row['register_movement_id'], '<i class="fa fa-print fa fa-2x vertical-align"></i>', array('target' => '_blank', 'class' => 'hidden-print')) ,'align' => 'left' );
+            
+             $data_row[] = array('data' => $row['register_movement_id'], 'align' => 'right');
+
+            $data_row[] = array('data' => date(get_date_format() . ' ' . get_time_format(), strtotime($row['register_date'])), 'align' => 'right');
+
+            $data_row[] = array('data' => $row['description'], 'align' => 'right');
+
+            if($row['type_movement']==1){
+                $data_row[] = array('data' => 'INGRESO', 'align' => 'right');
+                $data_row[] = array('data' => to_currency($row['mount']), 'align' => 'right');
+                $data_row[] = array('data' => "", 'align' => 'right');
+            }
+           else{
+                $data_row[] = array('data' => 'GASTOS', 'align' => 'right');
+                $data_row[] = array('data' => "", 'align' => 'right');
+                $data_row[] = array('data' => to_currency($row['mount']), 'align' => 'right');                
+               
+           }
+            $data_row[] = array('data' =>$row['categorias_gastos'], 'align' => 'right');
+            $data_row[] = array('data' =>$row['first_name']." ".$row['last_name'], 'align' => 'right');
+            $data_row[] = array('data' => to_currency($row['mount_cash']), 'align' => 'right');
+            
+            $tabular_data[] = $data_row;
+        }
+
+
+        $data = array(
+            "title" => "Movimiento de caja detallado",
+            "subtitle" => date(get_date_format(), strtotime($start_date)) . '-' . date(get_date_format(), strtotime($end_date)),
+            "headers" => $model->getDataColumns(),
+            "data" => $tabular_data,
+            "summary_data" => $model->getSummaryData(),
+            "export_excel" => $export_excel,
+            "export_pdf" => $export_pdf,
+            "pagination" => $this->pagination->create_links(),
+        );
+
+        
+       
+        $this->load->view("reports/tabular", $data);
+    }
+    
+    function specific_movement_cash($start_date, $end_date,$register_id, $export_excel = 0, $export_pdf = 0, $offset = 0)
+    {
         $start_date = rawurldecode($start_date);
         $end_date = rawurldecode($end_date);
         $this->check_action_permission('view_movement_cash');
@@ -2427,7 +2595,6 @@ class Reports extends Secure_area {
             
             $tabular_data[] = $data_row;
         }
-
 
         $data = array(
             "title" => "Movimiento de caja detallado",
@@ -3746,6 +3913,52 @@ class Reports extends Secure_area {
             'pagination' => $this->pagination->create_links()
         );
 
+			$this->load->view("reports/tabular", $data);
+    }
+	
+	function actualiza_balance_proveedor($supplier_id){
+		$total_balance= $this->Receiving->total_balance($supplier_id);
+		$this->db->set('balance', $total_balance);
+		$this->db->where('person_id', $supplier_id);
+        $result=$this->db->update('suppliers');
+	}
+	
+	function summary_store_payments($export_excel = 0, $export_pdf = 0, $offset = 0) {
+        $this->check_action_permission('view_store_payment');
+        $this->load->model('reports/Summary_store_payments');
+        $model = $this->Summary_store_payments;
+        $model->setParams(array('export_excel' => $export_excel, 'export_pdf' => $export_pdf, 'offset' => $offset));
+
+        $config = array();
+        $config['base_url'] = site_url("reports/summary_store_payments/$export_excel/$export_pdf");
+        $config['total_rows'] = $model->getTotalRows();
+        $config['per_page'] = $this->config->item('number_of_items_per_page') ? (int) $this->config->item('number_of_items_per_page') : 20;
+        $config['uri_segment'] = 4;
+        $this->pagination->initialize($config);
+
+        $tabular_data = array();
+        $vieja_data = $model->getData();
+		foreach ($vieja_data as $row) {
+			$this->actualiza_balance_proveedor( $row['person_id']);
+		}
+		$report_data = $model->getData();
+        $sno = 1;
+        foreach ($report_data as $row) {
+		   $tabular_data[] = array(array('data' => $sno, 'align' => 'left'), array('data' => $row['supplier'], 'align' => 'left'), array('data' => to_currency($row['balance']), 'align' => 'right'), array('data' => anchor("suppliers/pay_now/" . $row['person_id'], lang('suppliers_pay'), array('title' => lang('suppliers_update'))), 'align' => 'right'));
+            $sno++;
+        }
+
+        $data = array(
+            "title" => lang('reports_store_payment_summary_report'),
+            "subtitle" => '',
+            "headers" => $model->getDataColumns(),
+            "data" => $tabular_data,
+            "summary_data" => $model->getSummaryData(),
+            "export_excel" => $export_excel,
+            "export_pdf" => $export_pdf,
+            'pagination' => $this->pagination->create_links()
+        );
+
         $this->load->view("reports/tabular", $data);
     }
 
@@ -3840,13 +4053,14 @@ class Reports extends Secure_area {
     }
 
     function detailed_profit_and_loss($start_date, $end_date) {
-        $this->check_action_permission('view_profit_and_loss');
+        $this->check_action_permission('view_profit_and_loss'); 
         $this->load->model('reports/Detailed_profit_and_loss');
         $model = $this->Detailed_profit_and_loss; 
         $end_date = date('Y-m-d 23:59:59', strtotime($end_date)); 
         $model->setParams(array('start_date' => $start_date, 'end_date' => $end_date));
         $this->Sale->create_sales_items_temp_table(array('start_date' => $start_date, 'end_date' => $end_date));
-        $this->Receiving->create_receivings_items_temp_table(array('start_date' => $start_date, 'end_date' => $end_date));
+        $this->Receiving->create_receivings_items_temp_table(array('start_date' => $start_date, 'end_date' => $end_date,'listar_contado'=>true));
+		$this->Receiving->create_store_payments_temp_table(array('start_date' => $start_date, 'end_date' => $end_date));
         $this->Register_movement->create_movement_items_temp_table(array('start_date' => $start_date, 'end_date' => $end_date));
 
         $data = array(
@@ -3867,7 +4081,8 @@ class Reports extends Secure_area {
         $model->setParams(array('start_date' => $start_date, 'end_date' => $end_date));
 
         $this->Sale->create_sales_items_temp_table(array('start_date' => $start_date, 'end_date' => $end_date));
-        $this->Receiving->create_receivings_items_temp_table(array('start_date' => $start_date, 'end_date' => $end_date));
+        $this->Receiving->create_receivings_items_temp_table(array('start_date' => $start_date, 'end_date' => $end_date,'listar_contado'=>true));
+		$this->Receiving->create_store_payments_temp_table(array('start_date' => $start_date, 'end_date' => $end_date));
 
         $data = array(
             "title" => lang('reports_detailed_profit_and_loss'),

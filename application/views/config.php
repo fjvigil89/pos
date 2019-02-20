@@ -2944,7 +2944,6 @@
 							</div>
 
 							</div>
-							
 							<div class="form-group">	
 								<?php echo form_label('<a class="help_config_options  tooltips " data-placement="left" title="'.lang("config_custom1_subcategory_help").'">'.lang('config_custom2_subcategory').'</a>'.':', 'custom_subcategory2_name', array('class'=>'col-md-3 control-label')); ?> 						
 								<div class='col-md-9'>

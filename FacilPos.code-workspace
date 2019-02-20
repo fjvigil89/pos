@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "application\\models"
+		},
+		{
+			"path": "application\\controllers"
+		},
+		{
+			"path": "application\\views"
+		}
+	],
+	"settings": {
+		"workbench.colorCustomizations": {
+			"activityBar.background": "#42223E",
+			"titleBar.activeBackground": "#5C3056",
+			"titleBar.activeForeground": "#FCF9FC"
+		}
+	}
+}

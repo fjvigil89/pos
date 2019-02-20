@@ -94,5 +94,5 @@ $lang["module_select_seller_during_sale"]="Elegir vendedor durante la venta";
 $lang['module_warehouse']='Bodega';
 $lang['module_warehouse_desc']='Ediar, Actualizar, Borrar y ordenes';
 
-
+$lang['module_action_delete_receivings'] = 'Eliminar Compra';
 ?>
