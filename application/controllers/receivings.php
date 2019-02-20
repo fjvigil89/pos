@@ -322,6 +322,8 @@ class Receivings extends Secure_area
 				/* var_dump($receiving_id_raw); */
 				$this->load->view("receivings/error_pagos");
 				return;
+			} else {
+				$data['receiving_id'] ='RECV '.$receiving_id_raw;
 			}
 		}
 		
@@ -329,8 +331,8 @@ class Receivings extends Secure_area
 			$error_message = "Debe ingresar los datos de la(s) subcategoría(s).";	
 
 		}
-
-		if (empty($error_message)) {
+		/* var_dump($data['receiving_id']); */
+		if (empty($error_message) and $data['receiving_id']=="RECV -1") {
 			//SAVE receiving to database
 			$data['payments']=$this->receiving_lib->get_payments();
 			$data['receiving_id'] ='RECV '.$this->Receiving->save($data['cart'], $supplier_id,$employee_id,$comment,$payment_type,$this->receiving_lib->get_suspended_receiving_id(),0,$data['mode'],$location_id,$data['payments']);

@@ -41,7 +41,7 @@
 								
 										<tr>
 											<td align="center">
-												<?php echo $cash->pay_cash_id;?>
+												<a href="<?php echo site_url('receivings/receipt/'.$cash->pay_cash_id); ?>"> <?php echo $cash->pay_cash_id;?></a>
 											</td>
 											<td align="center">
 												<?php echo date(get_date_format().' @ '.get_time_format(), strtotime($cash->pay_cash_time));?>

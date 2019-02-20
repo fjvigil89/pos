@@ -75,7 +75,7 @@ $lang['receivings_error_editing_item'] = 'Error editing Item';
 $lang['receivings_transfer_from'] = 'Transfer From';
 $lang['receivings_transfer_to'] = 'Transfer To';
 
-$lang['receivings_recent_receivings'] = 'Recent Ceceivings';
+$lang['receivings_recent_receivings'] = 'Recent Receivings';
 $lang['receivings_store_account_payment'] = 'Payments to credit provider line';
 $lang['receivings_supplier_was_added'] = 'Supplier was added';
 $lang['receivings_store_account'] = 'Store account';

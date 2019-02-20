@@ -519,7 +519,7 @@ class Receiving extends CI_Model
 			if (isset($params['listar_contado']) && $params['listar_contado']==true){
 			$where .= ' and credit=0';
 			}
-			$where .= ' and '.$this->db->dbprefix('receivings_items').'.item_id not like '.$store_account_payment_item_id;
+			/* $where .= ' and '.$this->db->dbprefix('receivings_items').'.item_id not like '.$store_account_payment_item_id; */
 
 
 
@@ -784,19 +784,15 @@ class Receiving extends CI_Model
        if($location_id==false){
             $location_id= $this->Employee->get_logged_in_employee_current_location_id();
        }
-	    $this->db->select('a.*');
-        $this->db->from('receivings a');
-		$this->db->join('receivings_items b', ' b.receiving_id = a.receiving_id','left');
-        $this->db->where('a.supplier_id', $supplier_id);
-        $this->db->where('a.location_id', $location_id);        
-        $this->db->where('a.deleted', 0);
-		$this->db->not_like('b.item_id', $store_account_payment_item_id);		
-        $this->db->order_by('a.receiving_time DESC');
+	    $this->db->from('receivings');
+        $this->db->where('supplier_id', $supplier_id);
+        $this->db->where('location_id', $location_id);        
+        $this->db->where('deleted', 0);
+        $this->db->order_by('receiving_id DESC');
         $this->db->limit($limit);
         $query = $this->db->get();
-		
-		if($query->num_rows() > 0)
-               return $query->result();
+
+        return $query->result();
     }
 	
     function delete_pay_cash($pay_cash_id,$delte_all=false){
