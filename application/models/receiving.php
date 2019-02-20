@@ -990,6 +990,7 @@ class Receiving extends CI_Model
 					$this->db->query('UNLOCK TABLES');
 					return -1;
 				}
+				
 			 }
 			
 			if (!$this->db->insert('pay_cash',$receivings_data))
@@ -1031,7 +1032,7 @@ class Receiving extends CI_Model
 					return -1;
 				}			
 			 }	 		 
-         
+         $this->actualiza_balance_proveedor($supplier_id);
           // se actualiza la caja y los registros
          /*  foreach ($payments as $payment_id => $payment) {  */
         /*  $payment_types = $payment_types .$payments['payment_type'] . ': ' . to_currency($payments['payment_amount']) . '<br />'; */

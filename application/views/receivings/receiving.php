@@ -942,11 +942,18 @@
 		    $("#finish_sale_button").click(function()
 		    {
 				var supplier = '<?php echo isset($supplier_id) ? $supplier_id: 0; ?>';
+				var total = '<?php echo isset($total) ? $total: 0; ?>';
+				
 				if (supplier!=0){
-					$('#finish_sale_form').submit();
+					if (total>0){
+						$('#finish_sale_form').submit();
+					} else {
+						toastr.error(<?php echo json_encode(lang("error_mount_blank")); ?>, <?php echo json_encode(lang('common_error')); ?>);	
+					}
 				} else {
 					toastr.error(<?php echo json_encode(lang("receivings_in_suppliers")); ?>, <?php echo json_encode(lang('common_error')); ?>);	
 				}
+				
 			});
 			$( ".select_custom_subcategory" ).change(function() {
 				$($(this).parent()).submit();

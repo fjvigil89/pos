@@ -244,6 +244,8 @@ function get_supplier_manage_table($suppliers,$controller)
 	lang('common_first_name'),
 	lang('common_email'),
 	lang('common_phone_number'),
+	lang('suppliers_balance'),		
+	lang('common_credit'),
 	lang('common_actions'),
 	lang('customers_image'));
 
@@ -306,7 +308,9 @@ function get_supplier_data_row($supplier,$controller)
 	$table_data_row.='<td >'.H($supplier->last_name).'</td>';
 	$table_data_row.='<td >'.H($supplier->first_name).'</td>';
 	$table_data_row.='<td >'.mailto(H($supplier->email),H($supplier->email)).'</td>';
-	$table_data_row.='<td >'.H($supplier->phone_number).'</td>';		
+	$table_data_row.='<td >'.H($supplier->phone_number).'</td>';	
+	$table_data_row.='<td width="15%">'.to_currency($supplier->balance).'</td>';		
+	$table_data_row.='<td width="5%">'.anchor($controller_name."/pay_now/$supplier->person_id", "<i class='fa fa-money'></i>".lang('suppliers_pay'),array('class'=>'btn btn-xs default btn-editable', 'title'=>lang('suppliers_pay'))).'</td>';	
 	$table_data_row.='<td class="rightmost">'.anchor($controller_name."/view/$supplier->person_id/2", "<i class='fa fa-pencil'></i>".lang('common_edit'), array('class'=>'btn btn-xs btn-block default btn-editable update-supplier', 'title'=>lang($controller_name.'_update'))).'</td>';			
 	if ($avatar_url)
 	{
