@@ -50,7 +50,7 @@
 												<?php echo $cash->payment_type ;?>
 											</td>								
 
-											<td align="center"><?php  echo to_currency($cash->monton_total);?></td>
+											<td align="right"><?php  echo to_currency($cash->monton_total);?></td>
 											<?php if($delete_payments_to_credit):?>
 												<td align="center">
 													<button onclick="eliminar_abono(this)" data-id-pay-cash="<?php echo $cash->pay_cash_id;?>" class="btn btn-xs">Eliminar</button>
