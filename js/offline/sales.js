@@ -1328,7 +1328,7 @@ async function add_filas_tabla(data) {
                 if (edit_sale_price) {
 
                     filas += '<td class="text-center">';
-                    filas += '<form action="' + item.line + '" method="post"  class="line_item_form" onsubmit="editar_producto_cart(this)"  autocomplete="off">';
+                    filas += '<form action="' + item.line + '" method="post"  class="line_item_form" onsubmit="return editar_producto_cart(this)"  autocomplete="off">';
                     filas += '<input type="text" name="price" value="' + Number(to_currency_no_money(item.price, 10)) + '" class="form-control form-inps-sale text-center input-small text-center " id="price_"' + item.line + '/>';
 
                     filas += '</form>';
@@ -1488,7 +1488,7 @@ async function add_filas_tabla(data) {
 
             if (edit_sale_price) {
                 filas += '<td width="">';
-                filas += '<form action="' + item.line + '" method="post"  class="line_item_form" onsubmit="return  editar_producto_cart(this)  autocomplete="off">';
+                filas += '<form action="' + item.line + '" method="post"  class="line_item_form" onsubmit="return  editar_producto_cart(this)"  autocomplete="off">';
                 filas += '<input type="text" class="form-control form-inps-sale input-small text-center" name="discount" id="discount_' + item.line + '" tabindex="2" value="' + item.discount + '"/>';
 
                 filas += '</form>';

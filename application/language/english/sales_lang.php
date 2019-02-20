@@ -241,4 +241,9 @@ $lang["sales_opening_date"]="Opening date";
 $lang["sales_date_closing"]="Date of closing";
 $lang["reports_entrada"]="Input"; 
 $lang["reports_salida"]="Exit";
+
+$lang['cash_flows_total'] = 'Total';
+$lang['cash_flows_type'] = 'Type';
+$lang['cash_flows_in'] = 'Input';
+
 ?>
