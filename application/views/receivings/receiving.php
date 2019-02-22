@@ -945,18 +945,19 @@
 				var total = '<?php echo isset($total) ? $total: 0; ?>';
 				var modo = '<?=$mode?>';
 
-				if (modo =="transfer"){
-					$('#finish_sale_form').submit();
-				} else {
-				if (supplier!=0){
-					if (total>0){
-						$('#finish_sale_form').submit();
+				if(modo=="store_account_payment"){
+					if (supplier!=0){
+						if (total>0){
+							$('#finish_sale_form').submit();
+						} else {
+							toastr.error(<?php echo json_encode(lang("error_mount_blank")); ?>, <?php echo json_encode(lang('common_error')); ?>);	
+						}
+						
 					} else {
-						toastr.error(<?php echo json_encode(lang("error_mount_blank")); ?>, <?php echo json_encode(lang('common_error')); ?>);	
+						toastr.error(<?php echo json_encode(lang("receivings_in_suppliers")); ?>, <?php echo json_encode(lang('common_error')); ?>);	
 					}
-				} else {
-					toastr.error(<?php echo json_encode(lang("receivings_in_suppliers")); ?>, <?php echo json_encode(lang('common_error')); ?>);	
-				}
+				}else{
+					$('#finish_sale_form').submit();
 				}
 				
 			});
