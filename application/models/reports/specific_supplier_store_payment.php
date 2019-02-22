@@ -24,12 +24,14 @@ class Specific_supplier_store_payment extends Report
 		$this->db->where('supplier_id',$this->params['supplier_id']);
 		$this->db->where('deleted',0);
 		$this->db->where('credit',1);
+		$this->db->order_by('receiving_time','asc');
 		$query1 = $this->db->get()->result();
 		
 		$this->db->select("sno as num,(transaction_amount*-1) as monto,comment,date as fecha");
 		$this->db->from('store_payments');
 		$this->db->where('supplier_id',$this->params['supplier_id']);
 		$this->db->where('abono',1);
+		$this->db->order_by('date','asc');
 		$query2 = $this->db->get()->result();
 
 		
@@ -43,7 +45,8 @@ class Specific_supplier_store_payment extends Report
 			$this->db->limit($this->report_limit);
 			$this->db->offset($this->params['offset']);
 		} */
-		$result = array_merge($query1, $query2);
+		$result =array_merge($query1, $query2);
+		
 /* var_export ($query); */
 		/* $result = $this->db->get()->result_array(); */
 		/* var_dump($this->params['supplier_id']); */
