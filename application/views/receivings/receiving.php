@@ -943,7 +943,11 @@
 		    {
 				var supplier = '<?php echo isset($supplier_id) ? $supplier_id: 0; ?>';
 				var total = '<?php echo isset($total) ? $total: 0; ?>';
-				
+				var modo = '<?=$mode?>';
+
+				if (modo =="transfer"){
+					$('#finish_sale_form').submit();
+				} else {
 				if (supplier!=0){
 					if (total>0){
 						$('#finish_sale_form').submit();
@@ -952,6 +956,7 @@
 					}
 				} else {
 					toastr.error(<?php echo json_encode(lang("receivings_in_suppliers")); ?>, <?php echo json_encode(lang('common_error')); ?>);	
+				}
 				}
 				
 			});

@@ -301,7 +301,7 @@ function get_supplier_data_row($supplier,$controller)
 	$CI =& get_instance();
 	$controller_name=strtolower(get_class($CI));
 	$avatar_url=$supplier->image_id ?  site_url('app_files/view/'.$supplier->image_id) : (base_url().'img/no-image.png');
-
+	$balance_total=$CI->Receiving->total_balance($supplier->person_id);
 	$table_data_row='<tr>';
 	$table_data_row.="<td align='center'><input type='checkbox' class='css-checkbox' id='person_$supplier->person_id' value='".$supplier->person_id."'/><label for='".$supplier->person_id."' class='css-label cb0'></label></td>";
 	$table_data_row.='<td >'.H($supplier->company_name).'</td>';
@@ -309,7 +309,7 @@ function get_supplier_data_row($supplier,$controller)
 	$table_data_row.='<td >'.H($supplier->first_name).'</td>';
 	$table_data_row.='<td >'.mailto(H($supplier->email),H($supplier->email)).'</td>';
 	$table_data_row.='<td >'.H($supplier->phone_number).'</td>';	
-	$table_data_row.='<td width="15%">'.to_currency($supplier->balance).'</td>';		
+	$table_data_row.='<td width="15%" class="text-right">'.to_currency($balance_total).'</td>';		
 	$table_data_row.='<td width="5%">'.anchor($controller_name."/pay_now/$supplier->person_id", "<i class='fa fa-money'></i>".lang('suppliers_pay'),array('class'=>'btn btn-xs default btn-editable', 'title'=>lang('suppliers_pay'))).'</td>';	
 	$table_data_row.='<td class="rightmost">'.anchor($controller_name."/view/$supplier->person_id/2", "<i class='fa fa-pencil'></i>".lang('common_edit'), array('class'=>'btn btn-xs btn-block default btn-editable update-supplier', 'title'=>lang($controller_name.'_update'))).'</td>';			
 	if ($avatar_url)

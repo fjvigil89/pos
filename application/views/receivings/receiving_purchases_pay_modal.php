@@ -52,7 +52,7 @@
 												<?php echo $cash->payment_type ;?>
 											</td>								
 
-											<td align="center"><?php  echo to_currency($cash->mount);?></td>
+											<td align="right"><?php  echo to_currency($cash->mount);?></td>
 											<?php if($delete_payments_to_credit):?>
 												<td align="center">
 													<button onclick="eliminar_compra(this)" data-id-receiving="<?php echo $cash->receiving_id;?>" class="btn btn-xs">Eliminar</button>
