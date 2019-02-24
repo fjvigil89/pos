@@ -203,5 +203,8 @@ $lang['config_in_suppliers']='No permite comprar sin asignar un proveedor';
 
 $lang['config_product_rank']='Monitor product rank';
 
+$lang["config_name_new_tax_help"] ="Name that appears when a new tax was added during the sale";
+$lang["config_name_new_tax"]="Name of new tax";
+
 
 ?>

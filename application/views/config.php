@@ -385,6 +385,7 @@
 								</div>
 							</div>
 							
+							
 							<div class="form-group">	
 								<?php echo form_label(lang('config_default_tax_rate_5').':', 'default_tax_5_rate',array('class'=>'col-md-3 control-label ')); ?>
 								<div class="col-md-5">
@@ -409,7 +410,18 @@
 									</div>
 								</div>
 							</div>
-						</div>	
+						</div>	<br>
+						<div class="form-group">	
+							<?php echo form_label('<a class="help_config_options  tooltips" data-placement="left"  title="'.lang("config_name_new_tax_help").'">'.lang('config_name_new_tax').'</a>'.':', 'name_new_tax',array('class'=>'col-md-3 control-label ')); ?>
+							<div class='col-md-5'>
+								<?php echo form_input(array(
+									'name'=>'name_new_tax',
+									'id'=>'name_new_tax',
+									'class'=>'form-control',
+									'value'=>$this->config->item('name_new_tax')));
+								?> 
+							</div>
+						</div>
 						<br/>
 						<div class="form-group">	
 							<?php echo form_label(lang('config_barcode_price_include_tax').':', 'barcode_price_include_tax',array('class'=>'col-md-3 control-label ')); ?>

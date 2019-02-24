@@ -64,7 +64,7 @@ class Login extends CI_Controller
 		{
 			$data['ie_browser_warning'] = FALSE;
 		}
-		if(APPLICATION_VERSION=='5.6.40')
+		if(APPLICATION_VERSION==$this->config->item('version'))
 		{
 			$data['application_mismatch']=false;
 		}
@@ -75,7 +75,7 @@ class Login extends CI_Controller
 		
 		if($this->Employee->is_logged_in())
 		{
-			redirect('home/index/0/0/1');
+			redirect('home/index');
 		}
 		else
 		{

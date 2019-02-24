@@ -1132,6 +1132,8 @@ class Sales extends Secure_area
 		$data["another_currency"]= $this->sale_lib->get_pagar_otra_moneda();
 		$data["currency"]=$data["another_currency"]==0?null:$this->config->item('moneda');
 		$data["total_other_currency"]=$data["another_currency"]==0?null:($data['total']/(double) $this->config->item('equivalencia'));
+		$overwrite_tax= $this->sale_lib->get_overwrite_tax();
+		$new_tax= $this->sale_lib->get_new_tax();
 		if($this->config->item('system_point') && $this->sale_lib->get_mode() == 'sale')
 		{
 			$total=$data['total'];
@@ -1225,7 +1227,8 @@ class Sales extends Secure_area
 				$data['ref_no'],$data['auth_code'], $data['change_sale_date'], $data['balance'], $mode,$tier_id,
 				$deleted_taxes,
 				$data['store_account_payment'],$data['total'],$data['amount_change'],$invoice_type, null,$data["divisa"],$data["opcion_sale"],
-				$data["transaction_rate"],$data["transaction_cost"],$data["another_currency"],$data["currency"],$data["total_other_currency"]);
+				$data["transaction_rate"],$data["transaction_cost"],$data["another_currency"],$data["currency"],$data["total_other_currency"],
+				$overwrite_tax,$new_tax);
 				
            
 			}
@@ -1368,9 +1371,7 @@ class Sales extends Secure_area
         {
             $this->load->view("sales/receipt",$data);
         }
-
         $this->sale_lib->clear_all();
-
 
 	}
 
@@ -2187,7 +2188,8 @@ class Sales extends Secure_area
 			$deleted_taxes=$this->sale_lib->get_deleted_taxes();
 			$sale_id = $this->Sale->save($data['cart'], $customer_id,$employee_id, $sold_by_employee_id, $comment,$show_comment_on_receipt,$data['payments'], $sale_id, $suspend_type,'',''
 			,$this->config->item('change_sale_date_when_suspending') ? date('Y-m-d H:i:s') : FALSE,
-			 $data['balance'],$mode,$tier_id ,$deleted_taxes,0,0,0,$invoice_type, $ntbale);
+			 $data['balance'],$mode,$tier_id ,$deleted_taxes,0,0,0,$invoice_type, $ntbale,null, 
+			 null, null, null, 0, null, null , false,null);
 			 if($sale_id<0||( !$this->sale_lib->is_select_subcategory_items())){
 				echo("No se puede suspender la venta, Comprueba los producto del carrito, si el producto tiene subcategoría no olvide agregarla ");
 					return;
@@ -2629,6 +2631,16 @@ class Sales extends Secure_area
 			$customer = $this->Customer->get_info($id_persona);
 			echo to_currency_no_money($customer->balance);
 		}
+	}
+	function set_new_tax(){
+		$new_tax =  $this->input->post('new_tax');
+		if(is_numeric($new_tax) and $new_tax>0){			
+			$this->sale_lib->set_overwrite_tax(1);
+			$this->sale_lib->set_new_tax(
+				array("name"=> $this->config->item('name_new_tax'),"percent"=>(double)$new_tax,"cumulative"=>0));
+			$this->sale_lib->clear_deleted_taxes();
+		}	
+		$this->_reload();
 	}
 }
 ?>
