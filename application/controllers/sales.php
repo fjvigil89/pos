@@ -239,7 +239,8 @@ class Sales extends Secure_area
 
 		if ($this->config->item('track_cash'))
 		{
-			if ($this->input->post('opening_amount') != '')
+			$is_register_log_open=$this->Sale->is_register_log_open();
+			if ($this->input->post('opening_amount') != '' and !$is_register_log_open)
 			{
 				$now = date('Y-m-d H:i:s');				
 				$cash_register = new stdClass();
@@ -258,7 +259,7 @@ class Sales extends Secure_area
 				}
 				echo json_encode( array('success'=>true) );
 			} 
-			else if ($this->Sale->is_register_log_open())
+			else if ($is_register_log_open)
 			{				
 				$this->_reload(array(), false);			
 			}
