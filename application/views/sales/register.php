@@ -411,9 +411,15 @@
 														}
 														if (isset($prev_tax[$item['item_id']]) && $item['name']!=lang('sales_giftcard'))
 														{
-															$sum_tax=array_sum($prev_tax[$item['item_id']]);
-															$price_without_tax=$item['price']/(1+$sum_tax);
-															$value_tax=$price_without_tax*$sum_tax;
+															
+															if(!$overwrite_tax){
+																$sum_tax=array_sum($prev_tax[$item['item_id']]);
+																$price_without_tax=$item['price']/(1+$sum_tax);
+																$value_tax=$price_without_tax*$sum_tax;
+															}else{
+																$value_tax=get_nuevo_iva($new_tax,$item['price']);
+																$price_with_tax =get_precio_con_nuevo_iva($new_tax,$item['price']);
+															}
 
 															if($show_sales_price_without_tax){ ?>
 																<td class="text-center">
@@ -428,10 +434,14 @@
 														}
 														elseif (!isset($prev_tax[$item['item_id']]) && $item['name']!=lang('sales_giftcard'))
 														{
-															$sum_tax=0;
-															$price_without_tax=$item['price']/(1+$sum_tax);
-															$value_tax=$price_without_tax*$sum_tax;
-
+															if(!$overwrite_tax){
+																$sum_tax=0;
+																$price_without_tax=$item['price']/(1+$sum_tax);
+																$value_tax=$price_without_tax*$sum_tax;
+															}else{
+																$value_tax=get_nuevo_iva($new_tax,$item['price']);
+																$price_with_tax =get_precio_con_nuevo_iva($new_tax,$item['price']);
+															}
 															if($show_sales_price_without_tax){ ?>
 																<td class="text-center">
 																	<?php echo to_currency($price_without_tax, 2);?>
@@ -460,9 +470,15 @@
 														}
 														if (isset($prev_tax[$item['item_kit_id']]) && $item['name']!=lang('sales_giftcard'))
 														{
-															$sum_tax=array_sum($prev_tax[$item['item_kit_id']]);
-															$price_without_tax=$item['price']/(1+$sum_tax);
-															$value_tax=$price_without_tax*$sum_tax;
+															
+															if(!$overwrite_tax){
+																$sum_tax=array_sum($prev_tax[$item['item_kit_id']]);
+																$price_without_tax=$item['price']/(1+$sum_tax);
+																$value_tax=$price_without_tax*$sum_tax;
+															}else{
+																$value_tax=get_nuevo_iva($new_tax,$item['price']);
+																$price_with_tax =get_precio_con_nuevo_iva($new_tax,$item['price']);
+															}
 
 															if($show_sales_price_without_tax){ ?>
 																<td class="text-center">
@@ -477,9 +493,15 @@
 														}
 														elseif (!isset($prev_tax[$item['item_kit_id']]) && $item['name']!=lang('sales_giftcard'))
 														{
-															$sum_tax=0;
-															$price_without_tax=$item['price']/(1+$sum_tax);
-															$value_tax=$price_without_tax*$sum_tax;
+															
+															if(!$overwrite_tax){
+																$sum_tax=0;
+																$price_without_tax=$item['price']/(1+$sum_tax);
+																$value_tax=$price_without_tax*$sum_tax;
+															}else{
+																$value_tax=get_nuevo_iva($new_tax,$item['price']);
+																$price_with_tax =get_precio_con_nuevo_iva($new_tax,$item['price']);
+															}
 
 															if($show_sales_price_without_tax){ ?>
 																<td class="text-center">
@@ -552,9 +574,14 @@
 														}
 														if (isset($prev_tax[$item['item_id']]) && $item['name']!=lang('sales_giftcard'))
 														{
-															$sum_tax=array_sum($prev_tax[$item['item_id']]);
-															$value_tax=$item['price']*$sum_tax;
-															$price_with_tax=$item['price']+$value_tax;
+															if(!$overwrite_tax){
+																$sum_tax=array_sum($prev_tax[$item['item_id']]);
+																$value_tax=$item['price']*$sum_tax;
+																$price_with_tax=$item['price']+$value_tax;
+															}else{
+																$value_tax=get_nuevo_iva($new_tax,$item['price']);
+																$price_with_tax =get_precio_con_nuevo_iva($new_tax,$item['price']);
+															}
 
 															if($show_sales_price_iva){ ?>
 																<td class="text-center">
@@ -568,9 +595,15 @@
 														}
 														elseif (!isset($prev_tax[$item['item_id']]) && $item['name']!=lang('sales_giftcard'))
 														{
-															$sum_tax=0;
-															$value_tax=$item['price']*$sum_tax;
-															$price_with_tax=$item['price']+$value_tax;
+															if(!$overwrite_tax){
+																$sum_tax=0; 
+																$value_tax=$item['price']*$sum_tax;
+																$price_with_tax=$item['price']+$value_tax;
+															}else{
+																$value_tax=get_nuevo_iva($new_tax,$item['price']);
+																$price_with_tax =get_precio_con_nuevo_iva($new_tax,$item['price']);
+															}
+															
 
 															if($show_sales_price_iva){ ?>
 																<td class="text-center">
@@ -603,10 +636,16 @@
 														}
 
 														if (isset($prev_tax[$item['item_kit_id']]) && $item['name']!=lang('sales_giftcard'))
-														{
-															$sum_tax=array_sum($prev_tax[$item['item_kit_id']]);
-															$value_tax=$item['price']*$sum_tax;
-															$price_with_tax=$item['price']+$value_tax;
+														{															
+
+															if(!$overwrite_tax){
+																$sum_tax=array_sum($prev_tax[$item['item_kit_id']]);
+																$value_tax=$item['price']*$sum_tax;
+																$price_with_tax=$item['price']+$value_tax;
+															}else{
+																$value_tax=get_nuevo_iva($new_tax,$item['price']);
+																$price_with_tax =get_precio_con_nuevo_iva($new_tax,$item['price']);
+															}
 
 															if($show_sales_price_iva){ ?>
 																<td class="text-center">
@@ -628,9 +667,15 @@
 
 														elseif (!isset($prev_tax[$item['item_kit_id']]) && $item['name']!=lang('sales_giftcard'))
 														{
-															$sum_tax=0;
-															$value_tax=$item['price']*$sum_tax;
-															$price_with_tax=$item['price']+$value_tax;
+															
+															if(!$overwrite_tax){
+																$sum_tax=0;
+																$value_tax=$item['price']*$sum_tax;
+																$price_with_tax=$item['price']+$value_tax;
+															}else{
+																$value_tax=get_nuevo_iva($new_tax,$item['price']);
+																$price_with_tax =get_precio_con_nuevo_iva($new_tax,$item['price']);
+															}															
 
 															if($show_sales_price_iva){ ?>
 																<td class="text-center">

@@ -801,6 +801,7 @@ class Sale extends CI_Model
             "another_currency"=>$another_currency,
             "currency"=>$currency,
             "total_other_currency"=>$total_other_currency,
+            "overwrite_tax"=>$overwrite_tax
             
         );
 

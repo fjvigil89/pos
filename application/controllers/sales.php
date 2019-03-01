@@ -1134,6 +1134,8 @@ class Sales extends Secure_area
 		$data["total_other_currency"]=$data["another_currency"]==0?null:($data['total']/(double) $this->config->item('equivalencia'));
 		$overwrite_tax= $this->sale_lib->get_overwrite_tax();
 		$new_tax= $this->sale_lib->get_new_tax();
+		$data["overwrite_tax"]= $overwrite_tax;
+		$data["new_tax"]= $new_tax;
 		if($this->config->item('system_point') && $this->sale_lib->get_mode() == 'sale')
 		{
 			$total=$data['total'];
@@ -1599,7 +1601,7 @@ class Sales extends Secure_area
 		$data['payments']=$this->sale_lib->get_payments();
 		$data['is_sale_cash_payment'] = $this->sale_lib->is_sale_cash_payment();
 		$data['show_payment_times'] = TRUE;
-
+		$data["overwrite_tax"]=false;
 		$tier_id = $sale_info['tier_id'];
 		$tier_info = $this->Tier->get_info($tier_id);
 		$data['tier'] = $tier_info->name;
@@ -1940,7 +1942,8 @@ class Sales extends Secure_area
 		$data['is_over_credit_limit'] = false;
 		$data['add_cart_by_id_item'] = $this->config->item('add_cart_by_id_item');
 		$data["edit_tiers"]=$this->Employee->has_module_action_permission('sales', 'edit_tier', $this->Employee->get_logged_in_employee_info()->person_id);
-
+		$data["overwrite_tax"]= $this->sale_lib->get_overwrite_tax();
+		$data["new_tax"]= $this->sale_lib->get_new_tax();
 		/*$employees = array('' => lang('common_not_set'));
 
 		foreach($this->Employee->get_all()->result() as $employee)
@@ -2639,7 +2642,10 @@ class Sales extends Secure_area
 			$this->sale_lib->set_new_tax(
 				array("name"=> $this->config->item('name_new_tax'),"percent"=>(double)$new_tax,"cumulative"=>0));
 			$this->sale_lib->clear_deleted_taxes();
-		}	
+		}else{
+			$this->sale_lib->set_overwrite_tax(0);
+			$this->sale_lib->clear_new_tax();
+		}
 		$this->_reload();
 	}
 }
