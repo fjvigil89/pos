@@ -1014,28 +1014,29 @@
 					<?php if ($this->Employee->has_module_action_permission('sales', 'select_seller_during_sale', $this->Employee->get_logged_in_employee_info()->person_id)) :?>
 						<div class="col-lg-6 col-md-12 col-sm-12 col-xs-12" id="div_employees"></div>
 					<?php endif; ?>
-					
-					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-					<br>
-					<div >
-						<?php echo form_open("sales/set_new_tax", array('id' => 'new_tax_form', 'class'=>'form-horizontal', 'autocomplete'=> 'off'));?>
-							<div class="form-group no_margin_bottom">
-								<label class="col-md-9 col-sm-12 col-xs-12 control-label" id="new_tax" for="new_tax"><?php echo $this->config->item('name_new_tax').': ';?></label>
-								<div class="col-md-3 col-sm-12 col-xs-12">
-									<div class="input-group">
-										<div class="input-icon right"><i class="icon-percent"></i>
-											<?php echo form_input(array('name'=>'new_tax','value'=> '','min'=>0,'size'=>'3',"type"=>"number", 'class' => 'form-control' , 'id' => 'new_tax'))?>
-										</div>
-										<span class="input-group-btn">
-											<?php echo form_button(array('name'=>'submit_tax_form','type'=>'submit', 'class'=>'btn btn-success'), lang('common_submit'))?>
-										</span>
-									</div>
-								</div>
-							</div>
-						</form>
-						</div>								
-					</div>
+					<?php if ($this->Employee->has_module_action_permission('sales', 'overwrite_tax', $this->Employee->get_logged_in_employee_info()->person_id)) :?>
 
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+							<br>
+							<div >
+								<?php echo form_open("sales/set_new_tax", array('id' => 'new_tax_form', 'class'=>'form-horizontal', 'autocomplete'=> 'off'));?>
+									<div class="form-group no_margin_bottom">
+										<label class="col-md-9 col-sm-12 col-xs-12 control-label" id="new_tax" for="new_tax"><?php echo $this->config->item('name_new_tax').': ';?></label>
+										<div class="col-md-3 col-sm-12 col-xs-12">
+											<div class="input-group">
+												<div class="input-icon right"><i class="icon-percent"></i>
+													<?php echo form_input(array('name'=>'new_tax','value'=> '','min'=>0,'size'=>'3',"type"=>"number", 'class' => 'form-control' , 'id' => 'new_tax'))?>
+												</div>
+												<span class="input-group-btn">
+													<?php echo form_button(array('name'=>'submit_tax_form','type'=>'submit', 'class'=>'btn btn-success'), lang('common_submit'))?>
+												</span>
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>								
+						</div>
+					<?php endif; ?>
 				</div>
 			</div>
 

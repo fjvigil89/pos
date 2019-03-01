@@ -91,9 +91,9 @@ $lang["module_action_edit_quantity"]="Editar cantidad en inventario";
 $lang["module_return_item"]="Devoluciones";
 $lang["module_select_seller_during_sale"]="Elegir vendedor durante la venta";
 
-
 $lang['module_warehouse']='Bodega';
 $lang['module_warehouse_desc']='Ediar, Actualizar, Borrar y ordenes';
 
 $lang['module_action_delete_receivings'] = 'Eliminar Compra';
+$lang["module_overwrite_tax"]="Sobrescribir impuesto durante la venta";
 ?>

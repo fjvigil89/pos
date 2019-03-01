@@ -2118,6 +2118,9 @@ class Sales extends Secure_area
 		$data['amount_change']=$this->sale_lib->get_amount_due() * -1;
 		$data['balance']=$this->sale_lib->get_payment_amount(lang('sales_store_account'));
 		$data['employee']=$emp_info->first_name.' '.$emp_info->last_name;
+	
+		$data["overwrite_tax"]= $this->sale_lib->get_overwrite_tax();
+		$data["new_tax"]= $this->sale_lib->get_new_tax();
 
 		$location_id = $this->Employee->get_logged_in_employee_current_location_id();
 
@@ -2173,10 +2176,11 @@ class Sales extends Secure_area
 				$invoice_type['serie_number_invoice']=$serie_number;
             }
         }
-	
+	 
 		if ($suspend_type ==3)
 		{
-			$sale_id = $this->quote->save_quote($data['cart'], $customer_id,$employee_id, $sold_by_employee_id, $comment,$show_comment_on_receipt,$data['payments'], $sale_id, $suspend_type,'','',$this->config->item('change_sale_date_when_suspending') ? date('Y-m-d H:i:s') : FALSE, $data['balance']);
+			$sale_id = $this->quote->save_quote($data['cart'], $customer_id,$employee_id, $sold_by_employee_id, $comment,$show_comment_on_receipt,$data['payments'], $sale_id, $suspend_type,'','',$this->config->item('change_sale_date_when_suspending') ? date('Y-m-d H:i:s') : FALSE, $data['balance'],0,
+			$data["overwrite_tax"],$data["new_tax"]);
 		}
 
 		if ($suspend_type ==2 || $suspend_type ==1)
@@ -2192,11 +2196,11 @@ class Sales extends Secure_area
 			$sale_id = $this->Sale->save($data['cart'], $customer_id,$employee_id, $sold_by_employee_id, $comment,$show_comment_on_receipt,$data['payments'], $sale_id, $suspend_type,'',''
 			,$this->config->item('change_sale_date_when_suspending') ? date('Y-m-d H:i:s') : FALSE,
 			 $data['balance'],$mode,$tier_id ,$deleted_taxes,0,0,0,$invoice_type, $ntbale,null, 
-			 null, null, null, 0, null, null , false,null);
+			 null, null, null, 0, null, null ,$data["overwrite_tax"],$data["new_tax"]);
 			 if($sale_id<0||( !$this->sale_lib->is_select_subcategory_items())){
 				echo("No se puede suspender la venta, Comprueba los producto del carrito, si el producto tiene subcategoría no olvide agregarla ");
 					return;
-				}
+				} 
 		}
 		if( $suspend_type ==1 and $this->config->item('Generate_simplified_order')==1){
 			$data_order=array(
@@ -2636,6 +2640,7 @@ class Sales extends Secure_area
 		}
 	}
 	function set_new_tax(){
+		$this->check_action_permission('overwrite_tax');
 		$new_tax =  $this->input->post('new_tax');
 		if(is_numeric($new_tax) and $new_tax>0){			
 			$this->sale_lib->set_overwrite_tax(1);

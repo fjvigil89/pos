@@ -29,7 +29,7 @@ sftp-config.json
 #application/views/sales/register_initial.php
 #application/views/sales/register.php
 #application/views/sales/receipt.php
-application/views/sales/receipt_quote.php
+#application/views/sales/receipt_quote.php
 #application/views/sales/receipt_email.php
 application/views/sales/sale_seriales_modal.php
 #application/views/sales/shortcuts_sales.php

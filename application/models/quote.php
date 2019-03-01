@@ -3,7 +3,8 @@
 class Quote extends CI_Model
 {
 
-function save_quote($items,$customer_id,$employee_id, $sold_by_employee_id, $comment,$show_comment_on_receipt,$payments,$sale_id=false, $suspended = 0, $cc_ref_no = '', $auth_code = '', $change_sale_date=false,$balance=0, $store_account_payment = 0)
+function save_quote($items,$customer_id,$employee_id, $sold_by_employee_id, $comment,$show_comment_on_receipt,$payments,$sale_id=false, $suspended = 0, $cc_ref_no = '', $auth_code = '', $change_sale_date=false,$balance=0, $store_account_payment = 0,
+$overwrite_tax=false,$new_tax=null)
 	{
 		$this->load->library('sale_lib');
 			
@@ -39,6 +40,7 @@ function save_quote($items,$customer_id,$employee_id, $sold_by_employee_id, $com
 			'register_id' => $this->Employee->get_logged_in_employee_current_register_id(),
 			'store_account_payment' => $store_account_payment,
 			'tier_id' => $tier_id ? $tier_id : NULL,
+			"overwrite_tax"=>$overwrite_tax
 		);
 			
 		if($sale_id)
@@ -111,8 +113,7 @@ function save_quote($items,$customer_id,$employee_id, $sold_by_employee_id, $com
 
 		foreach($payments as $payment_id=>$payment)
 		{
-			//Only update giftcard payments if we are NOT an estimate (suspended = 2)
-			
+			//Only update giftcard payments if we are NOT an estimate (suspended = 2)			
 
 			$sales_payments_data = array
 			(
@@ -130,15 +131,9 @@ function save_quote($items,$customer_id,$employee_id, $sold_by_employee_id, $com
 				return -1;
 			}
 		}
-		//Only update store account payments if we are NOT an estimate (suspended = 2)
-		
-			
-		 		 
-
-			
+		//Only update store account payments if we are NOT an estimate (suspended = 2)		
 		 
 		$total_giftcard_payments = 0;
-
 	
 		$has_added_giftcard_value_to_cost_price = $total_giftcard_payments > 0 ? false : true;
 		$store_account_item_id = $this->Item->get_store_account_item_id();
@@ -207,32 +202,49 @@ function save_quote($items,$customer_id,$employee_id, $sold_by_employee_id, $com
 			
 			
 		
-		$customer = $this->Customer->get_info($customer_id);
+		$customer = $this->Customer->get_info($customer_id); 
  			if ($customer_id == -1 or $customer->taxable)
  			{
 				if (isset($item['item_id']))
 				{
-					foreach($this->Item_taxes_finder->get_info($item['item_id']) as $row)
-					{
-						$tax_name = $row['percent'].'% ' . $row['name'];
-				
-						//Only save sale if the tax has NOT been deleted
-						if (!in_array($tax_name, $this->sale_lib->get_deleted_taxes()))
-						{	
-							$query_result = $this->db->insert('quotes_items_taxes', array(
-								'quote_id' 	=>$sale_id,
-								'item_id' 	=>$item['item_id'],
-								'line'      =>$item['line'],
-								'name'		=>$row['name'],
-								'percent' 	=>$row['percent'],
-								'cumulative'=>$row['cumulative']
-							));
-							
-							if (!$query_result)
-							{
-								$this->db->query("ROLLBACK");
-								$this->db->query('UNLOCK TABLES');
-								return -1;
+					if($overwrite_tax==1){
+                        $query_result = $this->db->insert('quotes_items_taxes', array(
+							'quote_id' 	=>$sale_id,
+							'item_id' 	=>$item['item_id'],
+							'line'      =>$item['line'],
+							'name'		=>$new_tax['name'],
+							'percent' 	=>$new_tax['percent'],
+							'cumulative'=>$new_tax['cumulative']
+						));
+                        if (!$query_result) {
+                            $this->db->query("ROLLBACK");
+                            $this->db->query('UNLOCK TABLES');
+                            return -1;
+                        }                        
+    
+                    }else{
+						foreach($this->Item_taxes_finder->get_info($item['item_id']) as $row)
+						{
+							$tax_name = $row['percent'].'% ' . $row['name'];
+					
+							//Only save sale if the tax has NOT been deleted
+							if (!in_array($tax_name, $this->sale_lib->get_deleted_taxes()))
+							{	
+								$query_result = $this->db->insert('quotes_items_taxes', array(
+									'quote_id' 	=>$sale_id,
+									'item_id' 	=>$item['item_id'],
+									'line'      =>$item['line'],
+									'name'		=>$row['name'],
+									'percent' 	=>$row['percent'],
+									'cumulative'=>$row['cumulative']
+								));
+								
+								if (!$query_result)
+								{
+									$this->db->query("ROLLBACK");
+									$this->db->query('UNLOCK TABLES');
+									return -1;
+								}
 							}
 						}
 					}

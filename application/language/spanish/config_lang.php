@@ -286,4 +286,6 @@ $lang['config_company_vent_falla_titulo_menj'] = 'Manejos de los servicios segun
 $lang['config_company_vent_falla_label'] = 'Falla';
 $lang['config_company_vent_falla_boton'] = 'Enviar Datos';
 $lang['config_application_settings_help_st'] = 'Este  menú te permite  hacer las configuraciones del modulo de servicio técnico ';
+$lang["config_name_new_tax_help"] ="Nombre que aparece cuando agregue un nuevo impuesto durante la venta";
+$lang["config_name_new_tax"]="Nombre de nuevo impuesto";
 ?>
