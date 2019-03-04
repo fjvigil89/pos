@@ -1040,8 +1040,18 @@ class Employee extends Person
 		return $query->num_rows() >0;
 	}
 	function es_demo(){
-		$db=$this->db->database;
-		return $db == 'inpos_demo2017';
+		 $login_db = $this->load->database('login',true);
+		 $db_name=$this->db->database;
+		 $login_db->select('is_demo');
+		 $login_db->from('stores');
+		 $login_db->where('store_name', $db_name);
+		 $query = $login_db->get();
+		 if($query->num_rows()==1)
+		{
+			return (int)$query->row()->is_demo;
+		}else{
+			return 0;
+		}
 	}
 	function get_store(){
 		$db=$this->db->database;
