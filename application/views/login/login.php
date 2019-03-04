@@ -142,9 +142,9 @@
                 </div>
                 <div >
                     <h4><?php echo lang('login_reset_password').'?'; ?></h4>
-                    <p>
+                    <p> 
                         <?php echo lang('login_info_reset_password1'); ?>
-                        <a href="javascript:;" id="forget-password"><?php echo anchor("../../dev_licencia/public/index.php/passwordReset", lang('login_reset_password_link'), 'class="link-custom-login"'); ?></a>
+                        <a href="javascript:;" id="forget-password"><?php echo anchor(URL_LICENCIA."/passwordReset", lang('login_reset_password_link'), 'class="link-custom-login"'); ?></a>
                         <?php echo lang('login_info_reset_password2'); ?>
                     </p>
                 </div>
