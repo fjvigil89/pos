@@ -1133,6 +1133,10 @@ class Sales extends Secure_area
 		$data["another_currency"]= $this->sale_lib->get_pagar_otra_moneda();
 		$data["currency"]=$data["another_currency"]==0?null:$this->config->item('moneda');
 		$data["total_other_currency"]=$data["another_currency"]==0?null:($data['total']/(double) $this->config->item('equivalencia'));
+		$overwrite_tax= $this->sale_lib->get_overwrite_tax();
+		$new_tax= $this->sale_lib->get_new_tax();
+		$data["overwrite_tax"]= $overwrite_tax;
+		$data["new_tax"]= $new_tax;
 		if($this->config->item('system_point') && $this->sale_lib->get_mode() == 'sale')
 		{
 			$total=$data['total'];
@@ -1226,7 +1230,8 @@ class Sales extends Secure_area
 				$data['ref_no'],$data['auth_code'], $data['change_sale_date'], $data['balance'], $mode,$tier_id,
 				$deleted_taxes,
 				$data['store_account_payment'],$data['total'],$data['amount_change'],$invoice_type, null,$data["divisa"],$data["opcion_sale"],
-				$data["transaction_rate"],$data["transaction_cost"],$data["another_currency"],$data["currency"],$data["total_other_currency"]);
+				$data["transaction_rate"],$data["transaction_cost"],$data["another_currency"],$data["currency"],$data["total_other_currency"],
+				$overwrite_tax,$new_tax);
 				
            
 			}
@@ -1369,9 +1374,7 @@ class Sales extends Secure_area
         {
             $this->load->view("sales/receipt",$data);
         }
-
         $this->sale_lib->clear_all();
-
 
 	}
 
@@ -1599,7 +1602,7 @@ class Sales extends Secure_area
 		$data['payments']=$this->sale_lib->get_payments();
 		$data['is_sale_cash_payment'] = $this->sale_lib->is_sale_cash_payment();
 		$data['show_payment_times'] = TRUE;
-
+		$data["overwrite_tax"]=false;
 		$tier_id = $sale_info['tier_id'];
 		$tier_info = $this->Tier->get_info($tier_id);
 		$data['tier'] = $tier_info->name;
@@ -1940,7 +1943,8 @@ class Sales extends Secure_area
 		$data['is_over_credit_limit'] = false;
 		$data['add_cart_by_id_item'] = $this->config->item('add_cart_by_id_item');
 		$data["edit_tiers"]=$this->Employee->has_module_action_permission('sales', 'edit_tier', $this->Employee->get_logged_in_employee_info()->person_id);
-
+		$data["overwrite_tax"]= $this->sale_lib->get_overwrite_tax();
+		$data["new_tax"]= $this->sale_lib->get_new_tax();
 		/*$employees = array('' => lang('common_not_set'));
 
 		foreach($this->Employee->get_all()->result() as $employee)
@@ -2115,6 +2119,9 @@ class Sales extends Secure_area
 		$data['amount_change']=$this->sale_lib->get_amount_due() * -1;
 		$data['balance']=$this->sale_lib->get_payment_amount(lang('sales_store_account'));
 		$data['employee']=$emp_info->first_name.' '.$emp_info->last_name;
+	
+		$data["overwrite_tax"]= $this->sale_lib->get_overwrite_tax();
+		$data["new_tax"]= $this->sale_lib->get_new_tax();
 
 		$location_id = $this->Employee->get_logged_in_employee_current_location_id();
 
@@ -2170,10 +2177,11 @@ class Sales extends Secure_area
 				$invoice_type['serie_number_invoice']=$serie_number;
             }
         }
-	
+	 
 		if ($suspend_type ==3)
 		{
-			$sale_id = $this->quote->save_quote($data['cart'], $customer_id,$employee_id, $sold_by_employee_id, $comment,$show_comment_on_receipt,$data['payments'], $sale_id, $suspend_type,'','',$this->config->item('change_sale_date_when_suspending') ? date('Y-m-d H:i:s') : FALSE, $data['balance']);
+			$sale_id = $this->quote->save_quote($data['cart'], $customer_id,$employee_id, $sold_by_employee_id, $comment,$show_comment_on_receipt,$data['payments'], $sale_id, $suspend_type,'','',$this->config->item('change_sale_date_when_suspending') ? date('Y-m-d H:i:s') : FALSE, $data['balance'],0,
+			$data["overwrite_tax"],$data["new_tax"]);
 		}
 
 		if ($suspend_type ==2 || $suspend_type ==1)
@@ -2188,11 +2196,12 @@ class Sales extends Secure_area
 			$deleted_taxes=$this->sale_lib->get_deleted_taxes();
 			$sale_id = $this->Sale->save($data['cart'], $customer_id,$employee_id, $sold_by_employee_id, $comment,$show_comment_on_receipt,$data['payments'], $sale_id, $suspend_type,'',''
 			,$this->config->item('change_sale_date_when_suspending') ? date('Y-m-d H:i:s') : FALSE,
-			 $data['balance'],$mode,$tier_id ,$deleted_taxes,0,0,0,$invoice_type, $ntbale);
+			 $data['balance'],$mode,$tier_id ,$deleted_taxes,0,0,0,$invoice_type, $ntbale,null, 
+			 null, null, null, 0, null, null ,$data["overwrite_tax"],$data["new_tax"]);
 			 if($sale_id<0||( !$this->sale_lib->is_select_subcategory_items())){
 				echo("No se puede suspender la venta, Comprueba los producto del carrito, si el producto tiene subcategoría no olvide agregarla ");
 					return;
-				}
+				} 
 		}
 		if( $suspend_type ==1 and $this->config->item('Generate_simplified_order')==1){
 			$data_order=array(
@@ -2630,6 +2639,20 @@ class Sales extends Secure_area
 			$customer = $this->Customer->get_info($id_persona);
 			echo to_currency_no_money($customer->balance);
 		}
+	}
+	function set_new_tax(){
+		$this->check_action_permission('overwrite_tax');
+		$new_tax =  $this->input->post('new_tax');
+		if(is_numeric($new_tax) and $new_tax>0){			
+			$this->sale_lib->set_overwrite_tax(1);
+			$this->sale_lib->set_new_tax(
+				array("name"=> $this->config->item('name_new_tax'),"percent"=>(double)$new_tax,"cumulative"=>0));
+			$this->sale_lib->clear_deleted_taxes();
+		}else{
+			$this->sale_lib->set_overwrite_tax(0);
+			$this->sale_lib->clear_new_tax();
+		}
+		$this->_reload();
 	}
 }
 ?>

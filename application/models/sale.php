@@ -756,8 +756,8 @@ class Sale extends CI_Model
      $auth_code = '', $change_sale_date = false, $balance = 0,$mode="sale" ,$tier_id=false, 
      $deleted_taxes=array(),$store_account_payment = 0,
       $total = 0, $amount_change, $invoice_type, $ntbale = null,$divisa=null, 
-      $opcion_sale=null, $transaction_rate=null, $transaction_cost=null,
-      $another_currency=0,$currency=null, $total_other_currency=null )
+      $opcion_sale=null, $transaction_rate=null, $transaction_cost=null, $another_currency=0,
+      $currency=null, $total_other_currency=null , $overwrite_tax=false,$new_tax=null)
     {
         //we need to check the sale library for deleted taxes during sale
         $this->load->library('sale_lib');
@@ -801,6 +801,7 @@ class Sale extends CI_Model
             "another_currency"=>$another_currency,
             "currency"=>$currency,
             "total_other_currency"=>$total_other_currency,
+            "overwrite_tax"=>$overwrite_tax
             
         );
 
@@ -1277,54 +1278,90 @@ class Sale extends CI_Model
             }
 
             $customer = $this->Customer->get_info($customer_id);
-
-            if ($customer_id == -1 or $customer->taxable) {
+            
+            
+            if (($customer_id == -1 or $customer->taxable) ) {
+               
                 if (isset($item['item_id'])) {
+                    if($overwrite_tax==1){
+                        $query_result = $this->db->insert('sales_items_taxes', array(
+                            'sale_id' => $sale_id,
+                            'item_id' => $item['item_id'],
+                            'line' => $item['line'],
+                            'name' => $new_tax['name'],
+                            'percent' => $new_tax['percent'],
+                            'cumulative' => $new_tax['cumulative'],
+                        ));
+                        if (!$query_result) {
+                            $this->db->query("ROLLBACK");
+                            $this->db->query('UNLOCK TABLES');
+                            return -1;
+                        }                        
+    
+                    }else{
 
-                    foreach ($this->Item_taxes_finder->get_info($item['item_id']) as $row) {
+                        foreach ($this->Item_taxes_finder->get_info($item['item_id']) as $row) {
 
-                        $tax_name = $row['percent'] . '% ' . $row['name'];
+                            $tax_name = $row['percent'] . '% ' . $row['name'];
 
-                        //Only save sale if the tax has NOT been deleted
+                            //Only save sale if the tax has NOT been deleted
 
-                        if (!in_array($tax_name, $deleted_taxes)) {
+                            if (!in_array($tax_name, $deleted_taxes)) {
 
-                            $query_result = $this->db->insert('sales_items_taxes', array(
-                                'sale_id' => $sale_id,
-                                'item_id' => $item['item_id'],
-                                'line' => $item['line'],
-                                'name' => $row['name'],
-                                'percent' => $row['percent'],
-                                'cumulative' => $row['cumulative'],
-                            ));
+                                $query_result = $this->db->insert('sales_items_taxes', array(
+                                    'sale_id' => $sale_id,
+                                    'item_id' => $item['item_id'],
+                                    'line' => $item['line'],
+                                    'name' => $row['name'],
+                                    'percent' => $row['percent'],
+                                    'cumulative' => $row['cumulative'],
+                                ));
 
-                            if (!$query_result) {
+                                if (!$query_result) {
 
-                                $this->db->query("ROLLBACK");
-                                $this->db->query('UNLOCK TABLES');
-                                return -1;
+                                    $this->db->query("ROLLBACK");
+                                    $this->db->query('UNLOCK TABLES');
+                                    return -1;
+                                }
                             }
                         }
                     }
                 } else {
-                    foreach ($this->Item_kit_taxes_finder->get_info($item['item_kit_id']) as $row) {
-                        $tax_name = $row['percent'] . '% ' . $row['name'];
+                    if($overwrite_tax==true){
+                        $query_result = $this->db->insert('sales_item_kits_taxes', array(
+                            'sale_id' => $sale_id,
+                            'item_kit_id' => $item['item_kit_id'],
+                            'line' => $item['line'],
+                            'name' => $new_tax['name'],
+                            'percent' => $new_tax['percent'],
+                            'cumulative' => $new_tax['cumulative'],
+                        ));
+                        if (!$query_result) {
+                            $this->db->query("ROLLBACK");
+                            $this->db->query('UNLOCK TABLES');
+                           return -1;
+                        }
 
-                        //Only save sale if the tax has NOT been deleted
-                        if (!in_array($tax_name, $deleted_taxes)) {
-                            $query_result = $this->db->insert('sales_item_kits_taxes', array(
-                                'sale_id' => $sale_id,
-                                'item_kit_id' => $item['item_kit_id'],
-                                'line' => $item['line'],
-                                'name' => $row['name'],
-                                'percent' => $row['percent'],
-                                'cumulative' => $row['cumulative'],
-                            ));
+                    }else{
+                        foreach ($this->Item_kit_taxes_finder->get_info($item['item_kit_id']) as $row) {
+                            $tax_name = $row['percent'] . '% ' . $row['name'];
 
-                            if (!$query_result) {
-                                $this->db->query("ROLLBACK");
-                                $this->db->query('UNLOCK TABLES');
-                                return -1;
+                            //Only save sale if the tax has NOT been deleted
+                            if (!in_array($tax_name, $deleted_taxes)) {
+                                $query_result = $this->db->insert('sales_item_kits_taxes', array(
+                                    'sale_id' => $sale_id,
+                                    'item_kit_id' => $item['item_kit_id'],
+                                    'line' => $item['line'],
+                                    'name' => $row['name'],
+                                    'percent' => $row['percent'],
+                                    'cumulative' => $row['cumulative'],
+                                ));
+
+                                if (!$query_result) {
+                                    $this->db->query("ROLLBACK");
+                                    $this->db->query('UNLOCK TABLES');
+                                    return -1;
+                                }
                             }
                         }
                     }

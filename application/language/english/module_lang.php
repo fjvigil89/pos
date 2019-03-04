@@ -72,3 +72,5 @@ $lang['module_campaigns']='Campaign';
 $lang["module_changes_house"]="Change house";
 $lang['module_licenses']='License';
 $lang['module_recharges'] = 'Recharges';
+$lang["module_overwrite_tax"]="Overwrite the tax during the sale";
+?>

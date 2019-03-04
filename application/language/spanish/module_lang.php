@@ -95,4 +95,5 @@ $lang['module_warehouse']='Bodega';
 $lang['module_warehouse_desc']='Ediar, Actualizar, Borrar y ordenes';
 
 $lang['module_action_delete_receivings'] = 'Eliminar Compra';
+$lang["module_overwrite_tax"]="Sobrescribir impuesto durante la venta";
 ?>

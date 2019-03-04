@@ -51,6 +51,18 @@ class Sale_lib
 	function set_rate_sale($rate){
 		$this->CI->session->set_userdata('rate_sale',$rate);
 	}
+	function set_new_tax($new_tax){
+		$this->CI->session->set_userdata('new_tax',$new_tax);
+	}
+	function get_new_tax(){
+		return $this->CI->session->userdata('new_tax');
+	}
+	function set_overwrite_tax($overwrite_tax){
+		$this->CI->session->set_userdata('overwrite_tax',$overwrite_tax);
+	}
+	function get_overwrite_tax(){
+		return $this->CI->session->userdata('overwrite_tax') == 1 ?true:false ;
+	}
 	function get_rate_price(){
 
 		if($this->CI->session->userdata('rate_price')==false){
@@ -129,6 +141,15 @@ class Sale_lib
 	function clear_pagar_otra_moneda(){
 		$this->CI->session->unset_userdata('pagar_otra_moneda');
 
+	}
+	function clear_overwrite_tax()
+	{
+		$this->CI->session->unset_userdata('overwrite_tax');
+	}
+
+	function clear_new_tax()
+	{
+		$this->CI->session->unset_userdata('new_tax');
 	}
 	function clear_rate_price()
 	{
@@ -1363,6 +1384,7 @@ class Sale_lib
 		$this->delete_customer(false);
 		$sale_taxes = $this->get_taxes($sale_id);
 		$rate=0;
+		$sale_info= $this->CI->Sale->get_info($sale_id)->row();
 		foreach($this->CI->Sale->get_sale_items($sale_id)->result() as $row)
 		{
 			$item_info = $this->CI->Item->get_info($row->item_id);
@@ -1420,6 +1442,17 @@ class Sale_lib
 		$this->set_opcion_sale($this->CI->Sale->get_opcion_sale($sale_id));
 		$this->set_pagar_otra_moneda($this->CI->Sale->get_otra_moneda($sale_id));
 		$this->set_serie_number($this->CI->Sale->get_serie_number($sale_id));
+		$this->set_overwrite_tax($sale_info->overwrite_tax); 
+		$taxes_from_sale = array_merge($this->CI->Sale->get_sale_items_taxes($sale_id), $this->CI->Sale->get_sale_item_kits_taxes($sale_id));
+		if(count($taxes_from_sale)>0){
+			$this->set_new_tax(
+				array("name"=> $taxes_from_sale[0]["name"],"percent"=>(double)$taxes_from_sale[0]["percent"],"cumulative"=>0));
+		}else{
+			$this->set_overwrite_tax(0); 
+
+		}
+		
+
 		
 
 	}
@@ -1576,6 +1609,8 @@ class Sale_lib
 		$this->clear_total_price_transaction_previous();
 		$this->clear_pagar_otra_moneda();
 		$this->clear_serie_number();
+		$this->clear_overwrite_tax();
+		$this->clear_new_tax();
 		
 	}
 	
@@ -1670,34 +1705,62 @@ class Sale_lib
 		    {
 		        return array();
 		    }
+			if($this->get_overwrite_tax()==false){
+				foreach($this->get_cart() as $line=>$item)
+				{
+					$price_to_use = $this->_get_price_for_item_in_cart($item);      
+					
+					$tax_info = isset($item['item_id']) ? $this->CI->Item_taxes_finder->get_info($item['item_id']) : $this->CI->Item_kit_taxes_finder->get_info($item['item_kit_id']);
+					foreach($tax_info as $key=>$tax)
+					{
+						//echo $key;
+						//echo '<pre>'.print_r($tax,true).'</pre>';
+						$name = $tax['percent'].'% ' . $tax['name'];
+						$tax_base  = ($price_to_use*$item['quantity']-$price_to_use*$item['quantity']*$item['discount']/100);
+						$tax_amount= ($price_to_use*$item['quantity']-$price_to_use*$item['quantity']*$item['discount']/100)*(($tax['percent'])/100);
+						$tax_total  = $tax_base + $tax_amount;
+						
 
-		    foreach($this->get_cart() as $line=>$item)
-		    {
-		        $price_to_use = $this->_get_price_for_item_in_cart($item);      
-		        
-		        $tax_info = isset($item['item_id']) ? $this->CI->Item_taxes_finder->get_info($item['item_id']) : $this->CI->Item_kit_taxes_finder->get_info($item['item_kit_id']);
-		        foreach($tax_info as $key=>$tax)
-		        {
-		            //echo $key;
-		            //echo '<pre>'.print_r($tax,true).'</pre>';
-		            $name = $tax['percent'].'% ' . $tax['name'];
-		            $tax_base  = ($price_to_use*$item['quantity']-$price_to_use*$item['quantity']*$item['discount']/100);
-		            $tax_amount= ($price_to_use*$item['quantity']-$price_to_use*$item['quantity']*$item['discount']/100)*(($tax['percent'])/100);
-		            $tax_total  = $tax_base + $tax_amount;
-		            
+						if (!in_array($name, $this->get_deleted_taxes()))
+						{
+							if (!isset($taxes[$name]))
+							{
+								$taxes[$name] = array('base'=>0,'total_tax'=>0,'total'=>0);
+							}
+							
+							$taxes[$name]['base'] += $tax_base;
+							$taxes[$name]['total_tax'] += $tax_amount;
+							$taxes[$name]['total'] += $tax_total;
+						}
+					}
+				}
+			}
+			/** Para cuando se agrega un nuevo impuesto */
+			else{
+				foreach($this->get_cart() as $line=>$item)
+				{
+					$price_to_use = $this->_get_price_for_item_in_cart($item);      
+					
+					$tax_info =array("0"=>$this->get_new_tax());
+					foreach($tax_info as $key=>$tax)
+					{
+						
+						$name = $tax['percent'].'% ' . $tax['name'];
+						$tax_base  = ($price_to_use*$item['quantity']-$price_to_use*$item['quantity']*$item['discount']/100);
+						$tax_amount= ($price_to_use*$item['quantity']-$price_to_use*$item['quantity']*$item['discount']/100)*(($tax['percent'])/100);
+						$tax_total  = $tax_base + $tax_amount;						
 
-		            if (!in_array($name, $this->get_deleted_taxes()))
-		            {
-		                if (!isset($taxes[$name]))
-		                {
-		                    $taxes[$name] = array('base'=>0,'total_tax'=>0,'total'=>0);
-		                }
-		                
-		                $taxes[$name]['base'] += $tax_base;
-	            		$taxes[$name]['total_tax'] += $tax_amount;
-	            		$taxes[$name]['total'] += $tax_total;
-		            }
-		        }
+						if (!isset($taxes[$name]))
+							{
+								$taxes[$name] = array('base'=>0,'total_tax'=>0,'total'=>0);
+							}
+							
+						$taxes[$name]['base'] += $tax_base;
+						$taxes[$name]['total_tax'] += $tax_amount;
+						$taxes[$name]['total'] += $tax_total;
+						
+					}
+				}
 			}
 		}
         
@@ -1752,33 +1815,59 @@ class Sale_lib
 		    {
 		        return array();
 		    }
+			if($this->get_overwrite_tax()==false){
+				foreach($this->get_cart() as $line=>$item)
+				{  
+					$price_to_use = $this->_get_price_for_item_in_cart($item);      
+					
+					$tax_info = isset($item['item_id']) ? $this->CI->Item_taxes_finder->get_info($item['item_id']) : $this->CI->Item_kit_taxes_finder->get_info($item['item_kit_id']);
+					foreach($tax_info as $key=>$tax)
+					{
+						$name = $tax['percent'].'% ' . $tax['name'];
 
-		    foreach($this->get_cart() as $line=>$item)
-		    {
-		        $price_to_use = $this->_get_price_for_item_in_cart($item);      
-		        
-		        $tax_info = isset($item['item_id']) ? $this->CI->Item_taxes_finder->get_info($item['item_id']) : $this->CI->Item_kit_taxes_finder->get_info($item['item_kit_id']);
-		        foreach($tax_info as $key=>$tax)
-		        {
-		            $name = $tax['percent'].'% ' . $tax['name'];
+						$tax_base  = ($price_to_use*$item['quantity']-$price_to_use*$item['quantity']*$item['discount']/100);
+						$tax_amount= ($price_to_use*$item['quantity']-$price_to_use*$item['quantity']*$item['discount']/100)*(($tax['percent'])/100);
+						$tax_total  = $tax_base + $tax_amount;
+						
+						if (!in_array($name, $this->get_deleted_taxes()))
+						{
+							if (!isset($taxes[$name]))
+							{
+								$taxes[$name] = array('base'=>0,'total_tax'=>0,'total'=>0);
+							}
+							
+							$total_base_sum = $tax_base + $total_base_sum;
+							$total_tax_sum = $tax_amount + $total_tax_sum;
+							$total_sum = $tax_total + $total_sum;
+						}
+					}
+				}
+			}else{
+				foreach($this->get_cart() as $line=>$item)
+				{  
+					$price_to_use = $this->_get_price_for_item_in_cart($item);      
+					
+					$tax_info = $tax_info =array("0"=>$this->get_new_tax());
+					foreach($tax_info as $key=>$tax)
+					{
+						$name = $tax['percent'].'% ' . $tax['name'];
 
-		            $tax_base  = ($price_to_use*$item['quantity']-$price_to_use*$item['quantity']*$item['discount']/100);
-		            $tax_amount= ($price_to_use*$item['quantity']-$price_to_use*$item['quantity']*$item['discount']/100)*(($tax['percent'])/100);
-		            $tax_total  = $tax_base + $tax_amount;
-		            
-		            if (!in_array($name, $this->get_deleted_taxes()))
-		            {
-		                if (!isset($taxes[$name]))
-		                {
-		                    $taxes[$name] = array('base'=>0,'total_tax'=>0,'total'=>0);
-		                }
-		                
-		                $total_base_sum = $tax_base + $total_base_sum;
-	            		$total_tax_sum = $tax_amount + $total_tax_sum;
-	            		$total_sum = $tax_total + $total_sum;
-		            }
-		        }
-		    }
+						$tax_base  = ($price_to_use*$item['quantity']-$price_to_use*$item['quantity']*$item['discount']/100);
+						$tax_amount= ($price_to_use*$item['quantity']-$price_to_use*$item['quantity']*$item['discount']/100)*(($tax['percent'])/100);
+						$tax_total  = $tax_base + $tax_amount;
+						
+						
+						if (!isset($taxes[$name]))
+						{
+							$taxes[$name] = array('base'=>0,'total_tax'=>0,'total'=>0);
+						}
+						$total_base_sum = $tax_base + $total_base_sum;
+						$total_tax_sum = $tax_amount + $total_tax_sum;
+						$total_sum = $tax_total + $total_sum;
+						
+					}
+				}
+			}
 
 		    $taxes['total_base_sum'] = $total_base_sum;
 	        $taxes['total_tax_sum'] = $total_tax_sum;
@@ -1789,8 +1878,7 @@ class Sale_lib
 
 	function get_taxes($sale_id = false)
 	{
-		$taxes = array();
-		
+		$taxes = array();		
 		if ($sale_id)
 		{
 			$taxes_from_sale = array_merge($this->CI->Sale->get_sale_items_taxes($sale_id), $this->CI->Sale->get_sale_item_kits_taxes($sale_id));
@@ -1825,35 +1913,49 @@ class Sale_lib
 			{
 				return array();
 			}
-			//$hhhhhh=$this->get_cart();
-			foreach($this->get_cart() as $line=>$item)
-			{
-				$price_to_use = $this->_get_price_for_item_in_cart($item);		
-				
-				$tax_info = isset($item['item_id']) ? $this->CI->Item_taxes_finder->get_info($item['item_id']) : $this->CI->Item_kit_taxes_finder->get_info($item['item_kit_id']);
-				foreach($tax_info as $key=>$tax)
+			if($this->get_overwrite_tax()==false){ 
+				foreach($this->get_cart() as $line=>$item)
 				{
-					$name = $tax['percent'].'% ' . $tax['name'];
 					
-					if ($tax['cumulative'])
+					$price_to_use = $this->_get_price_for_item_in_cart($item);		
+					$tax_info = isset($item['item_id']) ? $this->CI->Item_taxes_finder->get_info($item['item_id']) : $this->CI->Item_kit_taxes_finder->get_info($item['item_kit_id']);
+					foreach($tax_info as $key=>$tax)
 					{
-						$prev_tax = ($price_to_use*$item['quantity']-$price_to_use*$item['quantity']*$item['discount']/100)*(($tax_info[$key-1]['percent'])/100);
-						$tax_amount=(($price_to_use*$item['quantity']-$price_to_use*$item['quantity']*$item['discount']/100) + $prev_tax)*(($tax['percent'])/100);					
+						$name = $tax['percent'].'% ' . $tax['name'];
+						if ($tax['cumulative'])
+						{
+							$prev_tax = ($price_to_use*$item['quantity']-$price_to_use*$item['quantity']*$item['discount']/100)*(($tax_info[$key-1]['percent'])/100);
+							$tax_amount=(($price_to_use*$item['quantity']-$price_to_use*$item['quantity']*$item['discount']/100) + $prev_tax)*(($tax['percent'])/100);					
+						}
+						else
+						{
+							$tax_amount=($price_to_use*$item['quantity']-$price_to_use*$item['quantity']*$item['discount']/100)*(($tax['percent'])/100);
+						}
+						if (!in_array($name, $this->get_deleted_taxes()))
+						{
+							if (!isset($taxes[$name]))
+							{
+								$taxes[$name] = 0;
+							}
+							$taxes[$name] += $tax_amount;
+						}
 					}
-					else
+				}
+			}else{				
+				foreach($this->get_cart() as $line=>$item)
+				{
+					$price_to_use = $this->_get_price_for_item_in_cart($item);		
+					$tax_info =array("0"=>$this->get_new_tax());
+					foreach($tax_info as $key=>$tax)
 					{
+						$name = $tax['percent'].'% ' . $tax['name'];
 						$tax_amount=($price_to_use*$item['quantity']-$price_to_use*$item['quantity']*$item['discount']/100)*(($tax['percent'])/100);
-					}
-
-					if (!in_array($name, $this->get_deleted_taxes()))
-					{
 						if (!isset($taxes[$name]))
 						{
 							$taxes[$name] = 0;
-						}
-						
-						$taxes[$name] += $tax_amount;
-					}
+						}								
+						$taxes[$name] += $tax_amount;						
+					}					
 				}
 			}
 		}		
