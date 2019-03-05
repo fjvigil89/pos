@@ -47,7 +47,16 @@ class Config extends Secure_area
 		$data['rates']=$this->Change_house->get_rate_all()->result_array();
                 $data['tservice'] = $this->Appconfig->get_tipo_servicios();
                 $data['tfallas'] = $this->Appconfig->get_tipo_fallas();
-                $data['tubi'] = $this->Appconfig->get_ubica_equipos();
+				$data['tubi'] = $this->Appconfig->get_ubica_equipos();
+				
+		$abreviaturas_divisa=array(
+			"USD"=>"DOLAR(USD)",
+			"EUR"=>"EURO(EUR)",
+			"MXN"=>"PESOS MEXICANO(MXN)",
+			"JPY"=>"YEN(JPY)"
+		);
+		$data['abreviaturas_divisa'] =$abreviaturas_divisa;
+
 		$this->load->view("config", $data);
 	}
 	
@@ -224,8 +233,12 @@ class Config extends Secure_area
 			"Generate_simplified_order"=>(int) $this->input->post('Generate_simplified_order'),
 			"offline_sales"=> (int) $this->input->post('offline_sales'),
 			"activar_pago_segunda_moneda"=>(int) $this->input->post('activar_pago_segunda_moneda'),
-			"moneda"=>$this->input->post('moneda'),
-			"equivalencia"=>(double)$this->input->post('equivalencia'),
+			"moneda1"=>$this->input->post('moneda1'),
+			"moneda2"=>$this->input->post('moneda2'),
+			"moneda3"=>$this->input->post('moneda3'),
+			"equivalencia1"=>(double)$this->input->post('equivalencia1'),
+			"equivalencia2"=>(double)$this->input->post('equivalencia2'),
+			"equivalencia3"=>(double)$this->input->post('equivalencia3'),
 			"offline_sales"=> (int) $this->input->post('offline_sales'),
 			"divisa"=>$this->input->post('divisa') ,
 			"address"=>$this->input->post('address'),

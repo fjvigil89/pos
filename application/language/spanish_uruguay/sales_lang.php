@@ -15,6 +15,7 @@ $lang['sales_item_name'] = 'Nombre';
 $lang['sales_item_number'] = '# de Artículo';
 $lang['sales_new_customer'] = 'Cliente Nuevo';
 $lang['sales_customer'] = 'cliente';
+$lang["sales_pay"]="Pagar en";
 $lang['sales_no_items_in_cart']='No hay artículos en el carrito';
 $lang['sales_total']='Total';
 $lang['sale_not_print_invoice']="No imprimir factura";

@@ -239,8 +239,7 @@ $lang["sales_ranks"]="Ranks";
 $lang["sales_payments"]="Payments";
 $lang["sales_opening_date"]="Opening date";
 $lang["sales_date_closing"]="Date of closing";
-$lang["reports_entrada"]="Input"; 
-$lang["reports_salida"]="Exit";
+$lang["sales_pay"]="Pay in";
 
 $lang['cash_flows_total'] = 'Total';
 $lang['cash_flows_type'] = 'Type';

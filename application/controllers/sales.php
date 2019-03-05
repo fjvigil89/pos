@@ -1131,8 +1131,8 @@ class Sales extends Secure_area
 		$data["transaction_cost"]= $this->config->item('activar_casa_cambio')==1?$this->sale_lib->get_total_price_transaction():0;
 		$data["show_return_policy_credit"]= ($this->config->item('show_return_policy_credit')==1 and $data['balance']!=0);
 		$data["another_currency"]= $this->sale_lib->get_pagar_otra_moneda();
-		$data["currency"]=$data["another_currency"]==0?null:$this->config->item('moneda');
-		$data["total_other_currency"]=$data["another_currency"]==0?null:($data['total']/(double) $this->config->item('equivalencia'));
+		$data["currency"]=$data["another_currency"]==0?null:$this->sale_lib->get_currency();
+		$data["total_other_currency"]=$data["another_currency"]==0?null:($data['total']/(double) $this->sale_lib->get_equivalencia_divisa());
 		$overwrite_tax= $this->sale_lib->get_overwrite_tax();
 		$new_tax= $this->sale_lib->get_new_tax();
 		$data["overwrite_tax"]= $overwrite_tax;
@@ -1858,6 +1858,9 @@ class Sales extends Secure_area
 		}
 	}
 	function set_otra_moneda(){
+		$this->sale_lib->set_moneda_numero($this->input->post('moneda_numero'));
+		$this->sale_lib->set_currency($this->config->item("moneda".$this->input->post('moneda_numero')));
+		$this->sale_lib->set_equivalencia_divisa($this->config->item("equivalencia".$this->input->post('moneda_numero')));
 		$this->sale_lib->set_pagar_otra_moneda($this->input->post('otra_moneda'));
 	}
 
@@ -1945,6 +1948,12 @@ class Sales extends Secure_area
 		$data["edit_tiers"]=$this->Employee->has_module_action_permission('sales', 'edit_tier', $this->Employee->get_logged_in_employee_info()->person_id);
 		$data["overwrite_tax"]= $this->sale_lib->get_overwrite_tax();
 		$data["new_tax"]= $this->sale_lib->get_new_tax();
+		$data["pagar_otra_moneda"]=   $this->sale_lib->get_pagar_otra_moneda();
+		$data["moneda_numero"]=   $this->sale_lib->get_moneda_numero();
+		$data["equivalencia"]= $this->sale_lib->get_equivalencia_divisa();
+		$data["currency"]=$this->sale_lib->get_currency();
+
+
 		/*$employees = array('' => lang('common_not_set'));
 
 		foreach($this->Employee->get_all()->result() as $employee)
@@ -2037,7 +2046,6 @@ class Sales extends Secure_area
 		if ($is_ajax)
 		{
 			if($this->config->item('activar_casa_cambio')==1){
-				$data["pagar_otra_moneda"]=   $this->sale_lib->get_pagar_otra_moneda();
 				$this->change($data,$is_ajax,$resumen_venta);
 			}else{
 				$this->load->view("sales/register",$data);

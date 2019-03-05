@@ -239,7 +239,7 @@ $lang['sales_payment_value'] = 'Valor';
 
 
 $lang['sales_all'] = 'Todos';
-
+$lang["sales_pay"]="Pagar en";
 // Cash_flows
 $lang['cash_flows'] = 'Flujo de Caja';
 $lang['cash_flows_time'] = 'Fecha';

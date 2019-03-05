@@ -130,17 +130,41 @@ class Sale_lib
 	{
 		$this->CI->session->set_userdata('divisa',$divisa);
 	}
+	function set_equivalencia_divisa($equivalencia){
+		$this->CI->session->set_userdata('equivalencia',$equivalencia);
+
+	}
+	function set_currency($currency){
+		$this->CI->session->set_userdata('currency',$currency);
+	}
+	function get_currency()
+	{
+		return $this->CI->session->userdata('currency');
+	}
+	function get_equivalencia_divisa()
+	{
+		return $this->CI->session->userdata('equivalencia')==FALSE ? 1:  $this->CI->session->userdata('equivalencia');
+	}
 	function get_divisa()
 	{
 		return $this->CI->session->userdata('divisa')? $this->CI->session->userdata('divisa'):$this->CI->config->item("divisa");
+	}
+	function clear_equivalencia_divisa(){
+		$this->CI->session->unset_userdata('equivalencia');
 	}
 	function clear_divisa()
 	{
 		$this->CI->session->unset_userdata('divisa');
 	}
+	function clear_currency(){
+		$this->CI->session->unset_userdata('currency');
+	}
 	function clear_pagar_otra_moneda(){
 		$this->CI->session->unset_userdata('pagar_otra_moneda');
-
+	}
+	
+	function clear_moneda_numero(){
+		$this->CI->session->unset_userdata('moneda_numero');
 	}
 	function clear_overwrite_tax()
 	{
@@ -757,6 +781,13 @@ class Sale_lib
 	function set_pagar_otra_moneda($value){
 		$this->CI->session->set_userdata('pagar_otra_moneda',$value);
 
+	}
+	function set_moneda_numero($value){
+		$this->CI->session->set_userdata('moneda_numero',$value);
+
+	}
+	function get_moneda_numero(){
+		return $this->CI->session->userdata('moneda_numero') ? $this->CI->session->userdata('moneda_numero') : 0;
 	}
 	function get_pagar_otra_moneda(){
 		return $this->CI->session->userdata('pagar_otra_moneda') ? $this->CI->session->userdata('pagar_otra_moneda') : 0;
@@ -1439,6 +1470,10 @@ class Sale_lib
 		$this->set_rate_sale($rate);
 		$this->set_ntable($this->CI->Sale->get_table($sale_id));
 		$this->set_divisa($this->CI->Sale->get_divisa($sale_id));
+		$this->set_currency($sale_info->currency);
+		if($sale_info->currency!=null){
+			$this->set_moneda_numero(1);
+		}
 		$this->set_opcion_sale($this->CI->Sale->get_opcion_sale($sale_id));
 		$this->set_pagar_otra_moneda($this->CI->Sale->get_otra_moneda($sale_id));
 		$this->set_serie_number($this->CI->Sale->get_serie_number($sale_id));
@@ -1608,9 +1643,12 @@ class Sale_lib
 		$this->clear_rate_price();
 		$this->clear_total_price_transaction_previous();
 		$this->clear_pagar_otra_moneda();
+		$this->clear_moneda_numero();
 		$this->clear_serie_number();
 		$this->clear_overwrite_tax();
+		$this->clear_equivalencia_divisa();
 		$this->clear_new_tax();
+		$this->clear_currency();
 		
 	}
 	

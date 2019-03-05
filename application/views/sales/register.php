@@ -1337,7 +1337,7 @@
 												</span>
 											</div>
 										</div>
-										<div class="row margin-top-10">
+										<!--<div class="row margin-top-10">
 											<div class="col-md-12">
 												<div class="input-group">
 													<?php $value=$this->config->item('round_value')==1 ? round($amount_due): to_currency_no_money($amount_due); ?>
@@ -1348,7 +1348,42 @@
 												</div>
 											</div>
 
+										</div>-->
+
+										<div class="row margin-top-10" id="panel1" style="display: <?php echo $pagar_otra_moneda? "none":"block" ?>;">
+											<div class="col-md-12">
+												<div class="input-group">
+													<?php $value=$this->config->item('round_value')==1 ? round($amount_due): to_currency_no_money($amount_due); ?>
+													<?php echo form_input(array('name'=>'amount_tendered','id'=>'amount_tendered','value'=>$value,'class'=>'form-control form-inps-sale', 'accesskey' => 'p'));?>
+													<span class="input-group-btn">
+													<input class="btn btn-success" type="button" id="add_payment_button" value="<?php echo lang('sales_add_payment'); ?>" />
+													</span>
+												</div>
+											</div>
 										</div>
+										<div class="row margin-top-10" id="panel2" style="display: <?php echo $pagar_otra_moneda?"block":"none" ?>;">
+											<div class="col-md-12">
+												<div class="input-group">												
+													<div class="input-group">
+														<span class="input-group-addon" id="abreviatura"><?php echo $currency?></span>
+														<?php echo form_input(array('name'=>'amount_tendered2','id'=>'amount_tendered2','class'=>'form-control form-inps-sale', 'accesskey' => 'p'));?>
+														<span class="input-group-btn">
+															<input class="btn btn-success" type="button" id="add_payment_button2" value="<?php echo lang('sales_add_payment'); ?>" />
+														</span>
+													</div>
+												</div>
+											</div>
+											
+										</div>
+										<?php if($this->config->item('activar_pago_segunda_moneda')==1){?>
+											<?= lang("sales_pay")?>
+											 <input type="radio" name="otra_moneda" abreviatura="<?php echo $this->config->item('moneda1')?>" equivalencia ="<?php echo $this->config->item('equivalencia1')?>" id="otra_moneda1" value="1" <?php echo ($pagar_otra_moneda and $moneda_numero==1)? "checked" :"" ?>> <strong> <?php echo $this->config->item('moneda1')?></strong> - 
+											 <input type="radio" name="otra_moneda" abreviatura="<?php echo $this->config->item('moneda2')?>" equivalencia ="<?php echo $this->config->item('equivalencia2')?>" id="otra_moneda2" value="2" <?php echo ($pagar_otra_moneda and $moneda_numero==2) ? "checked" :"" ?>> <strong> <?php echo $this->config->item('moneda2')?></strong> - 
+											 <input type="radio" name="otra_moneda" abreviatura="<?php echo $this->config->item('moneda3')?>" equivalencia ="<?php echo $this->config->item('equivalencia3')?>" id="otra_moneda3" value="3" <?php echo ($pagar_otra_moneda and $moneda_numero==3) ? "checked" :"" ?>> <strong> <?php echo $this->config->item('moneda3')?></strong> - 
+											 <input type="radio" name="otra_moneda" abreviatura="1" equivalencia ="1" id="otra_moneda0" value="0" <?php echo  $moneda_numero==0 ? "checked" :"" ?>> <strong>Default</strong><br>
+
+										<?php }?>
+
 									</li>
 								</ul>
 							</form>
@@ -1526,6 +1561,38 @@
 
 	<script type="text/javascript" language="javascript">
 
+		<?php if($this->config->item('activar_pago_segunda_moneda')==1){?>
+				let monto= convertir_moneda(<?php echo $amount_due ?>,<?php echo $equivalencia?>);
+				$("#amount_tendered2").val(monto);
+				$("#amount_tendered2").change(function(){
+					if($.isNumeric($("#amount_tendered2").val()) ){
+						$("#amount_tendered").val(revertir_moneda($("#amount_tendered2").val(),<?php echo $equivalencia?>));
+					}
+				});
+			<?php }?>
+			$( "input[type=radio][name=otra_moneda]").change(function(){
+				let moneda_numero= $(this).val();
+				let equivalencia= $(this).attr("equivalencia");
+				let abreviatura= $(this).attr("abreviatura");
+				if (moneda_numero>0) {
+					$.post('<?php echo site_url("sales/set_otra_moneda");?>', {"otra_moneda": 1,"moneda_numero":moneda_numero}, function()
+					{
+						$("#panel2").show();
+						$("#panel1").hide();
+						$("#abreviatura").html(abreviatura);
+						let monto= convertir_moneda(<?php echo $amount_due ?>,equivalencia);
+					$("#amount_tendered2").val(monto);
+					});		
+				}
+				else{
+					$.post('<?php echo site_url("sales/set_otra_moneda");?>', {"otra_moneda": 0,"moneda_numero":"default"}, function()
+					{
+						$("#panel1").show();
+						$("#panel2").hide();
+					});		
+				}
+			});
+
 		//Table headers fixed
 		var $table_receivings = $('#register');
 		$table_receivings.floatThead({
@@ -1567,7 +1634,11 @@
 	        formatter: function (value, options) {
 	          	return value.toFixed(options.decimals).replace('','<?php echo $this->config->item("currency_symbol")?>').replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 	        }
-      	});
+		  });
+		  $("#add_payment_button2").click(function()
+			{
+				$("#add_payment_button").click();
+			});
 		//$('#total-amount').data('to',1);
       	$('.animation-count').each(count);
 
@@ -2170,6 +2241,14 @@
 		}
 
 		crear_select_empleado(<?php echo $sold_by_employee_id; ?> ,"div_employees");
+		function convertir_moneda($value, equivalencia=1){
+			let total =  $value/equivalencia;
+			return total;
+		}
+		function revertir_moneda($value,equivalencia=1){
+			let total =  $value*equivalencia;
+			return total;
+		}
 	</script>
 
 	<script>

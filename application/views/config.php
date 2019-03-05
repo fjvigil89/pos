@@ -453,7 +453,89 @@
 									'value'=>$this->config->item('currency_symbol')));
 								?>
 							</div>
-						</div>			
+						</div>
+						<div class="form-group">	
+							<?php echo form_label(lang("config_segunda_moneda").':', 'activar_pago_segunda_moneda',array('class'=>'col-md-3 control-label')); ?>
+							<div class="col-md-9">
+								<div class="col-md-1">
+									<div class="md-checkbox-inline">
+										<div class="md-checkbox">
+											<?php echo form_checkbox(array(
+												'name'=>'activar_pago_segunda_moneda',
+												'id'=>'activar_pago_segunda_moneda',
+												'value'=>'1',
+												'checked'=>$this->config->item('activar_pago_segunda_moneda')));
+											?>
+											<label for="activar_pago_segunda_moneda">
+												<span></span>
+												<span class="check"></span>
+												<span class="box"></span>
+											</label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div id="div_monedas" style="<?php echo $this->config->item('activar_pago_segunda_moneda')==1 ?"" :"display:none" ?>">
+							<div class="form-group">							
+								<?php echo form_label(lang("config_currency_divisa").' 1:', 'moneda1',array('class'=>'col-md-3 control-label required')); ?>
+								<div class="col-md-2">
+									<?php echo form_dropdown('moneda1', $abreviaturas_divisa, $this->config->item('moneda1'), 'class="bs-select form-control moneda" id="moneda1"');
+									?>
+								</div>
+								<?php echo form_label(':', 'equivalencia',array('class'=>'col-md-3 control-label  ', "id"=>"equivalencia_lab1")); ?>
+								<div class="col-md-2">								
+									<?php	echo form_input(array(
+										'class'=>'form-control',
+										'placeholder' =>"Ingrese valor",
+										'name'=>'equivalencia1',
+										'id'=>'equivalencia1',
+										'type'=>'number',
+										'value'=> $this->config->item('equivalencia1')));
+									?>									
+								</div>							
+							</div>
+							
+							<div class="form-group">							
+								<?php echo form_label(lang("config_currency_divisa").' 2:', 'moneda2',array('class'=>'col-md-3 control-label required')); ?>
+								<div class="col-md-2">
+									<?php echo form_dropdown('moneda2', $abreviaturas_divisa, $this->config->item('moneda2'), 'class="bs-select form-control moneda" id="moneda2"');
+									?>
+								</div>
+								<?php echo form_label(':', 'equivalencia2',array('class'=>'col-md-3 control-label ',"id"=>"equivalencia_lab2")); ?>
+								<div class="col-md-2">								
+									<?php	echo form_input(array(
+										'class'=>'form-control',
+										'placeholder' =>"Ingrese valor",
+										'name'=>'equivalencia2',
+										'id'=>'equivalencia2',
+										'type'=>'number',
+										'value'=> $this->config->item('equivalencia2')));
+									?>									
+								</div>							
+							</div>
+
+							<div class="form-group">							
+								<?php echo form_label(lang("config_currency_divisa").' 3:', 'moneda3',array('class'=>'col-md-3 control-label required')); ?>
+								<div class="col-md-2">
+									<?php echo form_dropdown('moneda3', $abreviaturas_divisa, $this->config->item('moneda3'), 'class="bs-select form-control moneda" id="moneda3"');
+									?>
+								</div>
+								<?php echo form_label(':', 'equivalencia3',array('class'=>'col-md-3 control-label ',"id"=>"equivalencia_lab3")); ?>
+								<div class="col-md-2">								
+									<?php	echo form_input(array(
+										'class'=>'form-control',
+										'placeholder' =>"Ingrese valor",
+										'name'=>'equivalencia3',
+										'id'=>'equivalencia3',
+										'type'=>'number',
+										'value'=> $this->config->item('equivalencia3')));
+									?>									
+								</div>							
+							</div>
+
+						</div>
+														
 					</div>
 				</div>
 			</div>
@@ -3422,51 +3504,7 @@
 									<!--<a class="icon fa fa-youtube-play help_button" id='subcategory_video' rel='0' data-toggle="modal" data-target="#stack9">Ver Vídeo</a>	-->							
 							</div>
 						</div>	
-						<hr>
-						<div class="form-group">	
-							<?php echo form_label("Activar pago con una segunda maneda".':', 'activar_pago_segunda_moneda',array('class'=>'col-md-3 control-label')); ?>
-							<div class="col-md-1">
-								<div class="md-checkbox-inline">
-									<div class="md-checkbox">
-										<?php echo form_checkbox(array(
-											'name'=>'activar_pago_segunda_moneda',
-											'id'=>'activar_pago_segunda_moneda',
-											'value'=>'1',
-											'checked'=>$this->config->item('activar_pago_segunda_moneda')));
-										?>
-										<label for="activar_pago_segunda_moneda">
-											<span></span>
-											<span class="check"></span>
-											<span class="box"></span>
-										</label>
-									</div>
-								</div>
-							</div>
-							<?php echo form_label("Moneda".':', 'moneda',array('class'=>'col-md-1 control-label required')); ?>
-							<div class="col-md-2">
-								<?php echo form_dropdown('moneda', array(
-									'USD' => 'USD',
-									'EUR' => 'EUR'), $this->config->item('moneda'), 'class="bs-select form-control" id="moneda"');
-								?>
-							</div>
-							
-						</div>
-						<div class="form-group">	
-							<?php echo form_label(':', 'equivalencia',array('class'=>'col-md-3 control-label ',"id"=>"equivalencia_lab")); ?>
-							
-							<div class="col-md-3">								
-									<?php
-									echo form_input(array(
-										'class'=>'form-control',
-										'placeholder' =>"Ingrese valor",
-										'name'=>'equivalencia',
-										'id'=>'equivalencia',
-										'type'=>'number',
-										'value'=> $this->config->item('equivalencia')));
-									?>									
-							</div>							
-						</div>
-						<hr>
+						
 						<div class="form-group">	
 							<?php echo form_label(lang('config_divisa').':', 'divisa',array('class'=>'col-md-3 control-label required')); ?>
 							<div class="col-md-3">
@@ -3987,20 +4025,30 @@
 		 	 	nodata: 'No se encontraron resultados',
 		 	 	ignore_accents: true
 			});
-			$('#moneda').change(function()
+			$('.moneda').change(function()
 			{
-				equivalencia();
+				let id_number= $(this).attr("name");
+				equivalencia(id_number);
 			});
-		    
+			$('#activar_pago_segunda_moneda').change(function()
+			{
+				if($('#activar_pago_segunda_moneda').is(":checked")){
+					$("#div_monedas").show(800);
+				}else{
+					$("#div_monedas").hide(800);
+				}
+				
+			});
+		   
 	    });
-		function equivalencia(){
+		function equivalencia(id_number){
 			
-			let moneda= $("#moneda").val();
+			let moneda= $("#"+id_number).val();
 			let currency_symbol= $("#currency_symbol").val();
-			let value="1 "+moneda+" equivale a "+currency_symbol+" :";
-			$("#equivalencia_lab").html(value);
+			let value="1 "+moneda+" <?php echo lang("config_equivale")?> "+currency_symbol+" :";
+			$("#"+id_number).parent().next().html(value);
 		}
-		equivalencia();
+		equivalencia("moneda1"); equivalencia("moneda2"); equivalencia("moneda3");
 
 	</script>
 <?php $this->load->view("partial/footer"); ?>

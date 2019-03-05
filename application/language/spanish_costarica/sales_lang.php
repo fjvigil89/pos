@@ -11,6 +11,7 @@ $lang['sales_giftcard']='Tarjeta de Regalo';
 $lang['sales_register']='Caja Registradora';
 $lang['sales_mode']='Modo de Caja';
 $lang['sales_new_item'] = 'Artículo Nuevo';
+$lang["sales_pay"]="Pagar en";
 $lang['sales_item_name'] = 'Nombre';
 $lang['sales_item_number'] = '# de Artículo';
 $lang['sales_new_customer'] = 'Cliente Nuevo';

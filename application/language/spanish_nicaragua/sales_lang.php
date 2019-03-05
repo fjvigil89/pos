@@ -17,6 +17,7 @@ $lang['sales_new_customer'] = 'Cliente Nuevo';
 $lang['sales_customer'] = 'cliente';
 $lang['sales_no_items_in_cart']='No hay artículos en el carrito';
 $lang['sales_total']='Total';
+$lang["sales_pay"]="Pagar en";
 $lang['sale_not_print_invoice']="No imprimir factura";
 $lang['sale_go_to_offline_sales']="Ir a ventas OffLine";
 $lang['sale_search_by_serial']="Búsqueda por Serial";
