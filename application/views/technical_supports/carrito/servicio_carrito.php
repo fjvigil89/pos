@@ -154,7 +154,7 @@
 									<div class="portlet-title padding bg-green">
 										<div class="caption">
 											<i style="color: white" class="icon-basket-loaded"></i>
-											<span class="caption-subject bold" style="color: white">Resumen de la venta</span>
+											<span class="caption-subject bold" style="color: white"><?php  echo lang("sales_summary")?></span>
 										</div>
 										<div class="options">
 											<?php /* http://localhost/desarrollo/pos/index.php/sales/view_shortcuts */ ?>
@@ -164,7 +164,7 @@
 									<ul class="list-group">
 										<div class="item-subtotal-block">
 											<div class="num_items amount">
-												<span class="name-item-summary">En la cesta de artículos:</span>
+												<span class="name-item-summary"><?php echo lang("sales_items_in_cart") ?>:</span>
 												<span class="pull-right badge badge-cart badge-warning">
 													<?php if (isset($articulos_total)) echo $articulos_total ?>
 												</span>
@@ -180,7 +180,7 @@
 									<div class="amount-block">
 										<div class="total amount">
 											<div class="side-heading">
-												Total:
+												<?php echo lang("sales_total")?>:
 											</div>
 											<div id="total-amount" class="amount animation-count font-green-jungle" data-speed="1000" data-decimals="2">
 												
