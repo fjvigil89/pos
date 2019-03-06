@@ -27,15 +27,13 @@ if($this->input->get('bas')=='') { ?>
 if($this->input->get('bas')=='1') { ?>
     <div class="panel col-lg-12" style="padding: 0px;"> 
         <?php 
-         foreach ($ListarBusqueda->result() as $ListarBusqueda) {
-        // foreach ($suggestions as $value) {
+        // foreach ($ListarBusqueda->result() as $ListarBusqueda) {
+         foreach ($suggestions as $value) {
              ?>
             <div class="col-lg-12" style="border-bottom: 1px solid #DDDDDD;padding: 7px 0 10px 0;height: auto;overflow: hidden;">
-               <!-- <a href="javascript:void(0);" title="Ver registro" onclick="controler('<?php echo site_url() ?>/technical_supports/getClientsInfo/','hc=<?php echo $value['value'] ?>','vista',$('#resultado').html(''));"> -->
-                <a href="javascript:void(0);" title="<?php echo lang("technical_supports_title_detalle"); ?>" onclick="controler('<?php echo site_url() ?>/technical_supports/getClientsInfo/','hc=<?php echo $ListarBusqueda->id_customer; ?>','vista',$('#resultado').html(''));"> 
+                <a href="javascript:void(0);" title="Ver registro" onclick="controler('<?php echo site_url() ?>/technical_supports/getClientsInfo/','hc=<?php echo $value['value'] ?>','vista',$('#resultado').html(''));"> 
                     <div  class="col-lg-12">    
-                        <!--<b><?php// echo $value["label"] ?></b>  -->  
-                        <b><?php echo  $ListarBusqueda->first_name." ". $ListarBusqueda->last_name ?></b>     
+                        <b><?php echo $value["label"] ?></b>         
                     </div>
                 </a> 
             </div>
