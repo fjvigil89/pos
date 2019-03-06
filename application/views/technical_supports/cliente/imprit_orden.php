@@ -6,8 +6,8 @@
             <div class="modal-header" style="height: 90px;background: url('assets/template/images/bannerventana.png') center right no-repeat;background-size: cover;">
                 <button type="button" class="btn" style="background: #FFFFFF;color: #000000;padding: 2px 5px 2px 5px;float: right;" data-dismiss="modal" onclick="$('#impritOrdenc').html('');"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
 
-                <h4 class="modal-title">Orden</h4>
-                <small class="font-bold">Imprimir.</small>
+                <h4 class="modal-title"><?php echo lang("technical_supports_titu_vent_ord"); ?></h4>
+                <small class="font-bold"><?php echo lang("technical_supports_titu_vent_imp"); ?>.</small>
             </div>
 
             <div class="row">
@@ -119,7 +119,7 @@
                                             <table id="receipt_items">
                                                             <tr style="border-bottom: 1px solid #000000;border-top: 1px solid #000000;">
                                             <th class="left_text_align" style="width:<?php echo "25%" ; ?>"> <?php echo lang("technical_supports_type_team") ?></th>
-                                                                    <th class="text-center" style="width:25%;" ><?php echo"Marca" ?></th>
+                                                                    <th class="text-center" style="width:25%;" ><?php echo lang("technical_supports_titu_marca"); ?></th>
                                                                     <th class="text-center" style="width:25%;" ><?php echo lang('technical_supports_model'); ?></th>
                                                                     <th class="text-center" style="width:25%;" ><?php echo lang("technical_supports_color");?></th>                        
                                             </tr>
@@ -153,15 +153,15 @@
                                             </td>
                                             </tr>
                                 </table>
-                                            <?php if(isset($spare_parts) &&  $spare_parts->num_rows() >0) :?>
+                                            <?php if((isset($spare_parts) &&  $spare_parts->num_rows() >0) Or (isset($spare_parts_resp) &&  $spare_parts_resp->num_rows() >0)) :?>
                                                     <table id="details_options">
                                                                     <tr>
-                                                                            <th class="text-center" style="width:100%" colspan="7"><?php echo"Respuestos"; ?></th>						
+                                                                            <th class="text-center" style="width:100%" colspan="7"><?php echo lang("technical_supports_titu_repuesto"); ?></th>						
                                                                     </tr>
                                                                     <tr style="border-bottom: 1px solid #000000;border-top: 1px solid #000000;">
-                                                                            <th class="left_text_align" style="width:50%;" ><?php echo"Nombre";?></th>
-                                                                            <th class="text-center" style="width:50%;" ><?php echo "Serie"?></th>
-                                                                            <th class="text-center" style="width:50%;" ><?php echo "Cantidad" ?></th>
+                                                                            <th class="left_text_align" style="width:50%;" ><?php echo lang("technical_supports_titu_nomb"); ?></th>
+                                                                            <th class="text-center" style="width:50%;" ><?php echo lang("technical_supports_titu_serie"); ?></th>
+                                                                            <th class="text-center" style="width:50%;" ><?php echo lang("technical_supports_titu_canti"); ?></th>
 
                                                                     </tr>
                                                             <?php foreach($spare_parts->result() as $spare_part) :?>
@@ -174,6 +174,19 @@
                                                                             </td>
                                                                             <td class="text-center" >							
                                                                                     <?php echo $spare_part->quantity ?>
+                                                                            </td>
+                                                                    </tr>
+                                                                    <?php endforeach?>
+                                                                    <?php foreach($spare_parts_resp->result() as $spare_part_resp) :?>
+                                                                    <tr>
+                                                                            <td class="left_text_align">							
+                                                                                    <?php echo $spare_part_resp->name ?>
+                                                                            </td>                    
+                                                                            <td class="text-center" >							
+                                                                                    <?php echo $spare_part_resp->item_number ?>
+                                                                            </td>
+                                                                            <td class="text-center" >							
+                                                                                    <?php echo $spare_part_resp->respuesto_cantidad ?>
                                                                             </td>
                                                                     </tr>
                                                                     <?php endforeach?>
@@ -205,7 +218,11 @@
 
                                                                     </tr>
 
-                                                            <?php } ?>	
+                                                            <?php } 
+                                                            $totalResp=0;
+                                                            foreach ($spare_parts_resp->result() as $dataRespuestomasC) { $totalResp=$totalResp+$dataRespuestomasC->repuesto_total; }
+                                                            $repair_cost=$repair_cost+$totalResp;
+                                                            ?>	
                                                             <tr>
                                                                             <td class="right_text_align" colspan="7">
 
@@ -225,7 +242,7 @@
                                          <?php } ?>
                                                              <?php if(isset($do_have_guarantee)){ ?>
                                             <div> 
-                                               <?php echo"<strong>Garantía </strong>"; ?> : <?php echo $do_have_guarantee==1?"Si - hasta ".$date_garantia  :"No"?>
+                                               <strong><?php echo lang("technical_supports_titu_garant"); ?></strong> : <?php echo $do_have_guarantee==1?"Si - hasta ".$date_garantia  :"No"?>
                                             </div>
                                          <?php } ?>
                                          <?php if(!empty($damage_failure) && $damage_failure!="Otro"){ ?>
@@ -241,12 +258,12 @@
 
                                                             <?php if(!empty($observaciones_entrega)){ ?>
                                             <div> 
-                                               <?php echo"<strong>Observaciones </strong>"; ?> : <?php echo $observaciones_entrega; ?>
+                                               <strong><?php echo lang("technical_supports_titu_observ"); ?></strong> : <?php echo $observaciones_entrega; ?>
                                             </div>
                                          <?php } ?>
                                                 <?php if(!empty($retirado_por)){ ?>
                                             <div> 
-                                               <?php echo"<strong>Retirado por </strong>"; ?> : <?php echo $retirado_por; ?>
+                                               <strong><?php echo lang("technical_supports_titu_retp"); ?></strong> : <?php echo $retirado_por; ?>
                                             </div>
                                          <?php } ?>
                                                              <?php if($this->config->item('return_policy_support')!=FALSE){ ?>

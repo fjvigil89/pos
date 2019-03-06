@@ -40,6 +40,7 @@ foreach ($servicios as $servicios){
 </div> 
 <div class="col-lg-2 col-md-3 col-sm-6 col-xs-12">
     
+    <a onclick='controler("<?php echo site_url() ?>/technical_supports/ver_estadisticas_entregados","id_tipo=DIAGNOSTICADO","ventanaVer","")' title="Hacer clic para ver el registro detallado" href="javascript:void(0)" >
     <div class="dashboard-stat blue-madison">
             <div class="visual">
                     <i class="fa fa-wrench"></i>
@@ -60,9 +61,11 @@ foreach ($servicios as $servicios){
                     <?php echo lang('common_more_info_serv_act'); ?> <i class="m-icon-swapright m-icon-white"></i>
             </div>
     </div>
+    </a>
     
 </div>
 
+<a onclick='controler("<?php echo site_url() ?>/technical_supports/ver_estadisticas_entregados","id_tipo=REPARADO","ventanaVer","")' title="Hacer clic para ver el registro detallado" href="javascript:void(0)" >
 <div class="col-lg-2 col-md-3 col-sm-6 col-xs-12">
      
     <div class="dashboard-stat green">
@@ -87,6 +90,8 @@ foreach ($servicios as $servicios){
     </div>
     
 </div>
+</a>   
+<a onclick='controler("<?php echo site_url() ?>/technical_supports/ver_estadisticas_entregados","id_tipo=RECHAZADO","ventanaVer","")' title="Hacer clic para ver el registro detallado" href="javascript:void(0)" >
 <div class="col-lg-2 col-md-3 col-sm-6 col-xs-12">
      
     <div class="dashboard-stat red">
@@ -111,6 +116,8 @@ foreach ($servicios as $servicios){
     </div>
      
 </div>
+</a>
+<a onclick='controler("<?php echo site_url() ?>/technical_supports/ver_estadisticas_entregados","id_tipo=ENTREGADO","ventanaVer","")' title="Hacer clic para ver el registro detallado" href="javascript:void(0)" >
 <div class="col-lg-2 col-md-3 col-sm-6 col-xs-12">
      
     <div class="dashboard-stat  purple">
@@ -135,6 +142,29 @@ foreach ($servicios as $servicios){
     </div>
     
 </div> 
+</a>
+<div class="col-lg-2 col-md-3 col-sm-6 col-xs-12">
+     
+    <div class="dashboard-stat blue-madison">
+            <div class="visual">
+                    <i class="fa fa-bar-chart"></i>
+            </div>
+            <div class="details">
+                    <div class="number" style="font-size: 1.500em;">  
+                            ESTADISTICAS
+                    </div>
+                    <!-- BEGIN STATISTICS -->
+                    <div class="desc">
+                             
+                    </div>
+                    <!-- END STATISTICS -->
+            </div>
+            <div class="more">
+                    <?php echo lang('common_more_info_serv_act'); ?> <i class="m-icon-swapright m-icon-white"></i>
+            </div>
+    </div>
+    
+</div>
 <?php /*
 <div class="portlet-title padding">
     <div class="caption">

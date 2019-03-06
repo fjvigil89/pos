@@ -1,5 +1,8 @@
 <?php foreach ($dataServTecCliente->result() as $dataServTecCliente) {  ?>
-<?php foreach ($dataServTecAbono->result() as $dataServTecAbono) { $abonado=$dataServTecAbono->Abonado;  } ?>
+<?php foreach ($dataServTecAbono->result() as $dataServTecAbono) { $abonado=$dataServTecAbono->Abonado;  }
+$totalResp=0;
+foreach ($dataRespuestomas->result() as $dataRespuestomasC) { $totalResp=$totalResp+$dataRespuestomasC->repuesto_total; }
+?>
 <div class="modal Ventana-modal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:block;overflow-y: auto;">
     <div class="modal-dialog modal-lg" style="width: 96%">
         <div class="modal-content animated bounceInRight">
@@ -53,31 +56,38 @@
                             </div>
                             <div class="col-lg-9" style="margin-top: 10px;height: auto;"> 
                                 <div class="col-lg-12" style="overflow: hidden;">
-                                    <div class="col-lg-4" style="overflow: hidden;">
+                                    <div class="col-lg-5" style="overflow: hidden;">
                                         <div class="portlet sale-summary box green">
                                             <div class="portlet-title padding">
                                                 <div class="caption"> <?php echo lang("technical_supports_pagos_y_abonos"); ?> </div> 
                                             </div>
                                             <div class="portlet-body">
                                                 <ul class="list-unstyled">
-                                                    <li>
-                                                        <span class="sale-info"> <?php echo lang("technical_supports_abono"); ?> <i class="fa fa-img-up"></i></span>
-                                                        <span class="sale-num"> <?php if($abonado!=''){ echo $abonado; }else{ $abonado=0; echo "0"; } ?> </span>
+                                                    <li class="list-group-item ">
+                                                        <span class="sale-info" style="font-weight: 700;"> <?php echo lang("technical_supports_abono"); ?> <i class="fa fa-img-up"></i></span>
+                                                        <span class="sale-num"> <?php if($abonado!=''){  echo to_currency("{$abonado}", "2"); }else{ $abonado=0;  echo to_currency("{$abonado}", "2"); } ?> </span>
                                                     </li>
-                                                    <li>
-                                                        <span class="sale-info"> <?php echo lang("technical_supports_repair_cost"); ?> <i class="fa fa-img-down"></i></span>
-                                                        <span class="sale-num">  <?php echo $dataServTecCliente->repair_cost ?></span>
+                                                    <li class="list-group-item ">
+                                                        <span class="sale-info" style="font-weight: 700;"> <?php echo lang("technical_supports_repair_cost"); ?> <i class="fa fa-img-down"></i></span>
+                                                        <span class="sale-num">  <?php echo to_currency("{$dataServTecCliente->repair_cost}", "2"); ?> </span>
                                                     </li>
-                                                    <?php $resta=$dataServTecCliente->repair_cost - $abonado; ?>
-                                                    <li>
-                                                        <span class="sale-info"> <?php echo lang("technical_supports_diferencia"); ?> </span>
-                                                        <span class="sale-num"> <?php echo $resta; ?> </span>
+                                                    <li class="list-group-item ">
+                                                        <span class="sale-info" style="font-weight: 700;"> <?php echo lang("technical_supports_repair_mart"); ?> <i class="fa fa-img-down"></i></span>
+                                                        <span class="sale-num">  <?php echo to_currency("{$totalResp}", "2"); ?> </span>
+                                                    </li>
+                                                    <?php 
+                                                    $resta=$dataServTecCliente->repair_cost+$totalResp;  
+                                                    $resta=$resta- $abonado;
+                                                    ?>
+                                                    <li class="list-group-item ">
+                                                        <span class="sale-info" style="font-weight: 700;"> <?php echo lang("technical_supports_diferencia"); ?> </span>
+                                                        <span class="sale-num"> <?php echo to_currency("{$resta}", "2"); ?>  </span>
                                                     </li>
                                                 </ul>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="portlet light box green col-lg-8" style="height: auto;overflow: hidden;">
+                                    <div class="portlet light box green col-lg-7" style="height: auto;overflow: hidden;">
                                         <div class="portlet-title padding">
                                             <div class="caption">
                                                     <i class="fa fa-tablet"></i>
@@ -115,7 +125,7 @@
                                             if($dataServTecCliente->do_have_guarantee==1) {
                                                 echo $dataServTecCliente->date_garantia;
                                             }else{
-                                                echo "Sin garantia";
+                                               echo lang("technical_supports_orden_inf_garant");
                                             }
                                             ?></span>
                                         </li> 
@@ -155,8 +165,15 @@
                                                 </div>
                                             </div>
                                             <?php foreach ($dataRespuesto->result() as $dataRespuesto) {  ?>
-                                                <li class="list-group-item">
+                                                <li class="list-group-item" style="overflow: hidden;height: auto;">
                                                     <span class="name-item-summary"><?php echo $dataRespuesto->name ?></span> 
+                                                </li>
+                                            <?php } ?>
+                                            <?php foreach ($dataRespuestomas->result() as $dataRespuestomas) {  ?>
+                                                <li class="list-group-item" style="overflow: hidden;height: auto;">
+                                                    <div class="green col-lg-8" ><span class="name-item-summary"><?php echo $dataRespuestomas->name ?></span> </div>
+                                                    <div class="green col-lg-1" style="text-align: center;"> <?php echo $dataRespuestomas->respuesto_cantidad; ?> </div>
+                                                    <div class="green col-lg-3" > <?php echo to_currency("{$dataRespuestomas->repuesto_total}", "2"); ?> </div>
                                                 </li>
                                             <?php } ?>
                                         </div>
@@ -185,7 +202,7 @@
                                         <div class="form-group">
                                             <label class="col-lg-12 control-label"><?php echo lang("technical_supports_orden_ret_por"); ?></label>
                                             <div class="col-lg-12">
-                                                <input type="text" value="<?php echo $dataServTecCliente->retirado_por ?>" placeholder="Retirado por" id="nota" name="nota" class="form-control" required>
+                                                <input type="text" value="<?php echo $dataServTecCliente->retirado_por ?>" placeholder="<?php echo lang("technical_supports_orden_ret_por"); ?>" id="nota" name="nota" class="form-control" required>
                                             </div> 
                                         </div>  
                                     </div>

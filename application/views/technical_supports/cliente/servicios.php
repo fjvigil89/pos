@@ -42,7 +42,7 @@
                                             <div class="col-sm-12">
 						<?php //echo form_dropdown('team_type', $teams, $support->type_team, 'id="team_type" class="bs-select form-control "'); ?>
                                                 <select class="bs-select form-control" style="width: 80%;float: left;" data-show-subtext="true" id="team_type" name="team_type" required>
-                                                    <option value="">Seleccione </option>
+                                                    <option value=""><?php echo lang('technical_supports_selec'); ?> </option>
                                                     <?php  
                                                     foreach($tservice->result() as $tservice) {
                                                         ?><option value="<?php echo $tservice->tservicios; ?>"><?php echo $tservice->tservicios; ?> </option><?php
@@ -66,7 +66,7 @@
                                             <div class="col-sm-12">
 						<?php //echo form_dropdown('damage_failure', $fallas_comunes, $support->damage_failure, ' id="damage_failure" class="bs-select form-control select_custom_subcategory"'); ?>
                                                 <select data-placeholder="Choose a Country..."  style="width: 80%;float: left;" class="bs-select form-control chosen-select" id="damage_failure" name="damage_failure"  tabindex="2" required>
-                                                    <option value="">Seleccione </option>
+                                                    <option value=""><?php echo lang('technical_supports_selec'); ?> </option>
                                                     <?php  
                                                     foreach($tfallas->result() as $tfallas) {
                                                         ?><option value="<?php echo $tfallas->tfallas; ?>"><?php echo $tfallas->tfallas; ?> </option><?php
@@ -87,7 +87,7 @@
                                             <div class="col-sm-12">
 						<?php //echo form_dropdown('team_type', $teams, $support->type_team, 'id="team_type" class="bs-select form-control "'); ?>
                                                 <select class="bs-select form-control" style="width: 80%;float: left;" data-show-subtext="true" id="ubi_equipo" name="ubi_equipo">
-                                                    <option value="">No Aplica </option>
+                                                    <option value=""><?php echo lang('technical_supports_selec_napli'); ?> </option>
                                                     <?php  
                                                     foreach($ubiequipos->result() as $ubiequipos) {
                                                         ?><option value="<?php echo $ubiequipos->ubicacion; ?>"><?php echo $ubiequipos->ubicacion; ?> </option><?php
@@ -138,12 +138,8 @@
                                 <div class="col-sm-12">
 				<div class="col-md-6">
 					<div class="form-group">
-						<label class="control-label">
-						<a class="help_config_required tooltips" data-placement="left"
-							   title=""><?php echo lang('technical_supports_marca') ?> </a>
-						
-						</label>
-						<input type="text" class="form-control" 
+						<label class="control-label"><?php echo lang('technical_supports_marca') ?></label>
+						<input type="text" class="form-control"
 							   placeholder="<?php echo lang('technical_supports_marca') ?>" name="marca" id="marca"
 							   value="<?php echo $support->marca ?>">
 					</div>
@@ -342,9 +338,6 @@
 				},
 				last_name: {
 					required: true,
-				},
-				marca:{
-					required: true,
 				}
 			},
 		messages:
@@ -369,9 +362,6 @@
 					required: "Este dato es requerido ",
 				},
 				last_name: {
-					required: "Este dato es requerido ",
-				},
-				marca:{
 					required: "Este dato es requerido ",
 				}
 

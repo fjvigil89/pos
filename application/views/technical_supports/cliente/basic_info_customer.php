@@ -7,7 +7,6 @@
     <label class="<?php echo $required ?> control-label"><?php echo '<a class="help_config_required  tooltips " data-placement="left" title="'.lang("common_first_name_help").'">'.lang('common_first_name').'</a>'.':'?>
         <!--<span class="required">* </span>-->
     </label>
-
         <?php echo form_input(array(
                 'class'=>'form-control form-inps',
                 'name'=>'first_name',
@@ -20,7 +19,6 @@
 <div class="col-sm-3">
 <div class="form-group">
     <?php echo form_label(lang('common_last_name').':', 'last_name',array('class'=>'control-label')); ?>
-
         <?php echo form_input(array(
                 'class'=>'form-control form-inps',
                 'name'=>'last_name',
@@ -49,7 +47,6 @@
 <div class="col-sm-3">
 <div class="form-group">
     <?php echo form_label(lang('common_phone_number').':', 'phone_number',array('class'=>'col-md-3 control-label')); ?>
-
         <?php echo form_input(array(
             'class'=>'form-control form-inps',
             'name'=>'phone_number',
@@ -63,7 +60,6 @@
 <div class="col-sm-4">
 <div class="form-group">
     <?php echo form_label(lang('common_choose_avatar').':', 'avatar',array('class'=>'control-label')); ?>
-
         <?php echo form_upload(array(
             'name'=>'image_id',
             'id'=>'image_id',
@@ -81,7 +77,6 @@
 <?php if($person_info->image_id) {  ?>
     <div class="form-group">
         <?php echo form_label(lang('items_del_image').':', 'del_image',array('class'=>'control-label')); ?>
-
             <div class="md-checkbox-inline">
                 <div class="md-checkbox">
                     <?php echo form_checkbox(array(
@@ -118,7 +113,6 @@
 <div class="col-sm-8">
 <div class="form-group">
     <?php echo form_label(lang('common_address_1').':', 'address_1',array('class'=>'control-label')); ?>
-
         <?php echo form_input(array(
             'class'=>'form-control form-inps',
             'name'=>'address_1',
@@ -130,7 +124,6 @@
 <div class="col-sm-8">
 <div class="form-group">
     <?php echo form_label(lang('common_address_2').':', 'address_2',array('class'=>'control-label')); ?>
-
         <?php echo form_input(array(
             'class'=>'form-control form-inps',
             'name'=>'address_2',
@@ -142,7 +135,6 @@
 <div class="col-sm-8">
 <div class="form-group">
     <?php echo form_label(lang('common_city').':', 'city',array('class'=>'control-label')); ?>
-
         <?php echo form_input(array(
             'class'=>'form-control form-inps',
             'name'=>'city',

@@ -65,7 +65,6 @@
         </ul>
     </div>
 </div>
-
 <div class="portlet light box green">
     <div class="portlet-title padding">
         <div class="caption">

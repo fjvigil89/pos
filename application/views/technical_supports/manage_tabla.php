@@ -60,9 +60,16 @@
                                 <?php /* <a class="btn btn-xs btn-block btn-success"
                                    title="<?php echo lang($controller_name . '_entregar') ?>"
                                    href="<?php echo site_url() ?>/<?php echo $controller_name . "/repair/" . $servicios->Id_support ?>"> */ ?>
-                                <a class="btn btn-xs btn-block btn-success" href="javascript:void(0);" title="<?php echo lang($controller_name . '_entregar') ?>" onclick="controler('<?php echo site_url() ?>/technical_supports/detalles_serv_tecnico/','hc=<?php echo $servicios->Id_support; ?>','ventanaVer','');"> 
-                                        <i class="fa fa-edit"></i><?php echo lang('technical_supports_entregar') ?>
+                                <div class="col-lg-6">
+                                <a class="btn btn-xs btn-block btn-success" href="javascript:void(0);" title="<?php echo lang($controller_name . '_entregar') ?>" onclick="controler('<?php echo site_url() ?>/technical_supports/carritoServicio/','hc=<?php echo $servicios->Id_support; ?>','ventanaVer','');"> 
+                                    <i class="fa fa-shopping-cart"></i>
                                 </a>
+                                </div>
+                                <div class="col-lg-6">
+                                <a class="btn btn-xs btn-block btn-success " href="javascript:void(0);" title="<?php echo lang($controller_name . '_entregar') ?>" onclick="controler('<?php echo site_url() ?>/technical_supports/detalles_serv_tecnico/','hc=<?php echo $servicios->Id_support; ?>','ventanaVer','');"> 
+                                        <i class="fa fa-edit" ></i>
+                                </a>
+                                </div>
                         <?php } elseif ($servicios->state == "") { ?>
                                 <a href="javascript:void(0)"></a>
                         <?php }if ($servicios->state == "ENTREGADO") { ?> 

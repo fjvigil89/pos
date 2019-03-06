@@ -12,8 +12,7 @@
 		<img src="<?php echo site_url() ?>/app_files/view/<?php echo $result->image_id ?>"
 			 class="img-responsive" alt="profile-photo" ></div>
             <?php }  else { ?>
-            <img src="assets/template/images/perfil.JPG"
-			 class="img-responsive" alt="photo" ></div>
+            <img src="assets/template/images/perfil.JPG"  class="img-responsive" alt="photo" ></div>
                          <?php
            } ?>
 	 
@@ -24,12 +23,10 @@
 	<div class="profile-usermenu">
             <ul class="nav">
                 <li>
-                        <a href="javascript:void(0)">
-                                <i class="fa fa-inbox"></i> <?php echo $result->email ?></a>
+                    <a href="javascript:void(0)"> <i class="fa fa-inbox"></i> <?php echo $result->email ?></a>
                 </li>
                 <li>
-                        <a href="javascript:void(0)">
-                                <i class="fa fa-mobile-phone"></i> <?php echo $result->phone_number ?></a>
+                    <a href="javascript:void(0)"> <i class="fa fa-mobile-phone"></i> <?php echo $result->phone_number ?></a>
                 </li>
             </ul>
 	</div>

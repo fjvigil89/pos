@@ -6,23 +6,8 @@
 	<h1>
 		<i class="icon fa fa-wrench"></i>
 		<?php echo lang('module_' . $controller_name); ?> 
-                <?php 
-                    $extra="";
-					$url_video_ver="https://www.youtube.com/watch?v=SzJnORvT2vY&feature=youtu.be";
-					if($this->Appconfig->es_franquicia()){
-						$url_video=	$this->Appconfig->get_video("SERVICIO TÉCNICO");
-						if($url_video!=null){
-							$url_video_ver=$url_video;
-							
-						}else{
-							$extra=" style='display: none; '";
-						}
-					}
-					$a_video= '<a target="_blank" href="'.$url_video_ver.'" '.$extra.' class="icon fa fa-youtube-play help_button" ></a>';
-					echo $a_video;
-				
-				?>
-	</h1> 
+                <a target="_blank" href="https://www.youtube.com/watch?v=SzJnORvT2vY&feature=youtu.be" class="icon fa fa-youtube-play help_button" id='maxitems' ></a>
+	</h1>
 </div>
 <!-- END PAGE TITLE -->
 </div>

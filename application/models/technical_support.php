@@ -229,6 +229,11 @@ phppos_people p ON c.person_id=p.person_id WHERE Id_support='$id_equipo'");
         $query=$this->db->get();
         return  $query;
     }
+    function det_spare_part_all_by_id_order_respuesto($id_support)
+	{       
+            $query = $this->db->query("SELECT it.name,it.item_number, resp.repuesto_total, resp.respuesto_cantidad FROM phppos_technical_support_repuestos_persona resp, phppos_items it WHERE resp.repuesto_support='$id_support' AND it.item_id=resp.repuesto_item");   
+            return  $query;
+    }
     function delete_by_id($id_support)
 	{
       	
@@ -602,5 +607,30 @@ phppos_people p ON c.person_id=p.person_id WHERE Id_support='$id_equipo'");
 			return $person_obj;
 		}
 	}
+        function get_fallas($tipo) {
+        $reportFalla=$this->db->query("SELECT Distinct damage_failure 
+        FROM phppos_technical_supports
+        WHERE state='$tipo' Order By damage_failure"); 
+         return $reportFalla;
+        } 
+        function get_servicio_tipo($tipo) {
+        $reportServ=$this->db->query("SELECT Distinct type_team 
+        FROM phppos_technical_supports
+        WHERE state='$tipo' Order By type_team"); 
+         return $reportServ;
+        } 
+        function get_tecnicos($tipo) { 
+        $reportTecnico=$this->db->query("SELECT Distinct peo.last_name, peo.first_name, tec.id_technical
+        FROM phppos_technical_supports tec, phppos_people peo 
+        WHERE tec.state='$tipo' and peo.person_id=tec.id_technical Order By peo.last_name"); 
+         return $reportTecnico;
+        } 
+        function get_tecnicos_total($tipo) { 
+        $reportFallat=$this->db->query("SELECT *
+        FROM phppos_technical_supports
+        WHERE state='$tipo'"); 
+         return $reportFallat;
+        }  
+        
 }
 ?>
