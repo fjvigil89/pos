@@ -6,13 +6,13 @@ class technical_support extends CI_Model
 	{
 		$current_location = $this->Employee->get_logged_in_employee_current_location_id();
                 if($status==""){
-                    $query = $this->db->query("SELECT su.Id_support, p.first_name, p.last_name, su.model, su.type_team, su.state, su.ubi_equipo FROM phppos_technical_supports su 
+                    $query = $this->db->query("SELECT su.Id_support, p.first_name, p.last_name, su.model, su.type_team, su.state, su.ubi_equipo,su.date_register FROM phppos_technical_supports su 
                     INNER JOIN phppos_customers c ON su.id_customer=c.person_id 
                     INNER JOIN phppos_people p ON c.person_id=p.person_id 
                     WHERE su.state<>'ENTREGADO' AND su.state<>'RETIRADO' and id_location='$current_location'");
                 }
                 if($status!=""){
-                    $query = $this->db->query("SELECT su.Id_support, p.first_name, p.last_name, su.model, su.type_team, su.state, su.ubi_equipo FROM phppos_technical_supports su 
+                    $query = $this->db->query("SELECT su.Id_support, p.first_name, p.last_name, su.model, su.type_team, su.state, su.ubi_equipo,su.date_register FROM phppos_technical_supports su 
                     INNER JOIN phppos_customers c ON su.id_customer=c.person_id 
                     INNER JOIN phppos_people p ON c.person_id=p.person_id 
                     WHERE su.state<>'ENTREGADO' AND su.state<>'RETIRADO' and su.state=$status and id_location='$current_location'");
@@ -22,7 +22,7 @@ class technical_support extends CI_Model
         function lista_servicios_total_entregado($status)
 	{
 		$current_location = $this->Employee->get_logged_in_employee_current_location_id(); 
-                    $query = $this->db->query("SELECT su.Id_support, p.first_name, p.last_name, su.model, su.type_team, su.state FROM phppos_technical_supports su 
+                    $query = $this->db->query("SELECT su.Id_support, p.first_name, p.last_name, su.model, su.type_team, su.state,su.date_register FROM phppos_technical_supports su 
                     INNER JOIN phppos_customers c ON su.id_customer=c.person_id 
                     INNER JOIN phppos_people p ON c.person_id=p.person_id 
                     WHERE (su.state='$status' OR su.state='RETIRADO') and id_location='$current_location'");
@@ -520,8 +520,9 @@ phppos_people p ON c.person_id=p.person_id WHERE Id_support='$id_equipo'");
          return $reportServAbon;
     }
     function updat_status_serv_tec_cliente($idSupport,$data){ 
+        $now= date('Y-m-d H:i:s');
         $this->db->where('Id_support', $idSupport);
-        $this->db->update('phppos_technical_supports', array('state' => 'ENTREGADO','retirado_por'=>$data[nota],'date_entregado' => 'Now()'));
+        $this->db->update('phppos_technical_supports', array('state' => 'ENTREGADO','retirado_por'=>$data["nota"],'date_entregado' => $now));
     }
     public function buscar_servicios($searchword,$q) { 
         $current_location = $this->Employee->get_logged_in_employee_current_location_id();
@@ -601,6 +602,11 @@ phppos_people p ON c.person_id=p.person_id WHERE Id_support='$id_equipo'");
 			
 			return $person_obj;
 		}
-	}
+    }
+    function det_spare_part_all_by_id_order_respuesto($id_support)
+	{       
+            $query = $this->db->query("SELECT it.name,it.item_number, resp.repuesto_total, resp.respuesto_cantidad FROM phppos_technical_support_repuestos_persona resp, phppos_items it WHERE resp.repuesto_support='$id_support' AND it.item_id=resp.repuesto_item");   
+            return  $query;
+    }
 }
 ?>

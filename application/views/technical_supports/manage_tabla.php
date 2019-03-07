@@ -1,7 +1,8 @@
 <table class="table table-bordered" id="table-suppor">
     <thead>
     <tr>
-        <th style="width: 5%;"><?php echo lang("technical_supports_order_n"); ?></th>
+        <th style="width: 6%;"><?php echo lang("technical_supports_order_n"); ?></th>
+        <th ><?php echo lang("sales_date"); ?></th>
         <th style="width: 20%;"><?php echo lang("technical_supports_customer"); ?></th>
         <th style="width: 15%;"><?php echo lang("technical_supports_model"); ?></th>
         <th><?php echo lang("technical_supports_type"); ?></th>
@@ -20,6 +21,8 @@
         if ($servicios->state == "RECHAZADO") { $color="red-flamingo"; $bgcolor="#F8E9E8"; } if ($servicios->state == "REPARADO") { $color="green"; $bgcolor="#DFF4DE"; } if ($servicios->state == "RECIBIDO") { $color="blue"; } if ($servicios->state == "DIAGNOSTICADO") { $color="blue-dark"; $bgcolor="#D7EBF3"; } if ($servicios->state == "APROBADO") { $color="blue-dark"; $bgcolor="#E6F0F4"; } ?>
             <tr class="text-center" style="font-weight: 600; background: <?php echo $bgcolor; ?>">
                 <td><?php echo $servicios->Id_support; ?></td>
+                <td><?php echo  date(get_date_format().' '.get_time_format(), strtotime($servicios->date_register)) ; ?></td>
+
                 <td class="text-left"><?php echo $servicios->first_name . " " . $servicios->last_name; ?></td>
                 <td><?php echo $servicios->model; ?></td>
                 <td><?php echo $servicios->type_team; ?></td>
