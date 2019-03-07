@@ -25,6 +25,7 @@ class Template_model extends CI_Model
         $this->bd->select('*');
         $this->bd->from('items');
         $this->bd->join('app_files', 'items.image_id = app_files.file_id', 'left');
+        $this->bd->where('phppos_items.deleted',0);
         return $this->bd->get()->result(); 
         
 	}

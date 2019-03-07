@@ -1132,7 +1132,7 @@ class Sales extends Secure_area
 		$data["show_return_policy_credit"]= ($this->config->item('show_return_policy_credit')==1 and $data['balance']!=0);
 		$data["another_currency"]= $this->sale_lib->get_pagar_otra_moneda();
 		$data["currency"]=$data["another_currency"]==0?null:$this->sale_lib->get_currency();
-		$data["total_other_currency"]=$data["another_currency"]==0?null:($data['total']/(double) $this->sale_lib->get_equivalencia_divisa());
+		$data["total_other_currency"]=$data["another_currency"]==0?null:((double)$data['total']/(double) $this->sale_lib->get_equivalencia_divisa());
 		$overwrite_tax= $this->sale_lib->get_overwrite_tax();
 		$new_tax= $this->sale_lib->get_new_tax();
 		$data["overwrite_tax"]= $overwrite_tax;
@@ -1858,9 +1858,10 @@ class Sales extends Secure_area
 		}
 	}
 	function set_otra_moneda(){
-		$this->sale_lib->set_moneda_numero($this->input->post('moneda_numero'));
-		$this->sale_lib->set_currency($this->config->item("moneda".$this->input->post('moneda_numero')));
-		$this->sale_lib->set_equivalencia_divisa($this->config->item("equivalencia".$this->input->post('moneda_numero')));
+		$numero=$this->input->post('moneda_numero');
+		$this->sale_lib->set_moneda_numero($numero);
+		$this->sale_lib->set_currency($this->config->item("moneda".$numero));
+		$this->sale_lib->set_equivalencia_divisa($this->config->item("equivalencia".$numero));
 		$this->sale_lib->set_pagar_otra_moneda($this->input->post('otra_moneda'));
 	}
 

@@ -54,7 +54,7 @@ class Template extends CI_Controller{
         //desde aquí también podemos setear el título
         $this->template->write('title',$data['shop'], TRUE);
         $this->template->write('description',$data['shop_description'], TRUE);
-        //obtenemos los usuarios
+        //obtenemos los usuarios 
         
         
         //el contenido de nuestro formulario estará en views/registro/formulario_registro,

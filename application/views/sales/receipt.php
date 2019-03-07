@@ -437,7 +437,7 @@
 							<strong>Total en <?php echo $currency ?>:</strong>
 						</td>
 						<td class="right_text_align" colspan="2" >
-							<?php echo  to_currency($total_other_currency,4); ?>
+							<?php echo  to_currency_no_money($total_other_currency,4); ?>
 							
 						</td>
 					</tr>
