@@ -173,7 +173,7 @@
 
 	<script type="text/javascript" language="javascript">
         var JS_DATE_FORMAT = 'YYYY-MM-DD';
-		var JS_TIME_FORMAT = "H:mm";
+		var JS_TIME_FORMAT = "H:mm:s";
 
 		$('#start_date').datetimepicker({
 			format: JS_DATE_FORMAT+" "+JS_TIME_FORMAT,

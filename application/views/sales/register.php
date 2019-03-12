@@ -1375,12 +1375,16 @@
 											</div>
 											
 										</div>
-										<?php if($this->config->item('activar_pago_segunda_moneda')==1){?>
+										<?php if($this->config->item('activar_pago_segunda_moneda')==1){
+											$moneda1= $this->config->item('moneda1');
+											$moneda2=$this->config->item('moneda2');
+											$moneda3=$this->config->item('moneda3');
+											?>
 											<?= lang("sales_pay")?>
-											 <input type="radio" name="otra_moneda" abreviatura="<?php echo $this->config->item('moneda1')?>" equivalencia ="<?php echo $this->config->item('equivalencia1')?>" id="otra_moneda1" value="1" <?php echo ($pagar_otra_moneda and $moneda_numero==1)? "checked" :"" ?>> <strong> <?php echo $this->config->item('moneda1')?></strong> - 
-											 <input type="radio" name="otra_moneda" abreviatura="<?php echo $this->config->item('moneda2')?>" equivalencia ="<?php echo $this->config->item('equivalencia2')?>" id="otra_moneda2" value="2" <?php echo ($pagar_otra_moneda and $moneda_numero==2) ? "checked" :"" ?>> <strong> <?php echo $this->config->item('moneda2')?></strong> - 
-											 <input type="radio" name="otra_moneda" abreviatura="<?php echo $this->config->item('moneda3')?>" equivalencia ="<?php echo $this->config->item('equivalencia3')?>" id="otra_moneda3" value="3" <?php echo ($pagar_otra_moneda and $moneda_numero==3) ? "checked" :"" ?>> <strong> <?php echo $this->config->item('moneda3')?></strong> - 
-											 <input type="radio" name="otra_moneda" abreviatura="1" equivalencia ="1" id="otra_moneda0" value="0" <?php echo  $moneda_numero==0 ? "checked" :"" ?>> <strong>Default</strong><br>
+											 <input type="radio" name="otra_moneda" abreviatura="<?php echo $this->config->item('moneda1')?>" equivalencia ="<?php echo $this->config->item('equivalencia1')?>" id="otra_moneda1" value="1" <?php echo ($pagar_otra_moneda and ($moneda_numero==1 or $currency==$moneda1))? "checked" :"" ?>> <strong> <?php echo $moneda1;?></strong> - 
+											 <input type="radio" name="otra_moneda" abreviatura="<?php echo $this->config->item('moneda2')?>" equivalencia ="<?php echo $this->config->item('equivalencia2')?>" id="otra_moneda2" value="2" <?php echo ($pagar_otra_moneda and ($moneda_numero==2 or $currency==$moneda2)) ? "checked" :"" ?>> <strong> <?php echo $moneda2;?></strong> - 
+											 <input type="radio" name="otra_moneda" abreviatura="<?php echo $this->config->item('moneda3')?>" equivalencia ="<?php echo $this->config->item('equivalencia3')?>" id="otra_moneda3" value="3" <?php echo ($pagar_otra_moneda and ($moneda_numero==3 or $currency==$moneda3)) ? "checked" :"" ?>> <strong> <?php echo $moneda3;?></strong> - 
+											 <input type="radio" name="otra_moneda" abreviatura="0" equivalencia ="1" id="otra_moneda0" value="0" <?php echo  ($pagar_otra_moneda==0 and $moneda_numero==0) ? "checked" :"" ?>> <strong>Default</strong><br>
 
 										<?php }?>
 

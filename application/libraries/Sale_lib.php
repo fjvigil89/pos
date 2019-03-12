@@ -1472,7 +1472,7 @@ class Sale_lib
 		$this->set_divisa($this->CI->Sale->get_divisa($sale_id));
 		$this->set_currency($sale_info->currency);
 		if($sale_info->currency!=null){
-			$this->set_moneda_numero(1);
+			$this->set_pagar_otra_moneda(1);
 		}
 		$this->set_opcion_sale($this->CI->Sale->get_opcion_sale($sale_id));
 		$this->set_pagar_otra_moneda($this->CI->Sale->get_otra_moneda($sale_id));

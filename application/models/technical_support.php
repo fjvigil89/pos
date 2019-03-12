@@ -6,13 +6,13 @@ class technical_support extends CI_Model
 	{
 		$current_location = $this->Employee->get_logged_in_employee_current_location_id();
                 if($status==""){
-                    $query = $this->db->query("SELECT su.Id_support, p.first_name, p.last_name, su.model, su.type_team, su.state, su.ubi_equipo FROM phppos_technical_supports su 
+                    $query = $this->db->query("SELECT su.Id_support, p.first_name, p.last_name, su.model, su.type_team, su.state, su.ubi_equipo,su.date_register FROM phppos_technical_supports su 
                     INNER JOIN phppos_customers c ON su.id_customer=c.person_id 
                     INNER JOIN phppos_people p ON c.person_id=p.person_id 
                     WHERE su.state<>'ENTREGADO' AND su.state<>'RETIRADO' and id_location='$current_location'");
                 }
                 if($status!=""){
-                    $query = $this->db->query("SELECT su.Id_support, p.first_name, p.last_name, su.model, su.type_team, su.state, su.ubi_equipo FROM phppos_technical_supports su 
+                    $query = $this->db->query("SELECT su.Id_support, p.first_name, p.last_name, su.model, su.type_team, su.state, su.ubi_equipo,su.date_register FROM phppos_technical_supports su 
                     INNER JOIN phppos_customers c ON su.id_customer=c.person_id 
                     INNER JOIN phppos_people p ON c.person_id=p.person_id 
                     WHERE su.state<>'ENTREGADO' AND su.state<>'RETIRADO' and su.state=$status and id_location='$current_location'");
@@ -22,7 +22,7 @@ class technical_support extends CI_Model
         function lista_servicios_total_entregado($status)
 	{
 		$current_location = $this->Employee->get_logged_in_employee_current_location_id(); 
-                    $query = $this->db->query("SELECT su.Id_support, p.first_name, p.last_name, su.model, su.type_team, su.state FROM phppos_technical_supports su 
+                    $query = $this->db->query("SELECT su.Id_support, p.first_name, p.last_name, su.model, su.type_team, su.state,su.date_register FROM phppos_technical_supports su 
                     INNER JOIN phppos_customers c ON su.id_customer=c.person_id 
                     INNER JOIN phppos_people p ON c.person_id=p.person_id 
                     WHERE (su.state='$status' OR su.state='RETIRADO') and id_location='$current_location'");
@@ -525,8 +525,9 @@ phppos_people p ON c.person_id=p.person_id WHERE Id_support='$id_equipo'");
          return $reportServAbon;
     }
     function updat_status_serv_tec_cliente($idSupport,$data){ 
+        $now= date('Y-m-d H:i:s');
         $this->db->where('Id_support', $idSupport);
-        $this->db->update('phppos_technical_supports', array('state' => 'ENTREGADO','retirado_por'=>$data[nota],'date_entregado' => 'Now()'));
+        $this->db->update('phppos_technical_supports', array('state' => 'ENTREGADO','retirado_por'=>$data["nota"],'date_entregado' => $now));
     }
     public function buscar_servicios($searchword,$q) { 
         $current_location = $this->Employee->get_logged_in_employee_current_location_id();
@@ -607,30 +608,31 @@ phppos_people p ON c.person_id=p.person_id WHERE Id_support='$id_equipo'");
 			return $person_obj;
 		}
 	}
-        function get_fallas($tipo) {
+    function get_fallas($tipo) {
         $reportFalla=$this->db->query("SELECT Distinct damage_failure 
         FROM phppos_technical_supports
         WHERE state='$tipo' Order By damage_failure"); 
          return $reportFalla;
-        } 
-        function get_servicio_tipo($tipo) {
+    } 
+    function get_servicio_tipo($tipo) {
         $reportServ=$this->db->query("SELECT Distinct type_team 
         FROM phppos_technical_supports
         WHERE state='$tipo' Order By type_team"); 
          return $reportServ;
-        } 
-        function get_tecnicos($tipo) { 
-        $reportTecnico=$this->db->query("SELECT Distinct peo.last_name, peo.first_name, tec.id_technical
+    } 
+    function get_tecnicos($tipo) { 
+       $reportTecnico=$this->db->query("SELECT Distinct peo.last_name, peo.first_name, tec.id_technical
         FROM phppos_technical_supports tec, phppos_people peo 
         WHERE tec.state='$tipo' and peo.person_id=tec.id_technical Order By peo.last_name"); 
          return $reportTecnico;
-        } 
-        function get_tecnicos_total($tipo) { 
+    } 
+    function get_tecnicos_total($tipo) { 
         $reportFallat=$this->db->query("SELECT *
         FROM phppos_technical_supports
         WHERE state='$tipo'"); 
          return $reportFallat;
-        }  
+    } 
         
+   
 }
 ?>
