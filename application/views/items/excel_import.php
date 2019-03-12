@@ -109,6 +109,7 @@
 						if(!response.success)
 						{ 
 							toastr.error(response.message, <?php echo json_encode(lang('common_error')); ?>);
+							console.error("Error => "+response.erro_mysql)
 						}
 						else
 						{

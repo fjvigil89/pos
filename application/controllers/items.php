@@ -1505,13 +1505,14 @@ class Items extends Secure_area implements iData_controller
                         }
                     } else //insert or update item failure
                     {
-                        echo json_encode(array('success' => false, 'message' => lang('items_duplicate_item_ids')));
+                        $error_mysql= $this->db->_error_message();
+                        echo json_encode(array('success' => false, 'message' => lang('items_duplicate_item_ids'),"erro_mysql"=>$error_mysql));
                         return;
                     }
                 }
             } else {
-
-                echo json_encode(array('success' => false, 'message' => lang('common_upload_file_not_supported_format')));
+                $error_mysql= $this->db->_error_message();
+                echo json_encode(array('success' => false, 'message' => lang('common_upload_file_not_supported_format'),"erro_mysql"=>$error_mysql));
                 return;
             }
         }
