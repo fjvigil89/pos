@@ -2,7 +2,7 @@
 
 class Carrito_Lib
 {
-	protected $ci;
+	protected $CI;
 	public $carrito = array();
 	protected $iva_total = 0;
 	protected $subtotal = 0;
@@ -10,33 +10,33 @@ class Carrito_Lib
 
 	function __construct()
 	{
-		$this->ci =& get_instance();
-		$this->ci->load->model('CarritoModel');
+		$this->CI =& get_instance();
+		$this->CI->load->model('CarritoModel');
 	}
 
 	public function getItem($item)
 	{
-		return $this->ci->CarritoModel->obtenerItems("$item");
+		return $this->CI->CarritoModel->obtenerItems("$item");
 	}
 
 	public function getItemsTaxes($item)
 	{
-		return $this->ci->CarritoModel->obtenerItemsTaxes("$item");
+		return $this->CI->CarritoModel->obtenerItemsTaxes("$item");
 	}
 
 	public function getItemsLocationTaxes($item, $location)
 	{
-		return $this->ci->CarritoModel->obtenerItemsLocationTaxes("$item", "$location");
+		return $this->CI->CarritoModel->obtenerItemsLocationTaxes("$item", "$location");
 	}
 
 	public function getLocationPrincipal($location)
 	{
-		return $this->ci->CarritoModel->obtenerItemsLocationPrincipal("$location");
+		return $this->CI->CarritoModel->obtenerItemsLocationPrincipal("$location");
 	}
 
 	public function getConfig()
 	{
-		return $this->ci->CarritoModel->obtenerConfig();
+		return $this->CI->CarritoModel->obtenerConfig();
 	}
 
 	public function getIvaConfig()
@@ -262,20 +262,182 @@ class Carrito_Lib
 		unset($this->carrito["subtotal_total"]);
 		return $this->carrito == null ? null : $this->carrito;
 	}
+	function add_item($item_id,$quantity=1,$discount=0,$price=null,$description=null,$serialnumber=null, $force_add = FALSE, $line = FALSE,$custom1_subcategory=null,$custom2_subcategory=null,
+	$id_tier=0,$iva=null){
+		$store_account_item_id = $this->CI->Item->get_store_account_item_id();
+		
+		//Do NOT allow item to get added unless in store_account_payment mode
+		if ( $store_account_item_id == $item_id)
+		{
+			return FALSE;
+		}
+		$iva_total=0;
+		$location = $this->CI->Employee->get_logged_in_employee_current_location_id();
+		$item_info = $this->CI->Item->get_info($item_id);
 
+		if ($this->getIvaConfig()) {
+			$iva = $this->getIvaConfig();
+			$iva_total = $iva[0] + $iva[1] + $iva[2] + $iva[3] + $iva[4];
+		}
+
+		if ($this->getIvaTiendaPrincipal("$location")) {
+			$iva = $this->getIvaTiendaPrincipal("$location");
+			$iva_total = $iva[0] + $iva[1] + $iva[2] + $iva[3] + $iva[4];
+		}
+
+		if ($this->getIvaTiendita("$item_id", "$location")) {
+			$iva = $this->getIvaTiendita("$item_id", "$location");
+			$iva_total = $iva[0] + $iva[1] + $iva[2] + $iva[3] + $iva[4];
+		}
+
+		if ($this->getIvaItem("$item_id")) {
+			$iva = $this->getIvaItem("$item_id");
+			$iva_total = $iva[0] + $iva[1] + $iva[2] + $iva[3] + $iva[4];
+		}
+		$items = $this->get_cart();
+        $maxkey=0;                       //Highest key so far
+        $itemalreadyinsale=FALSE;        //We did not find the item yet.
+		$insertkey=0;                    //Key to use for new entry.
+		$updatekey=0;                    //Key to use to update(quantity)
+
+		foreach ($items as $item)
+		{
+            //We primed the loop so maxkey is 0 the first time.
+			//Also, we have stored the key in the element itself so we can compare.
+			// cuano en configuracion no esta la subcategoria activa custom1_subcategory custom2_subcategory serán null
+
+			if($maxkey <= $item['line'])
+			{
+				$maxkey = $item['line'];
+			}
+			
+			if(isset($item['item_id']) && $item['item_id']==$item_id &&  $item['custom1_subcategory']== $custom1_subcategory && $item['custom2_subcategory']== $custom2_subcategory )
+			{
+				
+				$itemalreadyinsale=TRUE;
+				$updatekey=$item['line'];
+				
+			}
+			
+		}
+
+		$insertkey=$maxkey+1;
+		if($this->CI->config->item("subcategory_of_items")==1 and $this->CI->config->item("inhabilitar_subcategory1")==1 and $custom1_subcategory==null){
+
+			$custom1_subcategory="»";
+		}
+
+	
+		$precio_con_iva =($price!=null ? $price:$item_info->unit_price) * (1 + ($iva_total / 100));
+		//array/cart records are identified by $insertkey and item_id is just another field.
+		$item = array(($line === FALSE ? $insertkey : $line)=>
+			array(
+				'item_id'=>$item_id,
+				'line'=>$line === FALSE ? $insertkey : $line,
+				'name'=>$item_info->name,
+				'size' => $item_info->size,
+				'model'=>$item_info->model,
+				'colour'=>$item_info->colour,
+				'marca'=>$item_info->marca,
+				'unit'=>$item_info->unit,
+				'product_id' => $item_info->product_id,
+				'description'=>$description!=null ? $description: $item_info->description,
+				'serialnumber'=>$serialnumber!=null ? $serialnumber: '',
+				'allow_alt_description'=>$item_info->allow_alt_description,
+				'is_serialized'=>$item_info->is_serialized,
+				'quantity'=>$quantity,
+				'item_number'=>$item_info->item_number,
+				'discount'=>$discount,
+				'custom1_subcategory'=>$custom1_subcategory,
+				'custom2_subcategory'=>$custom2_subcategory,
+				'price'=>$price!=null ? $price:$item_info->unit_price,
+				'has_subcategory'=>$item_info->subcategory,
+				"id_tier"=>$id_tier,
+				"numero_cuenta"=>null,
+				"numero_documento"=>null,
+				"titular_cuenta"=>null,
+				"tipo_documento"=> null,
+				"tasa"=>null,
+				"transaction_status"=>null,
+				"comentarios"=>null,
+				"fecha_estado"=>null,
+				"tipo_cuenta"=>null,
+				"observaciones"=>null,
+				"celular"=>null,
+				'iva_uno' => $iva[0],
+				'iva_dos' => $iva[1],
+				'iva_tres' => $iva[2],
+				'iva_cuatro' => $iva[3],
+				'iva_cinco' => $iva[4],
+				'precio_con_iva' => $precio_con_iva,
+				'subtotal' => $quantity* ($price!=null ? $price:$item_info->unit_price),
+				'total' => $quantity * $precio_con_iva
+
+				)
+			);
+		//Item already exists and is not serialized, add to quantity
+		if($itemalreadyinsale && ($item_info->is_serialized ==0) )
+		{	
+			$_line=($line === FALSE ? $updatekey : $line);
+			$new_quantity= $items[$_line]['quantity']+=$quantity;		
+			$items[$_line]['quantity']=$new_quantity;
+			$items[$_line]["subtotal"]=  $new_quantity* ($price!=null ? $price:$item_info->unit_price);
+			$items[$_line]["total"]= $new_quantity * $precio_con_iva;
+		}
+		else
+		{
+			//add to existing array
+			$items+=$item;
+		}
+		
+		if( $this->CI->config->item('sales_stock_inventory') and $this->out_of_stock($item_id) )
+		{
+			$items=$this->get_cart();
+		}
+		$this->set_cart($items);
+		return true;
+	}
+	function get_cart()
+	{
+		if($this->CI->session->userdata('cart_servicio') === false)
+			$this->set_cart(array());
+
+		return $this->CI->session->userdata('cart_servicio');
+	}
+
+	function set_cart($cart_data)
+	{
+		$this->CI->session->set_userdata('cart_servicio',$cart_data);
+	}
 	public function getPrecioSubtotal()
 	{
-		return $this->carrito["subtotal_total"] ? $this->carrito["subtotal_total"] : 0;
+		//return $this->carrito["subtotal_total"] ? $this->carrito["subtotal_total"] : 0;
+		$subtotal_total=0;
+		foreach ($this->get_cart() as $item) {
+			$subtotal_total+=$item["subtotal"];
+		}
+		return $subtotal_total;		
 	}
 
 	public function getPrecioTotal()
 	{
-		return $this->carrito["precio_total"] ? $this->carrito["precio_total"] : 0;
+		$precio_total=0;
+		foreach ($this->get_cart() as $item) {
+			$precio_total+=$item["total"];
+		}
+		return $precio_total;
+		//return $this->carrito["precio_total"] ? $this->carrito["precio_total"] : 0;
 	}
 
 	public function getArticulosTotal()
 	{
-		return $this->carrito["articulos_total"] ? $this->carrito["articulos_total"] : 0;
+		$articulos_total=0;
+		foreach ($this->get_cart() as $item) {
+			$articulos_total+=$item["quantity"];
+		}
+		return $articulos_total;
+		
+		//return $this->carrito["articulos_total"] ? $this->carrito["articulos_total"] : 0;
 	}
 
 	public function updateCantidad($item, $cantidad, $location, $carrito)
@@ -357,7 +519,7 @@ class Carrito_Lib
 	{
 
 		$iva_total = 0;
-		$location = $this->ci->Employee->get_logged_in_employee_current_location_id();
+		$location = $this->CI->Employee->get_logged_in_employee_current_location_id();
 
 		$carrito = $this->getContenidoCarrito();
 
@@ -443,7 +605,7 @@ class Carrito_Lib
 
 	public function getRepuestos($id_support)
 	{
-		return $this->ci->CarritoModel->getRespuestos($id_support);
+		return $this->CI->CarritoModel->getRespuestos($id_support);
 	}
 
 	public function agregarItemCarrito($carrito = 'carrito')
@@ -493,16 +655,16 @@ class Carrito_Lib
 
 	public function getPagos()
 	{
-		if ($this->ci->session->userdata('pagos_servicio')) {
-			return $this->ci->session->userdata('pagos_servicio');
+		if ($this->CI->session->userdata('pagos_servicio')) {
+			return $this->CI->session->userdata('pagos_servicio');
 		} else {
-			$this->ci->session->set_userdata('pagos_servicio', null);			
+			$this->CI->session->set_userdata('pagos_servicio', null);			
 		}
 	}
 
 	public function setPago($payment_type, $payment_amount)
 	{
-		$this->ci->session->userdata('pagos_servicio');
+		$this->CI->session->userdata('pagos_servicio');
 
 		$payments_data = $this->getPagos();
 
@@ -516,7 +678,7 @@ class Carrito_Lib
 
 		$payments_data[] = $payment;
 		
-		$this->ci->session->set_userdata('pagos_servicio', $payments_data);
+		$this->CI->session->set_userdata('pagos_servicio', $payments_data);
 
 		return true;
 	}
@@ -533,7 +695,7 @@ class Carrito_Lib
 		} else {
 			unset($payments[$payment_ids]);			
 		}
-		$this->ci->session->set_userdata('pagos_servicio', array_values($payments));			
+		$this->CI->session->set_userdata('pagos_servicio', array_values($payments));			
 	}
 
 	public function destroy($carrito)
@@ -573,7 +735,7 @@ class Carrito_Lib
 				$data = [];
 				$iva = [];
 
-				$location = $this->ci->Employee->get_logged_in_employee_current_location_id();
+				$location = $this->CI->Employee->get_logged_in_employee_current_location_id();
 
 				$row_location_principal = $this->getLocationPrincipal("$location");
 
@@ -644,7 +806,7 @@ class Carrito_Lib
 				$data = [];
 				$iva = [];
 
-				$location = $this->ci->Employee->get_logged_in_employee_current_location_id();
+				$location = $this->CI->Employee->get_logged_in_employee_current_location_id();
 
 				$row_location_principal = $this->getLocationPrincipal("$location");
 
@@ -725,7 +887,7 @@ class Carrito_Lib
 		$data = [];
 		$iva = [];
 
-		$location = $this->ci->Employee->get_logged_in_employee_current_location_id();
+		$location = $this->CI->Employee->get_logged_in_employee_current_location_id();
 
 		$row_location_principal = $this->getLocationPrincipal("$location");
 
