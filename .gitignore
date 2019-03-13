@@ -88,19 +88,15 @@ application/views/reports/detailed_payment.php
 application/views/reports/employees_date_input_excel_export.php
 application/views/reports/employees_date_input.php
 application/views/reports/tabular_details.php
-<<<<<<< HEAD
 application/views/reports/tabular_details.php
 #application/views/reports/tabular_movement.php
 application/views/reports/tabular.php
-<<<<<<< HEAD
-=======
->>>>>>> yonnel01
 application/views/reports/profit_and_loss_details.php
 application/views/reports/profit_and_loss_summary.php
-=======
+
 #application/views/reports/profit_and_loss_details.php
 #application/views/reports/profit_and_loss_summary.php
->>>>>>> angel02
+
 application/views/reports/sales_generator_tabular_details.php
 application/views/reports/store_account_statements.php
 application/models/reports/detailed_commissions.php
@@ -129,7 +125,7 @@ application/views/item_kits/manage.php
 #application/views/registers_movement/receipt.php
 
 #--movimiento de caja-------
-application/controllers/technical_supports.php
+#application/controllers/technical_supports.php
 application/views/registers_movement/technical_supports
 
 #--tendas-------
