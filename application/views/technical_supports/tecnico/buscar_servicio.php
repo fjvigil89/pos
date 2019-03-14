@@ -66,7 +66,7 @@
 <?php 
 if($support->state=="DIAGNOSTICADO" Or $support->state=="APROBADO") { ?>
 <script type="text/javascript"> 
-        $('#asigFallas2').load("<?php echo site_url() ?>/technical_supports/asignar_detalles_falla_tec/","supprt=<?php echo $support->Id_support; ?>");        
+        //$('#asigFallas2').load("<?php echo site_url() ?>/technical_supports/asignar_detalles_falla_tec/","supprt=<?php echo $support->Id_support; ?>");        
 </script>
 <?php } ?>
 

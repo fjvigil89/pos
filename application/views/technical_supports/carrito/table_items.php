@@ -10,12 +10,12 @@
 	</thead>
 	<tbody>
 	<?php if (isset($carrito) and is_array($carrito)): ?>
-		<?php foreach ($carrito as $row): ?>
+		<?php foreach ($carrito as $line=>$row): ?>
 			<tr>
-				<td class="text-center"><span style="cursor: pointer;" class="fa fa-trash-o fa-2x font-red" onclick="controler('<?php echo site_url() ?>/technical_supports/eliminarArticulo', 'id=<?php echo $row['unique_id']; ?>&nombre=<?php echo $row['nombre']; ?>&idSupport=<?php echo $idSupport ?>', 'tala_carrito')"></span></td>
-				<td class="text-center"><?php echo $row['nombre']; ?></td>
+				<td class="text-center"><span style="cursor: pointer;" class="fa fa-trash-o fa-2x font-red" onclick="controler('<?php echo site_url() ?>/technical_supports/eliminarArticulo', 'line=<?php echo $line; ?>&nombre=<?php echo $row['name']; ?>&idSupport=<?php echo $idSupport ?>', 'tala_carrito')"></span></td>
+				<td class="text-center"><?php echo $row['name']; ?></td>
 				<td class="text-center"><?php echo to_currency("{$row['precio_con_iva']}", "2"); ?></td>
-				<td width="5"><input type="text" name="cantidad"  id="cantidad<?php echo $row['id']; ?>" value="<?php echo $row['cantidad']; ?>" class="text-center form-control cantidad" onchange="controler('<?php echo site_url() ?>/technical_supports/updateCantidad','id=<?php echo $row['id']; ?>&idSupport=<?php echo $idSupport ?>&cantidad='+$('#cantidad<?php echo $row['id']; ?>').val(),'tala_carrito');"></td>
+				<td width="5"><input type="text" name="cantidad"  id="cantidad<?php echo $line; ?>" value="<?php echo $row['quantity']; ?>" class="text-center form-control cantidad" onchange="controler('<?php echo site_url() ?>/technical_supports/updateCantidad','id=<?php echo $line; ?>&idSupport=<?php echo $idSupport ?>&cantidad='+$('#cantidad<?php echo $line; ?>').val(),'tala_carrito');"></td>
 				<td class="text-center"><?php echo to_currency("{$row['total']}", "2"); ?></td>
 			</tr>
 		<?php endforeach ?>

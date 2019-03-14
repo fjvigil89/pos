@@ -371,10 +371,12 @@ class technical_supports extends Secure_area
 		$support = $this->technical_support->get_info_by_id($id_support, false);
 		$data["support"] = $support;
 		$data["customer"] = $this->Customer->get_info($data["support"]->id_customer);
+
 		$data["spare_parts"] = $this->technical_support->det_spare_part_all_by_id_order($id_support);
 		$data["dataDiagnostico"] = $this->technical_support->get_diagnosticos($id_support);
-
-		$this->load->view('technical_supports/tecnico/buscar_servicio', $data);
+		$this->load->view('technical_supports/tecnico/reparar_inicial', $data);
+		//$this->load->view('technical_supports/tecnico/buscar_servicio', $data);
+	
 		//$this->_reload($data, $is_ajax);
 
 		//$this->load->View('technical_supports/repair',$data);
@@ -599,7 +601,11 @@ class technical_supports extends Secure_area
 		$dataCliente['hCliente'] = $this->technical_support->get_historial_serv_tec_cliente($this->input->get('hc'));
 		$this->load->View('technical_supports/cliente/repair_h_cliente', $dataCliente);
 	}
-
+	
+	function get_fallas_tecnicas($supprt_id){
+		$dataDiagnostico = $this->technical_support->get_diagnosticos($idSupport);
+		$dataSupport = $this->technical_support->get_datos_support($idSupport);
+	}
 	function ingresar_fallas_tecnica()
 	{
 		$this->check_action_permission('add_update');
@@ -808,15 +814,16 @@ class technical_supports extends Secure_area
 
 	public function actualizar_diagnostico()
 	{
-		$this->check_action_permission('add_update');
-		$actua = '';
-		if ($this->input->get('nomb') != '') {
-			$this->technical_support->updat__diagnosticos($this->input->get('id'), $this->input->get('nomb'));
-			$actua = '1';
+		$this->check_action_permission('add_update');	
+		$resultado= $this->technical_support->updat__diagnosticos($this->input->post('id_diagnostico'), $this->input->post('nuevo_diagnostico'));
+		if($resultado){
+			$respuesta=array("respuesta"=>true,"mensaje"=>lang("technical_supports_mod_diag_titu_menj"),"id"=>$this->input->post('id_diagnostico'));
+		}else{
+			$respuesta=array("respuesta"=>false,"mensaje"=>"Errro");
 		}
-		$dataDiagnostico = $this->technical_support->get_diagnosticos($this->input->get('supprt'), $this->input->get('act'));
-		$this->load->view("technical_supports/tecnico/modificar_diagnostico", compact("dataDiagnostico", "actua"));
+		echo json_encode($respuesta);
 
+		
 	}
 
 	function ver_servicios_activos_resumen()
@@ -856,7 +863,7 @@ class technical_supports extends Secure_area
 		$data['subtotal_total'] =  $this->carrito_lib->getPrecioSubtotal();
 		$data['articulos_total'] =  $this->carrito_lib->getArticulosTotal();
 		$data['articulos_iva'] = $this->carrito_lib->getIvaProductos();
-		$data['carrito'] = $this->carrito_lib->getContenidoCarrito();
+		$data['carrito'] = $this->carrito_lib->get_cart();
 		$data["idSupport"] = $idSupport;
 		
 		$this->load->view("technical_supports/carrito/table_items", $data);
@@ -881,9 +888,9 @@ class technical_supports extends Secure_area
 
 	public function eliminarArticulo()
 	{
-		$item = $this->input->get('id');
+		$line = $this->input->get('id');
 		$idSupport = $this->input->get('idSupport');
-		$data['resultado'] = $this->carrito_lib->deleteItemCarrito($item, $idSupport);
+		$data['resultado'] = $this->carrito_lib->delete_item($line);
 		$data['precio_total'] =  $this->carrito_lib->getPrecioTotal();
 		$data['subtotal_total'] =  $this->carrito_lib->getPrecioSubtotal();
 		$data['articulos_total'] =  $this->carrito_lib->getArticulosTotal();
@@ -1328,6 +1335,48 @@ class technical_supports extends Secure_area
 		$listarTotal = $this->technical_support->get_tecnicos_total($this->input->get('id_tipo'));
 		$this->load->View('technical_supports/estadisticas/v_entregados', compact("listarTecnico", "listarFallas", "tipoNomb", "listarTotal", "listarServ"));
 	}
+
+	function add_diagnostico_tecnico(){
+		$this->check_action_permission('add_update');
+		$id_support = $this->input->post('supprt_id');
+		$diagnostico=array(			
+			'diagnostico'    => $this->input->post('diagnostico') ,
+			"fecha"=>date('Y-m-d H:i:s'),
+			"id_support"=>$id_support
+		 );		
+		$resultado= $this->technical_support->add_diagnostico($id_support,$diagnostico);
+		
+		if($resultado){
+			$respuesta=array("respuesta"=>true,"mensaje"=>lang("technical_supports_diagnostico_add"),"id"=>$resultado);
+		}else{
+			$respuesta=array("respuesta"=>false,"mensaje"=>"Errro");
+
+		}
+		echo json_encode($respuesta);
+	}
+	function eliminar_diagnostico($idSupport,$id_diagnostico){
+		$this->check_action_permission('add_update');
+		$resultado = $this->technical_support->delete_diagnostico($id_diagnostico, $idSupport);
+		$soporte = $this->technical_support->get_info_by_id($idSupport);
+		$state= $soporte->state;
+		if($resultado){
+			$respuesta=array("respuesta"=>true,"mensaje"=>lang("technical_supports_diagnostico_delet"),"state"=>$state);
+		}else{
+			$respuesta=array("respuesta"=>false,"mensaje"=>"Errro","state"=>$state);
+		}
+		echo json_encode($respuesta);
+
+	}
+	public function modal_actualizar_diagnostico($id_sopport, $id_diagnostico)
+	{
+		$this->check_action_permission('add_update');
+		
+		$dataDiagnostico = $this->technical_support->get_diagnosticos($id_sopport,  $id_diagnostico)->row();
+		$this->load->view("technical_supports/tecnico/modal_modificar_diagnostico", compact("dataDiagnostico"));
+
+	}
+		
 }
+
 
 ?>

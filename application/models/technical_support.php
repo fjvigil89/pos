@@ -466,41 +466,55 @@ phppos_people p ON c.person_id=p.person_id WHERE Id_support='$id_equipo'");
         $reportServicioss=$this->db->get();
         return $reportServicioss;
     }
-    function add_diagnostico($diagnostico){ 
-        $campo=array(
-           'id_support'     => $diagnostico['idSupport'],
-           'diagnostico'    => $diagnostico['diag'] 
-        );
-        $this->db->insert('phppos_technical_supports_diag_tec', $campo);
-        $this->db->where('Id_support', $diagnostico["idSupport"]);
-        $this->db->update('phppos_technical_supports', array('state' => 'DIAGNOSTICADO'));        
+    function add_diagnostico($id_support,$diagnostico){ 
+        $this->db->query("SET autocommit=0");      
+        if(!$this->db->insert('phppos_technical_supports_diag_tec', $diagnostico)){
+            $this->db->query("ROLLBACK");
+            return false;
+        }
+        $id =$this->db->insert_id();
+        $this->db->where('Id_support', $id_support);
+        if(!$this->db->update('phppos_technical_supports',
+         array('state' => lang("technical_supports_diagnosticado")))){
+            $this->db->query("ROLLBACK");
+            return false;
+        }
+        $this->db->query("COMMIT");
+        return $id;
     }
     function get_diagnosticos($idSupport,$id=''){ 
         $this->db->from('phppos_technical_supports_diag_tec');	
-        if($id==''){ $this->db->where('id_support',$idSupport); }else{ $this->db->where('id',$id); }
+        if($id==''){ 
+            $this->db->where('id_support',$idSupport); 
+        }
+        else{
+             $this->db->where('id',$id);
+        }
         $this->db->order_by('diagnostico');
         $reportServiciosl=$this->db->get();
          return $reportServiciosl;        
     }
     function updat__diagnosticos($id,$dataDiag){
         $this->db->where('id', $id);
-        $this->db->update('phppos_technical_supports_diag_tec', array('diagnostico' => $dataDiag));
+        return $this->db->update('phppos_technical_supports_diag_tec', array('diagnostico' => $dataDiag));
     }
-    function delete_diagnostico($idSup,$idSupport,$ant){
-        if($ant!='1') {
+    function cantidad_diagnosticos($idSupport){
+        $this->db->from('phppos_technical_supports_diag_tec');		
+        $this->db->where('id_support',$idSupport);         
+        return $this->db->get()->num_rows()  ;          
+    }
+    function delete_diagnostico($idSup,$idSupport){
+        
             $this->db->where('id', $idSup);       
-            $this->db->delete('phppos_technical_supports_diag_tec');         
-            $this->db->from('phppos_technical_supports_diag_tec');		
-            $this->db->where('id_support',$idSupport); 
-            $reportServiciosd=$this->db->get();
-            if($reportServiciosd->num_rows() == 0) {  
+            $eliminado = $this->db->delete('phppos_technical_supports_diag_tec');  
+            
+          
+            if($this->cantidad_diagnosticos($idSupport) == 0) {  
                 $this->db->where('Id_support', $idSupport);
-                $this->db->update('phppos_technical_supports', array('state' => 'RECIBIDO'));             
+                $this->db->update('phppos_technical_supports', array('state' => lang("technical_supports_recibido")));             
             } 
-        }else{
-            $this->db->where('Id_support', $idSupport);
-            $this->db->update('phppos_technical_supports', array('state' => 'RECIBIDO', 'technical_failure'=>''));
-        }
+            return $eliminado;
+       
     }
     
     function updat_status_serv_tecnico($idSupport,$dataResp,$dataST){

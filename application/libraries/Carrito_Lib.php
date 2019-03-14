@@ -495,8 +495,14 @@ class Carrito_Lib
 
 		$this->updatePrecioCantidad("$carrito");
 	}
+	function delete_item($line)
+	{
+		$items=$this->get_cart();		
+		unset($items[$line]);
+		$this->set_cart($items);
+	}
 
-	public function deleteItemCarrito($unique_id, $carrito)
+	/*public function deleteItemCarrito($unique_id, $carrito)
 	{
 		if (!isset($_SESSION["car$carrito"]["$unique_id"])) {
 
@@ -513,7 +519,7 @@ class Carrito_Lib
 			return true;
 		}
 
-	}
+	}*/
 
 	public function getIvaProductos()
 	{
