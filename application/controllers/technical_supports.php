@@ -19,10 +19,8 @@ class technical_supports extends Secure_area
 		$config['per_page'] = $this->config->item('number_of_items_per_page') ? (int)$this->config->item('number_of_items_per_page') : 20;
 		$data['controller_name'] = strtolower(get_class());
 
-		/////////////////////////////DANIEL/////////////////////////////
 		$data['servicios'] = $this->technical_support->lista_servicios($this->input->get('statusVer'));
 		$data['serviciosStatus'] = $this->technical_support->lista_servicios_total_entregado("ENTREGADO");
-		////////////////////////////////////////////////////////////////
 
 		$data["options"] = array(null => "", lang("technical_supports_recibido") => lang("technical_supports_recibido"), lang("technical_supports_diagnosticado") => lang("technical_supports_diagnosticado"),
 			lang("technical_supports_aprobado") => lang("technical_supports_aprobado"), lang("technical_supports_rechazado") => lang("technical_supports_rechazado"),
