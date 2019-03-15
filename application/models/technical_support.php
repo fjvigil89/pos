@@ -519,7 +519,7 @@ phppos_people p ON c.person_id=p.person_id WHERE Id_support='$id_equipo'");
     
     function updat_status_serv_tecnico($idSupport,$dataResp,$dataST){
         $this->db->where('Id_support', $idSupport);
-        $this->db->update('phppos_technical_supports', array('state' => $dataResp,'repair_cost' => $dataST['costo'],'observaciones_entrega' => $dataST['comentarios'],'do_have_guarantee' => $dataST['garantia'],'date_garantia' => $dataST['fecha_garantia']));
+        return $this->db->update('phppos_technical_supports', array('state' => $dataResp,'repair_cost' => $dataST['costo'],'observaciones_entrega' => $dataST['comentarios'],'do_have_guarantee' => $dataST['garantia'],'date_garantia' => $dataST['fecha_garantia']));
     }
     
     function get_sev_tec_cliente($idSupport,$aq=""){ 

@@ -36,7 +36,7 @@
                                 <div class="col-sm-4 pull-right">
                                     <div class="form-group">
                                         <label for="estado"><?php echo lang("technical_supports_stat"); ?>:
-                                        </label >
+                                        </label>
 
                                         <?php  echo "<b id='state'>$support->state </b>"; ?>
                                     </div>
@@ -108,12 +108,14 @@
                                                                     <td style="width: 75%;">
                                                                         <?php echo $dataDiagnostico->diagnostico ?></td>
                                                                     <td style="text-align: center;width: 25%;">
-                                                                        <a href="<?=site_url('technical_supports/modal_actualizar_diagnostico')."/".$support->Id_support."/".$dataDiagnostico->id?>" data-toggle="modal" data-target="#myModal">                                                                           
+                                                                        <a href="<?=site_url('technical_supports/modal_actualizar_diagnostico')."/".$support->Id_support."/".$dataDiagnostico->id?>"
+                                                                            data-toggle="modal" data-target="#myModal">
                                                                             <span class="icon"
                                                                                 style="font-size: 1.500em;"><i
                                                                                     class="fa fa-edit"></i></span>
                                                                         </a>
-                                                                        <a href="javascript:void(0);" onclick="eliminar_diagnostico(this,<?= $support->Id_support ?>,<?=$dataDiagnostico->id ?>)">
+                                                                        <a href="javascript:void(0);"
+                                                                            onclick="eliminar_diagnostico(this,<?= $support->Id_support ?>,<?=$dataDiagnostico->id ?>)">
                                                                             <span class="icon"
                                                                                 title="<?php echo lang("technical_supports_title_detalle_eli"); ?>"
                                                                                 style="margin-left: 10px;font-size: 1.500em;"><i
@@ -137,6 +139,9 @@
                 </div>
             </div>
             <div id="cart_body"></div>
+            <div id="div_entrega" style="display: <?= $support->state== lang("technical_supports_recibido")? "none":""?>">
+                <?php $this->load->view("technical_supports/tecnico/entrega_garantia");?>
+            </div>
         </div>
         <div class="col-sm-3">
             <div class="portlet box">
@@ -157,49 +162,89 @@
                 </div>
             </div>
 
-            <div id="mostrar_datos"> </div>
+            <div id="mostrar_datos">
+                <?php $this->load->view("technical_supports/tecnico/index");?>
+            </div>
+            <div>
+
+
+
+
+
+
+
+            </div>
 
         </div>
     </div>
 </div>
 
 <script type="text/javascript">
-$('#form_diagnostico').submit(function(e) {
-    e.preventDefault();
-    let data_enviar = $('#form_diagnostico').serializeArray();
-    let support= <?= $support->Id_support ?>;
-    $.post('<?php echo site_url("technical_supports/add_diagnostico_tecnico");?>', data_enviar, function(data) {
-        data= JSON.parse(data);
-        if(data.respuesta==true){          
-            let url2= '<?=site_url('technical_supports/modal_actualizar_diagnostico')."/".$support->Id_support?>';
-            let html='<tr><td style="width: 75%;">'+
-            $("#diagnostico").val()+'</td>'+
-            '<td style="text-align: center;width: 25%;">'+
-            '<a href="'+url2+"/"+data.id+'" data-toggle="modal" data-target="#myModal"> '+                                                                          
-            '<span class="icon" style="font-size: 1.500em;"><i  class="fa fa-edit"></i> </span>'+'</a>'+
-            '<a href="javascript:void(0);" onclick="eliminar_diagnostico(this,'+support+','+data.id+')">'+
-            '<span class="icon" title="<?php echo lang("technical_supports_title_detalle_eli"); ?>"'+
-            'style="margin-left: 10px;font-size: 1.500em;"><i class="fa fa-trash"></i></span>'+
-            '</a>  </td>   </tr>';
-            $("#diagnostico").val("");
-            $('#table_diagnostico tbody').append(html);
-            
+$(document).ready(function() {
+    $("#search_equipoo").autocomplete({
+        source: '<?=site_url("sales/equipos_search"); ?>',
+        delay: 0,
+        autoFocus: true,
+        minLength: 2,
+        select: function(event, ui) {
+            alert();
         }
     });
+
+    $('#form_diagnostico').submit(function(e) {
+        e.preventDefault();
+        let data_enviar = $('#form_diagnostico').serializeArray();
+        let support = <?= $support->Id_support ?>;
+        $.post('<?php echo site_url("technical_supports/add_diagnostico_tecnico");?>', data_enviar,
+            function(data) {
+                data = JSON.parse(data);
+                if (data.respuesta == true) {
+                    let url2 =
+                        '<?=site_url('technical_supports/modal_actualizar_diagnostico')."/".$support->Id_support?>';
+                    let html = '<tr><td style="width: 75%;">' +
+                        $("#diagnostico").val() + '</td>' +
+                        '<td style="text-align: center;width: 25%;">' +
+                        '<a href="' + url2 + "/" + data.id +
+                        '" data-toggle="modal" data-target="#myModal"> ' +
+                        '<span class="icon" style="font-size: 1.500em;"><i  class="fa fa-edit"></i> </span>' +
+                        '</a>' +
+                        '<a href="javascript:void(0);" onclick="eliminar_diagnostico(this,' +
+                        support + ',' + data.id + ')">' +
+                        '<span class="icon" title="<?php echo lang("technical_supports_title_detalle_eli"); ?>"' +
+                        'style="margin-left: 10px;font-size: 1.500em;"><i class="fa fa-trash"></i></span>' +
+                        '</a>  </td>   </tr>';
+                    $("#diagnostico").val("");
+                    $('#table_diagnostico tbody').append(html);
+                    if(data.state!= '<?= lang("technical_supports_diagnosticado")?>'){
+                    $("#div_entrega").show("swing");
+                    }
+
+                }
+            });
+    });
+
 });
-function eliminar_diagnostico(elemento,id_support, id_diagnostico){
-    if(confirm(<?php echo json_encode(lang('technical_supports_menj_detalle_eli')."?")?>)){
-    let url= '<?php echo site_url("technical_supports/eliminar_diagnostico");?>/'+id_support+"/"+id_diagnostico;
-    $.post(url,{}, function(data) {
-        data= JSON.parse(data);
-        if(data.respuesta==true){          
-            $(elemento).closest('tr').remove();
-            $("#state").html(data.state);
-        }
-        
-    });
+
+function eliminar_diagnostico(elemento, id_support, id_diagnostico) {
+    if (confirm(<?php echo json_encode(lang('technical_supports_menj_detalle_eli')."?")?>)) {
+        let url = '<?php echo site_url("technical_supports/eliminar_diagnostico");?>/' + id_support + "/" +
+            id_diagnostico;
+        $.post(url, {}, function(data) {
+            data = JSON.parse(data);
+            if (data.respuesta == true) {
+                $(elemento).closest('tr').remove();
+                $("#state").html(data.state);
+                if(data.state== '<?= lang("technical_supports_recibido")?>'){
+                    $("#div_entrega").hide("linear");
+                }
+            }
+
+        });
+    }
 }
-    
+
+function get_info_equipos(id_equipo) {
+    $('#mostrar_datos').load("<?= site_url("technical_supports/mostrarResumen")?>/" + id_equipo);
 }
 </script>
 

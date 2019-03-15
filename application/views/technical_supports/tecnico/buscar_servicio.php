@@ -37,7 +37,8 @@
                 </div>
             </div>
         </div>
-        <div id="asigFallas2"></div>
+        <div id="asigFallas2">
+        </div>
     </div>
     <div class="col-sm-3" >
             <div class="portlet box">

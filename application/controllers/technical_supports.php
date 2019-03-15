@@ -110,7 +110,7 @@ class technical_supports extends Secure_area
 
 	public function mostrarResumen($id_equipo)
 	{
-		$result = $this->technical_support->get_info_equipo($id_equipo);
+		$result = $this->technical_support->get_info_equipo($id_equipo)->row();
 		$abono = $this->technical_support->get_info_abono_orden($id_equipo);
 		$this->load->view("technical_supports/tecnico/index", compact("result", "abono"));
 	}
@@ -374,6 +374,8 @@ class technical_supports extends Secure_area
 
 		$data["spare_parts"] = $this->technical_support->det_spare_part_all_by_id_order($id_support);
 		$data["dataDiagnostico"] = $this->technical_support->get_diagnosticos($id_support);
+		$data["result"] = $this->technical_support->get_info_equipo($id_support)->row();
+		$data["abono"] = $this->technical_support->get_info_abono_orden($id_support);
 		$this->load->view('technical_supports/tecnico/reparar_inicial', $data);
 		//$this->load->view('technical_supports/tecnico/buscar_servicio', $data);
 	
@@ -1369,11 +1371,30 @@ class technical_supports extends Secure_area
 	}
 	public function modal_actualizar_diagnostico($id_sopport, $id_diagnostico)
 	{
-		$this->check_action_permission('add_update');
-		
+		$this->check_action_permission('add_update');		
 		$dataDiagnostico = $this->technical_support->get_diagnosticos($id_sopport,  $id_diagnostico)->row();
 		$this->load->view("technical_supports/tecnico/modal_modificar_diagnostico", compact("dataDiagnostico"));
 
+	}
+	function set_rechazar(){
+		$this->check_action_permission('add_update');
+		$id_support = $this->input->post('support_id');
+		$state = lang("technical_supports_rechazado");
+		$data['garantia'] = 0;
+		$data['fecha_garantia'] = '';
+		$data['comentarios'] = "";
+		$data['costo'] = "0";			
+		$resultado= $this->technical_support->updat_status_serv_tecnico($id_support, $state, $data);
+		/*$support = $this->technical_support->get_info_by_id($id_support, false);
+		$data_supporte["support"] = $support;
+		 $this->load->view("technical_supports/tecnico/entrega_garantia",$data_supporte);
+		*/
+		if($resultado){
+			$respuesta=array("respuesta"=>true,"mensaje"=>lang("technical_supports_asig_estado").$state);
+		}else{
+			$respuesta=array("respuesta"=>false,"mensaje"=>"Errro");
+		}
+		echo json_encode($respuesta);
 	}
 		
 }
