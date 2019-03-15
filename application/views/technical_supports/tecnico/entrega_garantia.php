@@ -7,6 +7,8 @@
     <div class="portlet-body">
         <div class="row">
             <div class="col-sm-12">
+                <?= form_open('technical_supports/set_reparar', 'class="" id="form_reparar" autocomplete="off"'); ?>
+
                 <form id="form_dt" action="javascript:void(0)"
                     onsubmit='controlerConfirm("<?php echo site_url() ?>/technical_supports/asignar_detalles_falla_tec/", $("#form_dt").serialize(), "asigFallas2","Estas seguro de cambiar el estado del equipo a REPARADO, al confirmar el equipo estara disponible para la entrega")'>
                     <div class="row">
@@ -67,55 +69,76 @@
                                 </div>
 
                                 <div class="col-sm-6">
-                                    <div class="form-group" id="accessory" style="display:none">
+                                    <div class="form-group" id="garantia" style="display:none">
                                         <label class="control-label">
                                             <a class="help_config_required tooltips" data-placement="left"
                                                 title="<?php echo lang("technical_supports_garantia") ?>"><?php echo lang('technical_supports_garantia') ?></a>
                                         </label>
-                                        <input type="date" id="fecha_garantia" name="fecha_garantia"
-                                            value="<?php echo $support->date_garantia; ?>" class="form-control">
+                                        <?= form_input(array(
+                                                'type'  => 'date',
+                                                'name'  => 'fecha_garantia',
+                                                'id'    => 'fecha_garantia',
+                                                'value' => $support->date_garantia,
+                                                "class"=>"form-control"
+                                        ));?>
+
                                     </div>
                                 </div>
                                 <div class="col-sm-12">
                                     <div class="form-group col-sm-8">
                                         <label for="comentarios"
-                                            class=""><?php echo lang("technical_supports_comentarios_entrega"); ?></label>
-                                        <textarea name="comentarios" id="comentarios"
-                                            placeholder="<?php echo lang("technical_supports_ingrese_reporte"); ?>"
-                                            class="form-control"></textarea>
+                                            class=""><?php echo lang("technical_supports_comentarios_entrega"); ?>
+                                        </label>
+
+                                        <?= form_textarea(array(
+                                                'name'        => 'comentarios',
+                                                'id'          => 'comentarios',
+                                                'value'       => set_value('comentarios'),
+                                                'rows'        => '2',
+                                                "placeholder"=>lang("technical_supports_ingrese_reporte"),
+                                                'class'       => 'form-control'));
+                                        ?>
+
                                     </div>
                                     <div class="form-group col-sm-4">
                                         <label for="costo"><?php echo lang("technical_supports_repair_cost"); ?></label>
-                                        <input type="number" id="costo" name="costo"
-                                            value="<?php echo $support->repair_cost; ?>" class="form-control">
+                                        <?= form_input(array(
+                                                'type'  => 'number',
+                                                'name'  => 'costo',
+                                                'id'    => 'costo',
+                                                'value' => $support->repair_cost,
+                                                "class"=>"form-control"
+                                        ));?>
                                     </div>
-
                                 </div>
                             </div>
                             <?php } ?>
                             <div class="col-sm-12" style="text-align: right;">
-                                <input type="hidden" id="acept" name="acept" value="2">
-                                <input type="hidden" id="supprt" name="supprt"
-                                    value="<?php echo $support->Id_support; ?>">
-                                <?php if ($support->state!=lang("technical_supports_rechazado") and $support->state!=lang("technical_supports_reparado")) { ?>
+                                <?= form_input(array(
+                                        'type'  => 'hidden',
+                                        'name'  => 'support_id',
+                                        'id'    => 'support_id',
+                                        'value' => $support->Id_support,
+                                ));?>
+
+                                <?php if ($support->state!=lang("technical_supports_rechazado") and $support->state!=lang("technical_supports_reparado")): ?>
                                 <button type="submit" id="form_dt" class="btn btn-primary"> <span
-                                        class="fa fa-save"></span> Marcar como Reparado </button>
+                                        class="fa fa-save"></span> Marcar como Reparado
+                                </button>
                                 <div id="rechz" style="float: right;margin-left: 7px;">
                                     <a href="javascript:void(0);" class="btn btn-primary" title="Devolver el equipo"
-                                        style="color: #FFFFFF;"
-                                        onclick="rechazar(this ,<?=  $support->Id_support; ?>)">
+                                        style="color: #FFFFFF;" onclick="rechazar(this ,<?=  $support->Id_support; ?>)">
                                         <span class="fa fa-save"></span> Rechazar
                                     </a>
                                 </div>
-                                <?php }
-									if ($support->state==lang("technical_supports_rechazado") Or $support->state==lang("technical_supports_reparado")) { ?>
+                                <?php endif; ?>
+
+                                <?php	if ($support->state==lang("technical_supports_rechazado") Or $support->state==lang("technical_supports_reparado")) : ?>
                                 <script type="text/javascript">
                                 window.location = '<?php echo site_url('technical_supports'); ?>';
                                 </script>
-                                <?php /*<a href="javascript:void(0);"  class="btn btn-primary" title="Equipo reparado" style="color: #FFFFFF;" onclick="window.location='<?php echo site_url('technical_supports'); ?>'">
-                                <span class="fa fa-search"></span> Servicio Rechazado Listar
-                                </a> */ ?>
-                                <?php }  ?>
+
+                                <?php endif; ?>
                             </div>
                         </div>
 
@@ -126,29 +149,51 @@
     </div>
 </div>
 <script>
-    function rechazar(elemento, support_id){
-        let msj="Estas seguro de RECHAZAR el servicio? , al confirmar el equipo estara disponible para la entrega";
-
-        if (confirm(msj)) {
-            let url = '<?php echo site_url("technical_supports/set_rechazar");?>';
-            $.post(url, {"support_id":support_id}, function(data) {
-                data=JSON.parse(data);        
-                if (data.respuesta == true) {                       
-                    toastr.success(data.mensaje,<?=json_encode(lang('common_success'))?>);
-                    window.location = '<?php echo site_url('technical_supports'); ?>';
-                }else{
-                    toastr.error(data.mensaje, <?=json_encode(lang('common_error'))?>);
-                }
-            });
-        }
-
+$('#form_reparar').submit(function(e) {
+    e.preventDefault();
+    let msj =
+        "Estas seguro de cambiar el estado del equipo a REPARADO ?, al confirmar el equipo estara disponible para la entrega."
+    let data_enviar = $('#form_reparar').serializeArray();
+    if (confirm(msj)) {
+        let url = '<?php echo site_url("technical_supports/set_reparar");?>';
+        $.post(url, data_enviar, function(data) {
+            data = JSON.parse(data);
+            if (data.respuesta == true) {
+                toastr.success(data.mensaje, <?=json_encode(lang('common_success'))?>);
+                window.location = '<?php echo site_url('technical_supports'); ?>';
+            } else {
+                toastr.error(data.mensaje, <?=json_encode(lang('common_error'))?>);
+            }
+        });
     }
-    $("#do_have_garantia_yes").click(function () {
-		$('div[id^="accessory"]').show(200);
-		$('div[id^="rechz"]').hide(200);
-	});
-	$("#do_have_garantia_no").click(function () {
-		$('div[id^="accessory"]').hide(200);
-		$('div[id^="rechz"]').show(200);
-	});
+});
+
+function rechazar(elemento, support_id) {
+    let msj = "Estas seguro de RECHAZAR el servicio ? , al confirmar el equipo estara disponible para la entrega.";
+    if (confirm(msj)) {
+        let url = '<?php echo site_url("technical_supports/set_rechazar");?>';
+        $.post(url, {
+            "support_id": support_id
+        }, function(data) {
+            data = JSON.parse(data);
+            if (data.respuesta == true) {
+                toastr.success(data.mensaje, <?=json_encode(lang('common_success'))?>);
+                window.location = '<?php echo site_url('technical_supports'); ?>';
+            } else {
+                toastr.error(data.mensaje, <?=json_encode(lang('common_error'))?>);
+            }
+        });
+    }
+
+}
+
+
+$("#do_have_garantia_yes").click(function() {
+    $('div[id^="garantia"]').show(200);
+    $('div[id^="rechz"]').hide(200);
+});
+$("#do_have_garantia_no").click(function() {
+    $('div[id^="garantia"]').hide(200);
+    $('div[id^="rechz"]').show(200);
+});
 </script>

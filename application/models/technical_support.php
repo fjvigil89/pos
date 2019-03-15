@@ -159,7 +159,6 @@ phppos_people p ON c.person_id=p.person_id WHERE Id_support='$id_equipo'");
                     return -1;
                 }
 
-
             }
         }
          /// se agregan los abonos

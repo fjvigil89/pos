@@ -3,7 +3,7 @@ if($eDatos->email !='') :
     $quien=$eDatos->first_name." ".$eDatos->last_name;
     $equipo="<b>".lang("technical_supports_email_disp").": </b>".$eDatos->type_team;
     $falla="<b>".lang("technical_supports_email_ftec").": </b>".$eDatos->damage_failure;
-    $Informacion=lang("technical_supports_email_menj")." <b>$dataCond</b>, ".lang("technical_supports_email_menj2");
+    $Informacion=lang("technical_supports_email_menj")." <b>$eDatos->state</b>, ".lang("technical_supports_email_menj2");
     ?>
     <html> 
         <body> 
