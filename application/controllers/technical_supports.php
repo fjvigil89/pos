@@ -1387,11 +1387,77 @@ class technical_supports extends Secure_area
 		 $this->load->view("technical_supports/tecnico/entrega_garantia",$data_supporte);
 		*/
 		if($resultado){
+			$this->enviar_correo($id_support);
 			$respuesta=array("respuesta"=>true,"mensaje"=>lang("technical_supports_asig_estado").$state);
 		}else{
 			$respuesta=array("respuesta"=>false,"mensaje"=>"Errro");
 		}
 		echo json_encode($respuesta);
+	}
+	function set_reparar(){
+		$this->check_action_permission('add_update');
+		$id_support = $this->input->post('support_id');
+		$state = lang("technical_supports_reparado");
+		$fecha_garantia= $this->input->post('fecha_garantia');	
+		$do_have_guarantee= $this->input->post('do_have_guarantee');	
+		$data['fecha_garantia'] = $fecha_garantia;
+		$data['garantia'] = (int)$do_have_guarantee;
+		$data['comentarios'] = $this->input->post('comentarios');
+		$data['costo'] = (double)$this->input->post('costo');
+
+
+		/*	foreach ($this->carrito_lib->getContenidoCarrito() as $row) {
+
+				$data_carrito = [
+					'repuesto_support' => $idSupport,
+					'repuesto_item' => $row['id'],
+					'repuesto_precio' => $row['precio'],
+					'respuesto_cantidad' => $row['cantidad'],
+					'repuesto_iva_uno' => $row['iva_uno'], 
+					'repuesto_iva_dos' => $row['iva_dos'],
+					'repuesto_iva_tres' => $row['iva_tres'],
+					'repuesto_iva_cuatro' => $row['iva_cuatro'],
+					'repuesto_iva_cinco' => $row['iva_cinco'],
+					'repuesto_subtotal' => $row['subtotal'],
+					'repuesto_total' =>  $row['total'],
+					'repuesto_location' => $current_location,
+					'repuesto_persona' => $cliente_equipo->id_customer,
+					'repuesto_fecha' => 'CURRENT_DATE',
+					'created_at' => 'CURRENT_DATE',
+				];
+
+				$this->CarritoModel->guardarCarrito($data_carrito);
+
+				$this->carrito_lib->destroy("$idSupport");
+			}*/
+
+		
+
+		//$dataRespuesto = $this->technical_support->det_spare_part_all_by_id_order($idSupport);
+
+				
+		$resultado= $this->technical_support->updat_status_serv_tecnico($id_support, $state, $data);
+		if($resultado){
+			$this->enviar_correo($id_support);
+			$respuesta=array("respuesta"=>true,"mensaje"=>lang("technical_supports_asig_estado").$state);
+		}else{
+			$respuesta=array("respuesta"=>false,"mensaje"=>"Errro");
+		}
+		echo json_encode($respuesta);
+	}
+	private function enviar_correo($support_id){
+		$servicio = $this->technical_support->get_sev_tec_cliente($support_id, "1");
+		$data["eDatoss"]=$servicio;
+		if ($this->config->item("st_correo_of_items") == '1' and filter_var($servicio->email, FILTER_VALIDATE_EMAIL)) {
+			$this->load->library('Email_send');
+			$para = $servicio->email;
+			$subject = "Servicio está {$servicio->state}";
+			$name = "";
+			$company = $this->config->item('company');
+			$from = $this->Location->get_info_for_key('email') ? $this->Location->get_info_for_key('email') : 'no-reply@FacilPos.com';
+			$this->email_send->send_($para, $subject, $name,
+			$this->load->view("technical_supports/correo/env_correo", $data, true), $from, $company);
+		}		
 	}
 		
 }

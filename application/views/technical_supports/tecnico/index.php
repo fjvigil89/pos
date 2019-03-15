@@ -1,4 +1,3 @@
-<?php foreach ($result->result() as $result) {  ?>
 <div class="portlet box">
     <div class="portlet-body">
         <div class="profile">
@@ -9,7 +8,7 @@
                         if($result->image_id !='') { 
                             $foto="site_url()/app_files/view/$result->image_id ";
                         }  else { 
-                            $foto="assets/template/images/perfil.JPG"; 
+                            $foto="img/perfil.JPG"; 
                          } ?>
                         <li class="text-center" style="background: url('<?php echo $foto; ?>') center center no-repeat; background-size: cover;height: 37px;"> 
                         </li>
@@ -65,7 +64,6 @@
         </ul>
     </div>
 </div>
-
 <div class="portlet light box green">
     <div class="portlet-title padding">
         <div class="caption">
@@ -90,4 +88,3 @@
         <span class="pull-right"><?php echo $result->color ?></span>
     </li>
 </div>
-<?php } ?>

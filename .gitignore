@@ -126,7 +126,7 @@ application/views/item_kits/manage.php
 
 #--movimiento de caja-------
 #application/controllers/technical_supports.php
-application/views/registers_movement/technical_supports
+#application/views/registers_movement/technical_supports
 
 #--tendas-------
 application/controllers/locations.php
