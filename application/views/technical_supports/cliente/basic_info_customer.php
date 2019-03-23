@@ -2,7 +2,7 @@
 <div class="col-sm-3">
 <div class="form-group">
     <?php
-    $required = ($controller_name == "suppliers") ? "" : "requireds";
+    $required = "requireds";
     ?>
     <label class="<?php echo $required ?> control-label"><?php echo '<a class="help_config_required  tooltips " data-placement="left" title="'.lang("common_first_name_help").'">'.lang('common_first_name').'</a>'.':'?>
         <!--<span class="required">* </span>-->

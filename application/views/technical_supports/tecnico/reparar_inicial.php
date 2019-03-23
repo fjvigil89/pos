@@ -138,8 +138,14 @@
                     </div>
                 </div>
             </div>
-            <div id="cart_body"></div>
-            <div id="div_entrega" style="display: <?= $support->state== lang("technical_supports_recibido")? "none":""?>">
+            <div id="cart_body" style="display: <?= $support->state== lang("technical_supports_recibido")? "none":""?>">
+                <?php
+               // $this->load->View("technical_supports/carrito/carrito_cuerpo"); 
+
+                 $this->load->view('technical_supports/carrito/cart_reparar');?>
+            </div>
+            <div id="div_entrega"
+                style="display: <?= $support->state== lang("technical_supports_recibido")? "none":""?>">
                 <?php $this->load->view("technical_supports/tecnico/entrega_garantia");?>
             </div>
         </div>
@@ -150,8 +156,8 @@
                         <div class="blog-single-sidebar-search">
                             <div class="input-icon right">
                                 <i class="icon-magnifier"></i>
-                                <input class="form-control ciContc" placeholder="<?php echo lang('common_search'); ?>"
-                                    type="text" accesskey="c" name="search_equipoo" id="search_equipoo"
+                                <input class="form-control" placeholder="<?php echo lang('common_search'); ?>"
+                                    type="text" name="search_equipo" id="search_equipo"
                                     value="<?php echo $support->Id_support ?>">
                                 <div class="col-sm-12" id="resultado"
                                     style="position: absolute;margin-top: 1px;margin-left: 0px;z-index: 9000;">
@@ -165,15 +171,6 @@
             <div id="mostrar_datos">
                 <?php $this->load->view("technical_supports/tecnico/index");?>
             </div>
-            <div>
-
-
-
-
-
-
-
-            </div>
 
         </div>
     </div>
@@ -181,15 +178,41 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-    $("#search_equipoo").autocomplete({
-        source: '<?=site_url("sales/equipos_search"); ?>',
-        delay: 0,
-        autoFocus: true,
-        minLength: 2,
+    $("#search_equipo").autocomplete({
+        minLength: 0,
+        source: '<?=site_url("technical_supports/buscar_servicios");?>',
+        focus: function(event, ui) {
+            // $( "#customer1" ).val( ui.item.cuenta );
+            return false;
+        },
         select: function(event, ui) {
-            alert();
+            $("#search_equipo").val(ui.item.value);
+            window.location = "<?php echo site_url("technical_supports/repair") ?>"+"/"+ui.item.value;
+            return false;
         }
-    });
+    }).autocomplete("instance")._renderItem = function(ul, item) {
+        return $("<li>")
+            .append(add_html(item)).appendTo(ul);
+    };
+
+    function add_html(item) {
+        let html = "<div>" +
+            "<strong><?=lang("technical_supports_order_n")?>: </strong>" + item.order_support + "<br>" +
+            "<strong><?=lang("technical_supports_type")?> : </strong>" + item.type_team +
+            " - <?=lang("technical_supports_marca")?>: " + item.marca + "<br>";
+             if('<?=$this->config->item("custom1_support_name")?>'!=""  ){
+                html += "<strong><?=$this->config->item("custom1_support_name")?> : </strong>" + item.custom1_support_name ;
+                html += " - <?=$this->config->item("custom2_support_name")?> : " + item.custom2_support_name +"<br>" ;
+             
+             }
+
+        if (item.customer_id == "") {
+            html += "<strong><?=lang("technical_supports_customer")?>: </strong>" + item.cliente;
+        }
+        return  "</div>"+html;
+
+    }
+
 
     $('#form_diagnostico').submit(function(e) {
         e.preventDefault();
@@ -215,8 +238,10 @@ $(document).ready(function() {
                         '</a>  </td>   </tr>';
                     $("#diagnostico").val("");
                     $('#table_diagnostico tbody').append(html);
-                    if(data.state!= '<?= lang("technical_supports_diagnosticado")?>'){
-                    $("#div_entrega").show("swing");
+                    if (data.state != '<?= lang("technical_supports_diagnosticado")?>') {
+                        $("#div_entrega").show("swing");
+                        $("#cart_body").show("swing");
+
                     }
 
                 }
@@ -234,8 +259,9 @@ function eliminar_diagnostico(elemento, id_support, id_diagnostico) {
             if (data.respuesta == true) {
                 $(elemento).closest('tr').remove();
                 $("#state").html(data.state);
-                if(data.state== '<?= lang("technical_supports_recibido")?>'){
+                if (data.state == '<?= lang("technical_supports_recibido")?>') {
                     $("#div_entrega").hide("linear");
+                    $("#cart_body").hide("linear");
                 }
             }
 

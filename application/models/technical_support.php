@@ -18,8 +18,41 @@ class technical_support extends CI_Model
                     WHERE su.state<>'ENTREGADO' AND su.state<>'RETIRADO' and su.state=$status and id_location='$current_location'");
                 }
 		return $query->result();
-	}
-        function lista_servicios_total_entregado($status)
+    }
+    /*function get_search_suggestions($search,$limit=25){
+        $suggestions = array();
+        $current_location = $this->Employee->get_logged_in_employee_current_location_id(); 
+		$this->db->distinct();
+        $this->db->select('Id_support,model,custom1_support_name,custom2_support_name,
+        type_team,marca,order_support ');
+		$this->db->from('phppos_technical_supports');
+		//$this->db->join('items','items.item_id=sales_items.item_id');	
+		$this->db->where("(order_support LIKE '%".$this->db->escape_like_str($search)."%' or 
+		custom2_support_name LIKE '%".$this->db->escape_like_str($search)."%' or 
+        custom2_support_name LIKE '%".$this->db->escape_like_str($search)."%' )");
+        $this->db->where("id_location",$current_location);					
+		$this->db->group_by('Id_support,order_support');
+		$this->db->limit($limit);	
+		$select = $this->db->get();
+		
+		foreach($select->result() as $row)
+		{
+			$suggestions[] = array(
+			"model"=> $row->model,
+			"value"=>$row->Id_support,
+			"custom1_support_name"=>$row->custom1_support_name,
+			"custom2_support_name"=> $row->custom2_support_name,
+			"type_team"=>$row->type_team,
+			"marca"=>$row->marca,
+			"order_support"=>$row->order_support
+			);
+		}
+		
+		return $suggestions;
+
+
+    }*/
+    function lista_servicios_total_entregado($status)
 	{
 		$current_location = $this->Employee->get_logged_in_employee_current_location_id(); 
                     $query = $this->db->query("SELECT su.Id_support, p.first_name, p.last_name, su.model, su.type_team, su.state,su.date_register FROM phppos_technical_supports su 
@@ -48,7 +81,8 @@ class technical_support extends CI_Model
     }
      function actualizarServicioCliente($id_support, $data)
     {
-       return $this->db->update("phppos_technical_supports", $data, "Id_support = $id_support");
+        $this->db->where('Id_support', $id_support);
+       return $this->db->update("phppos_technical_supports", $data);
     }   
 	/////////////////DANIEL////////////////////////////////
 
@@ -103,13 +137,16 @@ class technical_support extends CI_Model
 
 	public function get_info_equipo($id_equipo)
 	{
-		$query = $this->db->query("SELECT su.Id_support, p.first_name, p.last_name, p.image_id, p.country, p.email, p.phone_number, su.model, su.type_team, su.state, su.marca, su.color, su.repair_cost FROM phppos_technical_supports su INNER JOIN phppos_customers c ON su.id_customer=c.person_id INNER JOIN
-phppos_people p ON c.person_id=p.person_id WHERE Id_support='$id_equipo'");
+		$query = $this->db->query("SELECT su.Id_support, p.first_name, p.last_name, p.image_id, p.country, p.email, p.phone_number, su.model, su.type_team, su.state, su.marca, su.color, su.repair_cost
+         FROM phppos_technical_supports su 
+         INNER JOIN phppos_customers c ON su.id_customer=c.person_id 
+         INNER JOIN phppos_people p ON c.person_id=p.person_id WHERE Id_support='$id_equipo'");
 		return $query;
 	}
         public function get_info_abono_orden($id_equipo)
 	{
-		$queryAbono = $this->db->query("SELECT payment FROM phppos_support_payments WHERE id_support='$id_equipo'"); 
+		$queryAbono = $this->db->query("SELECT payment
+         FROM phppos_support_payments WHERE id_support='$id_equipo'"); 
 		return $queryAbono; 
 	}
 
@@ -132,9 +169,7 @@ phppos_people p ON c.person_id=p.person_id WHERE Id_support='$id_equipo'");
                 $this->db->query('UNLOCK TABLES');
                 return -1;            
             }
-            $id_support = $this->db->insert_id();
-           
-            
+            $id_support = $this->db->insert_id();          
         }  
         else{
             if($id_support!=-1){
@@ -220,15 +255,15 @@ phppos_people p ON c.person_id=p.person_id WHERE Id_support='$id_equipo'");
 	
     }
 
-    function det_spare_part_all_by_id_order($id_support)
+    /*function det_spare_part_all_by_id_order($id_support)
 	{       
        
 		$this->db->from('spare_parts');	      
         $this->db->where('id_support',$id_support);
         $query=$this->db->get();
         return  $query;
-    }
-    function det_spare_part_all_by_id_order_respuesto($id_support)
+    }*/
+   function det_spare_part_all_by_id_order_respuesto($id_support)
 	{       
             $query = $this->db->query("SELECT it.name,it.item_number, resp.repuesto_total, resp.respuesto_cantidad FROM phppos_technical_support_repuestos_persona resp, phppos_items it WHERE resp.repuesto_support='$id_support' AND it.item_id=resp.repuesto_item");   
             return  $query;
@@ -255,7 +290,7 @@ phppos_people p ON c.person_id=p.person_id WHERE Id_support='$id_equipo'");
     function get_search_suggestions($search,$limit=25)
 	{
 		$suggestions = array();
-        $this->db->from('technical_supports');
+       /* $this->db->from('technical_supports');
 		$this->db->like('color', $search);
 		$this->db->where('deleted',0);
 		$this->db->limit($limit);
@@ -263,115 +298,189 @@ phppos_people p ON c.person_id=p.person_id WHERE Id_support='$id_equipo'");
 		$temp_suggestions = array();
 		foreach($by_name->result() as $row)
 		{
-			$temp_suggestions[] = $row->color;
+            $suggestions[] = array(
+                "model"=> $row->model,
+                "value"=>$row->Id_support,
+                "custom1_support_name"=>$row->custom1_support_name,
+                "custom2_support_name"=> $row->custom2_support_name,
+                "type_team"=>$row->type_team,
+                "marca"=>$row->marca,
+                "order_support"=>$row->order_support,
+                "cliente"=>"",
+                "customer_id"=>"",);
+			
 		}
 		
-		sort($temp_suggestions);
-		foreach($temp_suggestions as $temp_suggestion)
+		sort($temp_suggestions);*/
+		/*foreach($temp_suggestions as $temp_suggestion)
 		{
 			$suggestions[]=array('label'=> $temp_suggestion);		
-        }
+        }*/
 		$this->db->from('technical_supports');
 		$this->db->like('custom1_support_name', $search);
 		$this->db->where('deleted',0);
 		$this->db->limit($limit);
 		$by_name = $this->db->get();
-		$temp_suggestions = array();
+		//$temp_suggestions = array();
 		foreach($by_name->result() as $row)
 		{
-			$temp_suggestions[] = $row->custom1_support_name;
+			$suggestions[$row->Id_support] =  array(
+                "model"=> $row->model,
+                "value"=>$row->Id_support,
+                "custom1_support_name"=>$row->custom1_support_name,
+                "custom2_support_name"=> $row->custom2_support_name,
+                "type_team"=>$row->type_team,
+                "marca"=>$row->marca,
+                "order_support"=>$row->order_support,
+                "cliente"=>"",
+                "customer_id"=>"",
+                "otro"=>"");
 		}
 		
-		sort($temp_suggestions);
-		foreach($temp_suggestions as $temp_suggestion)
+		//sort($temp_suggestions);
+		/*foreach($temp_suggestions as $temp_suggestion)
 		{
 			$suggestions[]=array('label'=> $temp_suggestion);		
-        }
+        }*/
         $this->db->from('technical_supports');
 		$this->db->like('custom2_support_name', $search);
 		$this->db->where('deleted',0);
 		$this->db->limit($limit);
 		$by_name = $this->db->get();
-		$temp_suggestions = array();
+		//$temp_suggestions = array();
 		foreach($by_name->result() as $row)
 		{
-			$temp_suggestions[] = $row->custom2_support_name;
+			$suggestions[$row->Id_support] =  array(
+                "model"=> $row->model,
+                "value"=>$row->Id_support,
+                "custom1_support_name"=>$row->custom1_support_name,
+                "custom2_support_name"=> $row->custom2_support_name,
+                "type_team"=>$row->type_team,
+                "marca"=>$row->marca,
+                "order_support"=>$row->order_support,
+                "cliente"=>"",
+                "customer_id"=>"",
+                "otro"=>"");
 		}
 		
-		sort($temp_suggestions);
+		/*sort($temp_suggestions);
 		foreach($temp_suggestions as $temp_suggestion)
 		{
 			$suggestions[]=array('label'=> $temp_suggestion);		
-		}
+        }*/
 		$this->db->from('technical_supports');
 		$this->db->like('order_support', $search);
 		$this->db->where('deleted',0);
 		$this->db->limit($limit);
 		$by_name = $this->db->get();
-		$temp_suggestions = array();
+		//$temp_suggestions = array();
 		foreach($by_name->result() as $row)
 		{
-			$temp_suggestions[] = $row->order_support;
+			$suggestions[$row->Id_support] =  array(
+                "model"=> $row->model,
+                "value"=>$row->Id_support,
+                "custom1_support_name"=>$row->custom1_support_name,
+                "custom2_support_name"=> $row->custom2_support_name,
+                "type_team"=>$row->type_team,
+                "marca"=>$row->marca,
+                "order_support"=>$row->order_support,
+                "cliente"=>"",
+                "customer_id"=>"",
+                "otro"=>"");
 		}
 		
-		sort($temp_suggestions);
+		/*sort($temp_suggestions);
 		foreach($temp_suggestions as $temp_suggestion)
 		{
 			$suggestions[]=array('label'=> $temp_suggestion);		
-        }
+        }*/
 
         $this->db->from('technical_supports');
 		$this->db->like('model', $search);
 		$this->db->where('deleted',0);
 		$this->db->limit($limit);
 		$by_name = $this->db->get();
-		$temp_suggestions = array();
+		//$temp_suggestions = array();
 		foreach($by_name->result() as $row)
 		{
-			$temp_suggestions[] = $row->model;
+			$suggestions[$row->Id_support] =  array(
+                "model"=> $row->model,
+                "value"=>$row->Id_support,
+                "custom1_support_name"=>$row->custom1_support_name,
+                "custom2_support_name"=> $row->custom2_support_name,
+                "type_team"=>$row->type_team,
+                "marca"=>$row->marca,
+                "order_support"=>$row->order_support,
+                "cliente"=>"",
+                "customer_id"=>"",
+                "otro"=>"");
 		}
 		
-		sort($temp_suggestions);
+		/*sort($temp_suggestions);
 		foreach($temp_suggestions as $temp_suggestion)
 		{
 			$suggestions[]=array('label'=> $temp_suggestion);		
-        }
+        }*/
         $this->db->from('technical_supports');
 		$this->db->like('state', $search);
 		$this->db->where('deleted',0);
 		$this->db->limit($limit);
 		$by_name = $this->db->get();
-		$temp_suggestions = array();
+		//$temp_suggestions = array();
 		foreach($by_name->result() as $row)
 		{
-			$temp_suggestions[] = $row->state;
+            //$temp_suggestions[] = $row->state;
+            $suggestions[$row->Id_support] =  array(
+                "model"=> $row->model,
+                "value"=>$row->Id_support,
+                "custom1_support_name"=>$row->custom1_support_name,
+                "custom2_support_name"=> $row->custom2_support_name,
+                "type_team"=>$row->type_team,
+                "marca"=>$row->marca,
+                "order_support"=>$row->order_support,
+                "cliente"=>"",
+                "customer_id"=>"",
+                "otro"=>"");
 		}
 		
-		sort($temp_suggestions);
+		/*sort($temp_suggestions);
 		foreach($temp_suggestions as $temp_suggestion)
 		{
 			$suggestions[]=array('label'=> $temp_suggestion);		
-        }
-        $this->db->select('people.first_name as first_name, 
-        people.last_name as last_name');
-        $this->db->join('people', 'customers.person_id = people.person_id');
+        }*/
+        $this->db->select('people.first_name ,Id_support, model,custom1_support_name,
+        people.last_name ,custom2_support_name,type_team,order_support,marca,people.person_id');
         $this->db->from('customers');
-		$this->db->like('first_name', $search);
-		$this->db->where('deleted',0);
+        $this->db->join('people', 'customers.person_id = people.person_id');
+        $this->db->join('technical_supports', 'technical_supports.id_customer = customers.person_id');
+
+		$this->db->like('account_number', $search);
+		$this->db->where($this->db->dbprefix('technical_supports').'.deleted',0);
 		$this->db->limit($limit);
 		$by_name = $this->db->get();
-		$temp_suggestions = array();
+		//$temp_suggestions = array();
 		foreach($by_name->result() as $row)
 		{
-			$temp_suggestions[] = $row->first_name." ".$row->last_name;
+            //$temp_suggestions[] = $row->first_name." ".$row->last_name;
+            $suggestions[$row->Id_support] =  array(
+                "model"=> $row->model,
+                "value"=>$row->Id_support,
+                "custom1_support_name"=>$row->custom1_support_name,
+                "custom2_support_name"=> $row->custom2_support_name,
+                "type_team"=>$row->type_team,
+                "marca"=>$row->marca,
+                "order_support"=>$row->order_support,
+                "cliente"=>$row->first_name." ".$row->last_name,
+                "customer_id"=>$person_id,
+                "otro"=>"");
 		}
 		
-		sort($temp_suggestions);
+		/*sort($temp_suggestions);
 		foreach($temp_suggestions as $temp_suggestion)
 		{
 			$suggestions[]=array('label'=> $temp_suggestion);		
-        }
-       
+        }*/
+       /*
         $this->db->from('customers');
 		$this->db->like('account_number', $search);
 		$this->db->where('deleted',0);
@@ -387,7 +496,7 @@ phppos_people p ON c.person_id=p.person_id WHERE Id_support='$id_equipo'");
 		foreach($temp_suggestions as $temp_suggestion)
 		{
 			$suggestions[]=array('label'=> $temp_suggestion);		
-        }
+        }*/
 		return $suggestions;
 
 	}
@@ -419,7 +528,7 @@ phppos_people p ON c.person_id=p.person_id WHERE Id_support='$id_equipo'");
 	
 	}
 	   
-    function exite_spare_part($id_support, $serie){
+   /* function exite_spare_part($id_support, $serie){
         $this->db->from('spare_parts');		
         $this->db->where('id_support',$id_support);
         $this->db->where('serie',$serie);
@@ -428,8 +537,8 @@ phppos_people p ON c.person_id=p.person_id WHERE Id_support='$id_equipo'");
             return true;
         }
         return false;
-     }
-    function add_spare_part($data){
+     }*/
+   /* function add_spare_part($data){
         if(!$this->exite_spare_part($data["id_support"], $data["serie"])){
             return  $this->db->insert('spare_parts', $data);
         }else{
@@ -439,17 +548,17 @@ phppos_people p ON c.person_id=p.person_id WHERE Id_support='$id_equipo'");
             return $this->db->update('spare_parts');           
        
         }
-    }
-    function get_spare_part_by_support($id_support){
+    }*/
+    /*function get_spare_part_by_support($id_support){
         $this->db->from('spare_parts');		
         $this->db->where('id_support',$id_support);
         $query=$this->db->get();
         return $query;
-    }
-    function delete_spare_part_by_id($id){        
+    }*/
+    /*function delete_spare_part_by_id($id){        
         $this->db->where('id', $id);       
         return  $this->db->delete('spare_parts');   
-    }
+    }*/
     
     ///////////////////////////// Modulo de Soporte Tecnico
     function get_historial_serv_tec_cliente($cliente) {         
@@ -505,8 +614,7 @@ phppos_people p ON c.person_id=p.person_id WHERE Id_support='$id_equipo'");
     function delete_diagnostico($idSup,$idSupport){
         
             $this->db->where('id', $idSup);       
-            $eliminado = $this->db->delete('phppos_technical_supports_diag_tec');  
-            
+            $eliminado = $this->db->delete('phppos_technical_supports_diag_tec');   
           
             if($this->cantidad_diagnosticos($idSupport) == 0) {  
                 $this->db->where('Id_support', $idSupport);
@@ -521,27 +629,31 @@ phppos_people p ON c.person_id=p.person_id WHERE Id_support='$id_equipo'");
         return $this->db->update('phppos_technical_supports', array('state' => $dataResp,'repair_cost' => $dataST['costo'],'observaciones_entrega' => $dataST['comentarios'],'do_have_guarantee' => $dataST['garantia'],'date_garantia' => $dataST['fecha_garantia']));
     }
     
-    function get_sev_tec_cliente($idSupport,$aq=""){ 
+    function get_sev_tec_cliente($idSupport,$cantidad=""){ 
         $reportServTec=$this->db->query("SELECT ts.*, client.phone_number, client.email, client.country, client.first_name, client.last_name, client.image_id
         FROM phppos_technical_supports ts, phppos_people client
         WHERE 	ts.id_support='$idSupport' and ts.id_customer=client.person_id Order By ts.Id_support");
-        if($aq=='') {
+        if($cantidad=='') {
          return $reportServTec;
         }
-        if($aq=='1') {
+        if($cantidad=='1') {
          return $reportServTec->row();
         }
         
     }
     function get_abonos_serv_tecnico($idSupport){ 
-        $reportServAbon=$this->db->query("SELECT SUM(payment) Abonado FROM phppos_support_payments WHERE id_support='$idSupport'"); 
-         return $reportServAbon;
-    }
-    function updat_status_serv_tec_cliente($idSupport,$data){ 
-        $now= date('Y-m-d H:i:s');
+        $this->db->select('SUM(payment) as abono');  
+        $this->db->from('support_payments'); 
         $this->db->where('Id_support', $idSupport);
-        $this->db->update('phppos_technical_supports', array('state' => 'ENTREGADO','retirado_por'=>$data["nota"],'date_entregado' => $now));
+        $query = $this->db->get();
+        if ($query->num_rows() ==1){
+            $data= $query->row();
+            return $data->abono?$data->abono:0;
+        }
+         return 0;
     }
+   
+
     public function buscar_servicios($searchword,$q) { 
         $current_location = $this->Employee->get_logged_in_employee_current_location_id();
         $where="";
@@ -592,7 +704,7 @@ phppos_people p ON c.person_id=p.person_id WHERE Id_support='$id_equipo'");
         } 
         /*
 	Gets information about a particular customer
-	*/
+	
 	function get_info($customer_id)
 	{   
 		$this->db->from('customers');	
@@ -620,7 +732,7 @@ phppos_people p ON c.person_id=p.person_id WHERE Id_support='$id_equipo'");
 			
 			return $person_obj;
 		}
-	}
+	}*/
     function get_fallas($tipo) {
         $reportFalla=$this->db->query("SELECT Distinct damage_failure 
         FROM phppos_technical_supports

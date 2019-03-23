@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-lg" style="width: 96%">
         <div class="modal-content animated bounceInRight">
             <div class="modal-header"
-                style="height: 90px;background: url('assets/template/images/bannerventana.png') center right no-repeat;background-size: cover;">
+                style="height: 90px;background: url('img/bannerventana.png') center right no-repeat;background-size: cover;">
                 <button type="button" title="Cerrar la ventana" class="btn btn-danger"
                     style="background: #FFFFFF;color: #000000;padding: 5px 7px 5px 7px;float: right;font-weight: 800;"
                     data-dismiss="modal"

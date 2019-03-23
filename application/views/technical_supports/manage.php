@@ -59,7 +59,7 @@
                 <div class="tools">
                     <div class="">
                         <?php if ($this->Employee->has_module_action_permission($controller_name, 'add_update', $this->Employee->get_logged_in_employee_info()->person_id)): ?>
-                            <a href="<?php echo site_url($controller_name) ?>/view/-1" class="btn btn-primary">
+                            <a href="<?php echo site_url($controller_name) ?>/nuevo-servicio/-1" class="btn btn-primary">
                                     <i class="fa fa-plus hidden-lg fa fa-2x tip-bottom"
                                        data-original-title="<?php echo lang($controller_name . '_new'); ?>"></i>
                                     <span class="visible-lg"><?php echo lang($controller_name . '_new') ?></span>
@@ -68,7 +68,7 @@
                     </div>
                 </div>
             </div>
-            <div id="contTabla" class="portlet-body table-responsive">
+            <div id="contTabla" class="portlet-body ">
                  <?php $this->load->view("technical_supports/manage_tabla"); ?>
             </div>
         </div>

@@ -94,6 +94,32 @@ function get_price_for_item_excluding_taxes($item_id_or_line, $item_price_includ
 	
 	return FALSE;
 }
+function get_price_for_item_excluding_taxes_support($tax_info, $item_price_including_tax, $sale_id = FALSE)
+{
+	$return = FALSE;
+	$CI =& get_instance();
+	
+	if (count($tax_info) == 2 && $tax_info[1]['cumulative'] == 1)
+	{
+		$return = $item_price_including_tax/(1+($tax_info[0]['percent'] /100) + ($tax_info[1]['percent'] /100) + (($tax_info[0]['percent'] /100) * (($tax_info[1]['percent'] /100))));
+	}
+	else //0 or more taxes NOT cumulative
+	{
+		$total_tax_percent = 0;		
+		foreach($tax_info as $tax)
+		{
+			$total_tax_percent+=$tax['percent'];
+		}		
+		$return = $item_price_including_tax/(1+($total_tax_percent /100));
+	}
+	
+	if ($return !== FALSE)
+	{
+		return to_currency_no_money($return, 10);
+	}
+	
+	return FALSE;
+}
 
 function get_price_for_item_including_taxes($item_id_or_line, $item_price_excluding_tax, $sale_id = FALSE)
 {

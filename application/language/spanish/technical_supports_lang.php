@@ -40,17 +40,14 @@ $lang["technical_supports_falla_no_support"]="No hay ordenes para mostrar";
 $lang["technical_supports_entregar"]="Entregar";
 $lang["technical_supports_marca"]="Marca";
 $lang["technical_supports_name_tecnico"]="Técnico";
-$lang["technical_supports_name_estad_equipo_imprime"]="Estado";
+//$lang["technical_supports_name_estad_equipo_imprime"]="Estado";
 $lang["technical_supports_garantia"]="Fecha de Garantía";
 $lang["technical_supports_observaciones"]="Observaciones";
 $lang["technical_supports_garantia_help"]="Fecha de vencimiento de la garantía ";
 $lang["technical_supports_color"]="Color";
 $lang["technical_supports_update_date"]="Actualizar fecha de ingreso";
-
-
 $lang['technical_supports_entrega_title_diag']="Diagnostico Técnico";
-$lang['technical_supports_entrega_title_resp']="Respuestos";
-
+//$lang['technical_supports_entrega_title_resp']="Respuestos";
 $lang['technical_supports_vntorden']="Orden";
 $lang['technical_supports_vntequipo']="Equipo";
 $lang['technical_supports_vntmodelo']="Modelo";
@@ -100,7 +97,7 @@ $lang['technical_supports_Mark_reject']="Rechazar";
 /////////Toas alert
 $lang['technical_supports_diagnostico_add']="Diagnostico almacenado con exito";
 $lang['technical_supports_diagnostico_delet']="Diagnostico eliminado con exito";
-$lang['technical_supports_respuesto_add']="Respuesto almacenado con exito";
+$lang['technical_supports_respuesto_add']="Respuesto(s) almacenado con exito";
 $lang['technical_supports_respuesto_delet']="Respuesto eliminado con exito";
 $lang['technical_supports_asig_estado']="El registro fue actualizado como ";
 $lang['technical_supports_adv_asig_resp']="El servicio no puede ser rechazado ya que tiene respuesto asignado.";
@@ -148,10 +145,8 @@ $lang["technical_supports_titu_subt"]="SUBTOTAL";
 
 $lang["technical_supports_menj_car"]="No hay artículos en elcarrito";
 $lang["technical_supports_menj_car_cestart"]="En la cesta de artículos";
-$lang["technical_supports_menj_car_subt"]="Subtotal";
-$lang["technical_supports_menj_car_prodiva"]="Productos con ivas especiales";
+$lang["technical_supports_menj_car_prodiva"]="Impuesto(s)";
 $lang["technical_supports_menj_car_product"]="Productos";
-$lang["technical_supports_menj_car_ivat"]="Ivas de la tienda";
 
 
 ///////////////////////////////////// Buscar Servicios
@@ -169,7 +164,7 @@ $lang["technical_supports_titu_garant"]="Garantia";
 $lang["technical_supports_titu_observ"]="Observaciones";
 $lang["technical_supports_titu_retp"]="Retirado por";
 
-$lang["technical_supports_repair_mart"]="Monto en Articulos";
+$lang["technical_supports_repair_mart"]="Total reparación"; //new
 $lang["technical_supports_orden_inf_garant"]="Sin garantia";
 
 $lang["technical_supports_vnthist"]="Ver Historial del Cliente";
