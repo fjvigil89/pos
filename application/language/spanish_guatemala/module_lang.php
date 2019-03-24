@@ -6,6 +6,11 @@ $lang['module_technical_supports']='Servicio Técnico';
 $lang['module_customers']='Clientes';
 $lang['module_customers_desc']='Agregar, Actualizar, Borrar y Buscar clientes';
 
+$lang["module_action_delete_serial"]="Permitir eliminar seriales";
+$lang["module_action_agregar_o_sustraer"]="Dar de baja artículos agregar o sustraer";
+$lang["module_action_mostrar_valor_cierre_caja"]="Mostrar valor de cierre de caja";
+$lang["module_action_return_item_with_invoice"]="Devolución con factura";
+
 $lang['module_suppliers']='Proveedores';
 $lang['module_suppliers_desc']='Agregar, Actualizar, Borrar y Buscar proveedores';
 

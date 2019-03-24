@@ -8,6 +8,11 @@ $lang['module_technical_supports']='Technical service';
 $lang['module_customers']='Customers';
 $lang['module_customers_desc']='Add, Update, Delete, and Search customers';
 
+$lang["module_action_delete_serial"]="Allow delete serial";
+$lang["module_action_agregar_o_sustraer"]="Allow delete items add or subtract";
+$lang["module_action_mostrar_valor_cierre_caja"]="Show cash closing value";
+$lang["module_action_return_item_with_invoice"]="Return with invoice";
+
 $lang['module_suppliers']='Suppliers';
 $lang['module_suppliers_desc']='Add, Update, Delete, and Search suppliers';
 
