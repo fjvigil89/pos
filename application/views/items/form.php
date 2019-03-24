@@ -398,8 +398,14 @@
 											<?php if (isset($seriales_item) and $seriales_item) {?>
 												<?php foreach($seriales_item->result() as $seriale) { ?>
 													<tr>
-														<td><input type="text" class="form-control form-inps" size="50" name="additional_item_seriales[]" value="<?php echo H($seriale->item_serial); ?>" /></td>
-														<td><a class="btn delete_item_serial" href="javascript:void(0);"><?php echo lang('common_delete'); ?></a></td>
+														<?php if ($this->Employee->has_module_action_permission('items','delete_serial', $this->Employee->get_logged_in_employee_info()->person_id) ) { ?>
+																<td><input type="text" class="form-control form-inps" size="50" name="additional_item_seriales[]" value="<?php echo H($seriale->item_serial); ?>" /></td>
+																<td><a class="btn delete_item_serial" href="javascript:void(0);"><?php echo lang('common_delete'); ?></a></td>
+														<?php }
+														else{?>
+															<td align="center"><?=  H($seriale->item_serial); ?> </td>
+															<td></td>
+														<?php } ?>
 													</tr>
 												<?php } ?>
 											<?php } ?>

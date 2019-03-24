@@ -607,8 +607,15 @@ class Items extends Secure_area implements iData_controller
             } else {
                 $this->Additional_item_numbers->delete($item_id);
             }
-            if ($this->input->post('is_serialized')==1 and $this->input->post('additional_item_seriales') && is_array($this->input->post('additional_item_seriales'))) {
-                $this->Additional_item_seriales->save($item_id, $this->input->post('additional_item_seriales'));
+            $additional_item_seriales= is_array($this->input->post('additional_item_seriales'))?$this->input->post('additional_item_seriales'):array();
+            if ($this->input->post('is_serialized')==1 ){               
+                if (!$this->Employee->has_module_action_permission('items','delete_serial', $this->Employee->get_logged_in_employee_info()->person_id) ) {
+                    $seriales_old=$this->Additional_item_seriales->get_item_serales_unsold($item_id)->result_array();;
+                    foreach ($seriales_old as $value) {
+                        $additional_item_seriales[]= $value["item_serial"];
+                    }                   
+                }
+                $this->Additional_item_seriales->save($item_id, $additional_item_seriales);
             } else {
                 $this->Additional_item_seriales->delete($item_id);
             }
@@ -838,7 +845,7 @@ class Items extends Secure_area implements iData_controller
 
     public function save_inventory($item_id = -1)
     {
-        $this->check_action_permission('add_update');
+        $this->check_action_permission('agregar_o_sustraer');
         $employee_id = $this->Employee->get_logged_in_employee_info()->person_id;
         $cur_item_info = $this->Item->get_info($item_id);
         $cur_item_location_info = $this->Item_location->get_info($item_id);

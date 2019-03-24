@@ -103,7 +103,7 @@
 								</div>
 								<div class="col-md-2">
 									Busqueda: 
-									<input type="text" name="search" id="search" class="form-control" placeholder="Buscar" value="<?php echo $search ?> ">
+									<input type="text" name="search" id="search" class="form-control" placeholder="Buscar" value="<?php echo $search ?>">
 		
 								</div>								
 								<?php if(!$this->Employee->has_module_action_permission('registers_movement','see_cash_flows_uniqued',  $this->session->userdata('person_id'))):?>

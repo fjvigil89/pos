@@ -831,7 +831,7 @@
 							<a href="<?php echo site_url('reports/summary_movement_cash');?>" class="btn icon-btn letter-space">
 								<i class="fa fa-building-o"></i>
 								<div>
-									<?php echo lang('reports_summary_reports'); ?>
+									<?php echo lang('reports_summary_reports')." - " .lang('only_cash'); ?>
 								</div>
 							</a>
 							<a href="<?php echo site_url('reports/only_cash');?>" class="btn icon-btn letter-space">

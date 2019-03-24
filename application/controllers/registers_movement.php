@@ -64,7 +64,6 @@ class Registers_movement extends Secure_area
 		
 
 		$data['registers_movement'] = $this->Register_movement->get_by_date($register_id,$desde,$hasta,"",$id_empleado, $filter, $search); //obtener todos los movimiento comprendidos en un rango de fecha o si es null los ultimos 30 dias
-		// print_r($data['registers_movement']->result());die;
 		$this->load->view('registers_movement/manage',$data);
 	}
 
@@ -83,6 +82,12 @@ class Registers_movement extends Secure_area
 		} else {
 			redirect('/registers_movement/', 'refresh');
 		}
+	}
+	function receipt_register($register_log_id){
+		$data = $this->Register_movement->report_register($register_log_id);
+		$data["credito_tienda"]=$this->config->item("customers_store_accounts");
+		$data["items_range"]=$this->Item->get_items_range($register_log_id);
+		$this->load->view("registers_movement/report_register",$data);
 	}
 
 	function save($operation = null)

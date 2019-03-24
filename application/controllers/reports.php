@@ -662,15 +662,19 @@ class Reports extends Secure_area {
         $details_data = array();
 
         foreach ($report_data as $row) {
+            $receipt="";
             if ($row['shift_end'] == '0000-00-00 00:00:00') {
                 $shift_end = lang('reports_register_log_open');
                 $delete = anchor('reports/delete_register_log/' . $row['register_log_id'] . '/' . $start_date . '/' . $end_date, lang('common_delete'), "onclick='return confirm(" . json_encode(lang('reports_confirm_register_log_delete')) . ")'");
+                $receipt="<br><strong>Abierto</strong>";
             } else {
                 $shift_end = date(get_date_format(), strtotime($row['shift_end'])) . ' ' . date(get_time_format(), strtotime($row['shift_end']));
                 $delete = anchor('reports/delete_register_log/' . $row['register_log_id'] . '/' . $start_date . '/' . $end_date, lang('common_delete'), "onclick='return confirm(" . json_encode(lang('reports_confirm_register_log_delete')) . ")'");
+                $receipt="<br>" .anchor('registers_movement/receipt_register/' . $row['register_log_id'], '<i class="fa fa-print fa fa-2x vertical-align"></i>', array('target' => '_blank', 'class' => 'hidden-print'));
+
             }
             $summary_data[] = array(
-                array('data' => $delete, 'align' => 'left'),
+                array('data' => $delete. $receipt, 'align' => 'left'),
                 array('data' => $row['register_name'], 'align' => 'left'),
                 array('data' => $row['open_first_name'] . ' ' . $row['open_last_name'], 'align' => 'left'),
                 array('data' => $row['close_first_name'] . ' ' . $row['close_last_name'], 'align' => 'left'),
@@ -2387,7 +2391,7 @@ class Reports extends Secure_area {
 
         $this->load->model('reports/specific_movement');
         $model = $this->specific_movement;
-         $params=array('start_date' => $start_date, 'end_date' => $end_date, "register_id"=>$register_id, 'export_excel' => $export_excel, 'export_pdf' => $export_pdf, 'offset' => $offset);
+        $params=array('start_date' => $start_date, 'end_date' => $end_date, "register_id"=>$register_id, 'export_excel' => $export_excel, 'export_pdf' => $export_pdf, 'offset' => $offset);
 
         $model->setParams(array('start_date' => $start_date, 'end_date' => $end_date,"register_id"=>$register_id, 'export_excel' => $export_excel, 'export_pdf' => $export_pdf, 'offset' => $offset));
 
@@ -2420,7 +2424,7 @@ class Reports extends Secure_area {
                 $data_row[] = array('data' => "", 'align' => 'right');
             }
            else{
-                $data_row[] = array('data' => 'GASTOS', 'align' => 'right');
+                $data_row[] = array('data' => 'SALIDA', 'align' => 'right');
                 $data_row[] = array('data' => "", 'align' => 'right');
                 $data_row[] = array('data' => to_currency($row['mount']), 'align' => 'right');                
                
@@ -2549,9 +2553,9 @@ class Reports extends Secure_area {
 
         $this->load->model('reports/specific_movement');
         $model = $this->specific_movement;
-        $datos = $this->Register_movement->get_sale();
-       // echo "<pre>";print_r($datos);die;
-         $params=array('start_date' => $start_date, 'end_date' => $end_date, "register_id"=>$register_id, 'export_excel' => $export_excel, 'export_pdf' => $export_pdf, 'offset' => $offset);
+        $location_id=$this->Employee->get_logged_in_employee_current_location_id();
+
+        $params=array('start_date' => $start_date, 'end_date' => $end_date, "register_id"=>$register_id, 'export_excel' => $export_excel, 'export_pdf' => $export_pdf, 'offset' => $offset);
 
         $model->setParams(array('start_date' => $start_date, 'end_date' => $end_date,"register_id"=>$register_id, 'export_excel' => $export_excel, 'export_pdf' => $export_pdf, 'offset' => $offset));
 
@@ -2567,11 +2571,66 @@ class Reports extends Secure_area {
         
         $tabular_data = array();
         $report_data = $model->getData();
-       
+        $pagos = $this->Register_movement->get_metodos_pago_no_efectivo_ventas($start_date,$end_date, $location_id);
+        $summary_data=$model->getSummaryData();
+       foreach ($pagos as  $pago) {
+           $es_devolucion= (
+                ($pago["items_quantity"]==null?0:$pago["items_quantity"])+
+                ($pago["items_k_quantity"]==null?0:$pago["items_k_quantity"])
+            )<=0;
+            if(!$es_devolucion){
+                $summary_data["entrada"]+=$pago["monto"];
+            }else{
+                $summary_data["salida"]-=$pago["monto"];
+            }
+          $tem=array(
+            "register_movement_id"=>$pago["id"],
+            "register_log_id"=>"0",
+            "register_date"=>$pago["fecha_pago"],
+            "mount"=>$pago["monto"],
+            "description"=>($es_devolucion?lang("sales_return"):lang("sales_sale"))." - ".$pago["payment_type"]." : Este tipo de movimiento no afecta el efectivo en caja" ,
+            "detailed_description"=>$es_devolucion?lang("sales_return"):lang("sales_sale"),
+            "type_movement"=>$es_devolucion?0:1,
+            "mount_cash"=>"0",
+            "categorias_gastos"=>$es_devolucion?lang("sales_return"):lang("sales_sale"),
+            "id_employee"=>$pago["person_id"],
+            "first_name"=>$pago["first_name"],
+            "last_name"=>$pago["last_name"],
+            "no_aplica"=>1
+          );
+          $report_data["details"][]= $tem;
+       }
+       $pagos = $this->Register_movement->get_metodos_pago_no_efectivo_credito($start_date,$end_date, $location_id);
+       foreach ($pagos as  $pago) {
+        
+         if(!$es_devolucion){
+             $summary_data["entrada"]+=$pago["monto"];
+         }
+       $tem=array(
+         "register_movement_id"=>$pago["id"],
+         "register_log_id"=>"0",
+         "register_date"=>$pago["fecha_pago"],
+         "mount"=>$pago["monto"],
+         "description"=>lang("sales_store_account_payment")." - ".$pago["payment_type"]." : Este tipo de movimiento no afecta el efectivo en caja" ,
+         "detailed_description"=>lang("sales_store_account_payment"),
+         "type_movement"=>1,
+         "mount_cash"=>"0",
+         "categorias_gastos"=>lang("sales_store_account_payment"),
+         "id_employee"=>$pago["person_id"],
+         "first_name"=>$pago["first_name"],
+         "last_name"=>$pago["last_name"],         
+         "no_aplica"=>1
+       );
+       $report_data["details"][]= $tem;
+    }
         foreach ($report_data["details"] as $row) {
             $data_row = array();
-            $data_row[] = array('data' => anchor('registers_movement/receipt/' . $row['register_movement_id'], '<i class="fa fa-print fa fa-2x vertical-align"></i>', array('target' => '_blank', 'class' => 'hidden-print')) ,'align' => 'left' );
-            
+            if(isset($row["no_aplica"])){
+                $data_row[] = array('data' => "" ,'align' => 'left' );
+
+            }else{
+                $data_row[] = array('data' => anchor('registers_movement/receipt/' . $row['register_movement_id'], '<i class="fa fa-print fa fa-2x vertical-align"></i>', array('target' => '_blank', 'class' => 'hidden-print')) ,'align' => 'left' );
+            }            
              $data_row[] = array('data' => $row['register_movement_id'], 'align' => 'right');
 
             $data_row[] = array('data' => date(get_date_format() . ' ' . get_time_format(), strtotime($row['register_date'])), 'align' => 'right');
@@ -2584,30 +2643,31 @@ class Reports extends Secure_area {
                 $data_row[] = array('data' => "", 'align' => 'right');
             }
            else{
-                $data_row[] = array('data' => 'GASTOS', 'align' => 'right');
+                $data_row[] = array('data' => 'SALIDA', 'align' => 'right');
                 $data_row[] = array('data' => "", 'align' => 'right');
                 $data_row[] = array('data' => to_currency($row['mount']), 'align' => 'right');                
                
            }
             $data_row[] = array('data' =>$row['categorias_gastos'], 'align' => 'right');
             $data_row[] = array('data' =>$row['first_name']." ".$row['last_name'], 'align' => 'right');
-            $data_row[] = array('data' => to_currency($row['mount_cash']), 'align' => 'right');
-            
+            if(isset($row["no_aplica"])){
+                $data_row[] = array('data' => "<strong>no aplica</strong>" ,'align' => 'left' );
+            }else{
+                $data_row[] = array('data' => to_currency($row['mount_cash']), 'align' => 'right');
+            }
             $tabular_data[] = $data_row;
         }
-
+       
         $data = array(
             "title" => "Movimiento de caja detallado",
             "subtitle" => date(get_date_format(), strtotime($start_date)) . '-' . date(get_date_format(), strtotime($end_date)),
             "headers" => $model->getDataColumns(),
             "data" => $tabular_data,
-            "summary_data" => $model->getSummaryData(),
+            "summary_data" => $summary_data,
             "export_excel" => $export_excel,
             "export_pdf" => $export_pdf,
             "pagination" => $this->pagination->create_links(),
-        );
-
-        
+        );       
        
         $this->load->view("reports/tabular_detailed_of_payment", $data);
     }

@@ -33,9 +33,11 @@
 					</h5>
 					<ul class="text-error" id="error_message_box"></ul>
 					<?php echo form_open('sales/closeregister' . $continue, array('id'=>'closing_amount_form','class'=>'')); ?>
-						<h3 class="text-success text-center">
-							<?php echo sprintf(lang('sales_closing_amount_approx'), to_currency($closeout)); ?>
-						</h3>					
+						<?php if ($this->Employee->has_module_action_permission('registers_movement','mostrar_valor_cierre_caja', $this->Employee->get_logged_in_employee_info()->person_id) ) { ?>
+							<h3 class="text-success text-center">
+								<?php echo sprintf(lang('sales_closing_amount_approx'), to_currency($closeout)); ?>
+							</h3>		
+						<?php } ?>			
 						<br/>
 						<div class="row"> 
 							<div class="col-md-6">

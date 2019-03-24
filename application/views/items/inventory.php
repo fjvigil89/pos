@@ -152,43 +152,45 @@
 										?>
 									</div>
 								</div>
+								<?php if ($this->Employee->has_module_action_permission('items','agregar_o_sustraer', $this->Employee->get_logged_in_employee_info()->person_id) ) { ?>
 
-								<div class="form-group hidden-print">
-									<?php echo form_label(lang('items_add_minus').':', 'quantity',array('class'=>'col-md-3 control-label requireds wide')); ?>
-									<div class="col-md-9">
-										<?php echo form_input(array(
-											'name'=>'newquantity',
-											'id'=>'newquantity',
-											'class'=>'form-control form-inps'));
-										?>
+									<div class="form-group hidden-print">
+										<?php echo form_label(lang('items_add_minus').':', 'quantity',array('class'=>'col-md-3 control-label requireds wide')); ?>
+										<div class="col-md-9">
+											<?php echo form_input(array(
+												'name'=>'newquantity',
+												'id'=>'newquantity',
+												'class'=>'form-control form-inps'));
+											?>
+										</div>
 									</div>
-								</div>
 
-								<div class="form-group hidden-print">
-									<?php echo form_label(lang('items_inventory_comments').':', 'description',array('class'=>'col-md-3 control-label wide')); ?>
-									<div class="col-md-9">
-										<?php echo form_textarea(array(
-											'name'=>'trans_comment',
-											'id'=>'trans_comment',
-											'class'=>'form-control form-inps',
-											'rows'=>'3',
-											'cols'=>'17'));
-										?>
+									<div class="form-group hidden-print">
+										<?php echo form_label(lang('items_inventory_comments').':', 'description',array('class'=>'col-md-3 control-label wide')); ?>
+										<div class="col-md-9">
+											<?php echo form_textarea(array(
+												'name'=>'trans_comment',
+												'id'=>'trans_comment',
+												'class'=>'form-control form-inps',
+												'rows'=>'3',
+												'cols'=>'17'));
+											?>
+										</div>
 									</div>
-								</div>
-										
-								<div class="form-group">
-									<div class="col-md-12">	                    
-		                    			<?php
-											echo form_button(array(
-											'type'=>'submit',
-											'name'=>'submit',
-											'id'=>'submit',
-											'content'=>lang('common_submit'),
-											'class'=>'btn btn-primary hidden-print pull-right'));
-										?>
+											
+									<div class="form-group">
+										<div class="col-md-12">	                    
+											<?php
+												echo form_button(array(
+												'type'=>'submit',
+												'name'=>'submit',
+												'id'=>'submit',
+												'content'=>lang('common_submit'),
+												'class'=>'btn btn-primary hidden-print pull-right'));
+											?>
+										</div>
 									</div>
-								</div>
+								<?php }?>
 																	
 							</div>	
 						<?php  echo form_close(); ?>

@@ -12,7 +12,9 @@ class Register_movement extends CI_Model
 		$this->current_location_id = $this->CI->Employee->get_logged_in_employee_current_location_id();
 	}
 
-	function save($cash, $description=" ", $register_id = false, $valid_greater_than_zero_cash = true,$categorias_gastos="",$id_employee=false,$retorna_id=false,$date=null,$register_log_id=null)
+	function save($cash, $description=" ", $register_id = false, 
+	$valid_greater_than_zero_cash = true, $categorias_gastos="",
+	$id_employee=false,$retorna_id=false,$date=null,$register_log_id=null)
 	{ 
         
 		if($id_employee==false){
@@ -129,10 +131,8 @@ class Register_movement extends CI_Model
 			$date_end1 = strtotime ( '-31 day' , strtotime ( mdate($datestring, $date_start) ) ) ;
 			$date_end = mdate($datestring, $date_start1);
 			$date_start = mdate($datestring, $date_end1);
-		}
-		
+		}	
 		$employee_id = $this->CI->Employee->get_logged_in_employee_info()->person_id;
-
 		$permision=$this->CI->Employee->has_module_action_permission('registers_movement','see_cash_flows_uniqued', $employee_id);
 		
 		$this->db->select(
@@ -141,20 +141,20 @@ class Register_movement extends CI_Model
 				 ->from('registers')
 				 ->join('register_log', 'register_log.register_id=registers.register_id')
 				 ->join('registers_movement', 'registers_movement.register_log_id=register_log.register_log_id')
-				 ->join('employees', 'employees.id=registers_movement.id_employee')
+				 ->join('employees', 'employees.person_id=registers_movement.id_employee')
 				 ->join('people', 'people.person_id=employees.person_id')
 				 ->where('registers.location_id', $this->current_location_id)
 				 ->where('registers.register_id', $register_id)
 				 ->where('FROM_unixtime(UNIX_TIMESTAMP(register_date),"%Y-%m-%d") >=', $date_start)
 				 ->where('FROM_unixtime(UNIX_TIMESTAMP(register_date),"%Y-%m-%d") <=', $date_end);
-				 if($employee!=false){
-					$this->db->where('registers_movement.id_employee', $employee);
-				 }
+				 
 				 if($categoria!=""){
 					$this->db->where('registers_movement.categorias_gastos', $categoria);
 				 }
-				 if($permision){
-					$this->db->where('registers_movement.id_employee', 	$employee_id);
+				 if($permision and $employee!=false ){
+					$this->db->where('registers_movement.id_employee', 	$employee );
+				 }else if(!$permision ){
+					$this->db->where('registers_movement.id_employee', $employee_id); 
 				 }
 				 if($filter != "" && $search != ""){
 					$this->db->like('registers_movement.'.$filter, $search);
@@ -323,7 +323,7 @@ class Register_movement extends CI_Model
 		FROM ".$this->db->dbprefix('registers_movement')."		
 		JOIN ".$this->db->dbprefix('register_log')." ON  ".$this->db->dbprefix('register_log').'.register_log_id='.$this->db->dbprefix('registers_movement').'.register_log_id'."
 		JOIN ".$this->db->dbprefix('registers')." ON  ".$this->db->dbprefix('registers').'.register_id='.$this->db->dbprefix('register_log').'.register_id'."
-		JOIN ".$this->db->dbprefix('employees')." ON  ".$this->db->dbprefix('employees').'.id='.$this->db->dbprefix('registers_movement').'.id_employee'."
+		JOIN ".$this->db->dbprefix('employees')." ON  ".$this->db->dbprefix('employees').'.person_id='.$this->db->dbprefix('registers_movement').'.id_employee'."
 		JOIN ".$this->db->dbprefix('people')." ON  ".$this->db->dbprefix('people').'.person_id='.$this->db->dbprefix('employees').'.person_id'."   
 		
 		$where )");
@@ -368,7 +368,7 @@ class Register_movement extends CI_Model
 		FROM ".$this->db->dbprefix('registers_movement')."		
 		JOIN ".$this->db->dbprefix('register_log')." ON  ".$this->db->dbprefix('register_log').'.register_log_id='.$this->db->dbprefix('registers_movement').'.register_log_id'."
 		JOIN ".$this->db->dbprefix('registers')." ON  ".$this->db->dbprefix('registers').'.register_id='.$this->db->dbprefix('register_log').'.register_id'."
-		JOIN ".$this->db->dbprefix('employees')." ON  ".$this->db->dbprefix('employees').'.id='.$this->db->dbprefix('registers_movement').'.id_employee'." 
+		JOIN ".$this->db->dbprefix('employees')." ON  ".$this->db->dbprefix('employees').'.person_id='.$this->db->dbprefix('registers_movement').'.id_employee'." 
 		JOIN ".$this->db->dbprefix('people')." ON  ".$this->db->dbprefix('people').'.person_id='.$this->db->dbprefix('employees').'.person_id'." 
 		
 		$where )");
@@ -376,10 +376,40 @@ class Register_movement extends CI_Model
 	
 	}
 
-	function get_sale()
+	function get_metodos_pago_no_efectivo_ventas($start_date, $end_date,$location_id)
 	{
-		
-        $query = $this->db->query("SELECT * FROM ".$this->db->dbprefix('sales')."");
+		$sql="SELECT sp.payment_type as payment_type,s.sale_id as id,em.person_id, sp.payment_amount as monto ,s.sale_time as fecha_pago, pe.first_name,pe.last_name  ,		
+		(select sum(si.quantity_purchased) from ". $this->db->dbprefix('sales_items')." si 	where si.sale_id =s.sale_id )  as items_quantity,		
+		(select sum(sik.quantity_purchased) from ". $this->db->dbprefix('sales_item_kits') ." sik where sik.sale_id =s.sale_id) as items_k_quantity		
+		 FROM ". $this->db->dbprefix('sales')." s,". $this->db->dbprefix('people')." pe, ". $this->db->dbprefix('employees')." em, 
+		 ". $this->db->dbprefix('sales_payments')." sp where sp.payment_type != ".$this->db->escape(lang('sales_cash'))."
+		and s.deleted=0
+		and sp.sale_id=s.sale_id
+		and s.sold_by_employee_id = em.person_id 
+		and em.person_id=pe.person_id
+		and s.location_id =".$this->db->escape($location_id)."
+		and s.sale_time>=".$this->db->escape($start_date)." and s.sale_time<="
+		.$this->db-> escape($end_date)."";
+		$query = $this->db->query($sql);
+   
+       return $query->result_array();
+	}
+	
+	function get_metodos_pago_no_efectivo_credito($start_date, $end_date,$location_id)
+	{
+		$sql="SELECT pp.payment_type as payment_type, pc.petty_cash_id as id, pp.payment_amount as monto,
+				pc.petty_cash_time as fecha_pago, pe.first_name,pe.last_name ,em.person_id 				
+				FROM ". $this->db->dbprefix('petty_cash')." pc, ". $this->db->dbprefix('people'). " pe, ".
+				$this->db->dbprefix('employees')." em, ". $this->db->dbprefix('petty_cash_payments')." pp 
+				where pp.payment_type  != ".$this->db->escape(lang('sales_cash'))."
+				and pc.deleted=0
+				and pc.petty_cash_id=pp.petty_cash_id
+				and pc.sold_by_employee_id = em.person_id 
+				and em.person_id=pe.person_id
+				and pc.location_id =".$this->db->escape($location_id)." and 
+				pc.petty_cash_time>=".$this->db->escape($start_date)." and pc.petty_cash_time<=".$this->db-> escape($end_date)."";
+			
+		$query = $this->db->query($sql);
    
        return $query->result_array();
 	}

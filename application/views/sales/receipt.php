@@ -347,17 +347,16 @@
 						</tr>
 
 					    <tr>
-					    	<?php if($this->config->item('hide_description')=='0'){ ?>
+					    	<?php if($item['description']!="" and $this->config->item('hide_description')==0){ ?>
 						    	<td colspan="3" align="left">
-						    		<?php echo $item['description']; ?>
+						    		<?= $item['description']; ?>
 					    		</td>	
 				    		<?php } ?>
-
-							<td colspan="1" >
-								<?php echo isset($item['serialnumber']) ? $item['serialnumber'] : ''; ?>
-							</td>
-						
-							
+							<?php if($item["serialnumber"]!=null and isset($item['serialnumber'])):?>
+								<td colspan="1" >
+									<?= "Serial: ".$item['serialnumber']  ?>
+								</td>
+							<?php endif; ?>						
 					    </tr>
 						<?php if($this->config->item('activar_casa_cambio') ):?>
 							<tr>							

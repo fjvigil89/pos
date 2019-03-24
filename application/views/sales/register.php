@@ -175,7 +175,7 @@
 												array('class'=>'','title'=>lang('sales_quotes')));
 											?>
 										</li>
-										<?php if ($this->Employee->has_module_action_permission('giftcards', 'add_update', $this->Employee->get_logged_in_employee_info()->person_id)) {?>
+										<?php if ($this->Employee->has_module_action_permission('giftcards', 'add_update', $logged_in_employee_id)) {?>
 											<li>
 												<?php echo anchor("sales/new_giftcard",
 													lang('sales_new_giftcard'),
@@ -184,7 +184,7 @@
 											</li>
 										<?php } ?>
 										<?php
-										if ($this->Employee->has_module_action_permission('reports', 'view_sales_generator', $this->Employee->get_logged_in_employee_info()->person_id)) { ?>
+										if ($this->Employee->has_module_action_permission('reports', 'view_sales_generator', $logged_in_employee_id)) { ?>
 											<li>
 												<?php echo anchor("reports/sales_generator",
 													lang('sales_search_reports'),
@@ -199,13 +199,14 @@
 											array('class'=>'','title'=>lang('batch_sale')));
 										?>
 									</li>
-
-									<li>
-									    <?php echo anchor("reports/detailed_sales/".date('Y-m-d').' 00:00:00'. '/' .date('Y-m-d').' 23:59:59/all/0/0/-1',
-									        lang('sale_sales_day'),
-									        array('class'=>'','target'=>'_blank','title'=>'Ventas realizadas hoy'));
-									    ?>
-									</li>
+									<?php if ($this->Employee->has_module_action_permission('reports','view_sales', $logged_in_employee_id) ) { ?>
+										<li>
+											<?php echo anchor("reports/detailed_sales/".date('Y-m-d').' 00:00:00'. '/' .date('Y-m-d').' 23:59:59/all/0/0/-1',
+												lang('sale_sales_day'),
+												array('class'=>'','target'=>'_blank','title'=>'Ventas realizadas hoy'));
+											?>
+										</li>
+									<?php } ?>
 
 								</ul>
 							</div>
@@ -520,7 +521,7 @@
 														<?php }
 													}
 
-													if ($this->Employee->has_module_action_permission('sales', 'edit_sale_price', $this->Employee->get_logged_in_employee_info()->person_id))
+													if ($this->Employee->has_module_action_permission('sales', 'edit_sale_price', $logged_in_employee_id))
 													{ ?>
 														<td class="text-center">
 															<?php
@@ -543,7 +544,7 @@
 												{
 													if($show_sales_price_without_tax)
 													{
-														if ($this->Employee->has_module_action_permission('sales', 'edit_sale_price', $this->Employee->get_logged_in_employee_info()->person_id))
+														if ($this->Employee->has_module_action_permission('sales', 'edit_sale_price', $logged_in_employee_id))
 														{ ?>
 															<td class="text-center">
 																<?php
@@ -730,7 +731,7 @@
 
 												<?php if ($show_sales_discount)
 												{
-													if ($this->Employee->has_module_action_permission('sales', 'give_discount', $this->Employee->get_logged_in_employee_info()->person_id)){ ?>
+													if ($this->Employee->has_module_action_permission('sales', 'give_discount', $logged_in_employee_id)){ ?>
 														<td width="3%">
 															<?php echo form_open("sales/edit_item/$line", array('class' => 'line_item_form', 'autocomplete'=> 'off'));
 																echo form_input(array('name'=>'discount','value'=>$item['discount'],'class'=>'form-control form-inps-sale input-small text-center', 'id' => 'discount_'.$line));?>
@@ -994,7 +995,7 @@
 								</form>
 							</div>
 						</div>
-						<?php if ($this->Employee->has_module_action_permission('sales', 'give_discount', $this->Employee->get_logged_in_employee_info()->person_id) && $mode != 'store_account_payment'){ ?>
+						<?php if ($this->Employee->has_module_action_permission('sales', 'give_discount', $logged_in_employee_id) && $mode != 'store_account_payment'){ ?>
 							<div class="" id="global_discount">
 								<?php echo form_open("sales/discount_all", array('id' => 'discount_all_form', 'class'=>'form-horizontal', 'autocomplete'=> 'off'));
 									echo '<div class="form-group no_margin_bottom"><label class="col-md-7 col-sm-12 col-xs-12 control-label" id="discount_all_percent_label" for="discount_all_percent">';
@@ -1011,10 +1012,10 @@
 							</div>
 						<?php } ?>
 					</div>
-					<?php if ($this->Employee->has_module_action_permission('sales', 'select_seller_during_sale', $this->Employee->get_logged_in_employee_info()->person_id)) :?>
+					<?php if ($this->Employee->has_module_action_permission('sales', 'select_seller_during_sale', $logged_in_employee_id)) :?>
 						<div class="col-lg-6 col-md-12 col-sm-12 col-xs-12" id="div_employees"></div>
 					<?php endif; ?>
-					<?php if ($this->Employee->has_module_action_permission('sales', 'overwrite_tax', $this->Employee->get_logged_in_employee_info()->person_id)) :?>
+					<?php if ($this->Employee->has_module_action_permission('sales', 'overwrite_tax', $logged_in_employee_id)) :?>
 
 						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 							<br>
@@ -1209,7 +1210,7 @@
 						echo '<span class="name-tier">'.lang('items_tiers'),'</span>';
 						echo '</div>';
 						// margin: 12px 0px 0px 12px;
-						if ($this->Employee->has_module_action_permission('sales', 'edit_tier_all', $this->Employee->get_logged_in_employee_info()->person_id)|| $this->Employee->has_module_action_permission('sales', 'edit_sale_price', $this->Employee->get_logged_in_employee_info()->person_id))
+						if ($this->Employee->has_module_action_permission('sales', 'edit_tier_all', $logged_in_employee_id)|| $this->Employee->has_module_action_permission('sales', 'edit_sale_price', $logged_in_employee_id))
 						{
 							echo '<div class="col-md-6">';
 							echo '<span class="">';
@@ -1263,7 +1264,7 @@
 						if(!($value=='0.00')) { ?>
 							<li class="list-group-item">
 								<span class="name-item-summary">
-									<?php if (!$is_tax_inclusive && $this->Employee->has_module_action_permission('sales', 'delete_taxes', $this->Employee->get_logged_in_employee_info()->person_id)){ ?>
+									<?php if (!$is_tax_inclusive && $this->Employee->has_module_action_permission('sales', 'delete_taxes', $logged_in_employee_id)){ ?>
 										<?php echo anchor("sales/delete_tax/".rawurlencode($name),'<i class="fa fa-times-circle fa-lg font-red"></i>', array('class' => 'delete_tax'));?>
 									<?php } ?>
 									<?php echo $name; ?>:

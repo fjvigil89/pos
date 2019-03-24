@@ -96,4 +96,9 @@ $lang['module_warehouse_desc']='Ediar, Actualizar, Borrar y ordenes';
 
 $lang['module_action_delete_receivings'] = 'Eliminar Compra';
 $lang["module_overwrite_tax"]="Sobrescribir impuesto durante la venta";
+
+$lang["module_action_delete_serial"]="Permitir eliminar seriales";
+$lang["module_action_agregar_o_sustraer"]="Dar de baja artículos agregar o sustraer";
+$lang["module_action_mostrar_valor_cierre_caja"]="Mostrar valor de cierre de caja";
+$lang["module_action_return_item_with_invoice"]="Devolución con factura";
 ?>

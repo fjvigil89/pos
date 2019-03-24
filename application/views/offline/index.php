@@ -57,7 +57,8 @@
                      <?php echo form_input(array(
 					        'class'=>'form-control',
                             'name'=>'password',
-                            "type"=>"password",          
+                            "type"=>"password", 
+                            "min"=>6,         
 					        'id'=>'password'));
 	                  	?>
 						<span class="required">*<?php echo lang('password_mensaje'); ?>  </span>			
@@ -86,12 +87,15 @@
       </div>
    </div>
 </div>
-<?php $this->load->view("partial/footer"); ?>
 
 <script>
     jQuery(document).ready(function() {
         $("#offline_form").submit(function(e){
             e.preventDefault(); 
+            if($("#password").val().length<6){
+               toastr.error("Contraseña muy corta, debe tener mínimo 6 caracteres.", <?php echo json_encode(lang('common_error'))?> );
+               return false;
+            }
             $("#submitf").attr("disabled", true);
             $.post('<?php echo site_url("offline/save");?>',$("#offline_form").serializeArray() , function(data) {
                 data= JSON.parse(data);
@@ -106,3 +110,4 @@
             
         });
 </script>
+<?php $this->load->view("partial/footer"); ?>

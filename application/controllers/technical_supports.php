@@ -9,7 +9,7 @@ class technical_supports extends Secure_area
 		parent::__construct("technical_supports");
 		$this->load->library('sale_lib');
 		$this->load->model('support_payment');
-		$this->load->library('carrito_lib');
+		//$this->load->library('carrito_lib');
 
 	}
 

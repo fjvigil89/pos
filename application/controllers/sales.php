@@ -1902,7 +1902,6 @@ class Sales extends Secure_area
         $data['show_sales_inventory'] = $this->config->item('show_sales_inventory');
 		$data['show_sales_description'] = $this->config->item('show_sales_description');
 		$data['subcategory_of_items']=$this->config->item('subcategory_of_items');
-		
 
 		$data['is_tax_inclusive'] = $this->_is_tax_inclusive();
 		if ($data['is_tax_inclusive'] && count($this->sale_lib->get_deleted_taxes()) > 0)
@@ -1911,16 +1910,22 @@ class Sales extends Secure_area
 		}
 		
 		$person_info = $this->Employee->get_logged_in_employee_info();
-		$data["employee_logueado"]=$person_info;
-		//$modes = array('sale'=>lang('sales_sale'),'return'=>lang('sales_return'));
-		$modes = array('sale'=>lang('sales_sale'),'return'=>lang('sales_return'). " ".lang("sales_without")." ".strtolower ($this->config->item('sale_prefix')),'return_ticket'=>(lang('sales_return')." ".lang("sales_with")." ".strtolower ($this->config->item('sale_prefix'))));
 
+		$data["employee_logueado"]=$person_info;
+		$data["logged_in_employee_id"]=$person_info->person_id;
+
+		$modes = array('sale'=>lang('sales_sale'));		
+		if ($this->Employee->has_module_action_permission('sales','return_item', $person_info->person_id) ) { 
+			$modes['return']=lang('sales_return'). " ".lang("sales_without")." ".strtolower ($this->config->item('sale_prefix'));
+		}
+		if ($this->Employee->has_module_action_permission('sales','return_item_with_invoice', $person_info->person_id) ) { 
+			$modes['return_ticket']=lang('sales_return')." ".lang("sales_with")." ".strtolower ($this->config->item('sale_prefix'));
+		}
 		if($this->config->item('customers_store_accounts'))
 		{
 			$modes['store_account_payment'] = lang('sales_store_account_payment');
-		}
-		
-		$data["cancelar_despues_desuspender"]=(!$this->sale_lib->get_suspended_sale_id() || !$this->Employee->has_module_action_permission('sales', 'cancel_sale_suspend', $this->Employee->get_logged_in_employee_info()->person_id));
+		}		
+		$data["cancelar_despues_desuspender"]=(!$this->sale_lib->get_suspended_sale_id() || !$this->Employee->has_module_action_permission('sales', 'cancel_sale_suspend', $person_info->person_id));
 
 		$data['cart']=$this->sale_lib->get_cart();
 		$data["sold_by_employee_id"]=$this->sale_lib->get_sold_by_employee_id();
@@ -1946,25 +1951,13 @@ class Sales extends Secure_area
 		$data['selected_tier_id'] = $this->sale_lib->get_selected_tier_id();
 		$data['is_over_credit_limit'] = false;
 		$data['add_cart_by_id_item'] = $this->config->item('add_cart_by_id_item');
-		$data["edit_tiers"]=$this->Employee->has_module_action_permission('sales', 'edit_tier', $this->Employee->get_logged_in_employee_info()->person_id);
+		$data["edit_tiers"]=$this->Employee->has_module_action_permission('sales', 'edit_tier', $person_info->person_id);
 		$data["overwrite_tax"]= $this->sale_lib->get_overwrite_tax();
 		$data["new_tax"]= $this->sale_lib->get_new_tax();
 		$data["pagar_otra_moneda"]=   $this->sale_lib->get_pagar_otra_moneda();
 		$data["moneda_numero"]=   $this->sale_lib->get_moneda_numero();
 		$data["equivalencia"]= $this->sale_lib->get_equivalencia_divisa();
 		$data["currency"]=$this->sale_lib->get_currency();
-
-
-		/*$employees = array('' => lang('common_not_set'));
-
-		foreach($this->Employee->get_all()->result() as $employee)
-		{
-			if ($this->Employee->is_employee_authenticated($employee->person_id, $this->Employee->get_logged_in_employee_current_location_id()))
-			{
-				$employees[$employee->person_id] = $employee->first_name.' '.$employee->last_name;
-			}
-		}
-		$data['employees'] = $employees;*/
 
 		$data['selected_sold_by_employee_id'] = $this->sale_lib->get_sold_by_employee_id();
 		$tiers = array();
@@ -1977,23 +1970,6 @@ class Sales extends Secure_area
 
 		$data['tiers'] = $tiers;
 
-		/*if ($this->Location->get_info_for_key('enable_credit_card_processing'))
-		{
-			$data['payment_options']=array(
-				lang('sales_cash') => lang('sales_cash'),
-				lang('sales_check') => lang('sales_check'),
-				lang('sales_credit') => lang('sales_credit'),
-				lang('sales_giftcard') => lang('sales_giftcard')
-			);
-
-			if($this->config->item('customers_store_accounts'))
-			{
-				$data['payment_options']=array_merge($data['payment_options'],	array(lang('sales_store_account') => lang('sales_store_account')
-				));
-			}
-		}
-		else
-		{*/
 			$data['payment_options']=array(
 				lang('sales_cash') => lang('sales_cash'),
 				lang('sales_check') => lang('sales_check'),
@@ -2007,7 +1983,6 @@ class Sales extends Secure_area
 				$data['payment_options']=array_merge($data['payment_options'],	array(lang('sales_store_account') => lang('sales_store_account')
 				));
 			}
-		//}
 
 		foreach($this->Appconfig->get_additional_payment_types() as $additional_payment_type)
 		{
@@ -2382,7 +2357,7 @@ class Sales extends Secure_area
 	}
 	function change_sale_with_ticket($sale_id)
 	{
-		$this->check_action_permission('return_item');
+		$this->check_action_permission('return_item_with_invoice');
 		$this->sale_lib->clear_all();
 		$this->sale_lib->copy_entire_sale($sale_id);
 		$this->sale_lib->set_change_sale_id($sale_id);		

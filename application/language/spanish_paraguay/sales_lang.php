@@ -6,6 +6,7 @@ $lang['sales_details_credit']='PAGOS DE LA LÍNEA DE CRÉDITO';
 $lang['sales_credit_detail']="Créditos recientes de";
 $lang['error_subcategory_item']="Debe seleccionar la categoría de todos los productos antes de completar la venta";
 $lang['sales_abono'] = 'Abono';
+$lang['only_cash'] = 'Gastos y entradas en efectivo';
 $lang['sales_giftcard_number']='Número de Tarjeta de Regalo';
 $lang['sales_giftcard']='Tarjeta de Regalo';
 $lang['sales_register']='Caja Registradora';
