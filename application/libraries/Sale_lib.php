@@ -1407,7 +1407,7 @@ class Sale_lib
 			$this->add_item_kit('KIT '.$row->item_kit_id,-$row->quantity_purchased,$row->discount_percent,$price_to_use,$row->description, $row->line);
 		}
 		$this->set_customer($this->CI->Sale->get_customer($sale_id)->person_id, false);
-	}
+	} 
 	
 	function copy_entire_sale($sale_id, $is_receipt = false)
 	{
@@ -1473,6 +1473,7 @@ class Sale_lib
 		$this->set_currency($sale_info->currency);
 		if($sale_info->currency!=null){
 			$this->set_pagar_otra_moneda(1);
+			$this->set_equivalencia_divisa($sale_info->value_other_currency==null?1:$sale_info->value_other_currency);			
 		}
 		$this->set_opcion_sale($this->CI->Sale->get_opcion_sale($sale_id));
 		$this->set_pagar_otra_moneda($this->CI->Sale->get_otra_moneda($sale_id));

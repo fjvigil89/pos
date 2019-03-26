@@ -77,33 +77,26 @@
 						<strong>
 						<?php 
 					 		if(isset($mode) && $mode=='return') {
-								if($this->Location->get_info_for_key('show_serie')==1){
-									echo lang('items_sale_mode').$sale_type." ".$serie_number.$sale_number;
-									
-								}else{
-									echo lang('items_sale_mode').$sale_type." ".$sale_number;
-								}			                 	
+								echo lang('items_sale_mode').$sale_type." ".$sale_number;
+								if($this->Location->get_info_for_key('show_serie')==1){									
+									echo"<br>Serie: ".$serie_number;									
+								}		                 	
 					 		} 
 					 		elseif(isset($mode) && $store_account_payment==1) {
 			                 	echo lang('sales_store_account_name').' '.$sale_id;
 					 		} 
 							elseif($show_comment_ticket==1) {
+								echo 'BOLETA '.$sale_number;
 								if($this->Location->get_info_for_key('show_serie')==1){
-									echo 'BOLETA '.$serie_number.$sale_number;
-								}else{
-									echo 'BOLETA '.$sale_number;
-								}
-			                 	
+									echo "<br>Serie: ".$serie_number;
+								}			                 	
 					 		} 
 					 		else
 					 		{
+								echo $this->config->item('sale_prefix').' '.$sale_number;
 								if($this->Location->get_info_for_key('show_serie')==1){
-									echo $this->config->item('sale_prefix').' '.$serie_number.$sale_number;
-									
-								}else{
-									echo $this->config->item('sale_prefix').' '.$sale_number;
+									echo "<br>Serie: ".$serie_number;									
 								}
-					 			
 					 		}  
 				 		?>
 				 		</strong> 
@@ -352,7 +345,7 @@
 						    		<?= $item['description']; ?>
 					    		</td>	
 				    		<?php } ?>
-							<?php if($item["serialnumber"]!=null and isset($item['serialnumber'])):?>
+							<?php if( isset($item['serialnumber']) and $item["serialnumber"]!=null ):?>
 								<td colspan="1" >
 									<?= "Serial: ".$item['serialnumber']  ?>
 								</td>
@@ -417,7 +410,7 @@
 						<td class="right_text_align" colspan="2" >
 
 							<?php
-							$subtotal_= 0;
+							$subtotal_= 0;							
 							if( $this->config->item('round_cash_on_sales')==1 && $is_sale_cash_payment ){
 								$subtotal_=to_currency(round_to_nearest_05($total));
 							} 
@@ -455,20 +448,29 @@
 					<?php foreach($payments as $payment_id=>$payment) { ?>
 						<tr class="gift_receipt_element">
 							<td class="right_text_align" colspan="<?php echo $discount_exists ? '6' : '4'; ?>">
-								<?php echo $payment["payment_type"]!=lang('sales_store_account')? lang('sales_value_cancel') : lang('sales_crdit'); ?>:
+								<?php echo $payment["payment_type"]!=lang('sales_store_account')?(
+								(isset($another_currency) and $another_currency==1)?lang('sales_value_cancel')." ".$currency:lang('sales_value_cancel'))
+								 : lang('sales_crdit'); ?>:
 							</td>
 							<td class="right_text_align" colspan="2">
 								<?php 
 								$payment_amount= 0;
+								$payment_amount_value= (isset($another_currency) and $another_currency==1)?
+										($payment['payment_amount']/$value_other_currency):$payment['payment_amount'];
 								if( $this->config->item('round_cash_on_sales')==1 && $payment['payment_type'] == lang('sales_cash') ){
-									$payment_amount=to_currency(round_to_nearest_05($payment['payment_amount']));
+									
+									$payment_amount=(round_to_nearest_05($payment_amount_value));
 								} 
 								else if($this->config->item('round_value')==1  ){
-									$payment_amount= to_currency(round($payment['payment_amount']));
+									$payment_amount= (round($payment_amount_value));
 								}else{
-									$payment_amount= to_currency($payment['payment_amount']);
+									$payment_amount= $payment_amount_value;
 								}
-								echo $payment_amount;
+								if(isset($another_currency) and $another_currency==1){
+									echo  to_currency_no_money($payment_amount,4);
+								}else{
+									echo to_currency($payment_amount);
+								}
 								?>  
 							</td>
 						</tr>
@@ -572,15 +574,21 @@
 								<td class="right_text_align" colspan="2">
 								<?php 
 								$payment_amount= 0;
+								$payment_amount_otro= (isset($another_currency) and $another_currency==1)?
+										($payment['payment_amount']/$value_other_currency):$payment['payment_amount'];
 								if( $this->config->item('round_cash_on_sales')==1 && $payment['payment_type'] == lang('sales_cash') ){
-									$payment_amount=to_currency(round_to_nearest_05($payment['payment_amount']));
+									$payment_amount=(round_to_nearest_05($payment_amount_otro));
 								} 
 								else if($this->config->item('round_value')==1  ){
-									$payment_amount= to_currency(round($payment['payment_amount']));
+									$payment_amount= (round($payment_amount_otro));
 								}else{
-									$payment_amount= to_currency($payment['payment_amount']);
+									$payment_amount= ($payment_amount_otro);
 								}
-								echo $payment_amount;
+								if(isset($another_currency) and $another_currency==1){
+									echo  to_currency_no_money($payment_amount,4);
+								}else{
+									echo to_currency($payment_amount);
+								}
 								?> 
 								</td>											
 							<?php } ?>							
@@ -592,20 +600,26 @@
 					<?php if ($amount_change >= 0) { ?>
 						<tr class="gift_receipt_element" >
 							<td class="right_text_align" colspan="<?php echo $discount_exists ? '6' : '6'; ?>">
-								<?php echo lang('sales_change_due'); ?>:
+								<?php echo lang('sales_change_due').((isset($another_currency) and $another_currency==1)?" ".$currency:""); ?>:
 							</td>
 							<td class="right_text_align" colspan="2">
 							<?php
 							$amount_change_= 0;
+							$amount_change_otro= (isset($another_currency) and $another_currency==1)?
+										($amount_change/$value_other_currency):$amount_change;
 							if( $this->config->item('round_cash_on_sales')==1 && $is_sale_cash_payment ){
-								$amount_change_=to_currency(round_to_nearest_05($amount_change));
+								$amount_change_=(round_to_nearest_05($amount_change_otro));
 							} 
 							else if($this->config->item('round_value')==1  ){
-								$amount_change_= to_currency(round($amount_change));
+								$amount_change_= (round($amount_change_otro));
 							}else{
-								$amount_change_= to_currency($amount_change);
+								$amount_change_= ($amount_change_otro);
 							}
-							echo $amount_change_;
+							if(isset($another_currency) and $another_currency==1){
+								echo  to_currency_no_money($amount_change_,4);
+							}else{
+								echo to_currency($amount_change_);
+							}
 							?>
 							</td>
 						</tr>
@@ -747,7 +761,7 @@
 						<?php	} ?>
 						<?php if($this->Location->get_info_for_key('show_rango')==1):?>
 							<div id="sale_rango">
-								<?php echo nl2br("Rango autorizado: ".$this->Location->get_info_for_key('serie_number').
+								<?php echo nl2br("Rango autorizado: "/*.$this->Location->get_info_for_key('serie_number')." "*/.
 								$this->Location->get_info_for_key('start_range')." a la ".
 								$this->Location->get_info_for_key('final_range')); ?>
 								<br />  

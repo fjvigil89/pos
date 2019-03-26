@@ -295,32 +295,26 @@ class Receivings extends Secure_area
 		$suppl_info=$this->Supplier->get_info($supplier_id);		
 		$data['balance'] = $this->Receiving->total_balance($supplier_id);
 		$total_venta=$this->receiving_lib->get_total();
-		//$this->Receiving->total_balance($supplier_id);
-		
 		if($this->receiving_lib->get_mode() == 'receive'  && isset($data['balance']) && $supplier_id)
-		{
-			/* var_dump($data['balance']); */
+		{		
 			$add_supplier=$this->Receiving->add_pay_cash_supplier($supplier_id, $data['balance'],$total_venta);
-
-			
 		}
 		$this->receiving_lib->set_payments($data);
 		if($data['store_account_payment']==1  && isset($data['balance']) && $supplier_id)
 		{	
-		$sold_by_employee_id=0;
-		$comment='';
-		$show_comment_on_receipt=0;
-		$data['payments']=$this->receiving_lib->get_payments();
+			$sold_by_employee_id=0;
+			$comment='';
+			$show_comment_on_receipt=0;
+			$data['payments']=$this->receiving_lib->get_payments();
 	
-		$suspended_change_receiving_id=0;
-		$ref_no='';
-		$auth_code='';
-		$change_receiving_date=0;
-		$amount_change=0;
+			$suspended_change_receiving_id=0;
+			$ref_no='';
+			$auth_code='';
+			$change_receiving_date=0;
+			$amount_change=0;
             $receiving_id_raw = $this->Receiving->save_pay_cash($data['cart'], $supplier_id, $employee_id, $sold_by_employee_id, $comment,$show_comment_on_receipt,$data['payments'], $suspended_change_receiving_id, 0,$ref_no,$auth_code, $change_receiving_date, $data['balance'], $data['store_account_payment'],$data['total'],$amount_change,-1);
 			if($receiving_id_raw<0){
-				/* var_dump($receiving_id_raw); */
-				$this->load->view("receivings/error_pagos");
+				$this->load->view("receivings/error_pagos",array("error_message"=>$error_message,"compra"=>1));
 				return;
 			} else {
 				$data['receiving_id'] ='RECV '.$receiving_id_raw;

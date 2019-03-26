@@ -41,7 +41,8 @@ class Inventory_summary extends Report
 		IFNULL('.$this->db->dbprefix('location_items').'.reorder_level, '.$this->db->dbprefix('items').'.reorder_level) as reorder_level, 
 		description', FALSE);
 		$this->db->from('items');
-		$this->db->join('suppliers', 'items.supplier_id = suppliers.person_id', 'left outer');
+		$this->db->join('items_suppliers', 'items.item_id = items_suppliers.item_id', 'left outer');
+		$this->db->join('suppliers', 'items_suppliers.supplier_id = suppliers.person_id', 'left outer');
 		$this->db->join('location_items', 'location_items.item_id = items.item_id and location_id = '.$current_location, 'left');
 		$this->db->where('items.deleted', 0);
 		
@@ -73,7 +74,8 @@ class Inventory_summary extends Report
 		IFNULL('.$this->db->dbprefix('location_items').'.reorder_level, '.$this->db->dbprefix('items').'.reorder_level) as reorder_level, 
 		description', FALSE);
 		$this->db->from('items');
-		$this->db->join('suppliers', 'items.supplier_id = suppliers.person_id', 'left outer');
+		$this->db->join('items_suppliers', 'items.item_id = items_suppliers.item_id', 'left outer');
+		$this->db->join('suppliers', 'items_suppliers.supplier_id = suppliers.person_id', 'left outer');
 		$this->db->join('location_items', 'location_items.item_id = items.item_id and location_id = '.$current_location, 'left');
 		$this->db->where('items.deleted', 0);
 		
@@ -95,7 +97,9 @@ class Inventory_summary extends Report
 		sum(IFNULL('.$this->db->dbprefix('location_items').'.unit_price, '.$this->db->dbprefix('items').'.unit_price) * quantity) as inventory_sale_total', FALSE);
 		$this->db->from('items');
 		$this->db->join('location_items', 'location_items.item_id = items.item_id and location_id = '.$current_location, 'left');
-		$this->db->join('suppliers', 'items.supplier_id = suppliers.person_id', 'left outer');
+		$this->db->join('items_suppliers', 'items.item_id = items_suppliers.item_id', 'left outer');
+		$this->db->join('suppliers', 'items_suppliers.supplier_id = suppliers.person_id', 'left outer');
+		
 		$this->db->where('is_service !=', 1);
 		$this->db->where('items.deleted', 0);
 		

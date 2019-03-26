@@ -1568,25 +1568,33 @@
 
 		<?php if($this->config->item('activar_pago_segunda_moneda')==1){?>
 				let monto= convertir_moneda(<?php echo $amount_due ?>,<?php echo $equivalencia?>);
+				window.equivalencia= '<?=  $equivalencia?>';
 				$("#amount_tendered2").val(monto);
 				$("#amount_tendered2").change(function(){
+					$("#add_payment_button2").attr('disabled','disabled');
 					if($.isNumeric($("#amount_tendered2").val()) ){
-						$("#amount_tendered").val(revertir_moneda($("#amount_tendered2").val(),<?php echo $equivalencia?>));
+						$("#amount_tendered").val(revertir_moneda($("#amount_tendered2").val(),window.equivalencia));
+						$("#add_payment_button2").removeAttr('disabled');
+					}else{
+						$("#add_payment_button2").removeAttr('disabled');
 					}
 				});
 			<?php }?>
 			$( "input[type=radio][name=otra_moneda]").change(function(){
+			
 				let moneda_numero= $(this).val();
 				let equivalencia= $(this).attr("equivalencia");
 				let abreviatura= $(this).attr("abreviatura");
 				if (moneda_numero>0) {
-					$.post('<?php echo site_url("sales/set_otra_moneda");?>', {"otra_moneda": 1,"moneda_numero":moneda_numero}, function()
+					$.post('<?php echo site_url("sales/set_otra_moneda");?>', {"otra_moneda": 1,"moneda_numero":moneda_numero}, function(data)
 					{
-						$("#panel2").show();
+						/*$("#panel2").show();
 						$("#panel1").hide();
 						$("#abreviatura").html(abreviatura);
 						let monto= convertir_moneda(<?php echo $amount_due ?>,equivalencia);
-					$("#amount_tendered2").val(monto);
+					$("#amount_tendered2").val(monto);*/
+					$("#register_container").load('<?php echo site_url("sales/reload"); ?>');
+
 					});		
 				}
 				else{

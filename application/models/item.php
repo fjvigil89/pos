@@ -456,7 +456,8 @@ class Item extends CI_Model
 		$this->db->from('sales_items');
 		$this->db->join('items','items.item_id=sales_items.item_id');	
 		$this->db->where("(numero_cuenta LIKE '%".$this->db->escape_like_str($search)."%' or 
-		numero_documento LIKE '%".$this->db->escape_like_str($search)."%' )");					
+		numero_documento LIKE '%".$this->db->escape_like_str($search)."%' or
+		titular_cuenta LIKE '%".$this->db->escape_like_str($search)."%' )");					
 		$this->db->group_by('numero_cuenta,name');
 		$this->db->limit($limit);	
 		$select = $this->db->get();

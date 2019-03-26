@@ -757,7 +757,7 @@ class Sale extends CI_Model
      $deleted_taxes=array(),$store_account_payment = 0,
       $total = 0, $amount_change, $invoice_type, $ntbale = null,$divisa=null, 
       $opcion_sale=null, $transaction_rate=null, $transaction_cost=null, $another_currency=0,
-      $currency=null, $total_other_currency=null , $overwrite_tax=false,$new_tax=null)
+      $currency=null, $total_other_currency=null , $overwrite_tax=false,$new_tax=null,$value_other_currency=null)
     {
         //we need to check the sale library for deleted taxes during sale
         $this->load->library('sale_lib');
@@ -801,7 +801,8 @@ class Sale extends CI_Model
             "another_currency"=>$another_currency,
             "currency"=>$currency,
             "total_other_currency"=>$total_other_currency,
-            "overwrite_tax"=>$overwrite_tax
+            "overwrite_tax"=>$overwrite_tax,
+            "value_other_currency"=>$value_other_currency
             
         );
 

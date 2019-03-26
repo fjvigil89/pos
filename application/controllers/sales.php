@@ -1135,8 +1135,9 @@ class Sales extends Secure_area
 		$data["total_other_currency"]=$data["another_currency"]==0?null:((double)$data['total']/(double) $this->sale_lib->get_equivalencia_divisa());
 		$overwrite_tax= $this->sale_lib->get_overwrite_tax();
 		$new_tax= $this->sale_lib->get_new_tax();
-		$data["overwrite_tax"]= $overwrite_tax;
+		$data["overwrite_tax"]= $overwrite_tax; 
 		$data["new_tax"]= $new_tax;
+		$data["value_other_currency"]=$this->sale_lib->get_equivalencia_divisa();
 		if($this->config->item('system_point') && $this->sale_lib->get_mode() == 'sale')
 		{
 			$total=$data['total'];
@@ -1231,7 +1232,7 @@ class Sales extends Secure_area
 				$deleted_taxes,
 				$data['store_account_payment'],$data['total'],$data['amount_change'],$invoice_type, null,$data["divisa"],$data["opcion_sale"],
 				$data["transaction_rate"],$data["transaction_cost"],$data["another_currency"],$data["currency"],$data["total_other_currency"],
-				$overwrite_tax,$new_tax);
+				$overwrite_tax,$new_tax,$data["value_other_currency"]);
 				
            
 			}
@@ -1639,6 +1640,7 @@ class Sales extends Secure_area
 		$data["another_currency"]= $this->sale_lib->get_pagar_otra_moneda();
 		$data["currency"]=$data["another_currency"]==0?null:$sale_info["currency"];
 		$data["total_other_currency"]=$data["another_currency"]==0?null:$sale_info["total_other_currency"];
+		$data["value_other_currency"]=$this->sale_lib->get_equivalencia_divisa();
 		$data["serie_number"] =$this->sale_lib->get_serie_number(); 
 		if($customer_id!=-1)
 		{
@@ -1863,6 +1865,7 @@ class Sales extends Secure_area
 		$this->sale_lib->set_currency($this->config->item("moneda".$numero));
 		$this->sale_lib->set_equivalencia_divisa($this->config->item("equivalencia".$numero));
 		$this->sale_lib->set_pagar_otra_moneda($this->input->post('otra_moneda'));
+		echo json_encode($this->config->item("equivalencia".$numero));
 	}
 
 	function _payments_cover_total()
@@ -2103,9 +2106,12 @@ class Sales extends Secure_area
 		$data['amount_change']=$this->sale_lib->get_amount_due() * -1;
 		$data['balance']=$this->sale_lib->get_payment_amount(lang('sales_store_account'));
 		$data['employee']=$emp_info->first_name.' '.$emp_info->last_name;
-	
+		$data["another_currency"]= $this->sale_lib->get_pagar_otra_moneda();
+		$data["currency"]=$data["another_currency"]==0?null:$this->sale_lib->get_currency();
+		$data["total_other_currency"]=$data["another_currency"]==0?null:((double)$data['total']/(double) $this->sale_lib->get_equivalencia_divisa());
 		$data["overwrite_tax"]= $this->sale_lib->get_overwrite_tax();
 		$data["new_tax"]= $this->sale_lib->get_new_tax();
+		$data["value_other_currency"]=$this->sale_lib->get_equivalencia_divisa();
 
 		$location_id = $this->Employee->get_logged_in_employee_current_location_id();
 
@@ -2181,7 +2187,7 @@ class Sales extends Secure_area
 			$sale_id = $this->Sale->save($data['cart'], $customer_id,$employee_id, $sold_by_employee_id, $comment,$show_comment_on_receipt,$data['payments'], $sale_id, $suspend_type,'',''
 			,$this->config->item('change_sale_date_when_suspending') ? date('Y-m-d H:i:s') : FALSE,
 			 $data['balance'],$mode,$tier_id ,$deleted_taxes,0,0,0,$invoice_type, $ntbale,null, 
-			 null, null, null, 0, null, null ,$data["overwrite_tax"],$data["new_tax"]);
+			 null, null, null, $data["another_currency"],$data["currency"],$data["total_other_currency"] ,$data["overwrite_tax"],$data["new_tax"],$data["value_other_currency"]);
 			 if($sale_id<0||( !$this->sale_lib->is_select_subcategory_items())){
 				echo("No se puede suspender la venta, Comprueba los producto del carrito, si el producto tiene subcategoría no olvide agregarla ");
 					return;
