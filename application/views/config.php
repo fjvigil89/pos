@@ -2903,6 +2903,7 @@
 									'id'=>'resolution',
 									'class'=>'form-textarea form-control',
 									'rows'=>'4',
+									'placeholder'=>'<strng>RESLUIN DE UTRIZIN NÚMER 400001 DEL 2013-07-26 NUMERIN DESDE 02-400001 HST 02-700000</strng>',
 									'cols'=>'30',
 									'value'=>$this->config->item('resolution')));
 								?>
@@ -2916,6 +2917,7 @@
 									'id'=>'return_policy',
 									'class'=>'form-textarea form-control',
 									'rows'=>'4',
+									'placeholder'=>'Garantía   excepto por golpes  daños eléctricos.',
 									'cols'=>'30',
 									'value'=>$this->config->item('return_policy')));
 								?>
@@ -2951,6 +2953,7 @@
 									'name'=>'return_policy_credit',
 									'id'=>'return_policy_credit',
 									'class'=>'form-textarea form-control',
+									'placeholder'=>'Garantía   excepto por golpes  daños eléctricos.',
 									'rows'=>'4',
 									'cols'=>'30',
 									'value'=>$this->config->item('return_policy_credit')));
@@ -3924,7 +3927,7 @@
 		    		sale_prefix: "required",
 					return_policy:
 					{
-						required: true
+						required: false
 					},
 					value_point: {
 				      	digits: true
