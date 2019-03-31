@@ -2423,7 +2423,7 @@
 								<?php $lenguge=$this->Appconfig->get_raw_language_value();?>								
 		                            <option data-icon="flagstrap-icon flagstrap-ar" value="spanish_argentina" <?php if($lenguge=="spanish_argentina") echo "selected";?>>Argentina - Español</option>                                   
 		                            <option data-icon="flagstrap-icon flagstrap-bo" value="spanish_bolivia" <?php if($lenguge=="spanish_bolivia") echo "selected";?>>Bolivia - Español</option>
-		                            <option data-icon="flagstrap-icon flagstrap-br" value="portugues_brasil" <?php if($lenguge=="portugues_brasil") echo "selected";?>>Brasil - Portugues</option>
+		                            <!--<option data-icon="flagstrap-icon flagstrap-br" value="portugues_brasil" <?php if($lenguge=="portugues_brasil") echo "selected";?>>Brasil - Portugues</option>-->
 		                            <option data-icon="flagstrap-icon flagstrap-cl" value="spanish_chile" <?php if($lenguge=="spanish_chile") echo "selected";?>>Chile - Español</option>
 		                            <option data-icon="flagstrap-icon flagstrap-co" value="spanish" <?php if($lenguge=="spanish") echo "selected";?>>Colombia - Español</option>  
 		                            <option data-icon="flagstrap-icon flagstrap-cr" value="spanish_costarica" <?php if($lenguge=="spanish_costarica") echo "selected";?>>Costa Rica - Español</option>
