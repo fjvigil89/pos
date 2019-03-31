@@ -48,7 +48,7 @@
               
                <div class="form-body"> 
 			           <h4><?php echo lang('common_fields_required_message'); ?></h4>
-                  <div class="form-group">
+                  <div class="form-group ">
                      <label class="requireds control-label col-md-3">
                         <a class="help_config_required  tooltips " data-placement="left" title="" data-original-title="<?php echo lang('data_password_title'); ?> "><?php echo lang('Password_Login'); ?></a>:
 							<!--<span class="required">* </span>-->
@@ -62,6 +62,21 @@
 					        'id'=>'password'));
 	                  	?>
 						<span class="required">*<?php echo lang('password_mensaje'); ?>  </span>			
+                     </div>
+                     </div>
+                     <div class="form-group">
+                     <label class="requireds control-label col-md-3">
+                        <a class="help_config_required  tooltips " data-placement="left" title="" data-original-title="<?php echo lang('data_password_title_again'); ?> "><?php echo lang('Password_Again'); ?></a>:
+							<!--<span class="required">* </span>-->
+                     </label>
+                     <div class="col-md-8">
+                     <?php echo form_input(array(
+					        'class'=>'form-control',
+                            'name'=>'password_again',
+                            "type"=>"password", 
+                            "min"=>6,         
+					        'id'=>'password_again'));
+	                  	?>			
                      </div>
                   </div>
                  <!-- <div class="form-group">
@@ -94,6 +109,9 @@
             e.preventDefault(); 
             if($("#password").val().length<6){
                toastr.error("Contraseña muy corta, debe tener mínimo 6 caracteres.", <?php echo json_encode(lang('common_error'))?> );
+               return false;
+            }else if($("#password").val()!=$("#password_again").val()){
+               toastr.error("las contraseñas no coinciden.", <?php echo json_encode(lang('common_error'))?> );
                return false;
             }
             $("#submitf").attr("disabled", true);

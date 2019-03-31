@@ -8,4 +8,6 @@ $lang['time_sincronizacion'] = "Tiempo sincronización DB";
 $lang['minute'] = "Minuto(s)";
 $lang['hours'] = "Hora(s)";
 $lang['button_save'] = "Guardar";
+$lang['data_password_title_again'] = "Confirmar Contraseña Inicio Sesión Modo Offline";
+$lang['Password_Again'] = "Confirmar contraseña";
 ?>
