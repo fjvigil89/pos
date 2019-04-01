@@ -227,6 +227,9 @@
                                                     </div>
                                                     <div class="form-actions">
                                                         <div class="col-md-12 text-center">
+                                                            <a class="btn  btn-primary" title="imprimir" href="<?=site_url("technical_supports/imprime_order/$id_support")?>"><span class="md-click-circle md-click-animate"></span>
+                                                                <i class="fa fa-print"></i>Imprimir
+                                                            </a>
                                                             <button type="submit" class="btn green" ><i class="fa fa-check"></i> <?php echo lang('common_submit') ?></button>
                                                         </div>
                                                     </div>
