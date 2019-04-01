@@ -1289,7 +1289,12 @@ class Sales extends Secure_area
 			}
 
 		}
-
+		if( $data['mode']=='return'){
+			foreach($data['cart'] as $key=> $cart){
+			$data['cart'][$key]['quantity']=$data['cart'][$key]['quantity']*-1;
+		    }
+		}
+		
 		if ($data['sale_id'] == $this->config->item('sale_prefix').' -1')
 		{
 			$data['error_message'] = '';
@@ -1591,6 +1596,7 @@ class Sales extends Secure_area
 		//Before changing the sale session data, we need to save our current state in case they were in the middle of a sale
 		$this->sale_lib->save_current_sale_state();
 
+
 		$data['is_sale'] = FALSE;
         $sale_numeration = $this->Sale->get_sale_numeration($sale_id);
 		$data['sale_number'] = ($sale_numeration->is_invoice == 1) ? $sale_numeration->invoice_number : $sale_numeration->ticket_number;
@@ -1642,6 +1648,8 @@ class Sales extends Secure_area
 		$data["total_other_currency"]=$data["another_currency"]==0?null:$sale_info["total_other_currency"];
 		$data["value_other_currency"]=$this->sale_lib->get_equivalencia_divisa();
 		$data["serie_number"] =$this->sale_lib->get_serie_number(); 
+		$data["mode"]=$this->Sale->is_return($sale_id)? "return" : "sale";
+		
 		if($customer_id!=-1)
 		{
 			$cust_info=$this->Customer->get_info($customer_id);

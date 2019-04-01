@@ -326,10 +326,8 @@
 							<?php if ($item['name']==lang('sales_giftcard')) { ?>
 								<td class="gift_receipt_element right_text_align" colspan="2">
 									<?php
-										if(isset($mode) && $mode=='return') {
-											$Total=$Total*(-1);
-											}
-							         	$Total=$item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100;
+										 $Total=$item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100;
+									
 									 	echo $this->config->item('round_value')==1 ? to_currency(round($Total)) :to_currency($Total); 								 	
 								 	?>
 							 	</td>
@@ -339,9 +337,6 @@
 								<td class="gift_receipt_element right_text_align" colspan="2">
 									<?php
 										 $Total=$price_with_tax*$item['quantity']-$price_with_tax*$item['quantity']*$item['discount']/100;
-										 if(isset($mode) && $mode=='return') {
-										 $Total=$Total*(-1);
-										 }
 									 	echo $this->config->item('round_value')==1 ? to_currency(round($Total)) :to_currency($Total); 								 	
 								 	?>
 								 </td>
@@ -407,9 +402,7 @@
 							<?php echo lang('sales_sub_total'); ?>: 
 						</td>
 						<td class="right_text_align" colspan="2" style='border-top:1px solid #000000;'>
-						<?php if(isset($mode) && $mode=='return') {
-								$subtotal=$subtotal*(-1);
-								}
+						<?php
 							echo $this->config->item('round_value')==1 ? to_currency(round($subtotal)) :to_currency($subtotal) ;
 						?>
 						</td>							
@@ -478,9 +471,6 @@
 								}else{
 									$payment_amount= $payment_amount_value;
 								}
-								if(isset($mode) && $mode=='return') {
-									$payment_amount=$payment_amount*(-1);
-									}
 								if(isset($another_currency) and $another_currency==1){
 									echo  to_currency_no_money($payment_amount,4);
 								}else{
@@ -520,20 +510,15 @@
 								<?php echo lang('reports_tax'); ?>:
 							</td>
 							<td class="right_text_align">
-							<?php if(isset($mode) && $mode=='return') {
-									echo $value['base']*-1; 
-								  }else{
+							<?php 
 									echo $value['base']; 	
-								  }
+								  
 								 ?>
 							</td>
 							<td class="right_text_align">
-								<?php 
-								if(isset($mode) && $mode=='return') {
-									echo to_currency_no_money(round($value['total_tax']*-1),1); 
-								  }else{
+								<?php
 									echo to_currency_no_money(round($value['total_tax']),1); 	
-								  }
+								  
 								?>
 							</td>
 							<td class="right_text_align" colspan="2">	
@@ -550,27 +535,19 @@
 										<?php echo $name; ?>:
 									</td>
 									<td class="right_text_align">
-									<?php if(isset($mode) && $mode=='return') {
-											echo $value['base']*-1;
-											}else{
+									<?php
 												echo $value['base']; 	
-											}
+											
 								 	?>
 									</td>
 									<td class="right_text_align">
-									<?php if(isset($mode) && $mode=='return') {
-											echo to_currency_no_money(round($value['total_tax']*-1),1); 
-								  		  }else{
+									<?php 
 											echo to_currency_no_money(round($value['total_tax']),1); 	
-								  			}
 									?>
 									</td>
 									<td class="right_text_align" colspan="2">
-									<?php	if(isset($mode) && $mode=='return') {
-										 echo $this->config->item('round_value')==1 ? to_currency(round($value['total']*-1)) :to_currency($value['total']*-1);
-										 }else{
+									<?php	
 										 echo $this->config->item('round_value')==1 ? to_currency(round($value['total'])) :to_currency($value['total']);
-										 }
 										 ?>
 									</td>
 								</tr>
@@ -579,16 +556,12 @@
 					} ?>
 					<tr style="border-top: 1px dashed #000000;">
 						<th class="text-center" colspan="2"><?php echo lang('sales_total').'='; ?></th>
-						<?php if(isset($mode) && $mode=='return') {?>
-							<th class="right_text_align" style="width:15%"><?php echo to_currency($detailed_taxes_total['total_base_sum']*-1); ?></th>
-							<th class="right_text_align" style="width:25%"><?php echo to_currency($detailed_taxes_total['total_tax_sum']*-1); ?></th>
-							<th class="right_text_align" style="width:25%" colspan="2"><?php echo $this->config->item('round_value')==1 ? to_currency($detailed_taxes_total['total_sum']*-1) :to_currency($detailed_taxes_total['total_sum']*-1) ; ?></th>
-							<?php }else{?>
+						<?php ?>
 							<th class="right_text_align" style="width:15%"><?php echo to_currency($detailed_taxes_total['total_base_sum']); ?></th>
 							<th class="right_text_align" style="width:25%"><?php echo to_currency($detailed_taxes_total['total_tax_sum']); ?></th>
 							<th class="right_text_align" style="width:25%" colspan="2"><?php echo $this->config->item('round_value')==1 ? to_currency($detailed_taxes_total['total_sum']) :to_currency($detailed_taxes_total['total_sum']) ; ?></th>
 							<?php //}
-							}
+							
 					   		 ?>
 					</tr>						
 

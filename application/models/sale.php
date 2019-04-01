@@ -17,6 +17,20 @@ class Sale extends CI_Model
         return $this->db->get();
     }
 
+    public function is_return($sale_id)
+    {
+        $this->db->select('sum(quantity_purchased) as quantity');
+        $this->db->from('sales_items');
+        $this->db->where('sale_id', $sale_id);
+        $result= $this->db->get()->row()->quantity;
+        $this->db->select('sum(quantity_purchased) as quantity');
+        $this->db->from('sales_item_kits');
+        $this->db->where('sale_id', $sale_id);
+        $result2= $this->db->get()->row()->quantity;
+        $quantity=($result==null ? 0 : $result)+($result2 == null ? 0 : $result2);
+        return $quantity> 0 ? false: true;
+    }
+
     public function get_cash_sales_total_for_shift($shift_start, $shift_end)
     {
         $sales_totals = $this->get_sales_totaled_by_id($shift_start, $shift_end);

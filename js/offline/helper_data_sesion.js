@@ -48,3 +48,17 @@ async function set_data_por_key(key, value){
     });
 
 }
+
+async function update_password_sesion(contrasena_encriptada,employee_id){
+     let db_name=localStorage.getItem("store_login");
+     let resul_db=await db_existe(db_name);
+    if(resul_db){
+        let data={"password_offline":contrasena_encriptada}
+        let query = await db1.employees.where({ "person_id":String(employee_id)}).modify(data);
+        return query>0 ? true : false;
+    }else{
+        return false;
+     }
+    
+
+}

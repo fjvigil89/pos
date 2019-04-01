@@ -104,7 +104,7 @@ $lang['reports_items_received'] = 'Artículos Recibidos';
 $lang['reports_detailed_receivings_report'] = 'Detalle de Compras';
 $lang['reports_sale_type'] = 'Tipo de Venta';
 $lang['reports_all'] = 'Todo';
-$lang['reports_returns'] = 'Devoluciones';
+$lang['reports_returns'] = 'Devoluciones sin factura';
 $lang['reports_deleted_sales'] = 'Ventas eliminadas';
 $lang['reports_deleted_sales_report'] = 'Ventas suprimidas';
 $lang['reports_receiving_id'] = 'Recibir ID';
@@ -204,7 +204,6 @@ $lang['reports_taxes_total'] = 'Impuestos';
 $lang['reports_discount_total'] = 'Descuentos';
 $lang['reports_receivings_total'] = 'Compras';
 
-$lang['reports_returns_total'] = 'Devoluciones';
 $lang['reports_confirm_register_log_delete'] = '¿Está seguro de que desea eliminar esta entrada del registro de registro?';
 $lang['reports_make_a_selection'] = 'Informes: Haga una selección';
 $lang['reports_detailed_customers_report'] = 'Reporte detallado de Clientes';

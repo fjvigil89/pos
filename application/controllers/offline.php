@@ -18,6 +18,7 @@ class Offline extends Secure_area
 			'1440' => "24 ".lang('hours'),
 		);			
 		$data["array_time"]=$array_time;*/
+		$data['imployee_info']=$this->Employee->get_logged_in_employee_info();
 		$this->load->view("offline/index",$data);
     
 	}
@@ -30,7 +31,7 @@ class Offline extends Secure_area
 		}
 		if(/*$this->Appconfig->batch_save($batch_save_data) and */$this->Employee->update_offline($employee_data) )
 		{
-			echo json_encode(array('success'=>true,'message'=>lang('config_saved_successfully')));
+			echo json_encode(array('success'=>true,'message'=>lang('config_saved_successfully'),'password_encriptada'=>$employee_data['password_offline']));
 		}else
 		{
 			echo json_encode(array('success'=>false,'message'=>lang('config_saved_unsuccessfully')));
