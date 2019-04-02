@@ -85,7 +85,12 @@ class Registers_movement extends Secure_area
 	{	
 		if ($operation == "depositcash" || $operation == "withdrawcash") {			
 			$data['text_info'] = $operation == "depositcash" ? "Depositar dinero" : "Registrar gasto";
-			$data['location_registers'] = $this->Register->get_registers();
+			$cajas = $this->Cajas_empleados->get_cajas_ubicacion_por_persona($this->session->userdata('person_id'),$this->Employee->get_logged_in_employee_current_location_id())->result_array();;
+			$registers=array();
+			foreach ($cajas as $caja) {
+				$registers[$caja["register_id"]]=$caja["name"];
+			}
+			$data['location_registers'] =$registers;// $this->Register->get_registers();
 			$data['operation'] = $operation;
 			$categorias_gastos=array("no establecido"=>"Seleccionar");
 			foreach($this->Appconfig->get_categorias_gastos() as $categoria){
