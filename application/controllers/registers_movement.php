@@ -8,11 +8,12 @@ class Registers_movement extends Secure_area
 	function __construct() 
 	{
 		parent::__construct('Registers_movement');
-		$this->load->helper('date');
-		
+		$this->load->helper('date');		
 		$this->load->model('Register_movement');
 		$this->load->model('Register');
 		$this->load->model('Sale');
+		$this->load->model('Cajas_empleados');
+
 	}
 	function receipt($id_movimiento){
 		$data=array();
@@ -23,13 +24,26 @@ class Registers_movement extends Secure_area
 
 	function index($register_id = null)
 	{
-		$registers =  $this->Register->get_registers();
-		$data['location_registers'] = $registers;// obtener cajas de la tienda selecionada
-		
-		if ($register_id == null || !array_key_exists($register_id, $registers)) {
-
-			$register_id = $this->Register->get_default()->register_id;
+		$cajas = $this->Cajas_empleados->get_cajas_ubicacion_por_persona($this->session->userdata('person_id'),$this->Employee->get_logged_in_employee_current_location_id())->result_array();;
+		$registers=array();
+		foreach ($cajas as $caja) {
+			$registers[$caja["register_id"]]=$caja["name"];
 		}
+		//$tem= $this->Register->get_registers();
+		//if ($register_id == null || !array_key_exists($register_id, $registers)) {
+		if($register_id == null || !$this->Employee->tiene_caja($register_id, $this->session->userdata('person_id'))){
+			if(count($registers)>0){
+				foreach($registers as $key =>$value){
+					$register_id =$key;
+					break;
+				}				
+			}else{
+				$registers[0]="Sin caja";	
+				$register_id=0;
+			}
+		}
+		$data['location_registers'] = $registers;// obtener cajas de la tienda selecionada
+
 		$empleados=array(0=>"Seleccione empleado");
 		$employees= $this->Employee->get_all()->result();
 		foreach($employees as $empleado){
