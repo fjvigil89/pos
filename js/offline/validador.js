@@ -84,7 +84,13 @@ async function db_existe(db_nombre){
     let existe=false;
     if(db_nombre!=null){
         try{
-            existe=  await  Dexie.exists("store_"+db_nombre);
+            var resul_array_db_nombre=db_nombre.split("_");
+            if(resul_array_db_nombre.length>1){
+                existe=  await  Dexie.exists(db_nombre);
+            }else{
+               existe=  await  Dexie.exists("store_"+db_nombre); 
+            }
+            
         } catch (e) {
         console.log(e);
         }

@@ -675,6 +675,9 @@ class Sale_lib
 		$amount_due=0;
 		$payment_total = $this->get_payments_totals();
 		$sales_total=$this->get_total($sale_id);
+		if($sales_total<0){
+			$payment_total=$payment_total*-1;
+		}
 		$amount_due=to_currency_no_money($sales_total - $payment_total);
 		return $amount_due;
 	}

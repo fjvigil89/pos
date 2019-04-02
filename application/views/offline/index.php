@@ -61,7 +61,7 @@
                             "min"=>6,         
 					        'id'=>'password'));
 	                  	?>
-						<span class="required">*<?php echo lang('password_mensaje'); ?>  </span>			
+								
                      </div>
                      </div>
                      <div class="form-group">
@@ -76,7 +76,19 @@
                             "type"=>"password", 
                             "min"=>6,         
 					        'id'=>'password_again'));
-	                  	?>			
+	                  	?>	
+                        <span class="required">*<?php echo lang('password_mensaje'); ?>  </span>			
+                     </div>
+                     <div class="col-md-12">
+                        <ul>
+                        <h4><?php echo lang('Password_creation'); ?></h4>
+                        <ol>
+                           <li>1. <?php echo lang('Password_creation_step_1'); ?></li>
+                           <li>2. <?php echo lang('Password_creation_step_2'); ?></li>
+                           <li>3. <?php echo lang('Password_creation_step_3').' '.site_url('sales/offline'); ?></li>
+                           
+                        </ol>
+                        </ul>
                      </div>
                   </div>
                  <!-- <div class="form-group">
@@ -121,6 +133,7 @@
                     toastr.error(data.message, <?php echo json_encode(lang('common_error'))?> );
                 }  else{
                     toastr.success(data.message, <?php echo json_encode(lang('common_success'))?> );
+                    console.log(update_password_sesion(data.password_encriptada,<?php echo $imployee_info->person_id; ?>));
                 }   
                 $("#submitf").removeAttr("disabled");  
             });
@@ -128,4 +141,5 @@
             
         });
 </script>
+<script src="<?php echo base_url();?>js/offline/validador.js" type="text/javascript"></script>
 <?php $this->load->view("partial/footer"); ?>
