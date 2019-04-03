@@ -29,8 +29,8 @@ foreach ($dataSupport->result() as $dataSupport) { $status=$dataSupport->state; 
             <input type="hidden" name="supprt" id="supprt" value="<?php echo $IdSupport ?>"> 
             <div class="col-md-12">   
                 <div class="col-md-12" style="overflow: hidden;height: auto;">
-                    <input value="" name="diag" id="diag" class="form-control input-lg" style="display: block;width: 80%;float: left;" type="text" autocomplete="off" placeholder="Ingrese el diagnostico técnico">
-                    <button type="submit" class=" btn green" title="Registrar diagnostico" style="height: 45px;margin-left: 5px;float: left;">                                                                
+                    <input value="" name="diag" id="diag" class="form-control input-lg" style="display: block;width: 80%;float: left;" type="text" autocomplete="off" placeholder="<?php echo lang("technical_supports_regs_diag"); ?>">
+                    <button type="submit" class=" btn green" title="<?php echo lang("technical_supports_reg_diag"); ?>" style="height: 45px;margin-left: 5px;float: left;">                                                                
                         <span class="fa fa-save" style="font-size: 1.700em;"></span>                                                                
                     </button>                         
                 </div> 

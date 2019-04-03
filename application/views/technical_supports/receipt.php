@@ -206,15 +206,15 @@
 						</tr>
 						
 					<?php } ?>	
-					<tr>
+					<?php if(is_numeric($repair_cost)){?>
+						<tr>
 							<td class="right_text_align" colspan="7">
-								
-									<div>
-										<?php echo lang("technical_supports_repair_cost").": " . to_currency($repair_cost); ?>
-									</div>
-								
+								<div>
+									<?php echo lang("technical_supports_repair_cost").": " . to_currency($repair_cost); ?>
+								</div>
 							</td>
 						</tr>
+					<?php } ?>
 					
 			</table>
 			<div id='datos_extras'>

@@ -153,10 +153,10 @@
                             <input type="hidden" id="acept" name="acept" value="2">
                             <input type="hidden" id="supprt" name="supprt" value="<?php echo $idSupport; ?>">
                             <?php if ($status!="RECHAZADO" and $status!="REPARADO") { ?>
-                                <button type="submit" id="form_dt" class="btn btn-primary"> <span class="fa fa-save"></span> Marcar como Reparado </button>
+                                <button type="submit" id="form_dt" class="btn btn-primary"> <span class="fa fa-save"></span> <?php echo lang("technical_supports_boton_rep"); ?> </button>
                                     <div id="rechz" style="float: right;margin-left: 7px;">
                                         <a href="javascript:void(0);" class="btn btn-primary" title="Devolver el equipo" style="color: #FFFFFF;" onclick="controlerConfirm('<?php echo site_url() ?>/technical_supports/asignar_detalles_falla_tec/','rechaz=2&supprt=<?php echo $idSupport; ?>','asigFallas2','Estas seguro de RECHAZAR el servicio, al confirmar el equipo estara disponible para la entrega');"> 
-                                        <span class="fa fa-save"></span> Rechazar 
+                                        <span class="fa fa-save"></span> <?php echo lang("technical_supports_boton_rrch"); ?> 
                                         </a>
                                     </div>
                             <?php } 

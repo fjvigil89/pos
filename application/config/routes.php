@@ -119,6 +119,8 @@ $route['reports/purchase_provider']="reports/purchase_provider_input";
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */
 //inventory_summary
+$route['technical_supports/editar-servicio/(:num)'] = "technical_supports/nuevo/$1";
+$route['technical_supports/nuevo-servicio/(:any)'] = "technical_supports/nuevo/$1";
 
 $route['tienda'] = "template/template";
 $route['tienda/category'] = "template/category";
