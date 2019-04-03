@@ -8,12 +8,17 @@ class CarritoModel extends CI_Model
         $query=$this->db->get();
         return  $query->result();
 	}
-	function get_spare_part_by_support($id_support){
+	function eleminar_respueto_por_id($respueto_id,$support_id){        
+		$this->db->where('id', $respueto_id);    
+		$this->db->where('id_support', $support_id);   
+        return  $this->db->delete('spare_parts');   
+    }
+	/*function get_spare_part_by_support($id_support){
         $this->db->from('spare_parts');		
         $this->db->where('id_support',$id_support);
         $query=$this->db->get();
         return $query;
-    }
+    }*/
 	function get_respuestos($support_id){
 		
 		$this->db->from('support_cart');

@@ -423,16 +423,16 @@ class technical_supports extends Secure_area
 		}
 		redirect("technical_supports/repair/" . $id_support . "/1");
 	}
-
+/*
 	function delete_spare($id)
 	{
 		$this->check_action_permission('delete');
 		if ($this->input->is_ajax_request()) {
 			echo $this->technical_support->delete_spare_part_by_id($id);
-		} else {
+		} else { 
 			echo false;
 		}
-	}
+	}*/
 
 	/*function _reload($data = array(), $is_ajax = 1)
 	{
@@ -665,7 +665,7 @@ class technical_supports extends Secure_area
 
 	#==================CARRITO MODIFICACION DE METODO asignar_detalles_falla_tec============================
 
-	function asignar_detalles_falla_tec()
+	/*function asignar_detalles_falla_tec()
 	{
 		$current_location = $this->Employee->get_logged_in_employee_current_location_id();
 
@@ -787,7 +787,7 @@ class technical_supports extends Secure_area
 		//$this->load->View('technical_supports/tecnico/ingfallatecnica', compact("dataAcc","idSupport","dataSupport","dataRespuesto","instrp","elmrp","dataCond","t_resp"));
 
 	}
-	
+	*/
 
 	function detalles_serv_tecnico()
 	{
@@ -983,9 +983,9 @@ class technical_supports extends Secure_area
 			$data['abonado']= $this->support_payment->get_sum_payment($data ['support_id']);
 			$data["saldo_restante"]=$data['precio_total']-$data['abonado'];	
 			$data["a_pagar"]= $data["saldo_restante"]-$this->carrito_lib->get_a_apagar();
-
+			$data['otros_respustos']= $this->CarritoModel->get_respuesto_viejos($data ['support_id']);
 			$data['is_cart_reparar']= 1;	
-
+			
 			if(!$cart and !$is_ajax){
 				// se carga toda la vista reparar 
 				$this->load->view('technical_supports/tecnico/reparar_inicial', $data);
@@ -1016,7 +1016,8 @@ class technical_supports extends Secure_area
 			$data['carrito']= $this->carrito_lib->get_cart();	
 			$data["saldo_restante"]=$data['precio_total']-$data['abonado'];	
 			$data["a_pagar"]= $data["saldo_restante"]-$this->carrito_lib->get_a_apagar();
-			$data['payments']= $this->carrito_lib->getPagos();	
+			$data['payments']= $this->carrito_lib->getPagos();
+			$data['otros_respustos']= $this->CarritoModel->get_respuesto_viejos($data ['support_id']);
 			$data['pagar_otra_moneda']= 0;
 			$data["amount_due"]=0;
 			$data["change_sale_date_enable"]=1;// para cambiar la fecha de la venta cuando se está editando
@@ -1586,6 +1587,17 @@ function _payments_cover_total($support_id)
 		}	
 		
 		//$this->_reload($data);
+	}
+	function delete_spare_old($spare_id,$is_cart_reparar,$support_id)
+	{
+		$this->check_action_permission('delete');
+		$this->CarritoModel->eleminar_respueto_por_id($spare_id,$support_id);
+		if($is_cart_reparar){
+			$this->reload_reparar(array("support_id"=>$support_id),true,true);
+		}else{
+			$this->reload_cart(array("support_id"=>$support_id),true);
+		}
+		
 	}
 	function delete_item($line,$is_cart_reparar,$support_id=false)
 	{

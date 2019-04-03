@@ -59,6 +59,40 @@
         </table>
     </div>
 </div>
+<?php if(!empty($otros_respustos)):?>
+    <div class="register-items-holder">
+        <center><strong>Otros respuestos</strong></center>
+        <p style="color:red";>*Estos productos no estan incluidos en el total </p>
+    </div>
+    <div class="register-items-holder">
+        <div style="width:100%;height:170px;overflow-x:auto;overflow-y:auto;border:1px solid #ddd;margin:10px 0!important">
+            <table id="table_cart_2" class="table table-advance table-bordered table-custom">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th><?= lang('technical_supports_titu_car_art'); ?></th>
+                        <th>Serial</th>
+                        <th><?= lang('technical_supports_titu_car_cant'); ?></th>
+                    </tr>
+                </thead>
+                <tbody class="register-item-content">
+                    <?php foreach ($otros_respustos as $respusto):?>                     
+                        <tr class="register-item-details">
+                            <td class="text-center">
+                                <?= anchor("technical_supports/delete_spare_old/$respusto->id/$is_cart_reparar/$support_id",'<i class="fa fa-trash-o fa fa-2x font-red"></i>', array('class' => 'delete_item_old'));?>
+                            </td>
+                            <td class="text-center"><?=H( $respusto->name)?></td>
+                            <td class="text-center"><?= $respusto->serie?></td>
+                            <td class="text-center"><?=H( $respusto->quantity)?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+       
+    </div>
+<?php endif; ?>
+
 <div class="portlet light margin-top-15 no-padding">
 
     <ul class="list-group">
@@ -143,6 +177,14 @@
             </div>
         </div>
     </div>
+    <script>
+        $('.delete_item_old').click(function(event) {
+            event.preventDefault();
+            if (confirm("¿Desea eliminar este respueto?, si elimina el respueto no podrá restaurarlo.")) {
+                $("#cart_body").load($(this).attr('href'));
+            }
+        });
+    </script>
     <?php endif; ?>
 
 </div>
@@ -190,6 +232,7 @@ $('.delete_item').click(function(event) {
     event.preventDefault();
     $("#cart_body").load($(this).attr('href'));
 });
+
 $('.line_item_form').ajaxForm({
     target: "#cart_body",
     beforeSubmit: antes_enviar

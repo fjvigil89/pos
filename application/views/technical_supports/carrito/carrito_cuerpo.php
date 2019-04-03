@@ -228,11 +228,6 @@
                         </form>
                     </div>
 
-
-
-
-
-
                     <div class="comment-sale">
                         <ul class="list-group">
                             <li class="list-group-item no-border-top tier-style">
