@@ -417,12 +417,12 @@
 							<?php
 							$subtotal_= 0;							
 							if( $this->config->item('round_cash_on_sales')==1 && $is_sale_cash_payment ){
-								$subtotal_=to_currency(round_to_nearest_05($Total));
+								$subtotal_=to_currency(round_to_nearest_05($total));
 							} 
 							else if($this->config->item('round_value')==1  ){
-								$subtotal_= to_currency(round($Total));
+								$subtotal_= to_currency(round($total));
 							}else{
-								$subtotal_= to_currency($Total);
+								$subtotal_= to_currency($total);
 							}
 							echo $subtotal_;
 							?>
