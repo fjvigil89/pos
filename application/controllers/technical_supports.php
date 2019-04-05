@@ -909,7 +909,7 @@ class technical_supports extends Secure_area
 		$data['carrito'] = $this->carrito_lib->get_cart();
 		$data['abonado']= $this->support_payment->get_sum_payment($idSupport);
 		$data["saldo_restante"]=$data['precio_total']-$data['abonado'];	
-		$data["a_pagar"]= $data["saldo_restante"]-$this->carrito_lib->get_a_apagar();
+		$data["a_pagar"]= $data["saldo_restante"]-$this->carrito_lib->get_pagos_agregados();
 
 		$data["support_id"] = $idSupport;
 		$data["is_cart_reparar"]=1;
@@ -981,7 +981,7 @@ class technical_supports extends Secure_area
 			$data['payments']= $this->carrito_lib->getPagos();
 			$data['abonado']= $this->support_payment->get_sum_payment($data ['support_id']);
 			$data["saldo_restante"]=$data['precio_total']-$data['abonado'];	
-			$data["a_pagar"]= $data["saldo_restante"]-$this->carrito_lib->get_a_apagar();
+			$data["a_pagar"]= $data["saldo_restante"]-$this->carrito_lib->get_pagos_agregados();
 			$data['otros_respustos']= $this->CarritoModel->get_respuesto_viejos($data ['support_id']);
 			$data['is_cart_reparar']= 1;	
 			
@@ -1014,7 +1014,7 @@ class technical_supports extends Secure_area
 			$data['articulos_iva']= $this->carrito_lib->getIvaProductos();
 			$data['carrito']= $this->carrito_lib->get_cart();	
 			$data["saldo_restante"]=$data['precio_total']-$data['abonado'];	
-			$data["a_pagar"]= $data["saldo_restante"]-$this->carrito_lib->get_a_apagar();
+			$data["a_pagar"]= $data["saldo_restante"]-$this->carrito_lib->get_pagos_agregados();
 			$data['payments']= $this->carrito_lib->getPagos();
 			$data['otros_respustos']= $this->CarritoModel->get_respuesto_viejos($data ['support_id']);
 			$data['pagar_otra_moneda']= 0;
@@ -1217,11 +1217,14 @@ function _payments_cover_total($support_id)
 		$data['is_sale'] = TRUE;
 		$data['cart'] = $this->carrito_lib->get_cart();
 		$data['mode']= $this->carrito_lib->get_mode();
+		$sale_id_raw=-1;
         $suspended_change_sale_id =false;// $this->sale_lib->get_suspended_sale_id() ? $this->sale_lib->get_suspended_sale_id() : $this->sale_lib->get_change_sale_id();
         $location_id = $this->Employee->get_logged_in_employee_current_location_id();
 		$support_id= $this->input->post("support_id");
 		$support_info= $this->technical_support->get_info_by_id($support_id);
 		$serie_number =$this->carrito_lib->get_serie_number();
+		$data['support_info']=$support_info;
+
 		if($suspended_change_sale_id)
         {
             $sale_data = $this->Sale->get_info($suspended_change_sale_id)->row();
@@ -1329,18 +1332,25 @@ function _payments_cover_total($support_id)
 		$data['subtotal_total'] =  $this->carrito_lib->getPrecioSubtotal();
 		$data['articulos_total'] =  $this->carrito_lib->getArticulosTotal();
 		$data['articulos_iva'] = $this->carrito_lib->getIvaProductos();
-		$data['carrito'] = $this->carrito_lib->getContenidoCarrito();*/
+		$data['carrito'] = $this->carrito_lib->getContenidoCarrito();
+		
+		
+		$abonado= $this->support_payment->get_sum_payment($idSupport);
+		$data["saldo_restante"]=$data['total']-$data['abonado'];	
+		$data["a_pagar"]= $data["saldo_restante"]-$this->carrito_lib->get_pagos_agregados();
+		*/
+		$customer_id=$support_info->id_customer;
+
 		$tier_id = $this->carrito_lib->get_selected_tier_id();
 		$tier_info = $this->Tier->get_info($tier_id);
 		$data['tier'] = $tier_info->name; 
 		$data["serie_number"]=$serie_number;
 		$data['register_name'] = $this->Register->get_register_name($this->Employee->get_logged_in_employee_current_register_id());
 		$data['subtotal']=$this->carrito_lib->getPrecioSubtotal();
-		$data['detailed_taxes']=$this->carrito_lib->getIvaProductos();
-		//$data['detailed_taxes_total']=$this->sale_lib->get_detailed_taxes_total();
+		$data['detailed_taxes']=$this->carrito_lib->get_detailed_taxes($customer_id);
+		$data['detailed_taxes_total']=$this->carrito_lib->get_detailed_taxes_total($customer_id);
 		$data['total']=$this->carrito_lib->getPrecioTotal();
 		$data['receipt_title']=lang('sales_receipt');
-		$customer_id=$support_info->id_customer;
 		$employee_id=$this->Employee->get_logged_in_employee_info()->person_id;
 		$sold_by_employee_id=$support_info->id_technical;
 		$data['comment'] = $this->carrito_lib->get_comentario();
@@ -1359,9 +1369,12 @@ function _payments_cover_total($support_id)
 								"truncated_card"=>"",
 								"card_issuer"=>"");
 		}
-		$data['is_sale_cash_payment'] =false;// $this->sale_lib->is_sale_cash_payment();
-		$data['amount_change']=0;//$this->sale_lib->get_amount_due() * -1;
-		$data['balance']=0;//$this->sale_lib->get_payment_amount(lang('sales_store_account'));
+		$abonado= $this->support_payment->get_sum_payment($support_id);
+		$data["amount_change"]=($data['total']-($abonado+$this->carrito_lib->get_pagos_agregados()))*-1;	
+
+
+		$data['is_sale_cash_payment'] = $this->carrito_lib->is_sale_cash_payment();
+		$data['balance']=$this->carrito_lib->get_payment_amount(lang('sales_store_account'));
 		$data['employee']=$emp_info->first_name.' '.$emp_info->last_name.($sold_by_employee_id && $sold_by_employee_id != $employee_id ? '/'. $sale_emp_info->first_name.' '.$sale_emp_info->last_name: '');
 		$data['discount_exists'] =false;// $this->_does_discount_exists($data['cart']);
 	
@@ -1370,6 +1383,7 @@ function _payments_cover_total($support_id)
 	
 		if($this->config->item('system_point') && $data['mode'] == 'sale')
 		{
+			//$this->load->library('sale_lib');
 			$total=$data['total'];
 			$point_pucharse = $this->carrito_lib->get_point($this->config->item('value_point'),$total);
 			$detail = 'Id venta #';
@@ -1381,6 +1395,8 @@ function _payments_cover_total($support_id)
 
 		$old_date =false;// $this->sale_lib->get_change_sale_id()  ? $this->Sale->get_info($this->sale_lib->get_change_sale_id())->row_array() : false;
 		$old_date=  $old_date ? date(get_date_format().' '.get_time_format(), strtotime($old_date['sale_time'])) : date(get_date_format().' '.get_time_format());
+		$data['transaction_time']=$old_date;// $this->sale_lib->get_change_sale_date_enable() ?  date(get_date_format().' '.get_time_format(), strtotime($this->sale_lib->get_change_sale_date())) : $old_date;
+		$data["overwrite_tax"]=false;
 		if($customer_id!=-1)
 		{
 			$cust_info=$this->Customer->get_info($customer_id);
@@ -1422,9 +1438,13 @@ function _payments_cover_total($support_id)
 			$suspended_change_sale_id, 0,"","", $data['change_sale_date'],
 			$data['balance'], $data["mode"],$tier_id,$deleted_taxes,
 			$data['store_account_payment'],$data['total'],$data['amount_change'],
-			$invoice_type, null,null,null,	null,null,0,null,0,false,null,null,true);
+			$invoice_type, null,null,null,	null,null,0,null,0,false,null,null,true,
+			/*$support_id*/null);
 		}	
-
+		$data["sale_id_raw"]=$sale_id_raw;
+		if($sale_id_raw>0){
+			$this->load->View('technical_supports/receipt_final', $data);
+		}
 	}
 	
 

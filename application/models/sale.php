@@ -772,7 +772,7 @@ class Sale extends CI_Model
       $total = 0, $amount_change, $invoice_type, $ntbale = null,$divisa=null, 
       $opcion_sale=null, $transaction_rate=null, $transaction_cost=null, $another_currency=0,
       $currency=null, $total_other_currency=null , $overwrite_tax=false,$new_tax=null,$value_other_currency=null,
-      $is_servicio_tecnico=false)
+      $is_servicio_tecnico=false,$support_id=null)
     {
         //we need to check the sale library for deleted taxes during sale
         //$this->load->library('sale_lib');
@@ -817,7 +817,8 @@ class Sale extends CI_Model
             "currency"=>$currency,
             "total_other_currency"=>$total_other_currency,
             "overwrite_tax"=>$overwrite_tax,
-            "value_other_currency"=>$value_other_currency
+            "value_other_currency"=>$value_other_currency,
+            "support_id"=>$support_id
             
         );
 
@@ -1329,17 +1330,14 @@ class Sale extends CI_Model
                                 $this->db->query('UNLOCK TABLES');
                                 return -1;
                             }   
-                        }
-                        
+                        }                        
                     }
                     else{
 
                         foreach ($this->Item_taxes_finder->get_info($item['item_id']) as $row) {
 
                             $tax_name = $row['percent'] . '% ' . $row['name'];
-
                             //Only save sale if the tax has NOT been deleted
-
                             if (!in_array($tax_name, $deleted_taxes)) {
 
                                 $query_result = $this->db->insert('sales_items_taxes', array(

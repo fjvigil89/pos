@@ -280,6 +280,37 @@ class Carrito_lib
 		unset($this->carrito["subtotal_total"]);
 		return $this->carrito == null ? null : $this->carrito;
 	}*/
+	public function get_payment_amount($payment_type)
+	{
+		$payment_amount = 0;
+		if (($payment_ids = $this->get_payment_ids($payment_type)) !== FALSE)
+		{
+			$payments=$this->getPagos();
+			
+			foreach($payment_ids as $payment_id)
+			{
+				$payment_amount += $payments[$payment_id]['payment_amount'];
+			}
+		}
+		
+		return $payment_amount;
+	}
+	public function get_payment_ids($payment_type)
+	{
+		$payment_ids = array();
+		
+		$payments=$this->getPagos();
+		
+		for($k=0;$k<count($payments);$k++)
+		{
+			if ($payments[$k]['payment_type'] == $payment_type)
+			{
+				$payment_ids[] = $k;
+			}
+		}
+		
+		return $payment_ids;
+	}
 	function suma_ivas($ivas){
 		$iva_total=0;
 		foreach ($ivas as $iva) {
@@ -449,12 +480,12 @@ class Carrito_lib
 		return $precio;
 	}
 	
-	function get_a_apagar(){
+	function get_pagos_agregados(){
 		$total=0;
 		$pagos_agregados= $this->getPagos();
 		
 		foreach ($pagos_agregados as $pago) {
-			$total= $pago["payment_amount"];
+			$total+= $pago["payment_amount"];
 		}
 		return $total;
 	}
@@ -465,6 +496,18 @@ class Carrito_lib
 	function subtotal_por_item($item){
 		$precio = $this->precio_sin_ivas_por_item($item["price"],$item["ivas"],$item["tax_included"]);
 		return $precio* $item["quantity"];
+	}
+	function is_sale_cash_payment()
+	{
+		foreach($this->getPagos() as $payment)
+		{
+			if($payment['payment_type'] ==  lang('sales_cash'))
+			{
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 	public function getPrecioTotal()
@@ -491,8 +534,220 @@ class Carrito_lib
 		unset($items[$line]);
 		$this->set_cart($items);
 	}
+ //Obtener detalladamente valores de los impuestos
+ function get_detailed_taxes($customer_id =-1 ,$sale_id = false)
+ {        
+	 $taxes = array();
 
-	
+	 if ($sale_id) 
+	 {
+		 $taxes_from_sale = array_merge($this->CI->Sale->get_sale_items_taxes($sale_id), $this->CI->Sale->get_sale_item_kits_taxes($sale_id));
+		 foreach($taxes_from_sale as $key=>$tax_item)
+		 {
+			 $name = $tax_item['name'].' '.$tax_item['percent'].'%';
+			 
+			 $tax_base   = ($tax_item['price']*$tax_item['quantity']-$tax_item['price']*$tax_item['quantity']*$tax_item['discount']/100);
+			 $tax_amount = ($tax_item['price']*$tax_item['quantity']-$tax_item['price']*$tax_item['quantity']*$tax_item['discount']/100)*(($tax_item['percent'])/100);
+			 $tax_total  = $tax_base + $tax_amount;
+
+			 if (!isset($taxes[$name]))
+			 {
+				 $taxes[$name] = array('base'=>0,'total_tax'=>0,'total'=>0);
+			 }
+
+			 $taxes[$name]['base'] += $tax_base;
+			 $taxes[$name]['total_tax'] += $tax_amount;
+			 $taxes[$name]['total'] += $tax_total;
+		 }
+	 }
+	 else
+	 {            
+		
+		 $customer = $this->CI->Customer->get_info($customer_id);
+
+		 //Do not charge sales tax if we have a customer that is not taxable
+		 if (!$customer->taxable and $customer_id!=-1)
+		 {
+			 return array();
+		 }
+		 if($this->get_overwrite_tax()==false){
+			 foreach($this->get_cart() as $line=>$item)
+			 {
+				$price_to_use =$this->precio_sin_ivas_por_item($item["price"],$item["ivas"],$item["tax_included"]);      
+				 
+				 $tax_info = $item['ivas'] ;
+				 foreach($tax_info as $key=>$tax)
+				 {
+					 
+					 $name = $tax['percent'].'% ' . $tax['name'];
+					 $tax_base  = ($price_to_use*$item['quantity']-$price_to_use*$item['quantity']*$item['discount']/100);
+					 $tax_amount= ($price_to_use*$item['quantity']-$price_to_use*$item['quantity']*$item['discount']/100)*(($tax['percent'])/100);
+					 $tax_total  = $tax_base + $tax_amount;					 
+
+					 if (!in_array($name, $this->get_deleted_taxes()))
+					 {
+						 if (!isset($taxes[$name]))
+						 {
+							 $taxes[$name] = array('base'=>0,'total_tax'=>0,'total'=>0);
+						 }
+						 
+						 $taxes[$name]['base'] += $tax_base;
+						 $taxes[$name]['total_tax'] += $tax_amount;
+						 $taxes[$name]['total'] += $tax_total;
+					 }
+				 }
+			 }
+		 }
+		 /** Para cuando se agrega un nuevo impuesto */
+		 else{
+			 foreach($this->get_cart() as $line=>$item)
+			 {
+				 $price_to_use =$this->precio_sin_ivas_por_item($item["price"],$item["ivas"],$item["tax_included"]);      
+				 
+				 $tax_info =array("0"=>$this->get_new_tax());
+				 foreach($tax_info as $key=>$tax)
+				 {
+					 
+					 $name = $tax['percent'].'% ' . $tax['name'];
+					 $tax_base  = ($price_to_use*$item['quantity']-$price_to_use*$item['quantity']*$item['discount']/100);
+					 $tax_amount= ($price_to_use*$item['quantity']-$price_to_use*$item['quantity']*$item['discount']/100)*(($tax['percent'])/100);
+					 $tax_total  = $tax_base + $tax_amount;					
+
+					if (!isset($taxes[$name]))
+					{
+						$taxes[$name] = array('base'=>0,'total_tax'=>0,'total'=>0);
+					}						 
+					 $taxes[$name]['base'] += $tax_base;
+					 $taxes[$name]['total_tax'] += $tax_amount;
+					 $taxes[$name]['total'] += $tax_total;
+					 
+				 }
+			 }
+		 }
+	 }
+	 
+	 return $taxes;
+ }
+  //Obtener los valores totales de los impuestos
+  function get_detailed_taxes_total($customer_id=-1,$sale_id = false)
+  {
+	  $taxes = array();
+
+	  if ($sale_id) 
+	  {
+		  $total_base_sum = 0;
+		  $total_tax_sum  = 0;
+		  $total_sum = 0;
+		  
+		  $taxes_from_sale = array_merge($this->CI->Sale->get_sale_items_taxes($sale_id), $this->CI->Sale->get_sale_item_kits_taxes($sale_id));
+		  foreach($taxes_from_sale as $key=>$tax_item)
+		  {
+			  $name = $tax_item['name'].' '.$tax_item['percent'].'%';
+			  
+			  $tax_base   = ($tax_item['price']*$tax_item['quantity']-$tax_item['price']*$tax_item['quantity']*$tax_item['discount']/100);
+			  $tax_amount = ($tax_item['price']*$tax_item['quantity']-$tax_item['price']*$tax_item['quantity']*$tax_item['discount']/100)*(($tax_item['percent'])/100);
+			  $tax_total  = $tax_base + $tax_amount;
+
+			  if (!isset($taxes[$name]))
+			  {
+				  $taxes[$name] = array('base'=>0,'total_tax'=>0,'total'=>0);
+			  }
+
+			  $total_base_sum = $tax_base + $total_base_sum;
+			  $total_tax_sum = $tax_amount + $total_tax_sum;
+			  $total_sum = $tax_total + $total_sum;
+		  }
+		  
+		  $taxes['total_base_sum'] = $total_base_sum;
+		  $taxes['total_tax_sum'] = $total_tax_sum;
+		  $taxes['total_sum'] = $total_sum;
+	  }
+	  else
+	  {            
+		  $total_base_sum = 0;
+		  $total_tax_sum  = 0;
+		  $total_sum = 0;
+
+		  
+		  $customer = $this->CI->Customer->get_info($customer_id);
+
+		  //Do not charge sales tax if we have a customer that is not taxable
+		  if (!$customer->taxable and $customer_id!=-1)
+		  {
+			  return array();
+		  }
+		  if($this->get_overwrite_tax()==false){
+			  foreach($this->get_cart() as $line=>$item)
+			  {  
+				  $price_to_use = $this->precio_sin_ivas_por_item($item["price"],$item["ivas"],$item["tax_included"]);       
+				  
+				  $tax_info = $item['ivas'];
+				  foreach($tax_info as $key=>$tax)
+				  {
+					  $name = $tax['percent'].'% ' . $tax['name'];
+
+					  $tax_base  = ($price_to_use*$item['quantity']-$price_to_use*$item['quantity']*$item['discount']/100);
+					  $tax_amount= ($price_to_use*$item['quantity']-$price_to_use*$item['quantity']*$item['discount']/100)*(($tax['percent'])/100);
+					  $tax_total  = $tax_base + $tax_amount;
+					  
+					  if (!in_array($name, $this->get_deleted_taxes()))
+					  {
+						  if (!isset($taxes[$name]))
+						  {
+							  $taxes[$name] = array('base'=>0,'total_tax'=>0,'total'=>0);
+						  }
+						  
+						  $total_base_sum = $tax_base + $total_base_sum;
+						  $total_tax_sum = $tax_amount + $total_tax_sum;
+						  $total_sum = $tax_total + $total_sum;
+					  }
+				  }
+			  }
+		  }else{
+			  foreach($this->get_cart() as $line=>$item)
+			  {  
+				  $price_to_use =$this->precio_sin_ivas_por_item($item["price"],$item["ivas"],$item["tax_included"]);       
+				  
+				  $tax_info = $tax_info =array("0"=>$this->get_new_tax());
+				  foreach($tax_info as $key=>$tax)
+				  {
+					  $name = $tax['percent'].'% ' . $tax['name'];
+
+					  $tax_base  = ($price_to_use*$item['quantity']-$price_to_use*$item['quantity']*$item['discount']/100);
+					  $tax_amount= ($price_to_use*$item['quantity']-$price_to_use*$item['quantity']*$item['discount']/100)*(($tax['percent'])/100);
+					  $tax_total  = $tax_base + $tax_amount;
+					  
+					  
+					  if (!isset($taxes[$name]))
+					  {
+						  $taxes[$name] = array('base'=>0,'total_tax'=>0,'total'=>0);
+					  }
+					  $total_base_sum = $tax_base + $total_base_sum;
+					  $total_tax_sum = $tax_amount + $total_tax_sum;
+					  $total_sum = $tax_total + $total_sum;
+					  
+				  }
+			  }
+		  }
+
+		  $taxes['total_base_sum'] = $total_base_sum;
+		  $taxes['total_tax_sum'] = $total_tax_sum;
+		  $taxes['total_sum'] = $total_sum;		    	    
+	  }
+	  return $taxes;
+  }
+ function get_new_tax(){
+	return $this->CI->session->userdata('new_tax_support');
+}
+ function get_deleted_taxes() 
+	{
+		$deleted_taxes = $this->CI->session->userdata('deleted_taxes_support') ? $this->CI->session->userdata('deleted_taxes_support') : array();
+		return $deleted_taxes;
+	}
+
+ function get_overwrite_tax(){
+	return $this->CI->session->userdata('overwrite_tax_support') == 1 ?true:false ;
+}
 	public function getIvaProductos()
 	{
 		$carrito = $this->get_cart();
