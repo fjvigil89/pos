@@ -76,6 +76,14 @@
         
     </div>
 </div>
+<?php if($edit_support_id>0) :?>
+    <script>
+        $(function() 
+        {
+            controler('<?= site_url("technical_supports/carritoServicio")?>','hc=<?=$edit_support_id ?>','ventanaVer','');
+        });
+    </script>
+<?php endif; ?>
 
 <script type="text/javascript">
     $(".ciContc").keyup(function () { // function(event)

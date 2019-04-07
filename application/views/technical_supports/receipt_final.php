@@ -9,16 +9,10 @@
 						<?php echo lang('sales_print'); ?> 
 					</button>
 				</div>
-								
-				<?php if (!empty($customer_email)) { ?>
-					<div class="col-lg-3 col-md-3 col-sm-6">
-						<?php echo anchor('sales/email_receipt/'.$sale_id_raw, lang('sales_email_receipt'), array('id' => 'email_receipt','class' => 'btn btn-success btn-block hidden-print'));?>
-					</div>
-				<?php }?>					
 				
 				<div class="col-lg-2 col-md-2 col-sm-6">
-					<button class="btn btn-success btn-block hidden-print" id="new_sale_button_1" onclick="window.location='<?php echo site_url('sales'); ?>'" >
-						<?php echo lang('sales_new_sale'); ?> 
+					<button class="btn btn-success btn-block hidden-print" id="new_sale_button_1" onclick="window.location='<?php echo site_url('technical_supports/nuevo-servicio/-1'); ?>'" >
+						<?php echo lang('technical_supports_new'); ?> 
 					</button>
 				</div>
 			</div>
@@ -138,7 +132,9 @@
 					<div id="employee">
 						<?php echo lang('employees_employee').": ".$employee; ?>
 					</div>
-					
+					<div >
+						<?php echo lang('technical_supports_orden_ret_por').": ".$retirado_por; ?>
+					</div>
 					<?php if($this->Location->get_info_for_key('enable_credit_card_processing')){
 						echo '<div id="mercahnt_id">'.lang('config_merchant_id').': '.$this->Location->get_info_for_key('merchant_id').'</div>';
 					} ?>				

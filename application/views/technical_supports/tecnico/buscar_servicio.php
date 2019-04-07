@@ -65,7 +65,8 @@
         $('#asigDiagnostico').load("<?php echo site_url() ?>/technical_supports/ingresar_fallas_tecnica/","supprt=<?php echo $support->Id_support; ?>&T=1");        
 </script> 
 <?php 
-if($support->state=="DIAGNOSTICADO" Or $support->state=="APROBADO") { ?>
+if($support->state==lang("technical_supports_diagnosticado") Or
+ $support->state==lang("technical_supports_aprobado")) { ?>
 <script type="text/javascript"> 
         //$('#asigFallas2').load("<?php echo site_url() ?>/technical_supports/asignar_detalles_falla_tec/","supprt=<?php echo $support->Id_support; ?>");        
 </script>

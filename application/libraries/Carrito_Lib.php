@@ -509,7 +509,20 @@ class Carrito_lib
 		
 		return false;
 	}
+	function set_edit_support_id($suspended_sale_id)
+	{
+		$this->CI->session->set_userdata('edit_support_id',$suspended_sale_id);
+	}
+	
+	function limpiar_edit_support_id()
+	{
+		$this->CI->session->unset_userdata('edit_support_id');
+	}
 
+	function get_edit_support_id()
+	{
+		return $this->CI->session->userdata('edit_support_id');
+	}
 	public function getPrecioTotal()
 	{		
 		$precio_total=0;
@@ -775,14 +788,14 @@ class Carrito_lib
 		return $this->CI->session->userdata('pagos_servicio')? $this->CI->session->userdata('pagos_servicio'):array();		
 	}
 
-	public function add_pago($payment_type, $payment_amount)
+	public function add_pago($payment_type, $payment_amount,$date=null)
 	{		
 		if($payment_amount!=0){
 			$payments_data = $this->getPagos();
 			$payment = [
 				'payment_type' => $payment_type,
 				'payment_amount' => $payment_amount,
-				'payment_date' => date('Y-m-d H:i:s'),
+				'payment_date' => $date==null?date('Y-m-d H:i:s'):$date,
 				'truncated_card' => '',
 				'card_issuer' => '',
 			];
@@ -934,11 +947,33 @@ class Carrito_lib
 	function set_comentario($comentario){
 		$this->CI->session->set_userdata('comentario',$comentario);
 	}
+	function get_retira(){		
+
+		return $this->CI->session->userdata('retirado_por');
+	}
+	function set_retira($retirado_por){
+		$this->CI->session->set_userdata('retirado_por',$retirado_por);
+	}
+	
 	function limpiar_cometario(){
 		$this->CI->session->unset_userdata('comentario');
 	}
+	function limpiar_retira(){
+		$this->CI->session->unset_userdata('retirado_por');
+	}
+	function is_over_credit_limit($cust_info)
+	{	
+		$current_sale_store_account_balance = $this->get_payment_amount(lang('sales_store_account'));
+		return $cust_info->credit_limit !== NULL && $cust_info->balance + $current_sale_store_account_balance > $cust_info->credit_limit;
+		
+	}
 	function cargar_cart($support_id){
+		
+		$support = $this->get_edit_support_id();
+		//$mode=$this->get_mode();
 		$this->clear_all();
+		$this->set_edit_support_id($support);
+		//$this->set_mode($mode);
 		$respuestos= $this->CI->CarritoModel->get_respuestos($support_id);
 		foreach ($respuestos as $item) {
 			$ivas= $this->cargar_ivas($item->id,$item->line);
@@ -985,6 +1020,8 @@ class Carrito_lib
 		$this->limpiar_serie_number();
 		$this->limpiar_comment_ticket();
 		$this->limpiar_mode();
+		$this->limpiar_edit_support_id();
+		$this->limpiar_retira();
 	}
 
 }

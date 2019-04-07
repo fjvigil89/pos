@@ -9,6 +9,12 @@ class Sale extends CI_Model
         $this->db->where('sale_id', $sale_id);
         return $this->db->get();
     }
+    public function get_info_by_support($support_id)
+    {
+        $this->db->from('sales');
+        $this->db->where('support_id', $support_id);
+        return $this->db->get();
+    }
 
     public function get_info_quotes($quote_id)
     {

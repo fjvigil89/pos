@@ -18,11 +18,16 @@ class technical_supports extends Secure_area
 	function Index()
 	{
 		$this->check_action_permission('search');
+		$edit_support_id= $this->input->get("edit"); 
+		
+		$data['edit_support_id']=(is_numeric($edit_support_id) and $edit_support_id>0)?$edit_support_id :false;
+		$this->carrito_lib->set_edit_support_id($edit_support_id);
+		
+		
 		$config['per_page'] = $this->config->item('number_of_items_per_page') ? (int)$this->config->item('number_of_items_per_page') : 20;
 		$data['controller_name'] = strtolower(get_class());
-
-		$data['servicios'] = $this->technical_support->lista_servicios($this->input->get('statusVer'));
-		$data['serviciosStatus'] = $this->technical_support->lista_servicios_total_entregado("ENTREGADO");
+				$data['servicios'] = $this->technical_support->lista_servicios($this->input->get('statusVer'));
+		$data['serviciosStatus'] = $this->technical_support->lista_servicios_total_entregado(lang("technical_supports_entregado"));
 
 		$data["options"] = array(null => "", lang("technical_supports_recibido") => lang("technical_supports_recibido"), lang("technical_supports_diagnosticado") => lang("technical_supports_diagnosticado"),
 			lang("technical_supports_aprobado") => lang("technical_supports_aprobado"), lang("technical_supports_rechazado") => lang("technical_supports_rechazado"),
@@ -882,7 +887,15 @@ class technical_supports extends Secure_area
 		$data["is_cart_reparar"]=0;
 		$this->carrito_lib->cargar_cart($idSupport);
 		$this->carrito_lib->set_comment_ticket($this->config->item('default_sales_type'));
-
+		if(($suppor_edit=$this->carrito_lib->get_edit_support_id())>0){
+			$sale_data = $this->Sale->get_info_by_support($suppor_edit)->row();
+			foreach($this->Sale->get_sale_payments($sale_data->sale_id)->result() as $row)
+			{
+				if($row->payment_type!==lang("technical_supports_pay")){
+					$this->carrito_lib->add_pago( $row->payment_type,$row->payment_amount,$row->payment_date);
+				}
+			}
+		}
 		$this->reload_cart($data,false);
 		
 	}
@@ -1004,7 +1017,9 @@ class technical_supports extends Secure_area
     }
 	function reload_cart($data=array(),$is_ajax=true){
 
-			$data['dataServTecCliente'] = $this->technical_support->get_sev_tec_cliente($data ['support_id'], "1");
+			$data['customer'] = $this->technical_support->get_customer_by_suport($data ['support_id']);
+			$data['customer_balance'] = $data['customer']->balance;
+			$data["is_over_credit_limit"]=$this->carrito_lib->is_over_credit_limit($data['customer']);
 			//$data['dataRespuesto']= $this->technical_support->det_spare_part_all_by_id_order($data ['support_id']);
 			//$data['dataRespuestomas']= $this->technical_support->det_spare_part_all_by_id_order_respuesto($data ['support_id']);
 			$data['abonado']= $this->support_payment->get_sum_payment($data ['support_id']);
@@ -1019,6 +1034,9 @@ class technical_supports extends Secure_area
 			$data['otros_respustos']= $this->CarritoModel->get_respuesto_viejos($data ['support_id']);
 			$data['pagar_otra_moneda']= 0;
 			$data["amount_due"]=0;
+			$data["retirado_por"]=$this->carrito_lib->get_retira();
+			$data["register_id"] = $this->Employee->get_logged_in_employee_current_register_id();
+
 			$data["change_sale_date_enable"]=1;// para cambiar la fecha de la venta cuando se está editando
 			$data["comment"]=$this->carrito_lib->get_comentario();
 			$data["change_sale_id"]=false;// cuando se está editando
@@ -1030,6 +1048,7 @@ class technical_supports extends Secure_area
 				lang('sales_debit') => lang('sales_debit'),
 				lang('sales_credit') => lang('sales_credit')
 			);
+			
 
 			if($this->config->item('customers_store_accounts'))
 			{
@@ -1218,19 +1237,20 @@ function _payments_cover_total($support_id)
 		$data['cart'] = $this->carrito_lib->get_cart();
 		$data['mode']= $this->carrito_lib->get_mode();
 		$sale_id_raw=-1;
-        $suspended_change_sale_id =false;// $this->sale_lib->get_suspended_sale_id() ? $this->sale_lib->get_suspended_sale_id() : $this->sale_lib->get_change_sale_id();
+        $suspended_change_sale_id = $this->carrito_lib->get_edit_support_id();
         $location_id = $this->Employee->get_logged_in_employee_current_location_id();
 		$support_id= $this->input->post("support_id");
 		$support_info= $this->technical_support->get_info_by_id($support_id);
 		$serie_number =$this->carrito_lib->get_serie_number();
 		$data['support_info']=$support_info;
-
+		$sale_info=null;
+		$data["retirado_por"]=$this->carrito_lib->get_retira();
 		if($suspended_change_sale_id)
         {
-            $sale_data = $this->Sale->get_info($suspended_change_sale_id)->row();
+            $sale_data = $this->Sale->get_info_by_support($suspended_change_sale_id)->row();
 
 
-            if( $this->sale_lib->get_comment_ticket() == 1 and  $sale_data->is_invoice == 1)
+            if( $this->carrito_lib->get_comment_ticket() == 1 and  $sale_data->is_invoice == 1)
             {
                 $invoice_type['invoice_number'] = NULL;
                 $invoice_type['ticket_number']  = $this->Sale->get_next_sale_number(0,$location_id);
@@ -1238,7 +1258,7 @@ function _payments_cover_total($support_id)
 				$invoice_type['serie_number_invoice']=$serie_number;
                 $data['sale_number']            = $invoice_type['ticket_number'];
             }
-            elseif ( $this->sale_lib->get_comment_ticket() == 0 and $sale_data->is_invoice == 0)
+            elseif ( $this->carrito_lib->get_comment_ticket() == 0 and $sale_data->is_invoice == 0)
             {
                 $invoice_type['invoice_number'] = $this->Sale->get_next_sale_number(1,$location_id);
 				$invoice_type['ticket_number']  = NULL;
@@ -1296,29 +1316,29 @@ function _payments_cover_total($support_id)
 			$register_log_id = $this->Sale->get_current_register_log();
 
 			if (!$register_log_id) {
-				echo"¡La caja donde se quiere efectuar la operación esta cerrada!";
-				//$this->_reload(array('error' => "¡La caja donde se quiere efectuar la operación esta cerrada!"), false);
-
+				$mensaje="¡La caja donde se quiere efectuar la operación esta cerrada!";
+				$this->load->View('technical_supports/error', array("error"=>$mensaje));
 				return;
 
 			} elseif ($suspended_change_sale_id ) {
 
-				$sale_data = $this->Sale->get_info($suspended_change_sale_id)->row();
+				$sale_data = $this->Sale->get_info_by_support($suspended_change_sale_id)->row();
 
 				if ($sale_data->location_id != $this->Employee->get_logged_in_employee_current_location_id()) {
-					echo"¡Esta no es la tienda donde se realizo la venta!";
-					//$this->_reload(array('error' => "¡Esta no es la tienda donde se realizo la venta!"), false);
+					
+					$mensaje="¡Esta no es la tienda donde se realizo la venta!";
+					$this->load->View('technical_supports/error', array("error"=>$mensaje));
 
 					return;
 
 				} else {
 
 					$cash        = $this->Sale->get_payment_cash($this->carrito_lib->getPagos());
-					$amount_diff = $suspended_change_sale_id ? $this->Sale->get_cash_available($suspended_change_sale_id, $cash) : 0;
+					$amount_diff = $suspended_change_sale_id ? $this->Sale->get_cash_available($sale_data->sale_id, $cash) : 0;
 
 					if ($amount_diff < 0) {
-						echo"¡La caja no tiene suficiente efectivo para realizar la operación!";
-						//$this->_reload(array('error' => "¡La caja no tiene suficiente efectivo para realizar la operación!"), false);
+						$mensaje="¡La caja no tiene suficiente efectivo para realizar la operación!";
+						$this->load->View('technical_supports/error', array("error"=>$mensaje));
 
 						return;
 					}
@@ -1326,19 +1346,7 @@ function _payments_cover_total($support_id)
 			}
 		}
 
-		//sales_store_account
-		/*$data['resultado'] = $this->carrito_lib->delete_item($line);
-		$data['precio_total'] =  $this->carrito_lib->getPrecioTotal();
-		$data['subtotal_total'] =  $this->carrito_lib->getPrecioSubtotal();
-		$data['articulos_total'] =  $this->carrito_lib->getArticulosTotal();
-		$data['articulos_iva'] = $this->carrito_lib->getIvaProductos();
-		$data['carrito'] = $this->carrito_lib->getContenidoCarrito();
 		
-		
-		$abonado= $this->support_payment->get_sum_payment($idSupport);
-		$data["saldo_restante"]=$data['total']-$data['abonado'];	
-		$data["a_pagar"]= $data["saldo_restante"]-$this->carrito_lib->get_pagos_agregados();
-		*/
 		$customer_id=$support_info->id_customer;
 
 		$tier_id = $this->carrito_lib->get_selected_tier_id();
@@ -1409,11 +1417,12 @@ function _payments_cover_total($support_id)
 			$data['customer_country'] = $cust_info->country;
 			$data['customer_phone'] = $cust_info->phone_number;
 			$data['customer_email'] = $cust_info->email;
+			
 		}
 				//If we have a previous sale make sure we get the ref_no unless we already have it set
 		if ($suspended_change_sale_id )
 		{
-			$sale_info = $this->Sale->get_info($suspended_change_sale_id)->row_array();
+			$sale_info = $this->Sale->get_info_by_support($suspended_change_sale_id)->row_array();
 			
 		}
 		if ($suspended_change_sale_id && $this->config->item('change_sale_date_when_completing_suspended_sale'))
@@ -1422,28 +1431,44 @@ function _payments_cover_total($support_id)
 		}
 		$data['store_account_payment'] = $data["mode"] == 'store_account_payment' ? 1 : 0;
 		//SAVE sale to database 
-		if($data["mode"] == 'sale'  && isset($data['balance']) && $customer_id)
-		{
-			$add_customer=$this->Sale->add_petty_cash_customer($customer_id, $data['balance']);
-		}		
+				
 		$deleted_taxes=array();//$this->sale_lib->get_deleted_taxes();
 
 		if($this->config->item('subcategory_of_items') &&  false/*!$this->sale_lib->is_select_subcategory_items()*/){
 			$sale_id_raw=-1;
 		}
 		else{
+			$sale_id= $suspended_change_sale_id ? $sale_info["sale_id"]:$suspended_change_sale_id;
 			$sale_id_raw = $this->Sale->save(
 			$data['cart'], $customer_id, $employee_id, $sold_by_employee_id, 
 			$data['comment'],$data['show_comment_on_receipt'],$data['payments'], 
-			$suspended_change_sale_id, 0,"","", $data['change_sale_date'],
+			$sale_id, 0,"","", $data['change_sale_date'],
 			$data['balance'], $data["mode"],$tier_id,$deleted_taxes,
 			$data['store_account_payment'],$data['total'],$data['amount_change'],
 			$invoice_type, null,null,null,	null,null,0,null,0,false,null,null,true,
-			/*$support_id*/null);
+			$support_id,null);
+			if($sale_id_raw>0){
+				if($data["mode"] == 'sale'  && isset($data['balance']) && $customer_id)
+				{
+					$add_customer=$this->Sale->add_petty_cash_customer($customer_id, $data['balance']);
+				}
+				$data_support=array(
+					'retirado_por' =>$data["retirado_por"],
+					'date_entregado'=>date('Y-m-d H:i:s'),
+					'state'=> lang("technical_supports_entregado")
+				);
+				
+				$this->technical_support->actualizarServicioCliente($support_id,$data_support);
+				$this->guardar_cart(false);
+			}
+			
 		}	
 		$data["sale_id_raw"]=$sale_id_raw;
 		if($sale_id_raw>0){
 			$this->load->View('technical_supports/receipt_final', $data);
+			$this->carrito_lib->clear_all();
+		}else{
+			$this->load->View('technical_supports/error', array("error"=>"Error al procesar la venta"));
 		}
 	}
 	
@@ -1714,10 +1739,14 @@ function _payments_cover_total($support_id)
 		$this->load->View('technical_supports/cliente/info_cliente',$data);
 	}
 	function set_comentario(){
-		$support_id= $this->input->post('support_id');
+		//$support_id= $this->input->post('support_id');
 		$comentario= $this->input->post('comment');	
 		$this->carrito_lib->set_comentario($comentario);
 
+	}
+	function set_retira(){
+		$retirado_por= $this->input->post('retirado_por');	
+		$this->carrito_lib->set_retira($retirado_por);
 	}
 	
 		

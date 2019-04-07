@@ -24,31 +24,22 @@
                     <div class="portlet-body padding">
                         <div class="customer-box">
                             <div class="avatar">
-                                <?php if($dataServTecCliente->image_id !=''): ?>
-                                <img src="<?php echo site_url() ?>/app_files/view/<?php echo $dataServTecCliente->image_id ?>"
+                                <?php if($customer->image_id !=''): ?>
+                                <img src="<?php echo site_url() ?>/app_files/view/<?php echo $customer->image_id ?>"
                                     class="img-thumbnail" alt="profile-photo">
                                 <?php else: ?>
                                 <img src="<?php echo base_url() ?>/img/avatar.jpg" alt="Customer" class="img-thumbnail">
                                 <?php endif ?>
                             </div>
                             <div class="information info-yes-email">
-                                <h4><?php echo $dataServTecCliente->first_name . " ". $dataServTecCliente->last_name  ?>
-                                </h4>
-                                <a></a>
-                                <span class="email"><?php echo $dataServTecCliente->email ?>
-                                    <div class="md-checkbox-inline">
-                                        <div class="md-checkbox">
-                                            <input type="checkbox" name="email_receipt" value="1" id="email_receipt"
-                                                class="email_receipt_checkbox">
-                                            <label for="email_receipt">
-                                                <span></span>
-                                                <span class="check"></span>
-                                                <span class="box"></span>
-                                                Enviar recibo al e-mail
-                                            </label>
-                                        </div>
-                                    </div>
-                                </span>
+                                <a class="name" href="<?= site_url('customers/view_modal/'.$customer->person_id) ; ?>"
+                                    data-toggle="modal"
+                                    data-target="#myModal"><?php echo character_limiter(H($customer->first_name . " ". $customer->last_name ), 29); ?>
+                                    <?php if ($this->config->item('customers_store_accounts') && isset($customer_balance)) {?>
+                                    <span
+                                        class="<?php echo $is_over_credit_limit ? 'credit_limit_warning' : 'credit_limit_ok'; ?>">(<?php echo lang('customers_balance').': '.to_currency($customer_balance); ?>)</span>
+                                    <?php } ?>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -237,21 +228,38 @@
 									{?>
                                 <div id="finish_sale">
                                     <?php echo form_open("technical_supports/facturar",array('id'=>'finish_sale_form', 'autocomplete'=> 'off')); ?>
-                                        <?= form_input(array(
+                                    <?= form_input(array(
                                         'type'  => 'hidden',
                                         'name'  => 'support_id',
                                         'id'    => 'support_id',
                                         'value' => $support_id,
                                         ));
                                     ?>
-                                    <?php if ($payments_cover_total) {
+                                    <?php if ($payments_cover_total and $register_id>0) {
                                          echo "<input type='button' class='btn btn-success btn-large btn-block' id='finish_sale_button' value='".lang('sales_complete_sale')."' />";
-                                        }?>
+                                        }else if($register_id<=0){
+                                            echo' <p style="color:red";>*Debe de abrir una caja antes de completar la operación.</p>';
+                                        }
+                                        ?>
                                     </form>
                                 </div>
                                 <?php }									
                                 ?>
                                 <!--class="hidden" -->
+                                <div id="container_comment">
+                                    <div class="title-heading">
+                                        <label id="comment_label" for="retirado_por"> <?= lang('technical_supports_orden_ret_por');?>
+                                        </label>
+                                    </div>
+                                    <?= form_input(array(
+                                        "class"=>"form-control form-inps-sale",
+                                        'type'  => 'text',
+                                        'name'  => 'retirado_por',
+                                        'id'    => 'retirado_por',
+                                        'value' => $retirado_por,
+                                        ));
+                                    ?>
+                                </div>
                                 <div id="container_comment">
                                     <div class="title-heading">
                                         <label id="comment_label" for="comment"> <?= lang('common_comments');?>
@@ -297,8 +305,6 @@
                                     </div>
                                 </div>
                                 <?php endif;?>
-
-
 
                             </li>
                         </ul>
@@ -359,8 +365,16 @@ $("#comment").change(function(e) {
     activa_desactiva(true);
     let url = '<?= site_url("technical_supports/set_comentario");?>';
     $.post(url, {
-        "support_id": <?= $support_id?>,
         "comment": $(this).val(),
+    }, function(data) {
+        activa_desactiva(false);
+    });
+});
+$("#retirado_por").change(function(e) {
+    activa_desactiva(true);
+    let url = '<?= site_url("technical_supports/set_retira");?>';
+    $.post(url, {
+        "retirado_por": $(this).val(),
     }, function(data) {
         activa_desactiva(false);
     });
@@ -370,15 +384,15 @@ $("#finish_sale_button").click(function() {
     activa_desactiva();
     $("#cart_body").plainOverlay('show');
     <?php if(!$payments_cover_total) { ?>
-        if (!confirm(<?php echo json_encode(lang('sales_payment_not_cover_total_confirmation')); ?>)) {
-            $("#cart_body").plainOverlay('hide');
-            return;
-        }
+    if (!confirm(<?php echo json_encode(lang('sales_payment_not_cover_total_confirmation')); ?>)) {
+        $("#cart_body").plainOverlay('hide');
+        return;
+    }
     <?php } ?>
     <?php if (!$this->config->item('disable_confirmation_sale')) { ?>
-        if (confirm(<?php echo json_encode(lang("sales_confirm_finish_sale")); ?>)) {
-            $('#finish_sale_form').submit();
-        }
+    if (confirm(<?php echo json_encode(lang("sales_confirm_finish_sale")); ?>)) {
+        $('#finish_sale_form').submit();
+    }
     <?php }
     else{
             echo "$('#finish_sale_form').submit();";

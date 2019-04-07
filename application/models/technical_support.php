@@ -5,17 +5,19 @@ class technical_support extends CI_Model
 	function lista_servicios($status)
 	{
 		$current_location = $this->Employee->get_logged_in_employee_current_location_id();
-                if($status==""){
+        $retirado=lang("technical_supports_retirado");  
+        $entregado=lang("technical_supports_entregado");      
+        if($status==""){
                     $query = $this->db->query("SELECT su.Id_support, p.first_name, p.last_name, su.model, su.type_team, su.state, su.ubi_equipo,su.date_register FROM phppos_technical_supports su 
                     INNER JOIN phppos_customers c ON su.id_customer=c.person_id 
                     INNER JOIN phppos_people p ON c.person_id=p.person_id 
-                    WHERE su.state<>'ENTREGADO' AND su.state<>'RETIRADO' and id_location='$current_location'");
+                    WHERE su.state<>'$entregado' AND su.state<>'$retirado' and id_location='$current_location'");
                 }
                 if($status!=""){
                     $query = $this->db->query("SELECT su.Id_support, p.first_name, p.last_name, su.model, su.type_team, su.state, su.ubi_equipo,su.date_register FROM phppos_technical_supports su 
                     INNER JOIN phppos_customers c ON su.id_customer=c.person_id 
                     INNER JOIN phppos_people p ON c.person_id=p.person_id 
-                    WHERE su.state<>'ENTREGADO' AND su.state<>'RETIRADO' and su.state=$status and id_location='$current_location'");
+                    WHERE su.state<>'$entregado' AND su.state<>'$retirado' and su.state=$status and id_location='$current_location'");
                 }
 		return $query->result();
     }
@@ -54,11 +56,12 @@ class technical_support extends CI_Model
     }*/
     function lista_servicios_total_entregado($status)
 	{
+        $retirado=lang("technical_supports_retirado");
 		$current_location = $this->Employee->get_logged_in_employee_current_location_id(); 
                     $query = $this->db->query("SELECT su.Id_support, p.first_name, p.last_name, su.model, su.type_team, su.state,su.date_register FROM phppos_technical_supports su 
                     INNER JOIN phppos_customers c ON su.id_customer=c.person_id 
                     INNER JOIN phppos_people p ON c.person_id=p.person_id 
-                    WHERE (su.state='$status' OR su.state='RETIRADO') and id_location='$current_location'");
+                    WHERE (su.state='$status' OR su.state='$retirado') and id_location='$current_location'");
                 
 		return $query->num_rows();
 	}
@@ -81,8 +84,11 @@ class technical_support extends CI_Model
     }
      function actualizarServicioCliente($id_support, $data)
     {
-        $this->db->where('Id_support', $id_support);
-       return $this->db->update("phppos_technical_supports", $data);
+        $this->db->where('Id_support', $id_support);      
+        $result= $this->db->update("phppos_technical_supports", $data);
+        $this->db->query("COMMIT");
+        return $result;
+       
     } 
     function search($search, $state = false, $limit=50,$offset=0,$column='order_support',$orderby='asc')
 	{
@@ -626,6 +632,16 @@ class technical_support extends CI_Model
         $this->db->where('Id_support', $idSupport);
         return $this->db->update('phppos_technical_supports', array('state' => $dataResp,'repair_cost' => $dataST['costo'],'observaciones_entrega' => $dataST['comentarios'],'do_have_guarantee' => $dataST['garantia'],'date_garantia' => $dataST['fecha_garantia']));
     }
+    function get_customer_by_suport($idSupport){
+        $this->db->from('customers');	
+        $this->db->join('technical_supports', 'technical_supports.id_customer = customers.person_id','left');
+        $this->db->join('people', 'people.person_id = customers.person_id');
+		$this->db->where($this->db->dbprefix("technical_supports").'.Id_support',$idSupport);
+		$query = $this->db->get();
+            
+        return $query->row();
+		
+    }
     
     function get_sev_tec_cliente($idSupport,$cantidad=""){ 
         $reportServTec=$this->db->query("SELECT ts.*, client.phone_number, client.email, client.country, client.first_name, client.last_name, client.image_id
@@ -655,6 +671,10 @@ class technical_support extends CI_Model
     public function buscar_servicios($searchword,$q) { 
         $current_location = $this->Employee->get_logged_in_employee_current_location_id();
         $where="";
+        $retirado=lang("technical_supports_retirado");
+        $entregado=lang("technical_supports_entregado");
+        $rechazado= lang("technical_supports_rechazado");
+        $reparado= lang("technical_supports_reparado");
         $bq= strtoupper("$searchword"); 
             $arr = explode(' ',$bq);
             if (is_array($arr)) {
@@ -674,7 +694,7 @@ class technical_support extends CI_Model
             }
             if($q=="2") {
                 $reportList=$this->db->query("SELECT DISTINCT client.first_name, client.last_name, ts.Id_support, ts.marca,ts.marca, ts.model, ts.type_team,ts.marca FROM phppos_technical_supports ts, phppos_people client
-                WHERE  1=1 $where and ts.state<>'ENTREGADO' and ts.state<>'REPARADO' and ts.state<>'RECHAZADO' and ts.id_customer=client.person_id and id_location='$current_location' ORDER BY ts.marca Limit 0,10"); 
+                WHERE  1=1 $where and ts.state<>'$retirado' and ts.state<>'$reparado' and ts.state<>'$rechazado' and ts.id_customer=client.person_id and id_location='$current_location' ORDER BY ts.marca Limit 0,10"); 
             }
         return $reportList;
      }
