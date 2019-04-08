@@ -998,6 +998,10 @@ class technical_supports extends Secure_area
 			$data['otros_respustos']= $this->CarritoModel->get_respuesto_viejos($data ['support_id']);
 			$data['is_cart_reparar']= 1;	
 			
+			$person_info = $this->Employee->get_logged_in_employee_info();
+
+			$data["employee_logueado"]=$person_info;
+			$data["logged_in_employee_id"]=$person_info->person_id;
 			if(!$cart and !$is_ajax){
 				// se carga toda la vista reparar 
 				$this->load->view('technical_supports/tecnico/reparar_inicial', $data);
@@ -1037,6 +1041,11 @@ class technical_supports extends Secure_area
 			$data["retirado_por"]=$this->carrito_lib->get_retira();
 			$data["register_id"] = $this->Employee->get_logged_in_employee_current_register_id();
 
+			$person_info = $this->Employee->get_logged_in_employee_info();
+
+			$data["employee_logueado"]=$person_info;
+			$data["logged_in_employee_id"]=$person_info->person_id;
+			
 			$data["change_sale_date_enable"]=1;// para cambiar la fecha de la venta cuando se está editando
 			$data["comment"]=$this->carrito_lib->get_comentario();
 			$data["change_sale_id"]=false;// cuando se está editando

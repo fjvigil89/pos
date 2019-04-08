@@ -191,7 +191,7 @@ $lang["technical_supports_estad_vent_label_tserv"]="Type of Services";
 
 $lang["technical_supports_reg_diag"]="Record diagnosis";
 $lang["technical_supports_regs_diag"]="Enter the diagnosis";
-
+$lang['technical_supports_prive_iva']="price with tax";
 $lang["technical_supports_reg_falla"]="Enter the technical fault";
 $lang["technical_supports_reg_falla_n"]="Press to add new faults";
 

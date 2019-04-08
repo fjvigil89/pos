@@ -5,6 +5,7 @@
                 <tr>
                     <th></th>
                     <th><?= lang('technical_supports_titu_car_art'); ?></th>
+                    <th><?= strtoupper(lang('technical_supports_prive_iva')); ?></th>
                     <th><?= lang('technical_supports_titu_car_pre'); ?></th>
                     <th><?= lang('technical_supports_titu_car_cant'); ?></th>
                     <th><?= strtoupper(lang('sales_total')); ?></th>
@@ -18,7 +19,28 @@
                         <?= anchor("technical_supports/delete_item/$line/$is_cart_reparar/$support_id",'<i class="fa fa-trash-o fa fa-2x font-red"></i>', array('class' => 'delete_item'));?>
                     </td>
                     <td class="text-center"><?=H($item['name']) ?></td>
+
+
+
                     <td class="text-center"><?php echo to_currency("{$item['precio_e_iva']}", "2"); ?></td>
+                    <?php if ($this->Employee->has_module_action_permission('sales', 'edit_sale_price', $logged_in_employee_id))
+					{ ?>
+                    <td class="text-center" width="100px">
+                        <?php
+                                    echo form_open("technical_supports/edit_item/$line/$is_cart_reparar/$support_id", array('class' => 'line_item_form', 'autocomplete'=> 'off'));
+                                    echo form_input(array('name'=>'price','value'=>to_currency_no_money($item['price'], 10),'class'=>'form-control form-inps-sale input-small text-center', 'style'=>'width:10px','id' => 'price_'.$line));
+                                ?>
+                        </form>
+                    </td>
+                    <?php }
+                        else{ ?>
+                    <td class="text-center">
+                        <?php echo form_open("sales/edit_item/$line/$is_cart_reparar/$support_id", array('class' => 'line_item_form', 'autocomplete'=> 'off'));
+                                    echo to_currency_no_money($item['price']);
+                                     echo form_hidden('price',$item['price']); ?>
+                        </form>
+                    </td>
+                    <?php }?>
                     <td width="5">
                         <?= form_open("technical_supports/edit_item/$line/$is_cart_reparar/$support_id", array('class' => 'line_item_form', 'autocomplete'=> 'off'));
 					if(isset($item['is_serialized']) && $item['is_serialized']==1)
@@ -34,19 +56,36 @@
                     </td>
                     <td class="text-center"><?php echo to_currency($item['price']*$item['quantity'], "2"); ?></td>
                 </tr>
-                <?php if($item['is_serialized']==1) :?>
+                <?php if($item['is_serialized']==1 || $item['is_service']==1) :?>
                 <tr class="register-item-bottom">
+                    <?php if($item['is_serialized']==1) :?>
                     <td>
                         <strong><?= lang('sales_serial')?> : </strong>
                     </td>
-                    <td COLSPAN="2">
+                    <td COLSPAN="1">
                         <?= form_open("technical_supports/edit_item/$line/$is_cart_reparar/$support_id", array('class' => 'line_item_form', 'autocomplete'=> 'off'));
 					        echo form_input(array('name'=>'serialnumber','value'=>$item['serialnumber'],'class'=>'form-control form-inps-sale  ', 'id' => 'serialnumber_'.$line, 'tabindex'=>'2'));
 					    ?>
                         </form>
                     </td>
+                    <?php endif; ?>
+                    <?php if($item['is_service']==1) :?>
+
+                    <td class="text-center">
+                        <strong><?= lang('sales_description_abbrv')?> : </strong>
+                    </td>
+                    <td COLSPAN="2">
+                        <?= form_open("technical_supports/edit_item/$line/$is_cart_reparar/$support_id", array('class' => 'line_item_form', 'autocomplete'=> 'off'));
+                                    echo form_input(array('name'=>'description','value'=>$item['description'],'size'=>'20', 'id' => 'description_'.$line, 'class' =>'form-control description', 'maxlength' => 255));
+                                ?>
+                        </form>
+                    </td>
+
+                    <?php endif; ?>
                 </tr>
                 <?php endif; ?>
+
+
                 <?php endforeach ?>
                 <?php else: ?>
                 <tr>
@@ -60,37 +99,37 @@
     </div>
 </div>
 <?php if(!empty($otros_respustos)):?>
-    <div class="register-items-holder">
-        <center><strong>Otros respuestos</strong></center>
-        <p style="color:red";>*Estos productos no estan incluidos en el total </p>
+<div class="register-items-holder">
+    <center><strong>Otros respuestos</strong></center>
+    <p style="color:red" ;>*Estos productos no estan incluidos en el total </p>
+</div>
+<div class="register-items-holder">
+    <div style="width:100%;height:170px;overflow-x:auto;overflow-y:auto;border:1px solid #ddd;margin:10px 0!important">
+        <table id="table_cart_2" class="table table-advance table-bordered table-custom">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th><?= lang('technical_supports_titu_car_art'); ?></th>
+                    <th>Serial</th>
+                    <th><?= lang('technical_supports_titu_car_cant'); ?></th>
+                </tr>
+            </thead>
+            <tbody class="register-item-content">
+                <?php foreach ($otros_respustos as $respusto):?>
+                <tr class="register-item-details">
+                    <td class="text-center">
+                        <?= anchor("technical_supports/delete_spare_old/$respusto->id/$is_cart_reparar/$support_id",'<i class="fa fa-trash-o fa fa-2x font-red"></i>', array('class' => 'delete_item_old'));?>
+                    </td>
+                    <td class="text-center"><?=H( $respusto->name)?></td>
+                    <td class="text-center"><?= $respusto->serie?></td>
+                    <td class="text-center"><?=H( $respusto->quantity)?></td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
     </div>
-    <div class="register-items-holder">
-        <div style="width:100%;height:170px;overflow-x:auto;overflow-y:auto;border:1px solid #ddd;margin:10px 0!important">
-            <table id="table_cart_2" class="table table-advance table-bordered table-custom">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th><?= lang('technical_supports_titu_car_art'); ?></th>
-                        <th>Serial</th>
-                        <th><?= lang('technical_supports_titu_car_cant'); ?></th>
-                    </tr>
-                </thead>
-                <tbody class="register-item-content">
-                    <?php foreach ($otros_respustos as $respusto):?>                     
-                        <tr class="register-item-details">
-                            <td class="text-center">
-                                <?= anchor("technical_supports/delete_spare_old/$respusto->id/$is_cart_reparar/$support_id",'<i class="fa fa-trash-o fa fa-2x font-red"></i>', array('class' => 'delete_item_old'));?>
-                            </td>
-                            <td class="text-center"><?=H( $respusto->name)?></td>
-                            <td class="text-center"><?= $respusto->serie?></td>
-                            <td class="text-center"><?=H( $respusto->quantity)?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
-       
-    </div>
+
+</div>
 <?php endif; ?>
 
 <div class="portlet light margin-top-15 no-padding">
@@ -178,12 +217,12 @@
         </div>
     </div>
     <script>
-        $('.delete_item_old').click(function(event) {
-            event.preventDefault();
-            if (confirm("¿Desea eliminar este respueto?, si elimina el respueto no podrá restaurarlo.")) {
-                $("#cart_body").load($(this).attr('href'));
-            }
-        });
+    $('.delete_item_old').click(function(event) {
+        event.preventDefault();
+        if (confirm("¿Desea eliminar este respueto?, si elimina el respueto no podrá restaurarlo.")) {
+            $("#cart_body").load($(this).attr('href'));
+        }
+    });
     </script>
     <?php endif; ?>
 

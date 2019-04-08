@@ -144,8 +144,10 @@
 							<?php if (!$store_account_payment && $this->Employee->has_module_action_permission('sales', 'edit_sale', $this->Employee->get_logged_in_employee_info()->person_id)){
 
 							 	$edit_sale_url = $sale_info['suspended'] > 0 ? 'unsuspend' : 'change_sale';
+								$url=$sale_info['support_id'] !=null ? "technical_supports/?edit=".$sale_info['support_id'] : "sales/$edit_sale_url/".$sale_info['sale_id'];
 
-								echo form_open("sales/$edit_sale_url/".$sale_info['sale_id'],array('id'=>'sales_change_form','class'=>'form-horizontal')); ?>
+
+								echo form_open($url,array('id'=>'sales_change_form','class'=>'form-horizontal')); ?>
 									<?php echo form_submit(array(
 										'name'=>'submit',
 										'id'=>'submit',

@@ -15,6 +15,7 @@ $lang["technical_supports_pay"]="Abono servicio";
 $lang['technical_supports_type']="Tipo";
 $lang['technical_supports_estado']="Estado";
 $lang['technical_supports_option']="Opciones";
+$lang['technical_supports_prive_iva']="Precio con impuesto";
 $lang['technical_supports_recibido']="RECIBIDO";
 $lang['technical_supports_diagnosticado']="DIAGNOSTICADO";
 $lang['technical_supports_aprobado']="APROBADO";

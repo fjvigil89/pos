@@ -374,6 +374,7 @@ class Carrito_lib
 				'colour'=>$item_info->colour,
 				'marca'=>$item_info->marca,
 				'unit'=>$item_info->unit,
+				'is_service'=>$item_info->is_service,
 				'tax_included'=> $tax_included,
 				'product_id' => $item_info->product_id,
 				'description'=>$description!=null ? $description: $item_info->description,
@@ -404,7 +405,7 @@ class Carrito_lib
 				)
 			);
 		//Item already exists and is not serialized, add to quantity
-		if($itemalreadyinsale && ($item_info->is_serialized ==0) )
+		if($itemalreadyinsale && ($item_info->is_serialized ==0) and $item_info->is_service==0 )
 		{	
 			$_line= ($line === FALSE ? $updatekey : $line);
 			$new_quantity= $items[$_line]['quantity']+=$quantity;		
@@ -419,7 +420,7 @@ class Carrito_lib
 			$items+=$item;
 		}
 		
-		if( $this->CI->config->item('sales_stock_inventory') and $this->out_of_stock($item_id) )
+		if( $this->CI->config->item('sales_stock_inventory')/* and $this->out_of_stock($item_id) */)
 		{
 			$items=$this->get_cart();
 		}
@@ -830,9 +831,9 @@ class Carrito_lib
 		$items = $this->get_cart();
 		if(isset($items[$line]))
 		{
-			/*if ($description !== FALSE ) {
+			if ($description !== FALSE ) {
 				$items[$line]['description'] = $description;
-			}*/
+			}
 			if ($serialnumber !== FALSE ) {
 				$items[$line]['serialnumber'] = $serialnumber;
 			}
@@ -841,10 +842,11 @@ class Carrito_lib
 			}
 			/*if ($discount !== FALSE ) {
 				$items[$line]['discount'] = $discount;
-			}
+			}*/
 			if ($price !== FALSE ) {
 				$items[$line]['price'] = $price;
-			}
+				$items[$line]['precio_e_iva']=$this->precio_con_iva($items[$line]);
+			}/*
 			if ($custom1_subcategory !== FALSE ) {
 				$items[$line]['custom1_subcategory'] = $custom1_subcategory;
 				$items[$line]['custom2_subcategory'] = "";

@@ -1764,7 +1764,7 @@ class Sales extends Secure_area
 
 		foreach ($this->Customer->get_all()->result() as $customer)
 		{
-			//$data['customers'][$customer->person_id] = $customer->first_name . ' '. $customer->last_name;
+			$data['customers'][$customer->person_id] = $customer->first_name . ' '. $customer->last_name;
 		}
 
 		$data['employees'] = array();
