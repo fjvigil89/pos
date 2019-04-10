@@ -135,6 +135,11 @@
 					<div >
 						<?php echo lang('technical_supports_orden_ret_por').": ".$retirado_por; ?>
 					</div>
+					<?php if ($support_info->do_have_guarantee==1) { ?>
+						<div >
+							<?php echo lang('technical_supports_titu_garant').': '.$support_info->date_garantia; ?>
+						</div>		
+					<?php } ?>
 					<?php if($this->Location->get_info_for_key('enable_credit_card_processing')){
 						echo '<div id="mercahnt_id">'.lang('config_merchant_id').': '.$this->Location->get_info_for_key('merchant_id').'</div>';
 					} ?>				
@@ -304,9 +309,9 @@
 						</tr>
 
 					    <tr>
-					    	<?php if($item['description']!="" and $this->config->item('hide_description')==0){ ?>
+					    	<?php if($item['description']!="" ){ ?>
 						    	<td colspan="3" align="left">
-						    		<?= $item['description']; ?>
+									<?= lang('sales_description_abbrv').": ". $item['description']; ?>
 					    		</td>	
 				    		<?php } ?>
 							<?php if( isset($item['serialnumber']) and $item["serialnumber"]!=null ):?>

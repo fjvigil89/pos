@@ -1012,7 +1012,7 @@
 							</div>
 						<?php } ?>
 					</div>
-					<?php if ($this->Employee->has_module_action_permission('sales', 'select_seller_during_sale', $logged_in_employee_id)) :?>
+					<?php if ($select_seller_during_sale) :?>
 						<div class="col-lg-6 col-md-12 col-sm-12 col-xs-12" id="div_employees"></div>
 					<?php endif; ?>
 					<?php if ($this->Employee->has_module_action_permission('sales', 'overwrite_tax', $logged_in_employee_id)) :?>
@@ -2210,8 +2210,9 @@
 		{
 			setTimeout(function(){$('#item').focus();}, 10);
 		}
-
-		crear_select_empleado(<?php echo $sold_by_employee_id; ?> ,"div_employees");
+		<?php if ($select_seller_during_sale) :?>
+			crear_select_empleado(<?php echo $sold_by_employee_id; ?> ,"div_employees");
+		<?php endif;?>
 		function convertir_moneda($value, equivalencia=1){
 			let total =  $value/equivalencia;
 			return total;

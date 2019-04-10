@@ -926,7 +926,9 @@ class technical_supports extends Secure_area
 
 		$data["support_id"] = $idSupport;
 		$data["is_cart_reparar"]=1;
-		
+		$person_info = $this->Employee->get_logged_in_employee_info();
+		$data["employee_logueado"]=$person_info;
+		$data["logged_in_employee_id"]=$person_info->person_id;
 		
 		$this->load->view("technical_supports/carrito/table_items", $data);
 	}
@@ -1316,8 +1318,8 @@ function _payments_cover_total($support_id)
 		}
 		if (!$this->_payments_cover_total($support_id))
 		{
-			echo"Debe pagar el total de la venta";
-			//$this->_reload(array('error' => lang('sales_cannot_complete_sale_as_payments_do_not_cover_total')), false);
+			$mensaje="¡Debe pagar el total de la venta!";
+			$this->load->View('technical_supports/error', array("error"=>$mensaje));
 			return;
 		}
 		if ($this->config->item('track_cash') == 1) {
@@ -1463,10 +1465,10 @@ function _payments_cover_total($support_id)
 				}
 				$data_support=array(
 					'retirado_por' =>$data["retirado_por"],
-					'date_entregado'=>date('Y-m-d H:i:s'),
 					'state'=> lang("technical_supports_entregado")
 				);
-				
+				if(!$suspended_change_sale_id)
+					$data_support["date_entregado"]=date('Y-m-d H:i:s');
 				$this->technical_support->actualizarServicioCliente($support_id,$data_support);
 				$this->guardar_cart(false);
 			}
@@ -1474,6 +1476,7 @@ function _payments_cover_total($support_id)
 		}	
 		$data["sale_id_raw"]=$sale_id_raw;
 		if($sale_id_raw>0){
+			$data["support_info"]= $this->technical_support->get_info_by_id($support_id,false);
 			$this->load->View('technical_supports/receipt_final', $data);
 			$this->carrito_lib->clear_all();
 		}else{
