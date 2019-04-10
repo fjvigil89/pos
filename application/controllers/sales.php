@@ -1764,7 +1764,7 @@ class Sales extends Secure_area
 
 		foreach ($this->Customer->get_all()->result() as $customer)
 		{
-			//$data['customers'][$customer->person_id] = $customer->first_name . ' '. $customer->last_name;
+			$data['customers'][$customer->person_id] = $customer->first_name . ' '. $customer->last_name;
 		}
 
 		$data['employees'] = array();
@@ -1969,6 +1969,8 @@ class Sales extends Secure_area
 		$data["moneda_numero"]=   $this->sale_lib->get_moneda_numero();
 		$data["equivalencia"]= $this->sale_lib->get_equivalencia_divisa();
 		$data["currency"]=$this->sale_lib->get_currency();
+		$data["select_seller_during_sale"]=$this->Employee->has_module_action_permission('sales', 'select_seller_during_sale', $person_info->person_id) ;
+
 
 		$data['selected_sold_by_employee_id'] = $this->sale_lib->get_sold_by_employee_id();
 		$tiers = array();

@@ -343,7 +343,7 @@
 							<?php } ?>
 						</tr>
 
-					    <tr>
+					    <tr> 
 					    	<?php if($item['description']!="" and $this->config->item('hide_description')==0){ ?>
 						    	<td colspan="3" align="left">
 						    		<?= $item['description']; ?>

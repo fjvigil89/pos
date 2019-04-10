@@ -277,7 +277,7 @@ class Items extends Secure_area implements iData_controller
         $data['controller_name'] = strtolower(get_class());
         $data['redirect'] = 2;
         $data['item_info'] = $this->Item->get_info($item_id);
-
+        $data["is_new_item"]=false;
         //Unset unique identifiers
         $data['item_info']->item_number = '';
         $data['item_info']->product_id = '';

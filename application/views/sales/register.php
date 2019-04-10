@@ -1012,7 +1012,7 @@
 							</div>
 						<?php } ?>
 					</div>
-					<?php if ($this->Employee->has_module_action_permission('sales', 'select_seller_during_sale', $logged_in_employee_id)) :?>
+					<?php if ($select_seller_during_sale) :?>
 						<div class="col-lg-6 col-md-12 col-sm-12 col-xs-12" id="div_employees"></div>
 					<?php endif; ?>
 					<?php if ($this->Employee->has_module_action_permission('sales', 'overwrite_tax', $logged_in_employee_id)) :?>
@@ -1324,7 +1324,7 @@
 
 							<?php echo form_open("sales/add_payment",array('id'=>'add_payment_form', 'autocomplete'=> 'off')); ?>
 
-								<ul class="list-group">
+								<ul class="list-group"> 
 									<li class="list-group-item no-border-top tier-style">
 										<div class="row">
 											<div class="col-md-6">
@@ -1413,47 +1413,7 @@
 										</div>
 
 									<?php }
-									/*elseif(count($payments) > 0)
-									{?>
-										<div id="finish_sale">
-											<?php echo form_open("sales/start_cc_processing",array('id'=>'finish_sale_form', 'autocomplete'=> 'off')); ?>
-												<?php if ($payments_cover_total && $customer_required_check || (is_sale_integrated_cc_processing()))
-												{
-													echo "<input type='button' class='btn btn-success btn-large btn-block' id='finish_sale_button' value='".lang('sales_process_credit_card')."' />";
-
-													if (is_sale_integrated_cc_processing())
-													{
-														if (isset($customer) && $customer_cc_token && $customer_cc_preview)
-														{
-															echo '<label id="sales_use_saved_cc_label" for="use_saved_cc_info" class="checkbox">';
-															echo lang('sales_use_saved_cc_info'). ' '.$customer_cc_preview;
-															echo form_checkbox(array(
-																'name'=>'use_saved_cc_info',
-																'id'=>'use_saved_cc_info',
-																'value'=>'1',
-																'checked'=>(boolean)$use_saved_cc_info)
-															);
-															echo '</label>  ';
-														}
-														elseif(isset($customer))
-														{
-															echo '<label id="sales_save_credit_card_label" for="save_credit_card_info" class="checkbox">';
-															echo lang('sales_save_credit_card_info');
-															echo form_checkbox(array(
-																'name'=>'save_credit_card_info',
-																'id'=>'save_credit_card_info',
-																'value'=>'1',
-																'checked'=>(boolean)$save_credit_card_info)
-															);
-															echo '</label>  ';
-														}
-													}
-												}?>
-											</form>
-										</div>
-
-									<?php
-									}*/
+									
 
 									echo '<div id="container_comment" class="hidden">';
 									echo '<div class="title-heading"';
@@ -2125,8 +2085,6 @@
 
 			$("#add_payment_button").click(function()
 			{
-
-
 				$('#add_payment_form').ajaxSubmit({target: "#register_container", beforeSubmit: salesBeforeSubmit});
 
 			});
@@ -2252,8 +2210,9 @@
 		{
 			setTimeout(function(){$('#item').focus();}, 10);
 		}
-
-		crear_select_empleado(<?php echo $sold_by_employee_id; ?> ,"div_employees");
+		<?php if ($select_seller_during_sale) :?>
+			crear_select_empleado(<?php echo $sold_by_employee_id; ?> ,"div_employees");
+		<?php endif;?>
 		function convertir_moneda($value, equivalencia=1){
 			let total =  $value/equivalencia;
 			return total;

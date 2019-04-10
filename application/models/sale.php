@@ -9,6 +9,12 @@ class Sale extends CI_Model
         $this->db->where('sale_id', $sale_id);
         return $this->db->get();
     }
+    public function get_info_by_support($support_id)
+    {
+        $this->db->from('sales');
+        $this->db->where('support_id', $support_id);
+        return $this->db->get();
+    }
 
     public function get_info_quotes($quote_id)
     {
@@ -771,10 +777,11 @@ class Sale extends CI_Model
      $deleted_taxes=array(),$store_account_payment = 0,
       $total = 0, $amount_change, $invoice_type, $ntbale = null,$divisa=null, 
       $opcion_sale=null, $transaction_rate=null, $transaction_cost=null, $another_currency=0,
-      $currency=null, $total_other_currency=null , $overwrite_tax=false,$new_tax=null,$value_other_currency=null)
+      $currency=null, $total_other_currency=null , $overwrite_tax=false,$new_tax=null,$value_other_currency=null,
+      $is_servicio_tecnico=false,$support_id=null)
     {
         //we need to check the sale library for deleted taxes during sale
-        $this->load->library('sale_lib');
+        //$this->load->library('sale_lib');
 
         if (count($items) == 0) {
             return -1;
@@ -816,7 +823,8 @@ class Sale extends CI_Model
             "currency"=>$currency,
             "total_other_currency"=>$total_other_currency,
             "overwrite_tax"=>$overwrite_tax,
-            "value_other_currency"=>$value_other_currency
+            "value_other_currency"=>$value_other_currency,
+            "support_id"=>$support_id
             
         );
 
@@ -1313,14 +1321,29 @@ class Sale extends CI_Model
                             return -1;
                         }                        
     
-                    }else{
+                    }else if($is_servicio_tecnico){
+                        foreach ($item["ivas"] as $iva) {
+                            $query_result = $this->db->insert('sales_items_taxes', array(
+                                'sale_id' => $sale_id,
+                                'item_id' => $item['item_id'],
+                                'line' => $item['line'],
+                                'name' => $iva['name'],
+                                'percent' => $iva['percent'],
+                                'cumulative' => $iva['cumulative'],
+                            ));
+                            if (!$query_result) {
+                                $this->db->query("ROLLBACK");
+                                $this->db->query('UNLOCK TABLES');
+                                return -1;
+                            }   
+                        }                        
+                    }
+                    else{
 
                         foreach ($this->Item_taxes_finder->get_info($item['item_id']) as $row) {
 
                             $tax_name = $row['percent'] . '% ' . $row['name'];
-
                             //Only save sale if the tax has NOT been deleted
-
                             if (!in_array($tax_name, $deleted_taxes)) {
 
                                 $query_result = $this->db->insert('sales_items_taxes', array(

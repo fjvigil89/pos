@@ -6,23 +6,8 @@
 	<h1>
 		<i class="icon fa fa-wrench"></i>
 		<?php echo lang('module_' . $controller_name); ?> 
-                <?php 
-                    $extra="";
-					$url_video_ver="https://www.youtube.com/watch?v=SzJnORvT2vY&feature=youtu.be";
-					if($this->Appconfig->es_franquicia()){
-						$url_video=	$this->Appconfig->get_video("SERVICIO TÉCNICO");
-						if($url_video!=null){
-							$url_video_ver=$url_video;
-							
-						}else{
-							$extra=" style='display: none; '";
-						}
-					}
-					$a_video= '<a target="_blank" href="'.$url_video_ver.'" '.$extra.' class="icon fa fa-youtube-play help_button" ></a>';
-					echo $a_video;
-				
-				?>
-	</h1> 
+                <a target="_blank" href="https://www.youtube.com/watch?v=SzJnORvT2vY&feature=youtu.be" class="icon fa fa-youtube-play help_button" id='maxitems' ></a>
+	</h1>
 </div>
 <!-- END PAGE TITLE -->
 </div>
@@ -74,7 +59,7 @@
                 <div class="tools">
                     <div class="">
                         <?php if ($this->Employee->has_module_action_permission($controller_name, 'add_update', $this->Employee->get_logged_in_employee_info()->person_id)): ?>
-                            <a href="<?php echo site_url($controller_name) ?>/view/-1" class="btn btn-primary">
+                            <a href="<?php echo site_url($controller_name) ?>/nuevo-servicio/-1" class="btn btn-primary">
                                     <i class="fa fa-plus hidden-lg fa fa-2x tip-bottom"
                                        data-original-title="<?php echo lang($controller_name . '_new'); ?>"></i>
                                     <span class="visible-lg"><?php echo lang($controller_name . '_new') ?></span>
@@ -83,7 +68,7 @@
                     </div>
                 </div>
             </div>
-            <div id="contTabla" class="portlet-body table-responsive">
+            <div id="contTabla" class="portlet-body ">
                  <?php $this->load->view("technical_supports/manage_tabla"); ?>
             </div>
         </div>
@@ -91,6 +76,14 @@
         
     </div>
 </div>
+<?php if($edit_support_id>0) :?>
+    <script>
+        $(function() 
+        {
+            controler('<?= site_url("technical_supports/carritoServicio")?>','hc=<?=$edit_support_id ?>','ventanaVer','');
+        });
+    </script>
+<?php endif; ?>
 
 <script type="text/javascript">
     $(".ciContc").keyup(function () { // function(event)

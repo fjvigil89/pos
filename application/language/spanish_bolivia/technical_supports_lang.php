@@ -11,9 +11,11 @@ $lang['technical_supports_falla_tecnica']="Tipo de falla o daño";
 $lang['technical_supports_falla_tecnica_peronalizada']="Ingrese tipo de falla";
 $lang['technical_supports_order_n']="N° Orden";
 $lang['technical_supports_customer']="Cliente";
+$lang["technical_supports_pay"]="Abono servicio";
 $lang['technical_supports_type']="Tipo";
 $lang['technical_supports_estado']="Estado";
 $lang['technical_supports_option']="Opciones";
+$lang['technical_supports_prive_iva']="Precio con impuesto";
 $lang['technical_supports_recibido']="RECIBIDO";
 $lang['technical_supports_diagnosticado']="DIAGNOSTICADO";
 $lang['technical_supports_aprobado']="APROBADO";
@@ -26,8 +28,8 @@ $lang['technical_supports_edit']="Editar";
 $lang["technical_supports_diagnose"]="Diagnosticar";
 $lang["technical_supports_aprobar_rechazar"]="Aprobar-rechazar";
 $lang["technical_supports_reparar"]="Reparar";
-$lang["technical_supports_rechazar"]="Rechazar oreden";
-$lang["technical_supports_aprobar"]="Aprobar oreden";
+$lang["technical_supports_rechazar"]="Rechazar orden";
+$lang["technical_supports_aprobar"]="Aprobar orden";
 $lang["technical_supports_type_team"]="Equipo";
 $lang['technical_supports_order']="Orden";
 $lang['technical_supports_accessorys']="Accesorios";
@@ -40,16 +42,12 @@ $lang["technical_supports_falla_no_support"]="No hay ordenes para mostrar";
 $lang["technical_supports_entregar"]="Entregar";
 $lang["technical_supports_marca"]="Marca";
 $lang["technical_supports_name_tecnico"]="Técnico";
-$lang["technical_supports_name_estad_equipo_imprime"]="Estado";
 $lang["technical_supports_garantia"]="Fecha de Garantía";
 $lang["technical_supports_observaciones"]="Observaciones";
 $lang["technical_supports_garantia_help"]="Fecha de vencimiento de la garantía ";
 $lang["technical_supports_color"]="Color";
 $lang["technical_supports_update_date"]="Actualizar fecha de ingreso";
-
 $lang['technical_supports_entrega_title_diag']="Diagnostico Técnico";
-$lang['technical_supports_entrega_title_resp']="Respuestos";
-
 $lang['technical_supports_vntorden']="Orden";
 $lang['technical_supports_vntequipo']="Equipo";
 $lang['technical_supports_vntmodelo']="Modelo";
@@ -91,10 +89,15 @@ $lang['technical_supports_mod_diag_titu_menj']="Actualización de diagnostico as
 $lang['technical_supports_mod_diag_label']="Diagnostico";
 $lang['technical_supports_mod_diag_boton']="Actualizar Datos";
 
+$lang['technical_supports_Mark_repaired']="Marcar como reparado";
+$lang['technical_supports_Mark_reject']="Rechazar";
+
+
+
 /////////Toas alert
 $lang['technical_supports_diagnostico_add']="Diagnostico almacenado con exito";
 $lang['technical_supports_diagnostico_delet']="Diagnostico eliminado con exito";
-$lang['technical_supports_respuesto_add']="Respuesto almacenado con exito";
+$lang['technical_supports_respuesto_add']="Respuesto(s) almacenado con exito";
 $lang['technical_supports_respuesto_delet']="Respuesto eliminado con exito";
 $lang['technical_supports_asig_estado']="El registro fue actualizado como ";
 $lang['technical_supports_adv_asig_resp']="El servicio no puede ser rechazado ya que tiene respuesto asignado.";
@@ -119,4 +122,73 @@ $lang["technical_supports_ingrese_reporte"]="Ingrese reporte tecnico";
 $lang["technical_supports_ubi_equipos"]="Ubicación del equipo";
 $lang["technical_supports_orden_ent_ubi_eq"]="Ubicación del equipo";
 $lang["technical_supports_ubi_equipo"]="Ubicación del Equipo";
+
+
+$lang["technical_supports_estad_vent_titu"]="Estadisticas de";
+$lang["technical_supports_estad_vent_mensj"]="Visualizar procesos procesados con esta opcion";
+
+$lang["technical_supports_estad_vent_label_falla"]="Tipos de Fallas";
+$lang["technical_supports_estad_vent_label_tec"]="Tecnicos";
+
+//////////////////////////////////////////////////////////////////////////////
+
+$lang["technical_supports_title_detalle"]="Ver registro";
+$lang["technical_supports_menj_detalle_eli"]="Estas seguro de eliminar el registro";
+$lang["technical_supports_title_detalle_eli"]="Eliminar registro";
+
+
+///////////////////////CARRITO
+$lang["technical_supports_titu_car_art"]="ARTICULO";
+$lang["technical_supports_titu_car_pre"]="PRECIO";
+$lang["technical_supports_titu_car_cant"]="CANTIDAD";
+$lang["technical_supports_titu_subt"]="SUBTOTAL";
+
+$lang["technical_supports_menj_car"]="No hay artículos en elcarrito";
+$lang["technical_supports_menj_car_cestart"]="En la cesta de artículos";
+$lang["technical_supports_menj_car_prodiva"]="Impuesto(s)";
+$lang["technical_supports_menj_car_product"]="Productos";
+
+
+///////////////////////////////////// Buscar Servicios
+$lang["technical_supports_titu_total"]="Total Resultado";
+
+///////////////////////////////////Imprimir Orden
+$lang["technical_supports_titu_vent_ord"]="Orden";
+$lang["technical_supports_titu_vent_imp"]="Imprimir";
+$lang["technical_supports_titu_marca"]="Marca";
+$lang["technical_supports_titu_repuesto"]="Repuestos";
+$lang["technical_supports_titu_nomb"]="Nombre";
+$lang["technical_supports_titu_serie"]="Serie";
+$lang["technical_supports_titu_canti"]="Cantidad";
+$lang["technical_supports_titu_garant"]="Garantia";
+$lang["technical_supports_titu_observ"]="Observaciones";
+$lang["technical_supports_titu_retp"]="Retirado por";
+
+$lang["technical_supports_repair_mart"]="Total reparación"; //new
+$lang["technical_supports_orden_inf_garant"]="Sin garantia";
+
+$lang["technical_supports_vnthist"]="Ver Historial del Cliente";
+$lang["technical_supports_vnthist_mnj"]="Información de los servicios prestados al cliente";
+
+$lang["technical_supports_selec"]="Seleccione";
+$lang["technical_supports_selec_napli"]="No Aplica";
+
+$lang["technical_supports_email_disp"]="Tipo de Dispositivo";
+$lang["technical_supports_email_ftec"]="Tipo de Falla Tècnica";
+$lang["technical_supports_email_menj"]="Hola te informamos que tu Servicio fue";
+$lang["technical_supports_email_menj2"]="favor pasar por la oficina";
+
+$lang["technical_supports_vent_cacum"]="Cobro Acumulados";
+$lang["technical_supports_vent_tcob"]="Total Cobrado por Servicios";
+$lang["technical_supports_estad_vent_label_tserv"]="Tipo de Servicios";
+
+$lang["technical_supports_reg_diag"]="Registrar diagnostico";
+$lang["technical_supports_regs_diag"]="Ingrese el diagnostico";
+
+$lang["technical_supports_reg_falla"]="Ingrese la falla técnica";
+$lang["technical_supports_reg_falla_n"]="Pulse para agregar nuevas fallas";
+
+$lang["technical_supports_boton_rrch"]="Rechazar";
+$lang["technical_supports_boton_rep"]="Marcar como Reparado";
+
 ?>

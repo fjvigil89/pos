@@ -1,11 +1,11 @@
 <div class="modal Ventana-modal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true" style="display:block;overflow-y: auto;">
     <div class="modal-dialog modal-lg" style="width: 97%;">
         <div class="modal-content animated bounceInRight">
-            <div class="modal-header" style="height: 90px;background: url('assets/template/images/bannerventana.png') center right no-repeat;background-size: cover;">
+            <div class="modal-header" style="height: 90px;background: url('img/bannerventana.png') center right no-repeat;background-size: cover;">
                 <button type="button" class="close img-circle" style="background: #FFFFFF;color: #000000;padding: 7px 9px 7px 9px;" data-dismiss="modal" onclick="controler('<?php echo site_url() ?>/config/tservicios/','1','listarFiador',$('#ventanaVer').html(''));"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
 
-                <h4 class="modal-title">Ver Historial del Cliente</h4>
-                <small class="font-bold">Información de los servicios prestados al cliente.</small>
+                <h4 class="modal-title"><?php echo lang('technical_supports_vnthist'); ?></h4>
+                <small class="font-bold"><?php echo lang('technical_supports_vnthist_mnj'); ?>.</small>
             </div>
             <div class="row">
                 <div class="col-sm-12">
@@ -16,7 +16,7 @@
                                         <?php echo lang('config_company_ventetqtfallas'); ?>
                                 </div> 
                         </div>
-                        <div class="portlet-body table-responsive">
+                        <div class="portlet-body ">
                             <table class="table table-bordered" id="table-hsuppor">
                                 <thead>
                                 <tr style="background: #FAFAFA;">
@@ -33,9 +33,9 @@
                                 <tbody>
                                 <?php 
                                 foreach ($hCliente->result() as $hCliente){ 
-                                    if($hCliente->state=="ENTREGADO"){ $color="color: blue"; $lFecha="Entregado: ".date('d-m-Y', strtotime($hCliente->date_entregado)); }
-                                    if($hCliente->state=="RECHAZADO"){ $color="color: red";  $lFecha="Recibido: ".date('d-m-Y', strtotime($hCliente->date_register)); }
-                                    if($hCliente->state=="RECIBIDO" Or $hCliente->state=="REPARADO"){ $color="color: #008966";  $lFecha="Recibido: ".date('d-m-Y', strtotime($hCliente->date_register)); }
+                                    if($hCliente->state==lang("technical_supports_entregado")){ $color="color: blue"; $lFecha="Entregado: ".date('d-m-Y', strtotime($hCliente->date_entregado)); }
+                                    if($hCliente->state==lang("technical_supports_rechazado")){ $color="color: red";  $lFecha="Recibido: ".date('d-m-Y', strtotime($hCliente->date_register)); }
+                                    if($hCliente->state==lang("technical_supports_retirado") Or $hCliente->state==lang("technical_supports_reparado")){ $color="color: #008966";  $lFecha="Recibido: ".date('d-m-Y', strtotime($hCliente->date_register)); }
                                     ?>
                                     <tr> 
                                         <td class="text-center"><?php echo $hCliente->order_support; ?></td>
