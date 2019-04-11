@@ -75,8 +75,8 @@
     });
     </script><?php 
 		if ($this->config->item('hide_support_chat')==0 &&  $this->router->fetch_method()!="complete" and 
-		!($this->router->fetch_class() == "technical_supports" && $this->router->fetch_method()=="save")  and
-		$this->router->fetch_method()!="receipt" and $this->router->fetch_method()!="closeregister" and $this->router->fetch_method()!="giftcard_print") {
+		!($this->router->fetch_class() != "technical_supports" )  and
+		$this->router->fetch_method()!="receipt" and $this->router->fetch_method()!="receipt_comanda"  and $this->router->fetch_method()!="closeregister" and $this->router->fetch_method()!="giftcard_print") {
 				$id_sitio_api="56f2edbbd68ada7f0fa9bda5";
 				if($this->Appconfig->es_franquicia()){
 					$id_sitio_api=$data_commpany->script_chat;

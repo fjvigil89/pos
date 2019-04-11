@@ -53,7 +53,25 @@ class Config extends Secure_area
 			"USD"=>"DOLAR(USD)",
 			"EUR"=>"EURO(EUR)",
 			"MXN"=>"PESOS MEXICANO(MXN)",
-			"JPY"=>"YEN(JPY)"
+			"JPY"=>"YEN(JPY)",
+			"BOB"=>"BOLIVIANO(BS)",
+			"VEF"=>"BOÍVAR VENEZOLANO(VEF)",
+			"ANG"=>" GUILDER ANTILLANO(NAƒ)",
+			"CLP"=>"PESO CHILENO(CLP)",
+			"NIO"=>"CÓRDOBA NICARAGÜENSE(NIO)",
+			"COP"=>"PESO COLOMBIANO(COP)",
+			"CAD"=>"DÓLAR CANADIENSE(CAD)",
+			"SVC"=>"EL COLON DEL SALVADOR(SVC)",
+			"GTQ"=>"QUETZAL DE GUATEMALA(GTQ)",
+			"HNL"=>"LEMPIRA HONDUREÑA(HNL)",
+			"PEN"=>"NUEVO SOL PERUANO(PEN[S/.])",
+			"CRC"=>"COLÓN COSTARRICENSE(CRC)",
+			"PAB"=>"BALBOA PANAMEÑO(PAB)",
+			"PYG"=>"GUARANÍ PARAGUAYO(PYG)",
+			"BRL"=>"REAL BRASILEÑO(BRL)",
+			"DOP"=>"PESO DOMINICANO(DOP)",
+			"ARS"=>"PESO ARGENTINO(ARS)",
+			"UYU"=>"PESO URUGUAYO(UYU)"
 		);
 		$data['abreviaturas_divisa'] =$abreviaturas_divisa;
 

@@ -86,6 +86,7 @@
 											<?php if ($mode != 'store_account_payment') { ?>
 												<a type="button" class="btn yellow-gold letter-space" id="quotes"><?php echo lang('sales_quotes_create');?></a>
 												<a type="button" class="btn yellow-gold letter-space" id="suspend_sale_button"><?php echo lang('sales_suspend_sale');?></a>
+												<a type="button" class="btn yellow-casablanca letter-space" id="print_sale_button"><i id="icon-print" class="fa fa-print"></i>Comanda</a>
 												<a type="button" class="btn yellow-gold letter-space" id="layaway_sale_button" style="display: none;"><?php echo lang('sales_layaway');?></a>
 												<a type="button" class="btn yellow-gold letter-space" id="estimate_sale_button" style="display: none;"><?php echo lang('sales_estimate');?></a>
 												<?php if($cancelar_despues_desuspender):?>
@@ -2037,7 +2038,20 @@
 						<?php } ?>
 					});
 
-
+					
+			$("#print_sale_button").click(function(){	
+				if($('#ntable').val()<=0){
+					alert("Debe seleccionar una mesa.")
+				}
+				else if($("#comment").val()!=""){
+					$.post('<?php echo site_url("sales/set_comment");?>', {comment: $('#comment').val()}, function() {
+						window.location = '<?php echo site_url("sales/receipt_command"); ?>/'+$('#ntable').val();
+					});
+				}else{
+					window.location = '<?php echo site_url("sales/receipt_command"); ?>/'+$('#ntable').val();
+				}
+				
+			});
 			$("#suspend_sale_button").click(function()
 			{
 				if (confirm(<?php echo json_encode(lang("sales_confirm_suspend_sale")); ?>))

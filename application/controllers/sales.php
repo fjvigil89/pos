@@ -20,7 +20,7 @@ class Sales extends Secure_area
 		
         //$this->load->view('sales/prueba');
 	}
-	function intems_sales_search(){
+	function items_sales_search(){
 		session_write_close();		
 		$suggestions = $this->Item->get_items_sales_search_suggestions($this->input->get('term'),30);
 		echo json_encode($suggestions);
@@ -1589,6 +1589,21 @@ class Sales extends Secure_area
 
 	function imprimir(){
 		$this->load->view("sales/receipt_offline");
+	}
+	function receipt_comanda($ntabe)
+	{
+		$data=array();
+      
+		$items=  $this->sale_lib->get_cart();
+      
+        $data = array();
+
+        
+		$data["items"]   =$items;  
+		$data["ntabe"]=$ntabe;
+        $data["description"]= $this->sale_lib->get_comment();
+
+        $this->load->view("sales/receipt_comanda", $data);
 	}
 
 	function receipt($sale_id)

@@ -77,7 +77,7 @@
                                     class="control-label"><?php echo lang("technical_supports_ubi_equipos") ?></label>
                             </label>
                             <div class="col-sm-12">
-                                <?php echo form_dropdown('ubi_equipo', $ubiequipos,$support->ubi_equipo, 'id="ubi_equipo" class="bs-select form-control" style="width: 80%;float: left;" required="required"'); ?>
+                                <?php echo form_dropdown('ubi_equipo', $ubiequipos,$support->ubi_equipo, 'id="ubi_equipo" class="bs-select form-control" style="width: 80%;float: left;"'); ?>
 
                                 <a href="javascript:void(0);" title="Pulse para agregar nuevos registro"
                                     onclick="controler('<?php echo site_url() ?>/config/ubica_equipo/','equipo','ventanaVer','');">
