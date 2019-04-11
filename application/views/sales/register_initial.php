@@ -166,10 +166,10 @@ array( "id"=>"modal-return-ticket", 'data-toggle'=>"modal","style"=>"display:non
 					var item_parent_class = "";
 					if (image_src != '' ) {
 						var item_parent_class = "item_parent_class";
-						var prod_image = '<a class="btn grey-gallery"><img class="img-thumbnail" style="width:100%; height:60px;" src="'+image_src+'" alt="" />';
+						var prod_image = '<a class="btn grey-gallery"><img class="img-fluid img-thumbnail" style="width:90%; height:60px;" src="'+image_src+'" alt="" />';
 					}
 					
-					var item = $("<div/>").attr('class', 'category_items item space-item col-lg-2 col-md-2 col-sm-3 col-xs-6  '+item_parent_class).attr('data-id', json.items[k].id).append(prod_image+'<p class="letter-space-item">'+json.items[k].name+'</p>'+'</a>');
+					var item = $("<div/>").attr('class', 'category_items item space-item col-lg-2 col-md-2 col-sm-2 col-xs-4  '+item_parent_class).attr('data-id', json.items[k].id).append(prod_image+'<p class="letter-space-item">'+json.items[k].name+'</p>'+'</a>');
 					$("#category_item_selection").append(item);
 					var d_id = json.items[k].id;
 				}

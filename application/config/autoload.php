@@ -108,7 +108,7 @@ $autoload['language'] = array('common', 'config', 'customers', 'datetime', 'empl
 |
 */
 
-$autoload['model'] = array('Appconfig','Person','Customer','Employee','Module','Item', 'Item_taxes', 'Sale', 'Supplier','Inventory','Receiving','Giftcard', 'Item_kit', 'Item_kit_taxes', 'Item_kit_items', 'Appfile','Item_location', 'Module_action','Location','Item_location_taxes', 'Tier', 'Item_kit_location','Item_kit_location_taxes', 'Item_taxes_finder', 'Item_kit_taxes_finder', 'Register', 'Additional_item_numbers','Additional_item_seriales','Template_model','items_subcategory','technical_support');
+$autoload['model'] = array('Appconfig','Person','Customer','Employee','Module','Item', 'Item_taxes', 'Sale', 'Supplier','Inventory','Receiving','Giftcard', 'Item_kit', 'Item_kit_taxes', 'Item_kit_items', 'Appfile','Item_location', 'Module_action','Location','Item_location_taxes', 'Tier', 'Item_kit_location','Item_kit_location_taxes', 'Item_taxes_finder', 'Item_kit_taxes_finder', 'Register', 'Additional_item_numbers','Additional_item_seriales','Template_model','items_subcategory','technical_support','Hour_access');
 
 /* End of file autoload.php */
 /* Location: ./application/config/autoload.php */

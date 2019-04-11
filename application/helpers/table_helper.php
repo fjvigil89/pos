@@ -414,6 +414,8 @@ function get_chanche_home_manage_table($data,$controller)
 		"Divisa",
 		"Total",
 		"Total transfererido",
+		"Hora",
+		"Vendido por",
 		""
 	);
 		
@@ -496,13 +498,11 @@ function get_change_home_data_row($item,$controller)
 	}else{
 		$total=$total*$tasa;	
 	}
-	
-		
-		
-	
-	
 	$table_data_row.='<td width="10%" align="center">'.to_currency_no_money($total).'</td>';
 	$table_data_row.='<td width="10%" align="center">'.to_currency($item->quantity_purchased*$item->item_unit_price).'</td>';
+	$table_data_row.='<td width="10%" align="center">'.date('h:i:s', strtotime($item->sale_time)).'</td>';
+	$table_data_row.='<td width="15%" align="center">'.$item->first_name.' '.$item->last_name .'</td>';
+	
 
 	$table_data_row.='<td width="3%" class="rightmost">'.anchor($controller_name."/view_modal/"
 	.$item->sale_id."/".$item->item_id."/".$item->line, "<i class='fa fa-edit'></i>Detalles",array("data-toggle"=>"modal", "data-target"=>"#myModal",'class'=>'btn btn-xs btn-block default btn-clon','title'=>"Detalles")).'</td>';			
