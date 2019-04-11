@@ -35,4 +35,5 @@ $lang['employees_cannot_delete_default_user'] = 'You cannot delete the default u
 $lang['employees_employee_type'] = 'Employee type';
 $lang['employees_logged_in_employee'] = 'Logged in employee';
 $lang['employees_sale_person'] = 'Sale person';
+$lang['employee_access_control']='Access control';
 ?>

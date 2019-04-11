@@ -38,4 +38,5 @@ $lang['employees_sale_person'] = 'Sale persona';
 $lang['employees_username_help'] = 'El usuario es un campo obligatorio y debe tener  por mínimo 5 caracteres';
 $lang['employees_password_help'] = 'La contraseña  debe tener  por mínimo 8 caracteres';
 $lang['employees_repeat_password_help'] = 'Las claves deben coincidir ';
+$lang['employee_access_control']='Control de acceso';
 ?>
