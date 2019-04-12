@@ -6,9 +6,9 @@ class Hour_access extends CI_Model
         $this->db->query("SET autocommit=0");
 		$success=$this->db->delete('access_employees', array('employee_id' => $employee_id));
         if($success){
-            $con_day=0;
             
             foreach ($hora_acceso as $id_tienda => $tienda_acceso_day) {
+                $con_day=0;
                 foreach($tienda_acceso_day as $key=>$acceso_day)
                 {
                     for ($i=0; $i <sizeof($acceso_day) ; $i++) { 

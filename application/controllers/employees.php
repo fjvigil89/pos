@@ -172,7 +172,7 @@ class Employees extends Person_controller
 		$data['logged_in_employee_id'] = $this->Employee->get_logged_in_employee_info()->person_id;
 		$data['all_modules']=$this->Module->get_all_modules();
 		$data['controller_name']=strtolower(get_class());
-		$data['hour_access_employee']=$this->Hour_access->get_acceso_employee($employee_id);
+		
 
 		$locations_list=$this->Location->get_all()->result();
 		$authenticated_locations = $this->Employee->get_authenticated_location_ids($employee_id);
@@ -200,6 +200,9 @@ class Employees extends Person_controller
 		
 		$data['locations']=$locations;
 		$data['redirect_code']=$redirect_code;
+		$data['hour_access_employee']=$this->Hour_access->get_acceso_employee($employee_id);
+		$data['hour_access_employee_table']=get_access_employee_table($data["locations_list"],$employee_id);
+
 		$this->load->view("employees/form",$data);
 	}
 	
