@@ -65,7 +65,7 @@ function get_model_tabla_detailed_sales($summary_data=array(),$headers=array(),$
 function get_access_employee_table($locations_list,$employee_id){
 
 	$content = '';
-	foreach($locations_list as $location){ 
+	foreach($locations_list as $location){
 		$content.="<div class='panel panel-default'>";
 			$content.="<div class='panel-heading'>";
 				$content.="<h3 class='panel-title font-green-seagreen'><strong><i class='fa fa-unlock-alt'></i>".lang("employee_access_control")."-".$location->name."</strong></h3>";
@@ -97,7 +97,7 @@ function get_access_employee_table($locations_list,$employee_id){
 											$content.='<div class="md-checkbox" >';	
 											
 											if($employee_id==1){
-											$content.=form_checkbox(array('name'=>$location->location_id.'_day_'.$day.'[]', 'id'=>$location->location_id.'checkbox'.$day.$hour, 'value'=>$hour, 'class'=>'md-check','checked'=> false,'disabled'=>true));																		
+											$content.=form_checkbox(array('name'=>$location->location_id.'_day_'.$day.'[]', 'id'=>$location->location_id.'checkbox'.$day.$hour, 'value'=>$hour, 'class'=>'md-check','checked'=> true,'disabled'=>true));																		
 											}else{
 											$content.=form_checkbox(array('name'=>$location->location_id.'_day_'.$day.'[]', 'id'=>$location->location_id.'checkbox'.$day.$hour, 'value'=>$hour, 'class'=>'md-check','checked'=> false));																		
 											}

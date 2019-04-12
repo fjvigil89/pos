@@ -46,13 +46,40 @@ class Hour_access extends CI_Model
         $this->db->where('hour_access', $hour.':00:00');
         $this->db->where('employee_id', $employee_id);
         $resul=$this->db->get()->num_rows();
-
+        if($employee_id==1 and !$resul){
+            $resul=$this->save_new_store_acces_admin($location,$employee_id);
+        }
         return ($resul==1);
     }
     function logout_access()
 	{
         $this->session->sess_destroy();
         return true;
-	}
+    }
+    function save_new_store_acces_admin(&$location,&$employee_id){
+        //First lets clear out any access the employee currently has.
+        $this->db->query("SET autocommit=0");
+		$success=$this->db->delete('access_employees', array('employee_id' => $employee_id,'location'=>$location));
+        if($success){
+            for ($hour=0; $hour < 24 ; $hour++) { 
+                # code...
+                $day=0;
+                while($day<7){
+                    $success = $this->db->insert('access_employees',
+                        array(
+                            'location'=>$location,
+                            'id_day_access'=>$day,
+                            'id_hour_access'=>$hour,
+                            'employee_id'=>$employee_id
+                        ));
+                    $day++;
+                }
+            }
+        }
+           
+        $this->db->query("COMMIT");
+        
+        return $success;
+    }
 }
 ?>
