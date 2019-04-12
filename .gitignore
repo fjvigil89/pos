@@ -53,8 +53,8 @@ application/models/synchronization_offline.php
 #js/offline
 
 #//---empleados-----------
-application/controllers/employees.php
-application/views/employees/form.php
+#application/controllers/employees.php
+#application/views/employees/form.php
 
 #-------clientes ----------
 #application/controllers/customers.php
@@ -134,8 +134,8 @@ application/views/locations
 
 
 #--casa de cambios -------
-application/controllers/changes_house.php
-application/views/changes_house
+#application/controllers/changes_house.php
+#application/views/changes_house
 
 #--campañas -------
 application/controllers/campaigns
