@@ -1592,7 +1592,7 @@ class Sales extends Secure_area
 	}
 	function receipt_comanda($ntabe)
 	{
-		$retu=$this->suspend(1,1);
+		
 		$data=array();
       
 		$items=  $this->sale_lib->get_cart();
@@ -1602,8 +1602,9 @@ class Sales extends Secure_area
         
 		$data["items"]   =$items;  
 		$data["ntabe"]=$ntabe;
-        $data["description"]= $this->sale_lib->get_comment();
-
+		$data["description"]= $this->sale_lib->get_comment();
+		
+		$retu=$this->suspend(1,1);
         $this->load->view("sales/receipt_comanda", $data);
 	}
 
