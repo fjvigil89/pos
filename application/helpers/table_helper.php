@@ -62,6 +62,68 @@ function get_model_tabla_detailed_sales($summary_data=array(),$headers=array(),$
 	return $html;
 }
 
+function get_access_employee_table($locations_list,$employee_id){
+
+	$content = '';
+	foreach($locations_list as $location){
+		$content.="<div class='panel panel-default'>";
+			$content.="<div class='panel-heading'>";
+				$content.="<h3 class='panel-title font-green-seagreen'><strong><i class='fa fa-unlock-alt'></i>".lang("employee_access_control")."-".$location->name."</strong></h3>";
+			$content.="</div>";
+			$content.="<div class='panel-body'>";
+				$content.='<div class="col-md-12">';
+					$content.='<div class=" table-responsive">';
+						$content.='<table class="table table-striped table-bordered table-hover">';
+							$content.='<thead>';
+								$content.='<tr>';
+									$content.='<th>'.lang("hours").'</th>';
+									$content.='<th>'.lang("day_1").'</th>';
+									$content.='<th>'.lang("day_2").'</th>';
+									$content.='<th>'.lang("day_3").'</th>';
+									$content.='<th>'.lang("day_4").'</th>';
+									$content.='<th>'.lang("day_5").'</th>';
+									$content.='<th>'.lang("day_6").'</th>';
+									$content.='<th>'.lang("day_7").'</th>';
+								$content.='</tr>';
+							$content.='</thead>';
+							$content.='<tbody>';
+							for ($hour=0; $hour < 24 ; $hour++) { 
+								$day=0;
+								$content.='<tr>';
+								$content.='<td>'.date(get_time_format(),strtotime($hour.':00')).'</td>';
+								while($day<7){
+									$content.='<td align="center">';
+										$content.='<div class="md-checkbox-inline">';
+											$content.='<div class="md-checkbox" >';	
+											
+											if($employee_id==1){
+											$content.=form_checkbox(array('name'=>$location->location_id.'_day_'.$day.'[]', 'id'=>$location->location_id.'checkbox'.$day.$hour, 'value'=>$hour, 'class'=>'md-check','checked'=> true,'disabled'=>true));																		
+											}else{
+											$content.=form_checkbox(array('name'=>$location->location_id.'_day_'.$day.'[]', 'id'=>$location->location_id.'checkbox'.$day.$hour, 'value'=>$hour, 'class'=>'md-check','checked'=> false));																		
+											}
+												$content.='<label for="'.$location->location_id.'checkbox'.$day.$hour.'">';
+												$content.='<span></span>';
+												$content.='<span class="check"></span>';
+												$content.='<span class="box"></span>';
+												$content.='</label>';
+											$content.='</div>';									
+										$content.='</div>';
+									$content.='</td>';
+								$day++;
+								}
+								$content.='</tr>';
+							} 
+							$content.='</tbody>';
+						$content.='</table>';
+					$content.='</div>';
+				$content.='</div>';
+			$content.='</div>';
+		$content.='</div>';
+	}
+	return $content;
+
+}
+
 function get_people_manage_table($people,$controller)
 {
 	$CI =& get_instance();
@@ -507,15 +569,6 @@ function get_change_home_data_row($item,$controller)
 	$table_data_row.='<td width="3%" class="rightmost">'.anchor($controller_name."/view_modal/"
 	.$item->sale_id."/".$item->item_id."/".$item->line, "<i class='fa fa-edit'></i>Detalles",array("data-toggle"=>"modal", "data-target"=>"#myModal",'class'=>'btn btn-xs btn-block default btn-clon','title'=>"Detalles")).'</td>';			
 
-
-
-
-	
-
-
-	
-	
-	
 	$table_data_row.='</tr>';
 	return $table_data_row;
 }

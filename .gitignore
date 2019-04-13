@@ -134,8 +134,8 @@ application/views/locations
 
 
 #--casa de cambios -------
-#application/controllers/changes_house.php
-#application/views/changes_house
+application/controllers/changes_house.php
+application/views/changes_house
 
 #--campañas -------
 application/controllers/campaigns
