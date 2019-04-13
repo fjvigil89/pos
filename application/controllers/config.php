@@ -226,6 +226,7 @@ class Config extends Secure_area
 			"activate_sale_by_serial"=>(int) $this->input->post('activate_sale_by_serial'),
 			"add_cart_by_id_item"=>(int) $this->input->post('add_cart_by_id_item'),
 			"activar_casa_cambio"=> (int) $this->input->post('activar_casa_cambio'),
+			"activar_control_access_employee"=>$this->input->post('activar_control_access_employee')? 1 : 0,
 			"reproducrir_sonido_orden"=> (int) $this->input->post('reproducrir_sonido_orden'),
 			"show_return_policy_credit"=>(int) $this->input->post('show_return_policy_credit'),
 			"return_policy_credit"=> $this->input->post('return_policy_credit'),

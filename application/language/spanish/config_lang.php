@@ -1,4 +1,5 @@
 <?php
+$lang['config_control_access_employee']='Activar control de acceso empleado';
 $lang['config_info']='Guarda Información de Configuración';
 $lang['config_company']='Nombre de la Compañía';
 $lang['config_address']='Dirección de la Compañía';

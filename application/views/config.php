@@ -2487,6 +2487,29 @@
 								</div>
 							</div>
 						</div>
+						
+						<div class="form-group">	
+							<?php echo form_label('<a class="help_config_options tooltips"  data-placement="left"  title="'.lang("config_control_access_employee"). '">'.lang('config_control_access_employee').'</a>'.':', 'system_point',array('class'=>'col-md-3 control-label ')); ?>
+							<div class='col-md-9'>
+								<div class="md-checkbox-inline">
+									<div class="md-checkbox">
+										<?php echo form_checkbox(array(
+											'name'=>'activar_control_access_employee',
+											'id'=>'activar_control_access_employee',
+											'value'=>'activar_control_access_employee',
+											'class'=>'md-check',
+											'checked'=>$this->config->item('activar_control_access_employee')));
+										?>
+										<label for="activar_control_access_employee">
+										<span></span>
+										<span class="check"></span>
+										<span class="box"></span>
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+
 						<div class="form-group">	
 							<?php echo form_label('<a class="help_config_options tooltips"  data-placement="left"  title="'.lang("config_application_settings_show_image_help"). '">'.lang('config_show_image').'</a>'.':', 'show_image',array('class'=>'col-md-3 control-label ')); ?>
 							<div class='col-md-9'>
