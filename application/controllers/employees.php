@@ -200,9 +200,12 @@ class Employees extends Person_controller
 		
 		$data['locations']=$locations;
 		$data['redirect_code']=$redirect_code;
-		$data['hour_access_employee']=$this->Hour_access->get_acceso_employee($employee_id);
-		$data['hour_access_employee_table']=get_access_employee_table($data["locations_list"],$employee_id);
+		if($this->config->item('activar_control_access_employee')==1){
+			$data['hour_access_employee']=$this->Hour_access->get_acceso_employee($employee_id);
+			$data['hour_access_employee_table']=get_access_employee_table($data["locations_list"],$employee_id);
 
+		}
+		
 		$this->load->view("employees/form",$data);
 	}
 	

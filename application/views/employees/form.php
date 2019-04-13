@@ -225,7 +225,11 @@
 									</div>
 								<?php } ?>
 							</div>
-							<?php echo $hour_access_employee_table; ?>
+							<?php 
+							if(!empty($hour_access_employee_table)){
+								echo $hour_access_employee_table; 
+							} 
+							?>
 							<!-- funcion para llenar dias con acceso, check_access() (en los script) -->
 
 							</div>

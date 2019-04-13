@@ -53,7 +53,7 @@
             $location=$CI->Employee->get_logged_in_employee_current_location_id();
             $hour= date("H",strtotime(date(get_time_format())));
             $day= date("w",strtotime(date(get_time_format())));
-            if($CI->config->item('activa_control_access_employee')==1 and $CI->router->method !== 'no_access' and !$CI->Hour_access->get_has_access($location,$hour,$day,$_SESSION['person_id'])){
+            if($CI->config->item('activar_control_access_employee')==1 and $CI->router->method !== 'no_access' and !$CI->Hour_access->get_has_access($location,$hour,$day,$_SESSION['person_id'])){
                 $CI->Hour_access->logout_access();
                 redirect('login/no_access/'.date("H:i",strtotime(date(get_time_format()))));
             }            
