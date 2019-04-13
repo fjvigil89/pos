@@ -222,17 +222,20 @@
 												}
 											?>
 											</ul>
+										</div>
 									</div>
 								<?php } ?>
-							</div>
-							<?php 
+
+								<?php 
 							if(!empty($hour_access_employee_table)){
 								echo $hour_access_employee_table; 
 							} 
 							?>
+							</div>
+							
 							<!-- funcion para llenar dias con acceso, check_access() (en los script) -->
 
-							</div>
+							
 						
 							<div class="tab-pane " id="tab_5_3">
 								<div class="alert alert-success alert-dismissable">
