@@ -2423,6 +2423,7 @@ class Sales extends Secure_area
 		if($this->appconfig->get('enabled_for_Restaurant') == '1'){
 			$sale_id =  $this->Sale->get_table_by_id($sale_id);
 			if ($sale_id == false){
+				$this->sale_lib->clear_all();
 				redirect(site_url('sales'));
 			}
 		}

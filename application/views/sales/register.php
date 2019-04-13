@@ -2054,7 +2054,12 @@
 			});
 			$("#suspend_sale_button").click(function()
 			{
-				if (confirm(<?php echo json_encode(lang("sales_confirm_suspend_sale")); ?>))
+				<?php if($this->appconfig->get('enabled_for_Restaurant') == '1'){?>
+					if($('#ntable').val()<=0){
+						alert("Debe seleccionar una mesa.");
+					}
+				<?php }?>
+				else if (confirm(<?php echo json_encode(lang("sales_confirm_suspend_sale")); ?>))
 				{
 					$.post('<?php echo site_url("sales/set_comment");?>', {comment: $('#comment').val()}, function() {
 						<?php if ($this->config->item('show_receipt_after_suspending_sale')) { ?>
