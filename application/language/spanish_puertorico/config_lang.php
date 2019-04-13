@@ -1,4 +1,5 @@
 <?php
+$lang['config_control_access_employee']='Activar control de acceso empleado';
 $lang['show_payments_ticket_help'] = 'Si activa esta opción se mostrarán los ultimos pagos realizados a la linea de credito';
 $lang['show_payments_ticket'] = 'Mostrar últimos abonos en el ticket';
 $lang['config_due_date_alarm'] = 'Activar alarma para envío de correos en productos vencidos';

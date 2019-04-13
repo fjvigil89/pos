@@ -1,4 +1,5 @@
 <?php
+$lang['config_control_access_employee']='Activate employee access control';
 $lang['show_payments_ticket'] = 'Show the last payments on the ticket';
 $lang['config_due_date_alarm'] = 'Activate the alarm for sending expired products';
 $lang['config_info']='Store Configuration Information';

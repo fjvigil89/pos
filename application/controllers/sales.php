@@ -1592,6 +1592,7 @@ class Sales extends Secure_area
 	}
 	function receipt_comanda($ntabe)
 	{
+		$retu=$this->suspend(1,1);
 		$data=array();
       
 		$items=  $this->sale_lib->get_cart();
@@ -2109,7 +2110,7 @@ class Sales extends Secure_area
      	$this->_reload(array(),true,true);
 	}
 
-	function suspend($suspend_type = 1)
+	function suspend($suspend_type = 1, $print_comanda=false)
 	{
 		$this->load->model('quote');
 		$this->load->model('Orders_sales');
@@ -2233,27 +2234,29 @@ class Sales extends Secure_area
 			$data['error_message'] = lang('sales_transaction_failed');
 		}
 		$this->sale_lib->clear_all();
-
-		if ($this->config->item('show_receipt_after_suspending_sale'))
-		{
-		   	if ($suspend_type==2 || $suspend_type ==1)
-		   	{
-				redirect('sales/receipt/'.$sale_id);
-          	}
-			if ($suspend_type==3)
+		if(!$print_comanda){
+			if ($this->config->item('show_receipt_after_suspending_sale'))
 			{
-				redirect('sales/quotes_receipt/'.$sale_id);
-	       	}
-       	}
+				if ($suspend_type==2 || $suspend_type ==1 )
+				{
+					redirect('sales/receipt/'.$sale_id);
+				}
+				if ($suspend_type==3)
+				{
+					redirect('sales/quotes_receipt/'.$sale_id);
+				}
+			}
 
-		elseif($suspend_type!=3)
-		{
-			$this->_reload(array('success' => lang('sales_successfully_suspended_sale')));
+			elseif($suspend_type!=3)
+			{
+				$this->_reload(array('success' => lang('sales_successfully_suspended_sale')));
+			}
+			else
+			{
+				$this->_reload(array('success' => lang('sales_successfully_quote_sale')));
+			}
 		}
-		else
-		{
-			$this->_reload(array('success' => lang('sales_successfully_quote_sale')));
-		}
+		
 	}
 
 	function batch_sale()
