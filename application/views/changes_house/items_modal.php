@@ -50,7 +50,6 @@
 								<tr> <td><strong>Observaciones de la transferencia:</strong></td> <td><?php echo $item_info->observaciones ?></td></tr>
 
 								<tr> <td><strong>Tasa</strong></td> <td> <?php echo (double)$tasa ?></td></tr>
-								<tr> <td><strong>Vendido por</strong></td> <td> <?php echo $sold_by_employee_info->first_name." ".$sold_by_employee_info->last_name ?></td></tr>
 								<tr> <td><strong><?php echo "Fecha de " . $item_info->transaction_status; ?> </strong></td><td> <?php echo $item_info->fecha_estado!=null? date(get_date_format() . ' ' . get_time_format(), strtotime($item_info->fecha_estado)):"No establecida " ?>  </td></tr>
 								<tr> <td><strong>Celular(whatsapp):</strong></td> <td><?php echo $item_info->celular ?></td></tr>
 

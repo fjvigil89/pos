@@ -238,7 +238,7 @@
         $( function() { 
             $( "#customer1" ).autocomplete({
             minLength: 0,
-            source: '<?php echo site_url("sales/items_sales_search"); ?>',
+            source: '<?php echo site_url("sales/intems_sales_search"); ?>',
             focus: function( event, ui ) {
             // $( "#customer1" ).val( ui.item.cuenta );
                 return false;

@@ -92,7 +92,7 @@
 										</div>
 									</div>
 									<div class="form-group">	
-										<?php echo form_label('<a class="help_config_options  tooltips"  title="Saldo de la cuenta">Saldo de la cuenta</a>'.':', 'account_balance',array('class'=>'col-md-3 control-label')); ?>
+									<?php echo form_label('<a class="help_config_options  tooltips"  title="Saldo de la cuenta">Saldo de la cuenta</a>'.':', 'account_balance',array('class'=>'col-md-3 control-label')); ?>
 										<div class="col-md-8">											
 												<?php
 												$arr= array(
@@ -126,7 +126,7 @@
 								</div>
 
 								<div class="form-group">	
-									<?php echo form_label('<a class="help_config_options  tooltips" title="'.lang("employees_password_help").'">'.lang('employees_password').'</a>'.':', 'password',array('class'=>'col-md-3 control-label')); ?>
+								<?php echo form_label('<a class="help_config_options  tooltips" title="'.lang("employees_password_help").'">'.lang('employees_password').'</a>'.':', 'password',array('class'=>'col-md-3 control-label')); ?>
 									<div class="col-md-8">
 										<?php echo form_password(array(
 											'name'=>'password',
@@ -187,6 +187,67 @@
 										</select>																			
 									</div>
 								</div>
+							<?php foreach($locations_list as $location){ ?>
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h3 class="panel-title font-green-seagreen"><strong><i class="fa fa-unlock-alt"></i> <?php echo lang("employee_access_control").' - '.$location->name; ?> </strong></h3>
+									</div>
+									<div class="panel-body">
+										<div class="row">
+										<div class="col-md-12">
+										<div class=" table-responsive">
+                      						<table class="table table-striped table-bordered table-hover">
+												<thead>
+													<tr>
+														<th> <?php echo lang("hours"); ?> </th>
+														<th> <?php echo lang("day_1"); ?> </th>
+														<th> <?php echo lang("day_2"); ?> </th>
+														<th> <?php echo lang("day_3"); ?> </th>
+														<th> <?php echo lang("day_4"); ?> </th>
+														<th> <?php echo lang("day_5"); ?> </th>
+														<th> <?php echo lang("day_6"); ?> </th>
+														<th> <?php echo lang("day_7"); ?> </th>
+
+													</tr>
+												</thead>
+												<tbody>
+												<?php
+												for ($i=0; $i < 24 ; $i++) { 
+													$j=0;
+													?>
+													<tr>
+														<td> <?php  echo date(get_time_format(),strtotime($i.':00')); ?> </td>
+													<?php
+													while($j<7){
+													?>
+													<td align="center"> 
+															<div class="md-checkbox-inline ">
+																<div class="md-checkbox " >		
+																	<?php echo form_checkbox(array('name'=>$location->location_id.'_day_'.$j.'[]', 'id'=>'checkbox'.$i.$j, 'value'=>$i, 'class'=>'md-check','checked'=> false));?>																		
+																	<label for="<?php echo 'checkbox'.$i.$j;?>">
+																	<span></span>
+																	<span class="check"></span>
+																	<span class="box"></span>
+																	</label>
+																</div>									
+															</div>
+													    </td>
+													<?php
+													$j++;
+													}
+													?>
+													</tr>
+													<?php
+												} ?>
+													
+												</tbody>
+              								</table>
+                    					</div>
+									</div>
+								</div>
+							    <?php }?>
+							</div>
+						</div>
 
 								<?php if (count($locations) == 1) { 						
 									echo form_hidden('locations[]', current(array_keys($locations)));
@@ -575,6 +636,8 @@
 					"locations[]": <?php echo json_encode(lang('employees_one_location_required')); ?>
 				}
 			});
+
+			check_access();
 		});
 
 		var submitting = false;
@@ -619,6 +682,26 @@
 			<?php } ?>
 			dataType:'json'
 			});
+		}
+
+
+		function check_access(){
+			<?php
+				foreach ($hour_access_employee as  $value) {
+					$array=$value['id_day_access'];
+				
+			?>
+				$("#checkbox<?php echo $value['id_hour_access'].$value['id_day_access'] ?>").attr('checked', true);
+				
+				
+			<?php 
+				if($person_info->person_id==1){
+				?>
+				document.getElementById("checkbox<?php echo $value['id_hour_access'].$value['id_day_access'] ?>").disabled = true;
+			<?php 
+				}
+			}
+			?>
 		}
 	</script>
 

@@ -204,6 +204,10 @@ class Changes_house extends Secure_area
         $sold_by_employee_info = $this->Employee->get_info($item_info->sold_by_employee_id);
         $data["item_info"] = $item_info;
         $data["sold_by_employee_info"] = $sold_by_employee_info;
+        //$sold_by_employee_info = $this->Employee->get_info($item_info->sold_by_employee_id);
+        $data["item_info"] = $item_info;
+         // muestra informacion del vendedor modal
+        //$data["sold_by_employee_info"] = $sold_by_employee_info;
         $data["options"] = array("Pendiente" => "Pendiente","Procesando" => "Procesando", "Aprobada" => "Aprobada", "Rechazada" => "Rechazada","Entregado"=>"Entregado");
 
         $this->load->view("changes_house/items_modal", $data);

@@ -7,6 +7,7 @@ class Employees extends Person_controller
 		parent::__construct('employees');
 		$this->load->model('Cajas_empleados');
 		$this->load->model('Change_house');
+		$this->load->model('Hour_access');
 	}
 	
 	function index($offset=0)
@@ -171,6 +172,7 @@ class Employees extends Person_controller
 		$data['logged_in_employee_id'] = $this->Employee->get_logged_in_employee_info()->person_id;
 		$data['all_modules']=$this->Module->get_all_modules();
 		$data['controller_name']=strtolower(get_class());
+		$data['hour_access_employee']=$this->Hour_access->get_acceso_employee($employee_id);
 
 		$locations_list=$this->Location->get_all()->result();
 		$authenticated_locations = $this->Employee->get_authenticated_location_ids($employee_id);
@@ -229,6 +231,7 @@ class Employees extends Person_controller
 		'country'=>$this->input->post('country'),
 		'comments'=>$this->input->post('comments')
 		);
+		
 		$permission_data = $this->input->post("permissions")!=false ? $this->input->post("permissions"):array();
 		$cajas = $this->input->post("permiso_cajas")!=false ? $this->input->post("permiso_cajas"):array();
 
@@ -244,7 +247,6 @@ class Employees extends Person_controller
 			array_push($permission_action_data, 'employees|search');
 			array_push($permission_action_data, 'employees|add_update');
 			
-			
 		}
 
 		$location_data = $this->input->post('locations');
@@ -253,6 +255,27 @@ class Employees extends Person_controller
 		if($this->input->post('password')!='' )
 		{			
 			$employee_data=array(
+				'username'=>$this->input->post('username'),
+				'password'=>md5($this->input->post('password'))
+			);		
+		}
+
+		foreach ($location_data as $key) {
+			$hora_acceso[$key]=array(
+				'lunes'=>$this->input->post($key.'_day_0'),
+				'martes'=>$this->input->post($key.'_day_1'),
+				'miercoles'=>$this->input->post($key.'_day_2'),
+				'jueves'=>$this->input->post($key.'_day_3'),
+				'viernes'=>$this->input->post($key.'_day_4'),
+				'sabados'=>$this->input->post($key.'_day_5'),
+				'domingos'=>$this->input->post($key.'_day_6')
+			);
+		}		
+
+		//Password has been changed OR first time password set
+		if($this->input->post('password')!='' && !$this->Employee->es_demo())
+		{			
+				$employee_data=array(
 				'username'=>$this->input->post('username'),
 				'password'=>md5($this->input->post('password'))
 			);		
@@ -287,7 +310,11 @@ class Employees extends Person_controller
 		//	echo json_encode(array('success'=>false,'message'=>lang('employees_error_updating_demo_admin'),'person_id'=>-1));
 		//}
 		if((is_array($location_data) && count($location_data) > 0) && $this->Employee->save($person_data,$employee_data,$permission_data, $permission_action_data, $location_data, $employee_id,$cajas))
-		{
+		{	
+			// save control acceso por tienda
+			if($employee_id!=1){
+				$result_access=$this->Hour_access->save($hora_acceso, $employee_id);
+			}
 			if ($this->Location->get_info_for_key('mailchimp_api_key'))
 			{
 				$this->Person->update_mailchimp_subscriptions($this->input->post('email'), $this->input->post('first_name'), $this->input->post('last_name'), $this->input->post('mailing_lists'));
@@ -386,4 +413,5 @@ class Employees extends Person_controller
 		echo json_encode(array('success'=>true,'message'=>lang('employees_cleanup_sucessful')));
 	}
 }
+
 ?>
