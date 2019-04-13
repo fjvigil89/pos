@@ -624,10 +624,7 @@
 			<?php } ?>
 			dataType:'json'
 			});
-		}
-
-		
-			
+		}		
 		function check_access(){
 			<?php if($person_info->person_id!=1) { ?>
 				var hour_access_employee=<?php echo json_encode($hour_access_employee) ?>;

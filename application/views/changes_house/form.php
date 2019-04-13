@@ -238,15 +238,15 @@
         $( function() { 
             $( "#customer1" ).autocomplete({
             minLength: 0,
-            source: '<?php echo site_url("sales/intems_sales_search"); ?>',
+            source: '<?php echo site_url("sales/items_sales_search"); ?>',
             focus: function( event, ui ) {
-            // $( "#customer1" ).val( ui.item.cuenta );
                 return false;
             },
             select: function( event, ui ) {
                 $( "#customer1" ).val( ui.item.value );
                 $( "#numero_cuenta" ).val( ui.item.numero_cuenta );
                 $( "#titular_cuenta" ).val( ui.item.titular_cuenta );
+                $( "#celular" ).val( ui.item.celular );
                 $("#docuemento").val(ui.item.value);
                 $('#item > option[value="'+ ui.item.item_id +'"]').attr('selected',true);
                 $('#tipo_cuenta > option[value="'+ ui.item.tipo_cuenta +'"]').attr('selected',true);
@@ -268,24 +268,19 @@
 			    submitHandler:function(form)
 			    {
                    if(es_valida_select()){
-                            $("#contenedor_boton").hide();
-                            var url =$(form).attr('action');
-                            
-			                var datos = $(form).serialize(); 
-			                $.ajax({
-				                type: 'POST',
-				                url: url,
-				                data: datos,
-				                beforeSend: salesBeforeSubmit1, 
-				                success: function(data){
-                                    $("#resumen-venta").html(data);
-                                }  
-			                });
-                           
-                       
-                   }
-			       
-			                
+                        $("#contenedor_boton").hide();
+                        var url =$(form).attr('action');                            
+			            var datos = $(form).serialize(); 
+			            $.ajax({
+				            type: 'POST',
+				            url: url,
+				            data: datos,
+				            beforeSend: salesBeforeSubmit1, 
+				            success: function(data){
+                                $("#resumen-venta").html(data);
+                            }  
+			            });
+                   }			                
 			    },
 				errorClass: "text-danger",
 				errorElement: "span",
@@ -355,12 +350,8 @@
                         <?php } ?>
 
                     },
-                   
-
-
 				}
 			});
-
 
       $("#cantidad_divisa").change(function(){
           $("#contenedor_boton").hide();
@@ -412,10 +403,7 @@
 				{
 					$("#resumen-venta").load("<?php echo site_url("sales/cancel_sale"); ?>");
 				}
-			});
-            //
-            
-           
+		});
         $('#reset-button').click(function(){
             $('#data_form')[0].reset();
             $("input[name='line']").val(0);
@@ -430,7 +418,7 @@
         });
         $("#cantidad_peso").click(function() {
 				$(this).select();
-			});
+		});
 
     });
 </script>

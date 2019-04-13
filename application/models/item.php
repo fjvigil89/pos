@@ -452,7 +452,7 @@ class Item extends CI_Model
 	{
 		$suggestions = array();
 		$this->db->distinct();
-		$this->db->select('numero_cuenta,name ,'.$this->db->dbprefix("sales_items").'.item_id, tipo_cuenta, numero_documento,tipo_documento, titular_cuenta');
+		$this->db->select('numero_cuenta,celular,name ,'.$this->db->dbprefix("sales_items").'.item_id, tipo_cuenta, numero_documento,tipo_documento, titular_cuenta');
 		$this->db->from('sales_items');
 		$this->db->join('items','items.item_id=sales_items.item_id');	
 		$this->db->where("(numero_cuenta LIKE '%".$this->db->escape_like_str($search)."%' or 
@@ -472,7 +472,7 @@ class Item extends CI_Model
 			"tipo_cuenta"=>$row->tipo_cuenta,
 			"tipo_documento"=>$row->tipo_documento,
 			"titular_cuenta"=>$row->titular_cuenta,
-			"celular"=>"");
+			"celular"=>$row->celular);
 		}
 		
 		return $suggestions;

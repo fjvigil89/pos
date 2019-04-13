@@ -2496,7 +2496,7 @@
 										<?php echo form_checkbox(array(
 											'name'=>'activar_control_access_employee',
 											'id'=>'activar_control_access_employee',
-											'value'=>'activar_control_access_employee',
+											'value'=>'1',
 											'class'=>'md-check',
 											'checked'=>$this->config->item('activar_control_access_employee')));
 										?>
