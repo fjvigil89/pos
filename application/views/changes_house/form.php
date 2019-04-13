@@ -182,9 +182,6 @@
 						        </div>
                             </div>
 
-                            
-                            
-
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <p style="color:red;" id="mensaje-erro"></p>

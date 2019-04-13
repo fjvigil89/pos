@@ -59,7 +59,7 @@ class Change_house extends CI_Model
 			return $obj;
 		}
     }
-	function search($search, $estado = false, $limit=20,$offset=0,$column='invoice_number',
+	function search($search, $estado = false, $limit=20,$offset=0,$column='sale_time',
 	$orderby='asc',$employee_id=false,$start_date="",$end_date="")
 	{
 		$CI =& get_instance();	
@@ -83,7 +83,7 @@ class Change_house extends CI_Model
 
 			//----------------------------------------------------------------
 
-            $this->db->select('invoice_number,
+            $this->db->select('invoice_number,sale_time,first_name,last_name,
             opcion_sale,divisa,quantity_purchased ,
              quantity_purchased, item_unit_price,item_cost_price,
              numero_cuenta,numero_documento,titular_cuenta,
@@ -92,6 +92,8 @@ class Change_house extends CI_Model
             $this->db->from('sales');
             $this->db->join('sales_items', 'sales_items.sale_id = sales.sale_id and location_id = '.$current_location);
 			$this->db->join('items', 'sales_items.item_id = items.item_id');
+			$this->db->join('employees', 'employees.person_id = sales.sold_by_employee_id');
+			$this->db->join('people', 'people.person_id = employees.person_id');
 			$this->db->where('sales.deleted',0);
 			$this->db->where('sales.suspended',0);
 			$this->db->where('FROM_unixtime(UNIX_TIMESTAMP(sale_time),"%Y-%m-%d") >=', $start_date)
@@ -111,6 +113,7 @@ class Change_house extends CI_Model
 			$this->db->offset($offset);
 			return $this->db->get();
 	}
+	
     function search_count_all($search, $estado = FALSE, $employee_id=false,$start_date="",$end_date="")
 	{
        
@@ -246,6 +249,35 @@ class Change_house extends CI_Model
 		return $suggestions;
 
 	}
+	function last_orders($limit=10000, $offset=0,$col='transaction_status',$order='',$employee_id=false,$start_date="")
+	{
+		$current_location=$this->Employee->get_logged_in_employee_current_location_id();
+		
+		$this->db->select('sale_time,invoice_number,
+			opcion_sale,divisa,quantity_purchased ,
+			quantity_purchased, item_unit_price,item_cost_price,
+			numero_cuenta,numero_documento,titular_cuenta,
+			tasa,tipo_documento,transaction_status,sales.sale_id,'.$this->db->dbprefix('sales_items').
+			'.item_id,line,name,observaciones,celular,first_name,last_name');		
+		$this->db->from('sales');
+		$this->db->join('sales_items', 'sales_items.sale_id = sales.sale_id and location_id = '.$current_location);
+		$this->db->join('items', 'sales_items.item_id = items.item_id');
+		$this->db->join('employees', 'employees.person_id = sales.sold_by_employee_id');
+		$this->db->join('people', 'people.person_id = employees.person_id');
+		$this->db->where('sales.deleted',0);
+		$this->db->where('sales.suspended',0);
+		$this->db->where('sale_time >=', $start_date);
+
+        if($employee_id != false){
+            $this->db->where('sold_by_employee_id',$employee_id);
+		}
+		
+		$this->db->order_by($col, $order);
+		$this->db->limit($limit);
+		$this->db->offset($offset);
+		return $this->db->get();
+	}
+
     function get_all($limit=10000, $offset=0,$col='transaction_status',$order='',$employee_id=false,$start_date="",$end_date="")
 	{
 		$current_location=$this->Employee->get_logged_in_employee_current_location_id();
@@ -272,7 +304,10 @@ class Change_house extends CI_Model
 		$this->db->limit($limit);
 		$this->db->offset($offset);
 		return $this->db->get();
-    }
+	}
+	
+	
+
     function count_all($employee_id=false,$start_date="",$end_date="")
 	{
         $current_location=$this->Employee->get_logged_in_employee_current_location_id();

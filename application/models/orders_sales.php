@@ -163,7 +163,8 @@ class Orders_sales extends CI_Model
 		if(count($suggestions > $limit))
 		{
 			$suggestions = array_slice($suggestions, 0,$limit);
-		}
+        } 
+        
 		return $suggestions;
 
 	}

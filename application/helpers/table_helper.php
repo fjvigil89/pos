@@ -65,6 +65,7 @@ function get_model_tabla_detailed_sales($summary_data=array(),$headers=array(),$
 function get_access_employee_table($locations_list,$employee_id){
 
 	$content = '';
+
 	foreach($locations_list as $location){
 		$content.="<div class='panel panel-default'>";
 			$content.="<div class='panel-heading'>";
@@ -87,38 +88,40 @@ function get_access_employee_table($locations_list,$employee_id){
 								$content.='</tr>';
 							$content.='</thead>';
 							$content.='<tbody>';
-							for ($hour=0; $hour < 24 ; $hour++) { 
-								$day=0;
+
+							for ($hour = 0; $hour < 24 ; $hour++) { 
+								$day = 0;
 								$content.='<tr style="height: 10px">';
 								$content.='<td style="padding: 0px 0px 0px !important">'.date(get_time_format(),strtotime($hour.':00')).'</td>';
-								while($day<7){
+								
+								while($day < 7){
 									$content.='<td align="center" style="padding: 0px 0px 0px !important">';
 										$content.='<div class="md-checkbox-inline">';
 											$content.='<div class="md-checkbox" >';	
 											
 											if($employee_id==1){
-											$content.=form_checkbox(array('name'=>$location->location_id.'_day_'.$day.'[]', 'id'=>$location->location_id.'checkbox'.$day.$hour, 'value'=>$hour, 'class'=>'md-check','checked'=> true,'disabled'=>true));																		
+												$content  .=  form_checkbox(array('name'=>$location->location_id.'_day_'.$day.'[]', 'id'=>$location->location_id.'checkbox'.$day.$hour, 'value'=>$hour, 'class'=>'md-check','checked'=> true,'disabled'=>true));																		
 											}else{
-											$content.=form_checkbox(array('name'=>$location->location_id.'_day_'.$day.'[]', 'id'=>$location->location_id.'checkbox'.$day.$hour, 'value'=>$hour, 'class'=>'md-check','checked'=> false));																		
+												$content  .=  form_checkbox(array('name'=>$location->location_id.'_day_'.$day.'[]', 'id'=>$location->location_id.'checkbox'.$day.$hour, 'value'=>$hour, 'class'=>'md-check','checked'=> false));																		
 											}
-												$content.='<label for="'.$location->location_id.'checkbox'.$day.$hour.'">';
-												$content.='<span></span>';
-												$content.='<span class="check"></span>';
-												$content.='<span class="box"></span>';
-												$content.='</label>';
-											$content.='</div>';									
-										$content.='</div>';
-									$content.='</td>';
+												$content .= '<label for="'.$location->location_id.'checkbox'.$day.$hour.'">';
+												$content .= '<span></span>';
+												$content .= '<span class="check"></span>';
+												$content .= '<span class="box"></span>';
+												$content .= '</label>';
+											$content .= '</div>';									
+										$content .= '</div>';
+									$content .= '</td>';
 								$day++;
 								}
-								$content.='</tr>';
+								$content .= '</tr>';
 							} 
-							$content.='</tbody>';
-						$content.='</table>';
-					$content.='</div>';
-				$content.='</div>';
-			$content.='</div>';
-		$content.='</div>';
+							$content .= '</tbody>';
+						$content .= '</table>';
+					$content .= '</div>';
+				$content .= '</div>';
+			$content .= '</div>';
+		$content .= '</div>';
 	}
 	return $content;
 
@@ -193,7 +196,7 @@ function get_people_manage_table($people,$controller)
 	}
 	
 
-	$table.='<thead><tr>';
+	$table .= '<thead><tr>';
 	
 	$count = 0;
 	foreach($headers as $header)
@@ -202,20 +205,20 @@ function get_people_manage_table($people,$controller)
 		
 		if ($count == 1)
 		{
-			$table.="<th class='leftmost'>$header</th>";
+			$table .= "<th class='leftmost'>$header</th>";
 		}
 		elseif ($count == count($headers))
 		{
-			$table.="<th class='rightmost'>$header</th>";
+			$table .= "<th class='rightmost'>$header</th>";
 		}
 		else
 		{
-			$table.="<th>$header</th>";		
+			$table .= "<th>$header</th>";		
 		}
 	}
-	$table.='</tr></thead><tbody>';
-	$table.=get_people_manage_table_data_rows($people,$controller);
-	$table.='</tbody></table>';
+	$table .= '</tr></thead><tbody>';
+	$table .= get_people_manage_table_data_rows($people,$controller);
+	$table .= '</tbody></table>';
 	return $table;
 }
 
@@ -229,12 +232,12 @@ function get_people_manage_table_data_rows($people,$controller)
 	
 	foreach($people->result() as $person)
 	{
-		$table_data_rows.=get_person_data_row($person,$controller);
+		$table_data_rows .= get_person_data_row($person,$controller);
 	}
 	
 	if($people->num_rows()==0)
 	{
-		$table_data_rows.="<tr><td colspan='11'><span class='col-md-12 text-center text-warning' >".lang('common_no_persons_to_display')."</span></tr>";
+		$table_data_rows .= "<tr><td colspan='11'><span class='col-md-12 text-center text-warning' >".lang('common_no_persons_to_display')."</span></tr>";
 	}
 	
 	return $table_data_rows;
@@ -250,31 +253,31 @@ function get_person_data_row($person,$controller)
 	$link = site_url('reports/specific_'.($controller_name == 'customers' ? 'customer' : 'employee').'/'.$start_of_time.'/'.$today.'/'.$person->person_id.'/all/0');
 	$table_data_row='<tr>';	
 	
-	$table_data_row.="<td style='width: 1%'><input type='checkbox' class='css-checkbox' id='person_$person->person_id' value='".$person->person_id."'/><label for='".$person->person_id."' class='css-label cb0'></label></td>";
-	$table_data_row.='<td>'.$person->person_id.'</td>';
-	$table_data_row.='<td ><a href="'.$link.'" class="underline">'.H($person->last_name).'</a></td>';
-	$table_data_row.='<td><a href="'.$link.'" class="underline">'.H($person->first_name).'</a></td>';
-	$table_data_row.='<td>'.mailto(H($person->email),H($person->email), array('class' => 'underline')).'</td>';
-	$table_data_row.='<td>'.H($person->phone_number).'</td>';	
+	$table_data_row .= "<td style='width: 1%'><input type='checkbox' class='css-checkbox' id='person_$person->person_id' value='".$person->person_id."'/><label for='".$person->person_id."' class='css-label cb0'></label></td>";
+	$table_data_row .= '<td>'.$person->person_id.'</td>';
+	$table_data_row .= '<td ><a href="'.$link.'" class="underline">'.H($person->last_name).'</a></td>';
+	$table_data_row .= '<td><a href="'.$link.'" class="underline">'.H($person->first_name).'</a></td>';
+	$table_data_row .= '<td>'.mailto(H($person->email),H($person->email), array('class' => 'underline')).'</td>';
+	$table_data_row .= '<td>'.H($person->phone_number).'</td>';	
 	if($controller_name=='customers' && $CI->config->item('customers_store_accounts'))
 	{	
-		$table_data_row.='<td width="15%">'.to_currency($person->balance).'</td>';		
-		$table_data_row.='<td width="5%">'.anchor($controller_name."/pay_now/$person->person_id", "<i class='fa fa-money'></i>".lang('customers_pay'),array('class'=>'btn btn-xs default btn-editable', 'title'=>lang('customers_pay'))).'</td>';
+		$table_data_row .= '<td width="15%">'.to_currency($person->balance).'</td>';		
+		$table_data_row .= '<td width="5%">'.anchor($controller_name."/pay_now/$person->person_id", "<i class='fa fa-money'></i>".lang('customers_pay'),array('class'=>'btn btn-xs default btn-editable', 'title'=>lang('customers_pay'))).'</td>';
 	}
 
 	if($controller_name=='customers' || $controller_name=='employees')
 	{
-		$table_data_row.='<td>'.anchor($controller_name."/view/$person->person_id/2", "<i class='fa fa-pencil'></i>".lang('common_edit'),array('class'=>'btn btn-xs btn-block default btn-editable update-person', 'title'=>lang($controller_name.'_update'))).'</td>';
+		$table_data_row .= '<td>'.anchor($controller_name."/view/$person->person_id/2", "<i class='fa fa-pencil'></i>".lang('common_edit'),array('class'=>'btn btn-xs btn-block default btn-editable update-person', 'title'=>lang($controller_name.'_update'))).'</td>';
 	}
 
 	if($CI->config->item('system_point') && $controller_name=='customers') 
     {
-		$table_data_row.='<td>'.anchor($controller_name."/redeempoints/$person->person_id/2", "<i class='fa fa-exchange'></i>".lang('common_redeempoints'),array('class'=>'btn btn-xs btn-block default update-person','title'=>lang($controller_name.'_redeempoints'))).'</td>';
+		$table_data_row .= '<td>'.anchor($controller_name."/redeempoints/$person->person_id/2", "<i class='fa fa-exchange'></i>".lang('common_redeempoints'),array('class'=>'btn btn-xs btn-block default update-person','title'=>lang($controller_name.'_redeempoints'))).'</td>';
     }	
 
 	if ($avatar_url)
 	{		
-		$table_data_row.="<td align='center'>
+		$table_data_row .= "<td align='center'>
 							<a href='$avatar_url' class='fancybox'>
 								<img id='avatar' src='$avatar_url' width='40' height='30' class='img-polaroid'/>
 							</a>
@@ -282,13 +285,13 @@ function get_person_data_row($person,$controller)
 	}
 	else
 	{
-		$table_data_row.="<td align='center'>
+		$table_data_row .= "<td align='center'>
 							<a href='javascript:;' class=''>
 								<img id='avatar' src='".base_url('img/no-image.png')."' width='40' height='30' class='img-polaroid'/>
 							</a>
 						</td>";
 	}
-	$table_data_row.='</tr>';
+	$table_data_row .= '</tr>';
 	
 	return $table_data_row;
 }
@@ -311,7 +314,7 @@ function get_supplier_manage_table($suppliers,$controller)
 	lang('common_actions'),
 	lang('customers_image'));
 
-	$table.='<thead><tr>';
+	$table .= '<thead><tr>';
 	$count = 0;
 	foreach($headers as $header)
 	{
@@ -319,21 +322,21 @@ function get_supplier_manage_table($suppliers,$controller)
 		
 		if ($count == 1)
 		{
-			$table.="<th class='leftmost'>$header</th>";
+			$table .= "<th class='leftmost'>$header</th>";
 		}
 		elseif ($count == count($headers))
 		{
-			$table.="<th class='rightmost'>$header</th>";
+			$table .= "<th class='rightmost'>$header</th>";
 		}
 		else
 		{
-			$table.="<th>$header</th>";		
+			$table .= "<th>$header</th>";		
 		}
 	}
 	
-	$table.='</tr></thead><tbody>';
-	$table.=get_supplier_manage_table_data_rows($suppliers,$controller);
-	$table.='</tbody></table>';
+	$table .= '</tr></thead><tbody>';
+	$table .= get_supplier_manage_table_data_rows($suppliers,$controller);
+	$table .= '</tbody></table>';
 	return $table;
 }
 
@@ -347,12 +350,12 @@ function get_supplier_manage_table_data_rows($suppliers,$controller)
 	
 	foreach($suppliers->result() as $supplier)
 	{
-		$table_data_rows.=get_supplier_data_row($supplier,$controller);
+		$table_data_rows .= get_supplier_data_row($supplier,$controller);
 	}
 	
 	if($suppliers->num_rows()==0)
 	{
-		$table_data_rows.="<tr><td colspan='8'><span class='col-md-12 text-center text-warning' >".lang('common_no_persons_to_display')."</span></tr>";
+		$table_data_rows .= "<tr><td colspan='8'><span class='col-md-12 text-center text-warning' >".lang('common_no_persons_to_display')."</span></tr>";
 	}
 	
 	return $table_data_rows;
@@ -468,6 +471,7 @@ function get_chanche_home_manage_table($data,$controller)
 
 	$headers=array(
 		"Orden",
+		"Hora",
 		"Nombre del Titular",
 		"Tipo de Documento",
 		"Número de Documento",
@@ -475,8 +479,7 @@ function get_chanche_home_manage_table($data,$controller)
 		"Banco",
 		"Divisa",
 		"Total",
-		"Total transfererido",
-		"Hora",
+		"Total transfererido",		
 		"Vendido por",
 		""
 	);
@@ -501,14 +504,13 @@ function get_chanche_home_manage_table($data,$controller)
 			$table.="<th>$header</th>";		
 		}
 	}
-
 	
 	$table.='</tr></thead><tbody>';
 	$table.=get_chanche_home_manage_table_data_rows($data,$controller);
 	$table.='</tbody></table>';
 	return $table;
 }
-function get_chanche_home_manage_table_data_rows($data,$controller)
+function get_chanche_home_manage_table_data_rows($data,$controller, $show_empty_message=true)
 {
 	$CI =& get_instance();
 	$table_data_rows='';
@@ -519,7 +521,7 @@ function get_chanche_home_manage_table_data_rows($data,$controller)
 		}
 	}
 	
-	if($data->num_rows()==0 || $CI->config->item('activar_casa_cambio')==0)
+	if($show_empty_message and ($data->num_rows()==0 || $CI->config->item('activar_casa_cambio')==0))
 	{
 		$table_data_rows.="<tr><td colspan='16'><span class='col-md-12 text-center text-warning' >".lang('technical_supports_falla_no_support').($CI->config->item('activar_casa_cambio')==0? ". Debe activar la casa de cambio":"")."</span></tr>";
 	}
@@ -546,6 +548,7 @@ function get_change_home_data_row($item,$controller)
 	}
 	$table_data_row='<tr '. $class_.'>';
 	$table_data_row.='<td width="8%"  align="center">'.$item->invoice_number.'</td>';
+	$table_data_row.='<td width="10%" align="center">'.date(get_time_format(), strtotime($item->sale_time)).'</td>';
 	$table_data_row.='<td width="20%" align="center">'.$item->titular_cuenta.'</td>';
 	$table_data_row.='<td width="10%" align="center">'.$item->tipo_documento.'</td>';
 	$table_data_row.='<td width="10%" align="center">'.$item->numero_documento.'</td>';
@@ -562,7 +565,6 @@ function get_change_home_data_row($item,$controller)
 	}
 	$table_data_row.='<td width="10%" align="center">'.to_currency_no_money($total).'</td>';
 	$table_data_row.='<td width="10%" align="center">'.to_currency($item->quantity_purchased*$item->item_unit_price).'</td>';
-	$table_data_row.='<td width="10%" align="center">'.date('h:i:s', strtotime($item->sale_time)).'</td>';
 	$table_data_row.='<td width="15%" align="center">'.$item->first_name.' '.$item->last_name .'</td>';
 	
 

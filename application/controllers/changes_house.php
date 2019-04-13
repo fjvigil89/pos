@@ -11,14 +11,28 @@ class Changes_house extends Secure_area
         $this->load->helper('report');        
 
     }
+    public function last_orders($start_date){
+        $start_date = rawurldecode($start_date);
+
+        if (!$this->Employee->has_module_action_permission('changes_house', 'refuse_approve',$this->session->userdata('person_id'))) {
+            $employee_id = $this->session->userdata('person_id');
+        } 
+        else {
+            $employee_id = false;
+        }
+        $table_data = $this->Change_house->last_orders(10000, 0,  'sale_time',  'DESC', $employee_id,$start_date);
+        $manage_table = get_chanche_home_manage_table_data_rows($table_data, $this,false);
+        echo json_encode(array("data"=>$manage_table, "rows"=>$table_data->num_rows(),"date"=>date('Y-m-d H:i:s')));
+
+    }
     public function get_total_divisa()
     {
         $cantidad_peso = $this->input->post('cantidad_peso');
         $opcion_sale = $this->sale_lib->get_opcion_sale(); //compra o venta
 
         $this->form_validation->set_rules('cantidad_peso', '', 'required|numeric');
-        if ($this->form_validation->run() != false) {
-           
+        
+        if ($this->form_validation->run() != false) {           
             if ($opcion_sale == "venta") {
                 $tasa = $this->sale_lib->get_rate_sale() ;
             } else {
@@ -30,26 +44,27 @@ class Changes_house extends Secure_area
         } else {
             echo json_encode(array("respuesta" => false, "data" => "Error datos erroneos."));
         }
-
     } 
+
     public function get_total_peso()
     {
         $cantidad_peso = $this->input->post('cantidad_peso');
         $opcion_sale = $this->sale_lib->get_opcion_sale(); //compra o venta
 
         $this->form_validation->set_rules('cantidad_peso', '', 'required|numeric');
+        
         if ($this->form_validation->run() != false) {
             $tasa = 1;
             $total = 0;
-           
-                if ($opcion_sale == "venta") {
-                    $tasa = $this->sale_lib->get_rate_sale() ;
-                } else {
-                    $tasa =   $this->sale_lib->get_rate_buy();
-                }
-            
-            
+        
+            if ($opcion_sale == "venta") {
+                $tasa = $this->sale_lib->get_rate_sale() ;
+            } else {
+                $tasa =   $this->sale_lib->get_rate_buy();
+            }
+
             $total = $cantidad_peso * $tasa;
+
             echo json_encode(array("respuesta" => true, "data" => to_currency_no_money($total, 4)));
 
         } else {
@@ -60,6 +75,7 @@ class Changes_house extends Secure_area
     function set_rate_all(){
         $rate = $this->input->post('tasa');
         $data= array( );
+
         if(!$this->Employee->has_module_action_permission('changes_house', 'edit_rate_transition', $this->Employee->get_logged_in_employee_info()->person_id))
 		{
             $data= array(
@@ -71,12 +87,15 @@ class Changes_house extends Secure_area
                     'success' => false,
                     'message' => "El valor de la tasa no es válido, ingrese un valor mayor que 0");
             }else{
-               $rate =abs($rate);
+                $rate =abs($rate);
+
                 if($this->sale_lib->get_opcion_sale()=="venta"){
                     $this->sale_lib->set_rate_sale($rate) ;
-                }else{
+                }
+                else{
                     $this->sale_lib->set_rate_buy($rate) ;
                 }
+
                 $this->sale_lib->set_rate_items($rate);
                 $data= array(
                     'success' => true,
@@ -88,6 +107,7 @@ class Changes_house extends Secure_area
     public function saldo($operation)
     {
         $this->check_action_permission('edit_balance_employee');
+
         if ($operation == "add" || $operation == "restar") {
             $data = array("operation" => $operation);
             $empleados = array("" => "Empleados");
@@ -97,10 +117,8 @@ class Changes_house extends Secure_area
             $data["empleados"] = $empleados;
             $this->load->view("changes_house/form_saldo", $data);
         } else {
-
             redirect('changes_house');
         }
-
     }
    
     public function save_rate()
@@ -118,16 +136,17 @@ class Changes_house extends Secure_area
                 "tasa_compra" => abs($tasa_compra),
                 "tasa_venta" => abs($tasa_venta),
             );
-            $resultado = $this->Employee->update_rate($data);
-            if ($resultado) {
 
+            $resultado = $this->Employee->update_rate($data);
+
+            if ($resultado) {
                 echo json_encode(
                     array(
                         'success' => true,
                         'message' => "Tasas actulizadas")
                 );
-            } else {
-
+            } 
+            else {
                 echo json_encode(
                     array(
                         'success' => false,
@@ -135,7 +154,8 @@ class Changes_house extends Secure_area
                 );
             }
 
-        } else {
+        } 
+        else {
             echo json_encode(
                 array(
                     'success' => false,
@@ -229,18 +249,18 @@ class Changes_house extends Secure_area
         }
         $per_page = $this->config->item('number_of_items_per_page') ? (int) $this->config->item('number_of_items_per_page') : 20;
         $offset = $this->input->post('offset') ? $this->input->post('offset') : 0;
-        $order_col = $this->input->post('order_col') ? $this->input->post('order_col') : 'invoice_number';
+        $order_col = $this->input->post('order_col') ? $this->input->post('order_col') : 'sale_time';
         $order_dir = $this->input->post('order_dir') ? $this->input->post('order_dir') : 'DESC';
 
         $search_data = array('offset' => $offset, 'order_col' => $order_col, 'order_dir' => $order_dir, "estado" => $estado, "search" => $search,"employee_id"=>$employee_id,"start_date"=>$start_date,"end_date"=>$end_date);
         $this->session->set_userdata("change_house_search_data", $search_data);
         if ($search || $estado) {
             $config['total_rows'] = $this->Change_house->search_count_all($search, $estado, $employee_id,$start_date , $end_date);
-            $table_data = $this->Change_house->search($search, $estado, $per_page, $this->input->post('offset') ? $this->input->post('offset') : 0, $this->input->post('order_col') ? $this->input->post('order_col') : 'invoice_number', $this->input->post('order_dir') ? $this->input->post('order_dir') : ' DESC',
+            $table_data = $this->Change_house->search($search, $estado, $per_page, $this->input->post('offset') ? $this->input->post('offset') : 0, $this->input->post('order_col') ? $this->input->post('order_col') : 'sale_time', $this->input->post('order_dir') ? $this->input->post('order_dir') : ' DESC',
              $employee_id,$start_date,$end_date);
         } else {
             $config['total_rows'] = $this->Change_house->count_all($employee_id,$start_date , $end_date);
-            $table_data = $this->Change_house->get_all($per_page, $this->input->post('offset') ? $this->input->post('offset') : 0, $this->input->post('order_col') ? $this->input->post('order_col') : 'invoice_number', $this->input->post('order_dir') ? $this->input->post('order_dir') : 'DESC', 
+            $table_data = $this->Change_house->get_all($per_page, $this->input->post('offset') ? $this->input->post('offset') : 0, $this->input->post('order_col') ? $this->input->post('order_col') : 'sale_time', $this->input->post('order_dir') ? $this->input->post('order_dir') : 'DESC', 
             $employee_id,$start_date,$end_date);
         }
 
@@ -255,10 +275,10 @@ class Changes_house extends Secure_area
 
         echo json_encode(array('manage_table' => $data['manage_table'], 'pagination' => $data['pagination']));
     }
-    public function index($offset = 0)
+    public function index($offset = 0) 
     {
         $data = array();
-        $params = $this->session->userdata('change_house_search_data') ? $this->session->userdata('change_house_search_data') : array('offset' => 0, 'order_col' => 'invoice_number', 'order_dir' => 'DESC', 'search' => false, 'estado' => false, "employee_id" => false,
+        $params = $this->session->userdata('change_house_search_data') ? $this->session->userdata('change_house_search_data') : array('offset' => 0, 'order_col' => 'sale_time', 'order_dir' => 'DESC', 'search' => false, 'estado' => false, "employee_id" => false,
             "start_date"=>date('Y-m-d'),"end_date"=>date('Y-m-d'));
         if ($offset != $params['offset']) {
             redirect('changes_house/index/' . $params['offset']);
@@ -341,13 +361,13 @@ class Changes_house extends Secure_area
         }
 
         if (empty($userdata['order_col'])) {
-            $order_col = $this->input->post('order_col') ? $this->input->post('order_col') : 'invoice_number';
+            $order_col = $this->input->post('order_col') ? $this->input->post('order_col') : 'sale_time';
         } else {
-            $order_col = 'invoice_number';
+            $order_col = 'sale_time';
         }
         if (isset($_POST['search_flag']) and !empty($_POST['search_flag'])) {
             $order_dir = $this->input->post('order_dir') ? $this->input->post('order_dir') : 'DESC';
-            $order_col = 'invoice_number';
+            $order_col = 'sale_time';
         } else {
             $order_dir = $userdata['order_dir'];
         }
@@ -356,7 +376,7 @@ class Changes_house extends Secure_area
         $this->session->set_userdata("change_house_search_data", $search_data_);
         $per_page = $this->config->item('number_of_items_per_page') ? (int) $this->config->item('number_of_items_per_page') : 20;
         $search_data = $this->Change_house->search($search, $estado, $per_page, $offset, $order_col, $order_dir,
-         $employee_id,$start_date,$end_date);
+        $employee_id,$start_date,$end_date);
         $config['base_url'] = site_url('changes_house/sorting');
 
         $config['total_rows'] = $this->Change_house->search_count_all($search, $estado, $employee_id,$start_date , $end_date);

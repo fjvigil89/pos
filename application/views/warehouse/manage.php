@@ -201,14 +201,16 @@ $(document).ready(function(){
 	</div>
 
 	<script type="text/javascript">
+
 		var start_date="<?php echo date('Y-m-d H:i:s'); ?>";
 		var url = "<?php echo site_url("warehouse/last_orders")?>";
 		var audio = document.getElementById("audio");
-		var reproducir_sonido = <?php  echo (int) $this->config->item('reproducrir_sonido_orden') ?>;
+		var reproducir_sonido = <?= (int) $this->config->item('reproducrir_sonido_orden') ?>;
 		
+		function onGranted() {};
 
-		function onGranted() {}
-		function onDenied() {}
+		function onDenied() {};
+
 		function add_rows(rows){
 			var last_rows = $("#manage_table").find('tbody').html();
 
@@ -218,13 +220,14 @@ $(document).ready(function(){
 		function last_orders(){
 			$.get(url+"/"+start_date, function(data)
 			{
-				data= JSON.parse(data);
-				start_date= data.date;
-				if(data.rows>0 && Push.Permission.has()){
+				data = JSON.parse(data);
+				start_date = data.date;
+
+				if(data.rows > 0 && Push.Permission.has()){
 						
 						Push.create("Bodega ", {
 						body: "Nuevas órdenes disponibles.",
-						icon: '<?php echo  $this->Appconfig->get_logo_image()?>',
+						icon: '<?= $this->Appconfig->get_logo_image()?>',
 						timeout: 16000,
 						onClick: function () {
 							window.focus();
@@ -232,40 +235,27 @@ $(document).ready(function(){
 						}
 					});
 				}
-				if(data.rows>0 && reproducir_sonido==1 ){
+				if(data.rows > 0 && reproducir_sonido == 1){
 					audio.play();
 					add_rows(data.data);
-				}
-							
+				}								
 			});
 		}
-	  	$(document).ready( function (){
-			setInterval('last_orders()',20000);
-			  
+		$(document).ready( function (){
 			var JS_DATE_FORMAT = 'YYYY-MM-DD';
-		//var JS_TIME_FORMAT = "H:mm";
+			setInterval('last_orders()',20000);	
+			$('#start_date, #end_date').datetimepicker({
+				format: JS_DATE_FORMAT,
+				locale: "es"
+			});
 
-		$('#start_date, #end_date').datetimepicker({
-			format: JS_DATE_FORMAT,
-			locale: "es"
+			$("#report_date_range_simple").change(function(){
+				
+				let fechas= $("#report_date_range_simple").val().split("/");
+				$("#start_date").val(fechas[0]);
+				$("#end_date").val(fechas[1]);
+			})
 		});
-
-		
-
-		$("#report_date_range_simple").change(function(){
-			
-			let fechas= $("#report_date_range_simple").val().split("/");
-			$("#start_date").val(fechas[0]);
-			$("#end_date").val(fechas[1]);
-
-		})
-
-			
-		});
-
-		           
-
-      
   	</script>
 
 <?php $this->load->view("partial/footer"); ?>

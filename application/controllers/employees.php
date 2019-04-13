@@ -205,7 +205,7 @@ class Employees extends Person_controller
 			$data['hour_access_employee_table']=get_access_employee_table($data["locations_list"],$employee_id);
 
 		}
-		
+				
 		$this->load->view("employees/form",$data);
 	}
 	
