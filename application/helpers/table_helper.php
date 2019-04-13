@@ -89,10 +89,10 @@ function get_access_employee_table($locations_list,$employee_id){
 							$content.='<tbody>';
 							for ($hour=0; $hour < 24 ; $hour++) { 
 								$day=0;
-								$content.='<tr>';
-								$content.='<td>'.date(get_time_format(),strtotime($hour.':00')).'</td>';
+								$content.='<tr style="height: 10px">';
+								$content.='<td style="padding: 0px 0px 0px !important">'.date(get_time_format(),strtotime($hour.':00')).'</td>';
 								while($day<7){
-									$content.='<td align="center">';
+									$content.='<td align="center" style="padding: 0px 0px 0px !important">';
 										$content.='<div class="md-checkbox-inline">';
 											$content.='<div class="md-checkbox" >';	
 											
