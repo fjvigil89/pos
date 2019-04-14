@@ -86,7 +86,9 @@
 											<?php if ($mode != 'store_account_payment') { ?>
 												<a type="button" class="btn yellow-gold letter-space" id="quotes"><?php echo lang('sales_quotes_create');?></a>
 												<a type="button" class="btn yellow-gold letter-space" id="suspend_sale_button"><?php echo lang('sales_suspend_sale');?></a>
-												<a type="button" class="btn yellow-casablanca letter-space" id="print_sale_button"><i id="icon-print" class="fa fa-print"></i>Comanda</a>
+												<?php if($this->appconfig->get('enabled_for_Restaurant') == 1):?>
+													<a type="button" class="btn yellow-casablanca letter-space" id="print_sale_button"><i id="icon-print" class="fa fa-print"></i>Comanda</a>
+												<?php endif;?>
 												<a type="button" class="btn yellow-gold letter-space" id="layaway_sale_button" style="display: none;"><?php echo lang('sales_layaway');?></a>
 												<a type="button" class="btn yellow-gold letter-space" id="estimate_sale_button" style="display: none;"><?php echo lang('sales_estimate');?></a>
 												<?php if($cancelar_despues_desuspender):?>
@@ -1507,20 +1509,20 @@
 	<?php if (!$this->config->item('disable_sale_notifications')) { ?>
 		<script type="text/javascript">
 			<?php
-			if(isset($error))
-			{
-				echo "toastr.error(".json_encode($error).", ".json_encode(lang('common_error')).");";
-			}
+				if(isset($error))
+				{
+					echo "toastr.error(".json_encode($error).", ".json_encode(lang('common_error')).");";
+				}
 
-			if (isset($warning))
-			{
-				echo "toastr.warning(".json_encode($warning).", ".json_encode(lang('common_warning')).");";
-			}
+				if (isset($warning))
+				{
+					echo "toastr.warning(".json_encode($warning).", ".json_encode(lang('common_warning')).");";
+				}
 
-			if (isset($success))
-			{
-				echo "toastr.success(".json_encode($success).", ".json_encode(lang('common_success')).");";
-			}
+				if (isset($success))
+				{
+					echo "toastr.success(".json_encode($success).", ".json_encode(lang('common_success')).");";
+				}
 			?>
 		</script>
 	<?php } ?>
@@ -1540,43 +1542,39 @@
 						$("#add_payment_button2").removeAttr('disabled');
 					}
 				});
-			<?php }?>
-			$( "input[type=radio][name=otra_moneda]").change(function(){
-			
-				let moneda_numero= $(this).val();
-				let equivalencia= $(this).attr("equivalencia");
-				let abreviatura= $(this).attr("abreviatura");
-				if (moneda_numero>0) {
-					$.post('<?php echo site_url("sales/set_otra_moneda");?>', {"otra_moneda": 1,"moneda_numero":moneda_numero}, function(data)
-					{
-						/*$("#panel2").show();
-						$("#panel1").hide();
-						$("#abreviatura").html(abreviatura);
-						let monto= convertir_moneda(<?php echo $amount_due ?>,equivalencia);
-					$("#amount_tendered2").val(monto);*/
-					$("#register_container").load('<?php echo site_url("sales/reload"); ?>');
-
-					});		
-				}
-				else{
-					$.post('<?php echo site_url("sales/set_otra_moneda");?>', {"otra_moneda": 0,"moneda_numero":"default"}, function()
-					{
-						$("#panel1").show();
-						$("#panel2").hide();
-					});		
-				}
-			});
-
-		//Table headers fixed
+		<?php }?>
+		$( "input[type=radio][name=otra_moneda]").change(function(){
+			let moneda_numero= $(this).val();
+			let equivalencia= $(this).attr("equivalencia");
+			let abreviatura= $(this).attr("abreviatura");
+			if (moneda_numero>0) {
+				$.post('<?php echo site_url("sales/set_otra_moneda");?>', {"otra_moneda": 1,"moneda_numero":moneda_numero},
+					function(data)
+					{	
+						$("#register_container").load('<?php echo site_url("sales/reload"); ?>');
+					}
+				);		
+			}
+			else{
+				$.post('<?php echo site_url("sales/set_otra_moneda");?>', {"otra_moneda": 0,"moneda_numero":"default"}, function()
+				{
+					$("#panel1").show();
+					$("#panel2").hide();
+				});		
+			}
+		});
+			//Table headers fixed
 		var $table_receivings = $('#register');
 		$table_receivings.floatThead({
 			scrollContainer: function($table){
 				return $table.closest('.table-scrollable');
 			}
 		});
+
 		$( ".select_custom_subcategory" ).change(function() {
-		$($(this).parent()).submit();
+			$($(this).parent()).submit();
 		});
+
 		$( "#id_credito" ).change(function() {
 			var opt= $("#id_credito").val();
 			if(opt==2){
@@ -1596,12 +1594,8 @@
 						alert( "error al consultar el Monto" );
 					})
 					.always(function(data) {
-
 				});
-			}
-
-
-  			
+			}  			
 		});
 		// Animation total sales
 		$('.animation-count').data('countToOptions', {
@@ -1631,52 +1625,44 @@
 	        options = $.extend({}, options || {}, $this.data('countToOptions') || {});
 	        $this.countTo(options);
       	}
-
 		//Remove attr small box sale summary
 		$('.list-group-item:first-child').css('border-top-left-radius', '0').css('border-top-right-radius','0');
 		$('.list-group-item').css('border', '0');
-
 		//
 		$(document).ready(function()
 		{
-
-
-
 			<?php if($this->config->item('hide_video_stack5') == '0'){?>
-         $('.modal.fade').addClass('in');
-         $('#stack5').css({'display':'block'});
-         <?php } ?>
-         $('.modal.fade.in').click(function(e){
+				$('.modal.fade').addClass('in');
+				$('#stack5').css({'display':'block'});
+			<?php } ?>
+        	$('.modal.fade.in').click(function(e){
 
-         if($(e.target)[0].id == "stack5")
-         {
-               $('.modal.fade.in').removeClass('in');
-               $('#stack5').css({'display':'none'});
+				if($(e.target)[0].id == "stack5")
+				{
+					$('.modal.fade.in').removeClass('in');
+					$('#stack5').css({'display':'none'});
+				}
+			});
 
-         }
+			$('#closesales').click(function(){
 
+				$('.modal.fade.in').removeClass('in');
+				$('#stack5').css({'display':'none'});
+				$('#maxsales').removeClass('icon fa fa-youtube-play help_button');
+				$('#maxsales').html("<a href='javascript:;' id='maxhom' rel=1 class='tn-group btn red-haze' ><span class='hidden-sm hidden-xs'>Maximizar&nbsp;</span><i class='icon fa fa-youtube-play help_button'></i></a>");
+			});
 
-         });
-          $('#closesales').click(function(){
+			$('#checkBoxStack5').click(function(e){
 
-               $('.modal.fade.in').removeClass('in');
-               $('#stack5').css({'display':'none'});
-               $('#maxsales').removeClass('icon fa fa-youtube-play help_button');
-               $('#maxsales').html("<a href='javascript:;' id='maxhom' rel=1 class='tn-group btn red-haze' ><span class='hidden-sm hidden-xs'>Maximizar&nbsp;</span><i class='icon fa fa-youtube-play help_button'></i></a>");
-         });
+				$.post('<?php echo site_url("config/show_hide_video_help");?>',
+				{show_hide_video5:$(this).is(':checked') ? '1' : '0',video5:'hide_video_stack5'});
+			});
 
-         $('#checkBoxStack5').click(function(e){
-
-             $.post('<?php echo site_url("config/show_hide_video_help");?>',
-             {show_hide_video5:$(this).is(':checked') ? '1' : '0',video5:'hide_video_stack5'});
-
-
-
-         });
 			if($("#show_comment_on_receipt").is(":checked") == true)
 			{
 				$("#container_comment").removeClass('hidden');
 			}
+
 			$("#show_comment_on_receipt").click(function(event) {
 
 			    if ($(this).is(":checked"))
@@ -1693,6 +1679,7 @@
 
 			//$(window).bind("resize",function(){
 			var size = $(this).width();
+
 		    if (size <= 1280)
 	    	{
 	    		$('.table-scrollable').css('height', '360px');
@@ -1708,7 +1695,6 @@
 		    else{
 		    	$('#box-customers').addClass('no-padding-left')
 		    }
-			//});
 		});
 
 		// Show or hide item grid
@@ -1815,7 +1801,6 @@
 				$( "#keyboardhelp" ).dialog( "open" );
 			});
 
-
 			//Here just in case the loader doesn't go away for some reason
 			$("#ajax-loader").hide();
 
@@ -1844,12 +1829,9 @@
 			<?php } ?>
 			$('#mode_form, #select_customer_form, #add_payment_form, .line_item_form, #discount_all_form, #new_tax_form').ajaxForm({target: "#register_container", beforeSubmit: salesBeforeSubmit});
 
-
 			$('#add_item_form').ajaxForm({target: "#register_container", beforeSubmit: salesBeforeSubmit, success: itemScannedSuccess});
 			$("#cart_contents input").change(function()
 			{
-			
-
 				$(this.form).ajaxSubmit({target: "#register_container", beforeSubmit: salesBeforeSubmit});
 			});
 
@@ -1860,7 +1842,6 @@
 				minLength: 1,
 				select: function(event, ui)
 				{
-
 					event.preventDefault();
 					$( "#item" ).val(ui.item.value);
 					$( "input[name='no_valida_por_id']" ).val("0");
@@ -1945,12 +1926,7 @@
 			{
 				$.post('<?php echo site_url("sales/set_email_receipt");?>', {email_receipt: $('#email_receipt').is(':checked') ? '1' : '0'});
 			});
-
-			/*	$('#save_credit_card_info').change(function()
-			{
-				$.post('<?php //echo site_url("sales/set_save_credit_card_info");?>', {save_credit_card_info:$('#save_credit_card_info').is(':checked') ? '1' : '0'});
-			});
-			*/
+			
 			$('#change_sale_date_enable').is(':checked') ? $("#change_sale_input").show() : $("#change_sale_input").hide();
 
 			$('#change_sale_date_enable').click(function() {
@@ -1981,22 +1957,22 @@
 									echo json_encode(lang("error_subcategory_item")." (".$this->config->item("custom_subcategory1_name")." y ".$this->config->item("custom_subcategory2_name").")");
 								?>);
 							return false;
-						<?php } ?>
+					<?php } ?>
 
-				//Prevent double submission of form
-				$("#finish_sale_button").hide();
-				$("#register_container").plainOverlay('show');
+					//Prevent double submission of form
+					$("#finish_sale_button").hide();
+					$("#register_container").plainOverlay('show');
 
-				<?php if ($is_over_credit_limit) { ?>
-					if (!confirm(<?php echo json_encode(lang('sales_over_credit_limit_warning')); ?>))
-					{
-						//Bring back submit and unmask if fail to confirm
-						$("#finish_sale_button").show();
-						$("#register_container").plainOverlay('hide');
+					<?php if ($is_over_credit_limit) { ?>
+						if (!confirm(<?php echo json_encode(lang('sales_over_credit_limit_warning')); ?>))
+						{
+							//Bring back submit and unmask if fail to confirm
+							$("#finish_sale_button").show();
+							$("#register_container").plainOverlay('hide');
 
-						return;
-					}
-				<?php } ?>
+							return;
+						}
+					<?php } ?>
 
 				<?php if(!$payments_cover_total) { ?>
 
@@ -2011,39 +1987,35 @@
 				<?php } ?>
 
 				<?php if (!$this->config->item('disable_confirmation_sale')) { ?>
-					if (confirm(<?php echo json_encode(lang("sales_confirm_finish_sale")); ?>))
-					{
-						<?php } ?>
+					if (confirm(<?php echo json_encode(lang("sales_confirm_finish_sale")); ?>))	{	<?php } ?>
 
-						if ($("#comment").val())
-						{
-							$.post('<?php echo site_url("sales/set_comment");?>', {comment: $('#comment').val()}, function()
-							{
-								$('#finish_sale_form').submit();
-							});
-						}
-						else
+					if ($("#comment").val())
+					{
+						$.post('<?php echo site_url("sales/set_comment");?>', {comment: $('#comment').val()}, function()
 						{
 							$('#finish_sale_form').submit();
-						}
-
-						<?php if (!$this->config->item('disable_confirmation_sale')) { ?>
-						}
-						else
-						{
-							//Bring back submit and unmask if fail to confirm
-							$("#finish_sale_button").show();
-							$("#register_container").plainOverlay('hide');
-						}
-						<?php } ?>
-					});
-
-					
+						});
+					}
+					else
+					{
+						$('#finish_sale_form').submit();
+					}
+					<?php if (!$this->config->item('disable_confirmation_sale')) { ?>
+					}
+					else
+					{
+						//Bring back submit and unmask if fail to confirm
+						$("#finish_sale_button").show();
+						$("#register_container").plainOverlay('hide');
+					}
+				<?php } ?>
+			});
+				
 			$("#print_sale_button").click(function(){	
-				if($('#ntable').val()<=0){
+				if($('#ntable').val() <= 0){
 					alert("Debe seleccionar una mesa.")
 				}
-				else if($("#comment").val()!=""){
+				else if($("#comment").val() != ""){
 					$.post('<?php echo site_url("sales/set_comment");?>', {comment: $('#comment').val()}, function() {
 						window.location = '<?php echo site_url("sales/receipt_command"); ?>/'+$('#ntable').val();
 					});
@@ -2052,14 +2024,8 @@
 				}
 				
 			});
-			$("#suspend_sale_button").click(function()
-			{
-				<?php if($this->appconfig->get('enabled_for_Restaurant') == '1'){?>
-					if($('#ntable').val()<=0){
-						alert("Debe seleccionar una mesa.");
-					}
-				<?php }?>
-				else if (confirm(<?php echo json_encode(lang("sales_confirm_suspend_sale")); ?>))
+			function _uspend_sale(){
+				if (confirm(<?php echo json_encode(lang("sales_confirm_suspend_sale")); ?>))
 				{
 					$.post('<?php echo site_url("sales/set_comment");?>', {comment: $('#comment').val()}, function() {
 						<?php if ($this->config->item('show_receipt_after_suspending_sale')) { ?>
@@ -2069,11 +2035,26 @@
 						<?php } ?>
 					});
 				}
+			}
+			$("#suspend_sale_button").click(function()
+			{
+				<?php if($this->appconfig->get('enabled_for_Restaurant') == '1'){?>
+					if($('#ntable').val() <= 0){
+						alert("Debe seleccionar una mesa.");
+					}
+					else{
+						_uspend_sale();
+					}
+				<?php }
+					else{
+						echo("_uspend_sale();");
+					}
+				?>				
 			});
-
 
 			$("#table_number").change(function () {
 				var end = this.value;
+
 				if (end > 0){
 					location.href = '<?php echo site_url("sales/unsuspend" );?>/' + end;
 				}
@@ -2089,7 +2070,6 @@
 						<?php }else { ?>
 							$("#register_container").load('<?php echo site_url("sales/suspend/3"); ?>');
 						<?php } ?>
-
 					});
 				}
 			});
@@ -2105,25 +2085,26 @@
 			$("#add_payment_button").click(function()
 			{
 				$('#add_payment_form').ajaxSubmit({target: "#register_container", beforeSubmit: salesBeforeSubmit});
-
 			});
 
 			$("#payment_types").change(checkPaymentTypeGiftcard).ready(checkPaymentTypeGiftcard);
 			$('#mode').change(function()
 			{
-				if ($(this).val() == "store_account_payment") { // Hiding the category grid
+				if ($(this).val() == "store_account_payment")
+				{ // Hiding the category grid
 					$('#show_hide_grid_wrapper, #category_item_selection_wrapper').fadeOut();
 				}
-				else if($(this).val()=="return_ticket"){
+				else if($(this).val()=="return_ticket")
+				{
 					$("#modal-return-ticket").click();
 					return 0;
 				}
-				else { // otherwise, show the categories grid
+				else 
+				{ // otherwise, show the categories grid
 					$('#show_hide_grid_wrapper, #show_grid').fadeIn();
 					$('#hide_grid').fadeOut();
 				}
 				$('#mode_form').ajaxSubmit({target: "#register_container", beforeSubmit: salesBeforeSubmit});
-
 			});
 
 			$('.delete_item, .delete_payment, #delete_customer, .delete_tax').click(function(event)
@@ -2144,13 +2125,10 @@
 			$(".tier_id_item").change(function()
 			{
 				$($(this).parent()).parent().submit();
-				
 			});
 			$("#tipo_documento").change(function()
 			{			
-				
 				$($(this).parent()).parent().submit();
-				
 			});
 			
 			$("#opcion_sale").change(function()
@@ -2161,8 +2139,6 @@
 					$("#register_container").load('<?php echo site_url("sales/reload"); ?>');
 				});
 			});
-
-			
 
 			$("input[type=text]").not(".description").click(function() {
 				$(this).select();
@@ -2203,16 +2179,13 @@
 					$("#amount_tendered").focus();
 				<?php } ?>
 				<?php if (!$this->config->item('disable_giftcard_detection')) { ?>
-				giftcard_swipe_field($("#amount_tendered"));
-				<?php
-				}
-				?>
+					giftcard_swipe_field($("#amount_tendered"));
+				<?php }	?>
 			}
 		}
 
 		function salesBeforeSubmit(formData, jqForm, options)
 		{
-
 			if (submitting)
 			{
 				return false;
@@ -2222,7 +2195,6 @@
 			$("#ajax-loader").show();
 			$("#add_payment_button").hide();
 			$("#finish_sale_button").hide();
-
 		}
 
 		function itemScannedSuccess(responseText, statusText, xhr, $form)

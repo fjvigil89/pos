@@ -151,12 +151,13 @@
                                                     class="name-item-summary"><?php echo lang("technical_supports_orden_fecha_garantia"); ?>:</span>
                                                 <span class="pull-right">
                                                     <?php
-                                            if($dataServTecCliente->do_have_guarantee==1) {
-                                                echo $dataServTecCliente->date_garantia;
-                                            }else{
-                                               echo lang("technical_supports_orden_inf_garant");
-                                            }
-                                            ?></span>
+                                                        if($dataServTecCliente->do_have_guarantee==1) {
+                                                            echo $dataServTecCliente->date_garantia;
+                                                        }else{
+                                                        echo lang("technical_supports_orden_inf_garant");
+                                                        }
+                                                     ?>
+                                                </span>
                                             </li>
                                             <li class="list-group-item col-lg-6">
                                                 <span
@@ -166,9 +167,7 @@
                                             </li>
                                         </div>
                                     </div>
-
                                     <div class="col-lg-12" style="overflow: hidden;">
-
                                         <div class="portlet light box green col-lg-6"
                                             style="height: auto;overflow: hidden;">
                                             <div class="portlet-title padding">
@@ -179,16 +178,16 @@
                                                 </div>
                                             </div>
                                             <?php if($dataServTecCliente->technical_failure!='') { ?>
-                                            <li class="list-group-item">
-                                                <span
-                                                    class="name-item-summary"><?php echo $dataServTecCliente->technical_failure ?></span>
-                                            </li>
+                                                <li class="list-group-item">
+                                                    <span
+                                                        class="name-item-summary"><?php echo $dataServTecCliente->technical_failure ?></span>
+                                                </li>
                                             <?php }
-                                        foreach ($dataDiagnostico->result() as $dataDiagnostico) {  ?>
-                                            <li class="list-group-item">
-                                                <span
-                                                    class="name-item-summary"><?php echo $dataDiagnostico->diagnostico ?></span>
-                                            </li>
+                                            foreach ($dataDiagnostico->result() as $dataDiagnostico) {  ?>
+                                                <li class="list-group-item">
+                                                    <span
+                                                        class="name-item-summary"><?php echo $dataDiagnostico->diagnostico ?></span>
+                                                </li>
                                             <?php } ?>
                                         </div>
                                         <?php //if($dataServTecCliente->state =="REPARADO") { ?>
@@ -202,20 +201,20 @@
                                                 </div>
                                             </div>
                                             <?php foreach ($respuestos_viejos as $dataRespuesto) {  ?>
-                                            <li class="list-group-item" style="overflow: hidden;height: auto;">
-                                                <span
-                                                    class="name-item-summary"><?php echo $dataRespuesto->name ?></span>
-                                            </li>
+                                                <li class="list-group-item" style="overflow: hidden;height: auto;">
+                                                    <span
+                                                        class="name-item-summary"><?php echo $dataRespuesto->name ?></span>
+                                                </li>
                                             <?php } ?>
                                             <?php foreach ($respuestos as $item) {  ?>
-                                            <li class="list-group-item" style="overflow: hidden;height: auto;">
-                                                <div class="green col-lg-8"><span
-                                                        class="name-item-summary"><?=$item["name"]; ?></span> </div>
-                                                <div class="green col-lg-1" style="text-align: center;">
-                                                    <?=$item["quantity"]; ?> </div>
-                                                <div class="green col-lg-3">
-                                                    <?php echo to_currency($item["precio_e_iva"],2); ?> </div>
-                                            </li>
+                                                <li class="list-group-item" style="overflow: hidden;height: auto;">
+                                                    <div class="green col-lg-8"><span
+                                                            class="name-item-summary"><?=$item["name"]; ?></span> </div>
+                                                    <div class="green col-lg-1" style="text-align: center;">
+                                                        <?=$item["quantity"]; ?> </div>
+                                                    <div class="green col-lg-3">
+                                                        <?php echo to_currency($item["precio_e_iva"],2); ?> </div>
+                                                </li>
                                             <?php } ?>
                                         </div>
                                         <?php //} ?>
@@ -234,11 +233,9 @@
                                                 </div>
                                             </div>
                                             <li class="list-group-item">
-                                                <span
-                                                    class="name-item-summary"><?php echo $dataServTecCliente->ubi_equipo ?></span>
+                                                <span class="name-item-summary"><?php echo $dataServTecCliente->ubi_equipo ?></span>
                                             </li>
                                         </div>
-
                                     </div>
                                     <?php } ?>
                                     <div class="portlet light profile-sidebar-portlet bordered"
@@ -260,13 +257,13 @@
                                         style="height: auto;overflow: hidden;">
                                         <div class="portlet-title">
                                             <div class="text-right">
-                                                <?php if($dataServTecCliente->state ==lang("technical_supports_reparado") Or $dataServTecCliente->state ==lang("technical_supports_rechazado")) { ?>
+                                                <?php /*if($dataServTecCliente->state ==lang("technical_supports_reparado") Or $dataServTecCliente->state ==lang("technical_supports_rechazado")) { ?>
                                                 <a href="javascript:entregar();">
                                                     <button class="btn btn-danger"><span class="icon"><i
                                                                 class="fa fa-user"></i></span>
                                                         <?php echo lang("technical_supports_orden_boton_entregar"); ?></button>
                                                 </a>
-                                                <?php }   ?>
+                                                <?php }   */?>
                                                 <a href="javascript:void(0);"
                                                     onclick="controler('<?php echo site_url() ?>/technical_supports/imprime_order/','idOrd=<?php echo $dataServTecCliente->Id_support ?>&ventana=1','impritOrdenc','');">
                                                     <button class="btn btn-danger"><span class="icon"><i
@@ -295,7 +292,7 @@ $('#apcion<?php echo $dataServTecCliente->Id_support; ?>').load(
 </script>
 
 <?php } */?>
-<script>
+<script>/*
 function entregar() {
     if (confirm("Estas seguro de entragar el equipo")) {
         $.post('<?= site_url("technical_supports/set_entregar");?>', {
@@ -310,5 +307,5 @@ function entregar() {
             }
         });
     }
-}
+}*/
 </script>

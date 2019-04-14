@@ -697,34 +697,31 @@
 
 				<?php if (!$store_account_payment==1) { ?>
 					<div id="sale_company_regimen">
-						<?php echo nl2br( $this->Location->get_info_for_key('overwrite_data')==1 ? $this->Location->get_info_for_key('company_regimen') : $this->config->item('company_regimen') ); ?>
+						<?= nl2br( $this->Location->get_info_for_key('overwrite_data')==1 ? $this->Location->get_info_for_key('company_regimen') : $this->config->item('company_regimen') ); ?>
+					   	<br />  
+					</div>
+					<div id="sale_resolution">
+						<?= nl2br($this->config->item('resolution')); ?>
+						<br />   
+					</div>
+					<?php /* if($show_return_policy_credit ==1){?>
+						<div id="sale_return_policy">
+							<?php echo nl2br($this->config->item('return_policy_credit')); ?>
+					   	<br />  
+					<?php }		*/			
+					  if($this->config->item('return_policy_support')!=FALSE){?>
+						<div id="sale_return_policy">
+							<?php echo nl2br($this->config->item('return_policy_support')); ?>
 					   	<br />   
-
+					<?php	} ?>
+					<?php if($this->Location->get_info_for_key('show_rango')==1):?>
+						<div id="sale_rango">
+							<?php echo nl2br("Rango autorizado: "/*.$this->Location->get_info_for_key('serie_number')." "*/.
+							$this->Location->get_info_for_key('start_range')." a la ".
+							$this->Location->get_info_for_key('final_range')); ?>
+							<br />  
 						</div>
-						<div id="sale_resolution">
-						<?php echo nl2br($this->config->item('resolution')); ?>
-					   	<br />   
-
-						</div>
-						<?php if($show_return_policy_credit ==1){?>
-							<div id="sale_return_policy">
-								<?php echo nl2br($this->config->item('return_policy_credit')); ?>
-						   	<br />  
-						<?php }
-							else{?>
-							<div id="sale_return_policy">
-								<?php echo nl2br($this->config->item('return_policy')); ?>
-						   	<br />   
-						<?php	} ?>
-						<?php if($this->Location->get_info_for_key('show_rango')==1):?>
-							<div id="sale_rango">
-								<?php echo nl2br("Rango autorizado: "/*.$this->Location->get_info_for_key('serie_number')." "*/.
-								$this->Location->get_info_for_key('start_range')." a la ".
-								$this->Location->get_info_for_key('final_range')); ?>
-								<br />  
-							</div>
-							<?php endif; ?>
-						
+						<?php endif; ?>
 					</div>
 				<?php } ?>
 

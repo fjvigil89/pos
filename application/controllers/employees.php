@@ -225,23 +225,21 @@ class Employees extends Person_controller
 	{
 		$this->check_action_permission('add_update');
 		$person_data = array(
-		'first_name'=>$this->input->post('first_name'),
-		'last_name'=>$this->input->post('last_name'),
-		'email'=>$this->input->post('email'),
-		'phone_number'=>$this->input->post('phone_number'),
-		'address_1'=>$this->input->post('address_1'),
-		'address_2'=>$this->input->post('address_2'),
-		'city'=>$this->input->post('city'),
-		'state'=>$this->input->post('state'),
-		'zip'=>$this->input->post('zip'),
-		'country'=>$this->input->post('country'),
-		'comments'=>$this->input->post('comments')
+			'first_name'=>$this->input->post('first_name'),
+			'last_name'=>$this->input->post('last_name'),
+			'email'=>$this->input->post('email'),
+			'phone_number'=>$this->input->post('phone_number'),
+			'address_1'=>$this->input->post('address_1'),
+			'address_2'=>$this->input->post('address_2'),
+			'city'=>$this->input->post('city'),
+			'state'=>$this->input->post('state'),
+			'zip'=>$this->input->post('zip'),
+			'country'=>$this->input->post('country'),
+			'comments'=>$this->input->post('comments')
 		);
 		
 		$permission_data = $this->input->post("permissions")!=false ? $this->input->post("permissions"):array();
 		$cajas = $this->input->post("permiso_cajas")!=false ? $this->input->post("permiso_cajas"):array();
-
-
 		$permission_action_data = $this->input->post("permissions_actions")!=false ? $this->input->post("permissions_actions"):array();
 
 		if($employee_id==1){
@@ -291,6 +289,7 @@ class Employees extends Person_controller
 			$username      = trim($this->input->post('username')) == '' ? NULL : trim($this->input->post('username'));
 			$employee_data = array('username' => $username);
 		}
+
 		if( $employee_id == 1 and $this->Employee->es_demo()){
 			$employee_data=array(
 				'username'=>$this->Employee->get_store(),
@@ -310,16 +309,17 @@ class Employees extends Person_controller
 		$valid_languages = directory_map(APPPATH.'language/', 1);
 		$employee_data=array_merge($employee_data,array('language'=>in_array($this->input->post('language'), $valid_languages) ? $this->input->post('language') : 'english'));
 		
-	//	if ( $this->Employee->es_demo() && $employee_id == 1)
-		//{
-			//failure
-		//	echo json_encode(array('success'=>false,'message'=>lang('employees_error_updating_demo_admin'),'person_id'=>-1));
-		//}
+
 		if((is_array($location_data) && count($location_data) > 0) && $this->Employee->save($person_data,$employee_data,$permission_data, $permission_action_data, $location_data, $employee_id,$cajas))
 		{	
 			// save control acceso por tienda
-			if($employee_id!=1){
-				$result_access=$this->Hour_access->save($hora_acceso, $employee_id);
+			if($employee_id !=1 )
+			{
+				$result_access = $this->Hour_access->save($hora_acceso, $employee_id);
+			}
+			else
+			{
+				// aqui agregar codigo para agregar los permisos para todas las ubicaciones todos los dias y 24 hrs
 			}
 			if ($this->Location->get_info_for_key('mailchimp_api_key'))
 			{
@@ -339,8 +339,7 @@ class Employees extends Person_controller
 				$success_message = lang('employees_successful_updating').' '.$person_data['first_name'].' '.$person_data['last_name'];
 				$this->session->set_flashdata('manage_success_message', $success_message);
 				echo json_encode(array('success'=>true,'message'=>$success_message,'person_id'=>$employee_id,'redirect_code'=>$redirect_code));
-			}
-			
+			}			
 			
 			//Delete Image
 			if($this->input->post('del_image') && $employee_id != -1)

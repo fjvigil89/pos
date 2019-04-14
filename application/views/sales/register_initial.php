@@ -17,23 +17,25 @@
 	</div>
 
 	<script>	
-			function change_employee(select){
-				$("#ajax-loader").show();
-					$.post('<?php echo site_url("sales/set_sold_by_employee_id");?>', {sold_by_employee_id: $(select).val()}, function()
-					{
-						$("#register_container").load('<?php echo site_url("sales/reload"); ?>');
-				});
-			}	
-		 function crear_select_empleado(id_employee="" ,id_div){
-
+		function change_employee(select){
+			$("#ajax-loader").show();
+				$.post('<?php echo site_url("sales/set_sold_by_employee_id");?>', {sold_by_employee_id: $(select).val()}, function()
+				{
+					$("#register_container").load('<?php echo site_url("sales/reload"); ?>');
+			});
+		}	
+		function crear_select_empleado(id_employee="" ,id_div){
 			let html='<select name="sold_by_employee_id" id="sold_by_employee_id" onchange ="change_employee(this)" class="form-control" >';
 			var employees=<?php echo json_encode($employees); ?>;
 			let select="";
+
 			for(id in employees){
 				select="";
+
 				if(id_employee==id){
 					select="selected";
 				}
+
 				html+='<option value="'+id+'" '+select+'>'+employees[id]+'</option>';
 			}
 			html+="</select>";
@@ -44,10 +46,10 @@
 		<?php $this->load->view("sales/register"); ?>
 	</div>
 
-<?php echo anchor(site_url('sales/sale_return_modal'),'',
-array( "id"=>"modal-return-ticket", 'data-toggle'=>"modal","style"=>"display:none",
-	'data-target'=>'#myModal'));
-?>
+	<?php echo anchor(site_url('sales/sale_return_modal'),'',
+					array( "id"=>"modal-return-ticket", 'data-toggle'=>"modal","style"=>"display:none",
+						'data-target'=>'#myModal'));
+	?>
 	<script type="text/javascript">
 		$(document).ready(function()
 		{
@@ -159,11 +161,12 @@ array( "id"=>"modal-return-ticket", 'data-toggle'=>"modal","style"=>"display:non
 				var back_to_categories_button = $("<div/>").attr('id', 'back_to_categories').attr('class', 'category_item back-to-categories col-md-2 col-sm-3 col-xs-6 ').append('<p>&laquo; '+<?php echo json_encode(lang('sales_back_to_categories')); ?>+'</p>');
 				$("#category_item_selection").append(back_to_categories_button);
 
-				for(var k=0;k<json.items.length;k++)
+				for(var k = 0; k < json.items.length; k++)
 				{
 					var image_src = json.items[k].image_src ? json.items[k].image_src : "<?php echo base_url().'img/no-photo.jpg'?>";
 					var prod_image = "";
 					var item_parent_class = "";
+					
 					if (image_src != '' ) {
 						var item_parent_class = "item_parent_class";
 						var prod_image = '<a class="btn grey-gallery"><img class="img-fluid img-thumbnail" style="width:90%; height:60px;" src="'+image_src+'" alt="" />';

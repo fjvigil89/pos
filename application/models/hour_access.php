@@ -5,20 +5,22 @@ class Hour_access extends CI_Model
         //First lets clear out any access the employee currently has.
         $this->db->query("SET autocommit=0");
 		$success=$this->db->delete('access_employees', array('employee_id' => $employee_id));
+       
         if($success){
-            
+       
             foreach ($hora_acceso as $id_tienda => $tienda_acceso_day) {
-                $con_day=0;
-                foreach($tienda_acceso_day as $key=>$acceso_day)
+                $con_day = 0;
+
+                foreach($tienda_acceso_day as $key => $acceso_day)
                 {
                     for ($i=0; $i <sizeof($acceso_day) ; $i++) { 
                         $success = $this->db->insert('access_employees',
-                        array(
-                            'location'=>$id_tienda,
-                            'id_day_access'=>$con_day,
-                            'id_hour_access'=>$acceso_day[$i],
-                            'employee_id'=>$employee_id
-                        ));
+                                                    array(
+                                                        'location'=>$id_tienda,
+                                                        'id_day_access'=>$con_day,
+                                                        'id_hour_access'=>$acceso_day[$i],
+                                                        'employee_id'=>$employee_id
+                                                    ));
                     }
                     
                     $con_day++;
@@ -46,7 +48,7 @@ class Hour_access extends CI_Model
         $this->db->where('hour_access', $hour.':00:00');
         $this->db->where('employee_id', $employee_id);
         $resul=$this->db->get()->num_rows();
-        if($employee_id==1 and !$resul){
+        if($employee_id == 1 and !$resul){
             $resul=$this->save_new_store_acces_admin($location,$employee_id);
         }
         return ($resul==1);
@@ -60,11 +62,12 @@ class Hour_access extends CI_Model
         //First lets clear out any access the employee currently has.
         $this->db->query("SET autocommit=0");
 		$success=$this->db->delete('access_employees', array('employee_id' => $employee_id,'location'=>$location));
+        
         if($success){
-            for ($hour=0; $hour < 24 ; $hour++) { 
-                # code...
-                $day=0;
-                while($day<7){
+            for ($hour =0; $hour < 24 ; $hour++) { 
+                $day = 0;
+        
+                while($day < 7){
                     $success = $this->db->insert('access_employees',
                         array(
                             'location'=>$location,
