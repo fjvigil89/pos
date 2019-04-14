@@ -431,7 +431,7 @@
 					<?php if(isset($another_currency) and $another_currency==1){ ?>
 						<tr class="gift_receipt_element">
 						<td class="right_text_align "colspan="4">
-							<strong>Total en <?php echo $currency ?>:</strong>
+							<strong>Total en <?php echo get_currency_symbol($currency) ?>:</strong>
 						</td>
 						<td class="right_text_align" colspan="2" >
 							<?php echo  to_currency_no_money($total_other_currency,4); ?>
@@ -454,7 +454,7 @@
 						<tr class="gift_receipt_element">
 							<td class="right_text_align" colspan="<?php echo $discount_exists ? '6' : '4'; ?>">
 								<?php echo $payment["payment_type"]!=lang('sales_store_account')?(
-								(isset($another_currency) and $another_currency==1)?lang('sales_value_cancel')." ".$currency:lang('sales_value_cancel'))
+								(isset($another_currency) and $another_currency==1)?lang('sales_value_cancel')." ".get_currency_symbol($currency):lang('sales_value_cancel'))
 								 : lang('sales_crdit'); ?>:
 							</td>
 							<td class="right_text_align" colspan="2">
@@ -625,7 +625,7 @@
 					<?php if ($amount_change >= 0) { ?>
 						<tr class="gift_receipt_element" >
 							<td class="right_text_align" colspan="<?php echo $discount_exists ? '6' : '6'; ?>">
-								<?php echo lang('sales_change_due').((isset($another_currency) and $another_currency==1)?" ".$currency:""); ?>:
+								<?php echo lang('sales_change_due').((isset($another_currency) and $another_currency==1)?" ".get_currency_symbol($currency):""); ?>:
 							</td>
 							<td class="right_text_align" colspan="2">
 							<?php
