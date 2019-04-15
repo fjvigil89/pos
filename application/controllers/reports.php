@@ -3909,7 +3909,7 @@ class Reports extends Secure_area {
         $this->load->view("reports/tabular", $data);
     }
 
-    function summary_giftcards($export_excel = 0, $export_pdf = 0, $offset = 0) {
+    function summary_giftcards($start_date, $end_date,$export_excel = 0, $export_pdf = 0, $offset = 0) {
         $this->check_action_permission('view_giftcards');
         $this->load->model('reports/Summary_giftcards');
         $model = $this->Summary_giftcards;
@@ -3919,12 +3919,14 @@ class Reports extends Secure_area {
         $config['total_rows'] = $model->getTotalRows();
         $config['per_page'] = $this->config->item('number_of_items_per_page') ? (int) $this->config->item('number_of_items_per_page') : 20;
         $config['uri_segment'] = 4;
+        $start_date = rawurldecode($start_date);
+        $end_date = rawurldecode($end_date);
         $this->pagination->initialize($config);
 
         $tabular_data = array();
-        $report_data = $model->getData();
+        $report_data = $model->getData($start_date,$end_date);
         foreach ($report_data as $row) {
-            $tabular_data[] = array(array('data' => $row['giftcard_number'], 'align' => 'left'), array('data' => to_currency($row['value']), 'align' => 'left'), array('data' => $row['customer_name'], 'align' => 'left'));
+            $tabular_data[] = array(array('data' => $row['giftcard_number'], 'align' => 'left'), array('data' => to_currency($row['value']), 'align' => 'left'), array('data' => $row['customer_name'], 'align' => 'left'), array('data' => date(get_date_format(), strtotime($row['update_giftcard'])), 'align' => 'left'));
         }
 
         $data = array(

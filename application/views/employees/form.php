@@ -633,7 +633,7 @@
 			});
 		}		
 		function check_access(){
-			<?php if($person_info->person_id!=1) { ?>
+			<?php if($person_info->person_id!=1 && !empty($hour_access_employee_table)) { ?>
 				var hour_access_employee=<?php echo json_encode($hour_access_employee) ?>;
 				hour_access_employee.forEach(function (subArrayDatos, indice, hour_access_employee) {
 				var id="#"+subArrayDatos['location']+"checkbox"+subArrayDatos["id_day_access"]+""+subArrayDatos["id_hour_access"];
