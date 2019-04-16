@@ -315,7 +315,13 @@ class Employees extends Person_controller
 			// save control acceso por tienda
 			if($employee_id !=1 && $this->config->item('activar_control_access_employee')==1)
 			{
-				$result_access = $this->Hour_access->save($hora_acceso, $employee_id);
+				if($employee_id==-1){			
+					
+					$result_access = $this->Hour_access->save($hora_acceso,$id=$person_data['person_id']);
+				}else{
+					$result_access = $this->Hour_access->save($hora_acceso, $employee_id);
+				
+				}
 			}
 			else
 			{
