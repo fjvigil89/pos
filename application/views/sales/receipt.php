@@ -526,32 +526,24 @@
 							</td>
 						</tr>
 					<?php } 
-					else {
-						
-						foreach($detailed_taxes as $name=>$value) {  							
-							//if(!($value=='0.00')) { ?>
-								<tr class="gift_receipt_element">
-									<td class="left_text_align" colspan="2">
-										<?php echo $name; ?>:
-									</td>
-									<td class="right_text_align">
-									<?php
-												echo $value['base']; 	
-											
-								 	?>
-									</td>
-									<td class="right_text_align">
-									<?php 
-											echo to_currency_no_money(round($value['total_tax']),1); 	
-									?>
-									</td>
-									<td class="right_text_align" colspan="2">
-									<?php	
-										 echo $this->config->item('round_value')==1 ? to_currency(round($value['total'])) :to_currency($value['total']);
-										 ?>
-									</td>
-								</tr>
-							<?php //}
+
+					else {						
+						foreach($detailed_taxes as $name=>$value) {  ?>
+							<tr class="gift_receipt_element">
+								<td class="left_text_align" colspan="2">
+									<?= $name; ?>:
+								</td>
+								<td class="right_text_align">
+									<?= to_currency($value['base'] )?>
+								</td>
+								<td class="right_text_align">
+									<?= to_currency(round($value['total_tax']),1);	?>
+								</td>
+								<td class="right_text_align" colspan="2">
+									<?= $this->config->item('round_value')==1 ? to_currency(round($value['total'])) :to_currency($value['total']);?>
+								</td>
+							</tr>
+						<?php
 						}
 					} ?>
 					<tr style="border-top: 1px dashed #000000;">
