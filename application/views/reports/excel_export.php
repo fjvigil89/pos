@@ -175,7 +175,7 @@
 					export_pdf = 1;
 				}
 				var start_date =  ($("#start_date").val()).replace(" ","%20");
-					var end_date = ($("#end_date").val()).replace(" ","%20");
+				var end_date = ($("#end_date").val()).replace(" ","%20");
 
 				var url = window.location+'/'+start_date + '/'+ end_date + '/' + export_excel+'/' + export_pdf;
 				if($("#export_pdf_yes").prop('checked'))

@@ -20,7 +20,7 @@ class Summary_giftcards extends Report
 		$this->db->join('people', 'giftcards.customer_id = people.person_id', 'left');
 		if($start_date!=0 && $end_date!=0){
 			$this->db->where('update_giftcard >=',$start_date);
-			$this->db->where('update_giftcard =<',$end_date);
+			$this->db->where('update_giftcard <=',$end_date);
 		}
 		$this->db->order_by('giftcard_number');
 

@@ -12,9 +12,9 @@ class Login extends CI_Controller
 			$this->load->view("partial/cache_control");
             $this->load->view("login2/login");
 		}
-	function no_access($hour)
+	function no_access()
 		{
-			$data['hour']=$hour;
+			$data['hour']=date(get_time_format(),time());
 			$this->load->view("login/no_access",$data);
 			
 		}
