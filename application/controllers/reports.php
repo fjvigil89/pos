@@ -3796,7 +3796,8 @@ class Reports extends Secure_area {
     }
 
     function excel_export() {
-        $this->load->view("reports/excel_export", array());
+        $data = $this->_get_common_report_data(TRUE);
+        $this->load->view("reports/excel_export",$data);
     }
 
     function inventory_input() {
@@ -3926,7 +3927,7 @@ class Reports extends Secure_area {
         $tabular_data = array();
         $report_data = $model->getData($start_date,$end_date);
         foreach ($report_data as $row) {
-            $tabular_data[] = array(array('data' => $row['giftcard_number'], 'align' => 'left'), array('data' => to_currency($row['value']), 'align' => 'left'), array('data' => $row['customer_name'], 'align' => 'left'), array('data' => date(get_date_format(), strtotime($row['update_giftcard'])), 'align' => 'left'));
+            $tabular_data[] = array(array('data' => $row['giftcard_number'], 'align' => 'left'), array('data' => date(get_date_format(), strtotime($row['update_giftcard'])), 'align' => 'left'), array('data' => to_currency($row['value']), 'align' => 'left'), array('data' => $row['customer_name'], 'align' => 'left'));
         }
 
         $data = array(
@@ -4025,12 +4026,13 @@ class Reports extends Secure_area {
     }
 
     function detailed_giftcards_input() {
+        $data = $this->_get_common_report_data(TRUE);
         $data['specific_input_name'] = lang('reports_customer');
         $data['search_suggestion_url'] = site_url('reports/customer_search');
         $this->load->view("reports/detailed_giftcards_input", $data);
     }
 
-    function detailed_giftcards($customer_id, $export_excel = 0, $export_pdf = 0, $offset = 0) {
+    function detailed_giftcards($start_date, $end_date,$customer_id, $export_excel = 0, $export_pdf = 0, $offset = 0) {
         $this->check_action_permission('view_giftcards');
         $this->load->model('reports/Detailed_giftcards');
         $model = $this->Detailed_giftcards;
@@ -4044,9 +4046,11 @@ class Reports extends Secure_area {
         $config['per_page'] = $this->config->item('number_of_items_per_page') ? (int) $this->config->item('number_of_items_per_page') : 20;
         $config['uri_segment'] = 5;
         $this->pagination->initialize($config);
+        $start_date = rawurldecode($start_date);
+        $end_date = rawurldecode($end_date);
 
         $headers = $model->getDataColumns();
-        $report_data = $model->getData();
+        $report_data = $model->getData($start_date,$end_date );
 
         $summary_data = array();
         $details_data = array();

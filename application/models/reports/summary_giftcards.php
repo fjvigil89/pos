@@ -9,7 +9,7 @@ class Summary_giftcards extends Report
 	
 	public function getDataColumns()
 	{
-		return array(array('data'=>lang('giftcards_giftcard_number'), 'align'=>'left'), array('data'=>lang('giftcards_card_value'), 'align'=> 'left'), array('data'=>lang('giftcards_customer_name'), 'align'=> 'left'), array('data'=>lang('reports_date'), 'align'=> 'left'));
+		return array(array('data'=>lang('giftcards_giftcard_number'), 'align'=>'left'), array('data'=>lang('reports_date'), 'align'=> 'left'), array('data'=>lang('giftcards_card_value'), 'align'=> 'left'), array('data'=>lang('giftcards_customer_name'), 'align'=> 'left'));
 	}
 	
 	public function getData($start_date=0,$end_date=0)
@@ -18,7 +18,7 @@ class Summary_giftcards extends Report
 		$this->db->from('giftcards');
 		$this->db->where('deleted', 0);
 		$this->db->join('people', 'giftcards.customer_id = people.person_id', 'left');
-		if($start_date!=0 && $end_date!=0){
+		if($start_date!=0 || $end_date!=0){
 			$this->db->where('update_giftcard >=',$start_date);
 			$this->db->where('update_giftcard <=',$end_date);
 		}

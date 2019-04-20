@@ -641,6 +641,15 @@
 				});
 			<?php } ?>
 		}
+		function all_day_access(input,source) {
+			checkboxes = document.getElementsByName(source);
+			
+			for(var i=0, n=checkboxes.length;i<n;i++) {
+				console.log(checkboxes[i]);
+				checkboxes[i].checked = input.checked;
+				
+			}
+		}
 		
 	</script>
 

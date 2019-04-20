@@ -47,7 +47,7 @@ class Detailed_giftcards extends Report
 		return $return;
 	}
 	
-	public function getData()
+	public function getData($start_date=0,$end_date=0)
 	{
 		$data = array();
 		$data['summary'] = array();
@@ -60,6 +60,12 @@ class Detailed_giftcards extends Report
 
 		$this->db->where('deleted', 0);
 		$this->db->where('customer_id', $this->params['customer_id']);
+
+		if($start_date!=0 || $end_date!=0){
+			$this->db->where('sale_time >=',$start_date);
+			$this->db->where('sale_time <=',$end_date);
+		}
+
 		$this->db->like('payment_type', lang('sales_giftcard'));
 		$this->db->group_by('sale_id');
 		$this->db->order_by('sale_time');

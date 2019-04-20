@@ -37,7 +37,22 @@
 						}
 					?>
 					<?php echo form_open('',['class'=>'form-horizontal']);?>
-						<div class="form-body">							
+						<div class="form-body">		
+							<div class="form-group">
+								<?php echo form_label('<a class="help_config_options  tooltips" data-placement="left" title="'.lang("reports_fixed_range_help").'">'.lang('reports_fixed_range').'</a>'.': ', 'range',array('class'=>'col-md-3 control-label')); ?>
+								<div class="col-md-9 align-vertical">
+									<div class="md-radio">
+										<input type="radio" name="report_type" id="simple_radio" value='simple' class="md-radiobtn" checked='checked'/>
+										<label for="simple_radio">
+											<span></span>
+											<span class="check"></span>
+											<span class="box"></span>
+										</label>
+									</div>
+									<br/>
+									<?php echo form_dropdown('report_date_range_simple',$report_date_range_simple, '', 'id="report_date_range_simple" class="form-control"'); ?>
+								</div>
+							</div>
 							<div class="form-group">
 								<?php echo form_label(lang('reports_export_to_excel').' :', 'reports_export_to_excel', array('class'=>'col-md-3 control-label')); ?> 
 								<div class="col-md-9 ">
@@ -177,15 +192,30 @@
 				var start_date =  ($("#start_date").val()).replace(" ","%20");
 				var end_date = ($("#end_date").val()).replace(" ","%20");
 
+				if ($("#simple_radio").prop('checked'))
+				{
+					var url = window.location+'/'+$("#report_date_range_simple option:selected").val() + '/' + export_excel+'/' + export_pdf;
+					if($("#export_pdf_yes").prop('checked'))
+						window.open(url);
+					else
+						window.location =url;
+				}
+				else
+				{
 				var url = window.location+'/'+start_date + '/'+ end_date + '/' + export_excel+'/' + export_pdf;
 				if($("#export_pdf_yes").prop('checked'))
 						window.open(url);
 					else
 						window.location =url;
+				}
 			});	
 			$("#start_date").click(function()
 			{
 				$("#complex_radio").prop('checked', true);
+			});
+			$("#report_date_range_simple").change(function()
+			{
+				$("#simple_radio").prop('checked', true);
 			});
 		});
 	</script>
