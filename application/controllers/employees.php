@@ -315,18 +315,12 @@ class Employees extends Person_controller
 			// save control acceso por tienda
 			if($employee_id !=1 && $this->config->item('activar_control_access_employee')==1)
 			{
-				if($employee_id==-1){			
-					
-					$result_access = $this->Hour_access->save($hora_acceso,$id=$person_data['person_id']);
-				}else{
-					$result_access = $this->Hour_access->save($hora_acceso, $employee_id);
+				$_employee_id_acce = $employee_id == -1 ? $person_data['person_id']: $employee_id;
 				
-				}
+				$result_access = $this->Hour_access->save($hora_acceso,$_employee_id_acce);
+				
 			}
-			else
-			{
-				// aqui agregar codigo para agregar los permisos para todas las ubicaciones todos los dias y 24 hrs
-			}
+			
 			if ($this->Location->get_info_for_key('mailchimp_api_key'))
 			{
 				$this->Person->update_mailchimp_subscriptions($this->input->post('email'), $this->input->post('first_name'), $this->input->post('last_name'), $this->input->post('mailing_lists'));

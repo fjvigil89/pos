@@ -4,8 +4,12 @@ class Change_house extends CI_Model
     function actualiza_item($sale_id,$item_id,$line,$data){
         $this->db->where('sale_id', $sale_id);
         $this->db->where('item_id', $item_id);
-        $this->db->where('line', $line);
-        return $this->db->update('sales_items', $data);
+		$this->db->where('line', $line);		
+		$_return = $this->db->update('sales_items', $data);
+
+		$this->db->query("COMMIT");
+		
+        return $_return ;
     }
     function get_info($sale_id,$item_id,$line,$employee_id=false){
         $current_location=$this->Employee->get_logged_in_employee_current_location_id();

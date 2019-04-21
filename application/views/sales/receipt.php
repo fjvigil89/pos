@@ -377,7 +377,7 @@
 							<tr>							
 							
 								<td colspan="5" >
-									<strong><?php echo "Total ".lang("sales_".$divisa).": ";?></strong>
+									<strong><?php echo "Total : ";?></strong>
 									<?php
 										$total2=0;
 										$Total_por_item=$item['price']*$item['quantity'];
@@ -387,7 +387,8 @@
 										}else{
 											$total2+=$Total_por_item*$tasa;
 										}	
-									echo to_currency_no_money($total2,4);
+										echo to_currency($total2,3,lang("sales_".$divisa)." ")
+									//echo to_currency_no_money($total2,4);
 									?>
 									
 								</td>
@@ -445,7 +446,7 @@
 								<strong><?php echo $this->config->item('activar_casa_cambio') ==0? lang('saleS_total_invoice'):"Total ".lang("sales_".$divisa); ?>:</strong>
 							</td>
 							<td class="right_text_align" colspan="2" >
-									<?php echo (double) $total_divisa ?>
+									<?= to_currency($total_divisa,3,lang("sales_".$divisa)." ") ?>
 							</td>
 						</tr>
 					<?php endif;?>

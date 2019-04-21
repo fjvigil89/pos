@@ -42,7 +42,7 @@
 									}   									
 									
 									?>
-									<tr> <td><strong><?php  echo lang('sales_total')." peso / ".lang('sales_total')." ".lang('sales_'.$divisa); ?> </strong></td> <td> <?php echo to_currency($total_peso)." / ".$total;?></td></tr>
+									<tr> <td><strong><?php  echo lang('sales_total')." peso / ".lang('sales_total')." ".lang('sales_'.$divisa); ?> </strong></td> <td> <?php echo to_currency($total_peso)." / ".  to_currency($total,3,lang("sales_".$divisa)." ");?></td></tr>
 									<tr> 
 										<td align="center" colspan="2">
 											<?php echo anchor(site_url('sales/delete_item/'.$item["line"]),"Eliminar",

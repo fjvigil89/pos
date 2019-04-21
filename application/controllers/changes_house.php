@@ -208,7 +208,32 @@ class Changes_house extends Secure_area
             "transaction_status" => $estado,
             "fecha_estado" => date('Y-m-d H:i:s'),
         );
+        $image_file_id = -1;
+        $resultado =false;
+
+        if(!empty($_FILES["image_id"]) && $_FILES["image_id"]["error"] == UPLOAD_ERR_OK)
+		{
+            $allowed_extensions = array('png', 'jpg', 'jpeg', 'gif');
+            $extension = strtolower(pathinfo($_FILES["image_id"]["name"], PATHINFO_EXTENSION));
+            if (in_array($extension, $allowed_extensions))
+            {
+                $config['image_library'] = 'gd2';
+                $config['source_image']	= $_FILES["image_id"]["tmp_name"];
+                $config['create_thumb'] = FALSE;
+                $config['maintain_ratio'] = TRUE;
+                $config['width']	 = 400;
+                $config['height']	= 300;
+                $this->load->library('image_lib', $config); 
+                $this->image_lib->resize();
+                $image_file_id = $this->Appfile->save_transfer($_FILES["image_id"]["name"], file_get_contents($_FILES["image_id"]["tmp_name"]));
+            }            
+        }
+    
+        if( $image_file_id > 0)
+            $data["file_id"]=$image_file_id;
+        
         $resultado = $this->Change_house->actualiza_item($sale_id, $item_id, $line, $data);
+    
         echo json_encode(array("success" => $resultado));
 
     }
