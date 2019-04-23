@@ -194,6 +194,14 @@
 							</td>
 						</tr>
 					<?php } ?>
+					<tr>
+						<td class="right_text_align" colspan="12">
+							<?php if(isset($comment )){
+								echo $comment ;
+							}
+							?>
+						</td>
+					</tr>
 				</table>
 				
 

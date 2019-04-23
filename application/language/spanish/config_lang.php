@@ -1,4 +1,6 @@
 <?php
+$lang['config_not_show_column_cash_flow_info']='No se muestra la columna (En caja), en la tabla de movimiento de caja';
+$lang['config_not_show_column_cash_flow']='No mostrar la columna (En caja), movimiento de caja';
 $lang['config_control_access_employee']='Activar control de acceso empleado';
 $lang['config_info']='Guarda Información de Configuración';
 $lang['config_company']='Nombre de la Compañía';

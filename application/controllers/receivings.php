@@ -239,6 +239,7 @@ class Receivings extends Secure_area
 		$data['payment_amount']=$this->receiving_lib->get_total();
 		$data['mode']=$this->receiving_lib->get_mode();
 		$data['balance']=$this->Receiving->total_balance($supplier_id);
+		$data['comment'] = $this->receiving_lib->get_comment();
 		/* $data['payments']=$this->receiving_lib->get_payments(); */
 		$data['receiving_id'] = "RECV -1";
 		
