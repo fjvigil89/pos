@@ -1,6 +1,4 @@
 <?php
-$lang['config_not_show_column_cash_flow_info']='No se muestra la columna (En caja), en la tabla de movimiento de caja';
-$lang['config_not_show_column_cash_flow']='No mostrar la columna (En caja), movimiento de caja';
 $lang['config_control_access_employee']='Activar control de acceso empleado';
 $lang['show_payments_ticket_help'] = 'Si activa esta opción se mostrarán los ultimos pagos realizados a la linea de credito';
 $lang['show_payments_ticket'] = 'Mostrar últimos abonos en el ticket';

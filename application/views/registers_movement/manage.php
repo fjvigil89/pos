@@ -148,7 +148,7 @@
 												<th>Tipo de Documento</th>
 												<th>Categoría</th>
 												<th>Cajero</th>
-												<?php if(!$this->config->item('not_show_column_cash_flow')){ ?>
+												<?php if(!$this->Employee->has_module_action_permission('registers_movement','not_show_column_cash_flow',  $this->session->userdata('person_id'))){?>
 												<th>En Caja</th>
 												<?php } ?>
 											</tr>
@@ -183,9 +183,7 @@
 													<?php }?>
 													<td align='center'><?=$movement->categorias_gastos;?></td>
 													<td><?=$movement->first_name;?> <?=$movement->last_name;?></td>
-													<?php if(!$this->config->item('not_show_column_cash_flow')){ ?>
 													<td align='center'><?=$amount_cash;?></td>
-													<?php } ?>
 												</tr>
 												<?php }?>
 											</tbody>
