@@ -1,6 +1,4 @@
 <?php
-$lang['config_not_show_column_cash_flow_info']='Column (in cash flow) is not shown in the cash movement table';
-$lang['config_not_show_column_cash_flow']='Do not show the column (in cash flow), cash flow.';
 $lang['config_control_access_employee']='Activate employee access control';
 $lang['show_payments_ticket'] = 'Show the last payments on the ticket';
 $lang['config_due_date_alarm'] = 'Activate the alarm for sending expired products';

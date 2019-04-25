@@ -1,4 +1,5 @@
 <?php
+$lang['module_action_show_column_cash_flow']='Do show the column (in cash flow), cash flow.';
 $lang["module_action_delete_sale_offline"]="Remove Offline Sales";
 
 $lang['module_home']='Home';

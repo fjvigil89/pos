@@ -1,5 +1,5 @@
 <?php
-$lang['module_action_not_show_column_cash_flow']='No mostrar la columna (En caja)';
+$lang['module_action_show_column_cash_flow']='Mostrar la columna (En caja)';
 $lang["module_action_delete_sale_offline"]="Eliminar ventas OffLine";
 
 $lang['module_home']='Inicio';
