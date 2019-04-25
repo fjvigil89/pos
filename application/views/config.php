@@ -2511,28 +2511,6 @@
 						</div>
 
 						<div class="form-group">	
-							<?php echo form_label('<a class="help_config_options tooltips"  data-placement="left"  title="'.lang("config_not_show_column_cash_flow_info"). '">'.lang('config_not_show_column_cash_flow').'</a>'.':', 'system_point',array('class'=>'col-md-3 control-label ')); ?>
-							<div class='col-md-9'>
-								<div class="md-checkbox-inline">
-									<div class="md-checkbox">
-										<?php echo form_checkbox(array(
-											'name'=>'not_show_column_cash_flow',
-											'id'=>'not_show_column_cash_flow',
-											'value'=>'1',
-											'class'=>'md-check',
-											'checked'=>$this->config->item('not_show_column_cash_flow')));
-										?>
-										<label for="not_show_column_cash_flow">
-										<span></span>
-										<span class="check"></span>
-										<span class="box"></span>
-										</label>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<div class="form-group">	
 							<?php echo form_label('<a class="help_config_options tooltips"  data-placement="left"  title="'.lang("config_application_settings_show_image_help"). '">'.lang('config_show_image').'</a>'.':', 'show_image',array('class'=>'col-md-3 control-label ')); ?>
 							<div class='col-md-9'>
 								<div class="md-checkbox-inline">
