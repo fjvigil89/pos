@@ -197,6 +197,10 @@ class Changes_house extends Secure_area
             }
         }
     }
+    public function img_modal($img_id)
+    {
+        $this->load->view("changes_house/img_modal", array("img_id"=>$img_id));
+    }
 
     public function save($sale_id, $item_id, $line)
     {
@@ -210,6 +214,18 @@ class Changes_house extends Secure_area
         );
         $image_file_id = -1;
         $resultado =false;
+        $date_delete = $this->config->item("date_deleted_img");
+
+        $now = date('Y-m-d');
+        $old_date = strtotime ( '-20 day' , strtotime ( $now ) ) ;
+        $old_date = date ( 'Y-m-d' , $old_date );
+
+        if($date_delete != date('Y-m-d'))
+        {
+            $result = $this->Appfile->delete_all_by_date($old_date);
+
+            $this->Appconfig->save("date_deleted_img",  $now);
+        }       
 
         if(!empty($_FILES["image_id"]) && $_FILES["image_id"]["error"] == UPLOAD_ERR_OK)
 		{
@@ -221,8 +237,8 @@ class Changes_house extends Secure_area
                 $config['source_image']	= $_FILES["image_id"]["tmp_name"];
                 $config['create_thumb'] = FALSE;
                 $config['maintain_ratio'] = TRUE;
-                $config['width']	 = 400;
-                $config['height']	= 300;
+                $config['width']	 = 550;
+                $config['height']	= 450;
                 $this->load->library('image_lib', $config); 
                 $this->image_lib->resize();
                 $image_file_id = $this->Appfile->save_transfer($_FILES["image_id"]["name"], file_get_contents($_FILES["image_id"]["tmp_name"]));

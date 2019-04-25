@@ -99,6 +99,12 @@ class Appfile extends CI_Model
 	{
 		return $this->db->delete('app_files', array('file_id' => $file_id)); 
 	}
+
+	function delete_all_by_date($date)
+	{
+		$this->db->where('date_at <= ', $date);
+		return $this->db->delete('transfer_files'); 
+	}
 }
 
 ?>

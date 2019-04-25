@@ -134,9 +134,9 @@
 <script>
 
 	$("#image_id").fileinput({
-		initialPreview: [
+		/*initialPreview: [
 			"<img src='<?php echo $item_info->file_id ? site_url('app_files/view_transfer/'.$item_info->file_id) : base_url().'img/no-photo.jpg'; ?>' class='file-preview-image' alt='Avatar' title='Avatar'>"
-		],
+		],*/
 		overwriteInitial: true,
 		initialCaption: "Imagen"
 	});
