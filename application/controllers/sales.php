@@ -1698,6 +1698,34 @@ class Sales extends Secure_area
 			}
 		}
 
+		//If we don't have any taxes, run a check for items so we don't show the price including tax on receipt
+		if (empty($data['taxes']))
+		{
+			foreach(array_keys($data['cart']) as $key)
+			{
+				if (isset($data['cart'][$key]['item_id']))
+				{
+					$item_info = $this->Item->get_info($data['cart'][$key]['item_id']);
+					if($item_info->tax_included)
+					{
+						$price_to_use = get_price_for_item_excluding_taxes($data['cart'][$key]['item_id'], $data['cart'][$key]['price']);
+						$data['cart'][$key]['price'] = $price_to_use;
+					}
+				}
+				elseif (isset($data['cart'][$key]['item_kit_id']))
+				{
+					$item_info = $this->Item_kit->get_info($data['cart'][$key]['item_kit_id']);
+					if($item_info->tax_included)
+					{
+						$price_to_use = get_price_for_item_kit_excluding_taxes($data['cart'][$key]['item_kit_id'], $data['cart'][$key]['price']);
+						$data['cart'][$key]['price'] = $price_to_use;
+					}
+				}
+
+			}
+
+		}
+
 		if ($sale_info['suspended'] > 0)
 		{
 			if ($sale_info['suspended'] == 1)
