@@ -477,10 +477,11 @@ function get_chanche_home_manage_table($data,$controller)
 		"Número de Documento",
 		"Cuenta bancararia",
 		"Banco",
-		"Divisa",
+		//"Divisa",
 		"Total",
 		"Total transfererido",		
 		"Vendido por",
+		"Imagen",
 		""
 	);
 		
@@ -548,13 +549,14 @@ function get_change_home_data_row($item,$controller)
 	}
 	$table_data_row='<tr '. $class_.'>';
 	$table_data_row.='<td width="8%"  align="center">'.$item->invoice_number.'</td>';
+	
 	$table_data_row.='<td width="10%" align="center">'.date(get_time_format(), strtotime($item->sale_time)).'</td>';
 	$table_data_row.='<td width="20%" align="center">'.$item->titular_cuenta.'</td>';
 	$table_data_row.='<td width="10%" align="center">'.$item->tipo_documento.'</td>';
 	$table_data_row.='<td width="10%" align="center">'.$item->numero_documento.'</td>';
 	$table_data_row.='<td width="20%" align="center">'.$item->numero_cuenta.'</td>';
 	$table_data_row.='<td width="20%" align="center">'.$item->name.'</td>';
-	$table_data_row.='<td width="5%" align="center">'.lang("sales_".$item->divisa).'</td>';
+	//$table_data_row.='<td width="5%" align="center">'.lang("sales_".$item->divisa).'</td>';
 	$total=0;
 	$tasa=($item->tasa==0|| $item->tasa==null)?1 :$item->tasa;
 	$total= ($item->quantity_purchased*$item->item_unit_price);	
@@ -563,10 +565,14 @@ function get_change_home_data_row($item,$controller)
 	}else{
 		$total=$total*$tasa;	
 	}
-	$table_data_row.='<td width="10%" align="center">'.to_currency_no_money($total).'</td>';
+	$table_data_row.='<td width="10%" align="center">'.to_currency($total,2,lang("sales_".$item->divisa)." ").'</td>';
 	$table_data_row.='<td width="10%" align="center">'.to_currency($item->quantity_purchased*$item->item_unit_price).'</td>';
 	$table_data_row.='<td width="15%" align="center">'.$item->first_name.' '.$item->last_name .'</td>';
 	
+	if($item->file_id != null)
+		$table_data_row.='<td width="55px" align="center"><a href="'.site_url('changes_house/img_modal/'.$item->file_id). '" data-toggle ="modal" data-target ="#myModal" class="btn btn-xs default btn-editable" title="Pagar"><i class="fa  fa-camera"></i></a></td>';
+	else
+		$table_data_row.='<td width="55px" align="center"></td>';
 
 	$table_data_row.='<td width="3%" class="rightmost">'.anchor($controller_name."/view_modal/"
 	.$item->sale_id."/".$item->item_id."/".$item->line, "<i class='fa fa-edit'></i>Detalles",array("data-toggle"=>"modal", "data-target"=>"#myModal",'class'=>'btn btn-xs btn-block default btn-clon','title'=>"Detalles")).'</td>';			

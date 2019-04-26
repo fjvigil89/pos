@@ -2016,7 +2016,6 @@ class Sales extends Secure_area
 		$data["currency"]=$this->sale_lib->get_currency();
 		$data["select_seller_during_sale"]=$this->Employee->has_module_action_permission('sales', 'select_seller_during_sale', $person_info->person_id) ;
 
-
 		$data['selected_sold_by_employee_id'] = $this->sale_lib->get_sold_by_employee_id();
 		$tiers = array();
 

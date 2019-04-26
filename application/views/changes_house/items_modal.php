@@ -43,7 +43,7 @@
     									
 									
 									?>
-								<tr> <td><strong><?php echo lang("sales_" . $item_info->divisa) ?></strong></td> <td> <?php echo to_currency_no_money($total,3); ?></td></tr>
+								<tr> <td><strong><?php echo lang("sales_" . $item_info->divisa) ?></strong></td> <td> <?php echo  to_currency($total,3,lang("sales_".$item_info->divisa)." "); ?></td></tr>
 								<tr> <td><strong>Total transfererido:</strong></td> <td><?php echo to_currency( $item_info->quantity_purchased * $item_info->item_unit_price)?></td></tr>
 
 								<tr> <td><strong>Observaciones del ticket:</strong></td> <td><?php echo $item_info->comment ?></td></tr>
@@ -70,7 +70,7 @@
 										<div class="form-group">
 											<label for="conetario" class="col-md-12 control-label wide">Comentarios:</label>										
 											<div class="col-md-12">
-												<textarea id="description" name="comentario" class="form-control form-textarea" row="2" cols="17"><?php echo  $item_info->comentarios ?></textarea>
+												<textarea id="description" name="comentario" class="form-control form-textarea" row="50" cols="17"><?php echo  $item_info->comentarios ?></textarea>
 											</div>
 										</div>
 									</div>
@@ -84,12 +84,32 @@
 											</div>
 										</div>
 									</div>
+									<div class="col-sm-6 ">
+										<div class="form-group">
+										<label for="conetario" class="col-md-12 control-label wide">
+												<a class="help_config_options  tooltips" data-placement="left" title="" >Imagen:</a>
+											</label>	
+											<div class="col-md-12">
+												<?php echo form_upload(array(
+													'name'=>'image_id',
+													'id'=>'image_id',
+													'class' => 'file form-control',
+													'multiple' => "false",
+													'data-show-upload' => 'false',
+													'data-show-remove' => 'false',
+													'value'=>3));
+												?>
+										</div>
+										</div>
+									</div>
+						
 									<div class="   col-md-4 col-md-offset-5 margin-top-10 ">								
 
 									<button id="submit-button" name="submit" class="btn green">Guardar</button>
 									<button id="cancel-button" type="button" class="btn default">Cancelar</button>
 									
 									</div>
+
 								</div>
 								
 							</div>						
@@ -112,6 +132,14 @@
 </div>
 
 <script>
+
+	$("#image_id").fileinput({
+		/*initialPreview: [
+			"<img src='<?php echo $item_info->file_id ? site_url('app_files/view_transfer/'.$item_info->file_id) : base_url().'img/no-photo.jpg'; ?>' class='file-preview-image' alt='Avatar' title='Avatar'>"
+		],*/
+		overwriteInitial: true,
+		initialCaption: "Imagen"
+	});
 $("#item_form").submit(function(e){
 	e.preventDefault();
 	let estado="cambiar a pendiente";
@@ -123,16 +151,36 @@ $("#item_form").submit(function(e){
 	if (confirm("Desea "+estado+" esta orden?")){
 		$("#submit-button").html("Guardando...");
 		$("#submit-button").prop('disabled', true);
-	
-		$.post($("#item_form").attr('action'), $("#item_form").serializeArray(),function(data){
-		
-			if(JSON.parse(data).success==true){
+
+			var data = new FormData();
+			jQuery.each($('input[type=file]')[0].files, function(i, file) {
+				data.append('image_id', file);
+			});
+			var other_data = $("#item_form").serializeArray();
+			$.each(other_data,function(key,input){
+				data.append(input.name,input.value);
+			});
+			jQuery.ajax({
+				url: $("#item_form").attr('action'),
+				data: data,
+				cache: false,
+				contentType: false,
+				processData: false,
+				type: 'POST',
+				success: function(data){
+					if(JSON.parse(data).success==true){
 				location.reload(true);
 			}else{
 				$("#submit-button").html("Guardar");
 				$("#submit-button").prop('disabled', false)
-			}		
-		});
+			}
+				}
+			});
+	
+		/*$.post($("#item_form").attr('action'), $("#item_form").serializeArray(),function(data){
+		
+					
+		});*/
 	}
 });
 $('#cancel-button').click(function(e){

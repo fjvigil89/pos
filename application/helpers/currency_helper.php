@@ -1,8 +1,8 @@
 <?php
-function to_currency($number, $decimals = 2)
+function to_currency($number, $decimals = 2,$currency_symbol=null)
 {
 	$CI =& get_instance();
-	$currency_symbol = $CI->config->item('currency_symbol') ? $CI->config->item('currency_symbol') : '$';
+	$currency_symbol = $currency_symbol !== null ? $currency_symbol:( $CI->config->item('currency_symbol') ? $CI->config->item('currency_symbol') : '$');
 	$thousand_separator = $CI->config->item('thousand_separator') ? $CI->config->item('thousand_separator') : '.';
 	$decimal_separator = $CI->config->item('decimal_separator') ? $CI->config->item('decimal_separator') : ',';
 	$remove_decimals = $CI->config->item('remove_decimals') ? $CI->config->item('remove_decimals') : 0;

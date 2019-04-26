@@ -14,7 +14,7 @@
 	<!-- BEGIN PAGE BREADCRUMB -->
 	<div id="breadcrumb" class="hidden-print">
 		<?php echo create_breadcrumb(); ?>
-	</div>
+	</div> 
 	<!-- END PAGE BREADCRUMB -->
 
 	<div class="clear"></div>

@@ -4,8 +4,12 @@ class Change_house extends CI_Model
     function actualiza_item($sale_id,$item_id,$line,$data){
         $this->db->where('sale_id', $sale_id);
         $this->db->where('item_id', $item_id);
-        $this->db->where('line', $line);
-        return $this->db->update('sales_items', $data);
+		$this->db->where('line', $line);		
+		$_return = $this->db->update('sales_items', $data);
+
+		$this->db->query("COMMIT");
+		
+        return $_return ;
     }
     function get_info($sale_id,$item_id,$line,$employee_id=false){
         $current_location=$this->Employee->get_logged_in_employee_current_location_id();
@@ -84,7 +88,7 @@ class Change_house extends CI_Model
 			//----------------------------------------------------------------
 
             $this->db->select('invoice_number,sale_time,first_name,last_name,
-            opcion_sale,divisa,quantity_purchased ,
+            opcion_sale,divisa,quantity_purchased ,'.$this->db->dbprefix('sales_items').'.file_id,
              quantity_purchased, item_unit_price,item_cost_price,
              numero_cuenta,numero_documento,titular_cuenta,
              tasa,tipo_documento,transaction_status, sales.sale_id,'.$this->db->dbprefix('sales_items').
@@ -254,7 +258,7 @@ class Change_house extends CI_Model
 		$current_location=$this->Employee->get_logged_in_employee_current_location_id();
 		
 		$this->db->select('sale_time,invoice_number,
-			opcion_sale,divisa,quantity_purchased ,
+			opcion_sale,divisa,quantity_purchased ,'.$this->db->dbprefix('sales_items').'.file_id,
 			quantity_purchased, item_unit_price,item_cost_price,
 			numero_cuenta,numero_documento,titular_cuenta,
 			tasa,tipo_documento,transaction_status,sales.sale_id,'.$this->db->dbprefix('sales_items').
@@ -282,7 +286,7 @@ class Change_house extends CI_Model
 	{
 		$current_location=$this->Employee->get_logged_in_employee_current_location_id();
         $this->db->select('sale_time,invoice_number,
-        opcion_sale,divisa,quantity_purchased ,
+        opcion_sale,divisa,quantity_purchased ,'.$this->db->dbprefix('sales_items').'.file_id,
          quantity_purchased, item_unit_price,item_cost_price,
          numero_cuenta,numero_documento,titular_cuenta,
 		 tasa,tipo_documento,transaction_status,sales.sale_id,'.$this->db->dbprefix('sales_items').

@@ -156,9 +156,8 @@
 							<?php echo lang('sales_total')." ".lang('sales_'.$divisa); ?>:
 						</div>
 						<div  class="amount  font-green-jungle" data-decimals="2">
-							<?php
-														
-							echo $total_divisa
+							<?= to_currency($total_divisa,3,lang('sales_'.$divisa)." ")													
+							// $total_divisa
 							?>
 							
 						</div>				
