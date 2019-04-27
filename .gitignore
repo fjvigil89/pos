@@ -32,7 +32,7 @@ sftp-config.json
 #application/views/sales/receipt.php
 #application/views/sales/receipt_quote.php
 #application/views/sales/receipt_email.php
-application/views/sales/sale_seriales_modal.php
+#application/views/sales/sale_seriales_modal.php
 #application/views/sales/shortcuts_sales.php
 #application/views/sales/closing_amount.php
 #application/views/sales/opening_amount.php
@@ -44,10 +44,10 @@ application/views/sales/sale_seriales_modal.php
 #application/controllers/appcache.php
 #application/views/offline_data
 #application/views/sales/offline.php
-application/views/sales/closing_amount_offline.php
-application/views/sales/opening_amount_offline.php
-application/views/sales/choose_register_offline.php
-application/models/synchronization_offline.php
+#application/views/sales/closing_amount_offline.php
+#application/views/sales/opening_amount_offline.php
+#application/views/sales/choose_register_offline.php
+#application/models/synchronization_offline.php
 #js/offline/sales.js
 #js/offline/sale.js
 #js/offline
@@ -60,63 +60,63 @@ application/models/synchronization_offline.php
 #application/controllers/customers.php
 #application/views/customers/form.php
 #application/views/customers/redeempoints.php
-application/views/customers/excel_import.php
+#application/views/customers/excel_import.php
 
 # ---- tarjeta de regalo 
- application/controllers/giftcards.php
-application/views/giftcards/form.php
-application/views/giftcards/manage.php
-application/views/giftcards/print.php
+# application/controllers/giftcards.php
+#application/views/giftcards/form.php
+#application/views/giftcards/manage.php
+#application/views/giftcards/print.php
 
 #-----recargas 
- application/controllers/recharges.php
+# application/controllers/recharges.php
 
 # ----- reportes 
 # application/controllers/reports.php
-application/views/reports/custom_input_excel_export.php
-application/views/reports/custom_serial_input_excel_export.php
-application/views/reports/date_input_excel_export.php
-application/views/reports/date_input_excel_register_log.php
-application/views/reports/date_input_profit_and_loss.php
-application/views/reports/date_input.php
-application/views/reports/defective_items_input.php
-application/views/reports/depostos_salidas_input_excel_export.php
-application/views/reports/detailed_consolidated.php
-application/views/reports/detailed_giftcards_input.php
-application/views/reports/detailed_inventory_input.php
-application/views/reports/detailed_payment.php
-application/views/reports/employees_date_input_excel_export.php
-application/views/reports/employees_date_input.php
-application/views/reports/tabular_details.php
-application/views/reports/tabular_details.php
+#application/views/reports/custom_input_excel_export.php
+#application/views/reports/custom_serial_input_excel_export.php
+#application/views/reports/date_input_excel_export.php
+#application/views/reports/date_input_excel_register_log.php
+#application/views/reports/date_input_profit_and_loss.php
+#application/views/reports/date_input.php
+#application/views/reports/defective_items_input.php
+#application/views/reports/depostos_salidas_input_excel_export.php
+#application/views/reports/detailed_consolidated.php
+#application/views/reports/detailed_giftcards_input.php
+##application/views/reports/detailed_inventory_input.php
+#application/views/reports/detailed_payment.php
+#application/views/reports/employees_date_input_excel_export.php
+#application/views/reports/employees_date_input.php
+#application/views/reports/tabular_details.php
+#application/views/reports/tabular_details.php
 #application/views/reports/tabular_movement.php
-application/views/reports/tabular.php
-application/views/reports/profit_and_loss_details.php
-application/views/reports/profit_and_loss_summary.php
+#application/views/reports/tabular.php
+#application/views/reports/profit_and_loss_details.php
+#application/views/reports/profit_and_loss_summary.php
 
 #application/views/reports/profit_and_loss_details.php
 #application/views/reports/profit_and_loss_summary.php
 
-application/views/reports/sales_generator_tabular_details.php
-application/views/reports/store_account_statements.php
-application/models/reports/detailed_commissions.php
-application/models/reports/detailed_consolidated.php
-application/models/reports/detailed_inventory.php
+#application/views/reports/sales_generator_tabular_details.php
+#application/views/reports/store_account_statements.php
+#application/models/reports/detailed_commissions.php
+#application/models/reports/detailed_consolidated.php
+#application/models/reports/detailed_inventory.php
 #application/models/reports/detailed_profit_and_loss.php
-application/models/reports/detailed_receivings.php
-application/models/reports/sales_consolidation.php
+#application/models/reports/detailed_receivings.php
+#application/models/reports/sales_consolidation.php
 #application/models/reports/specific_customer.php
-application/models/reports/specific_employee.php
-application/models/reports/summary_commissions.php
+#application/models/reports/specific_employee.php
+#application/models/reports/summary_commissions.php
 #application/models/reports/summary_customers.php
-application/models/reports/summary_employees.php
-application/models/reports/deleted_sales.php
-application/models/reports/summary_sales.php
+#application/models/reports/summary_employees.php
+#application/models/reports/deleted_sales.php
+#application/models/reports/summary_sales.php
 
 #--kits-------
-application/controllers/item_kits.php
-application/views/item_kits/form.php
-application/views/item_kits/manage.php
+#application/controllers/item_kits.php
+#application/views/item_kits/form.php
+#application/views/item_kits/manage.php
 
 #--movimiento de caja-------
 #application/controllers/registers_movement.php
@@ -129,19 +129,19 @@ application/views/item_kits/manage.php
 #application/views/registers_movement/technical_supports
 
 #--tendas-------
-application/controllers/locations.php
-application/views/locations
+#application/controllers/locations.php
+#application/views/locations
 
 
 #--casa de cambios -------
-application/controllers/changes_house.php
-application/views/changes_house
+#application/controllers/changes_house.php
+#application/views/changes_house
 
 #--campañas -------
-application/controllers/campaigns
+#application/controllers/campaigns
 
 #-- bodega -------
-application/controllers/warehouse
+#application/controllers/warehouse
 
 #-- compras  -------
 #application/controllers/receivings.php
