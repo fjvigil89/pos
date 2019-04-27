@@ -1936,6 +1936,9 @@ class Sale_lib
 				else
 				{
 					$tax_amount=($tax_item['price']*$tax_item['quantity']-$tax_item['price']*$tax_item['quantity']*$tax_item['discount']/100)*(($tax_item['percent'])/100);
+					if($tax_amount<0){
+						$tax_amount=$tax_amount*-1;
+					}
 				}
 
 				if (!isset($taxes[$name]))
@@ -2147,6 +2150,23 @@ class Sale_lib
 		}
 
 		foreach($this->get_taxes($sale_id) as $tax)
+		{
+			$total+=$tax;
+		}
+		
+		$total = $this->CI->config->item('round_cash_on_sales') && $this->is_sale_cash_payment() ?  round_to_nearest_05($total) : $total;
+		return to_currency_no_money($total); 
+	}
+	function get_total_quotes($sale_id = false)
+	{
+		$total = 0;
+		foreach($this->get_cart() as $item)
+		{
+			$price_to_use = $this->_get_price_for_item_in_cart($item, $sale_id);
+			$total+=($price_to_use*$item['quantity']-$price_to_use*$item['quantity']*$item['discount']/100);
+		}
+
+		foreach($this->get_taxes_quotes($sale_id) as $tax)
 		{
 			$total+=$tax;
 		}

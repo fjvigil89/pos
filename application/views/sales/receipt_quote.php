@@ -256,26 +256,7 @@
 						<?php }?>
 					<?php }?>
 				
-					<?php if ($amount_change >= 0) { ?>
-						<tr class="gift_receipt_element" >
-							<td class="right_text_align" colspan="<?php echo $discount_exists ? '4' : '3'; ?>">
-								<?php echo lang('sales_change_due'); ?>
-							</td>
-							<td class="right_text_align" colspan="1">
-								<?php echo $this->config->item('round_cash_on_sales')  && $is_sale_cash_payment ?  to_currency(round_to_nearest_05($amount_change)) : to_currency($amount_change) || $this->config->item('round_value')==1 ? to_currency(round($amount_change)) :to_currency($amount_change); ?> 
-							</td>
-						</tr>
-					<?php }
-					else { ?>
-						<tr>
-							<td class="right_text_align" colspan="<?php echo $discount_exists ? '4' : '3'; ?>">
-								<?php echo lang('sales_amount_due'); ?>
-							</td>
-							<td class="right_text_align" colspan="1">
-								<?php echo $this->config->item('round_cash_on_sales')  && $is_sale_cash_payment ?  to_currency(round_to_nearest_05($amount_change * -1)) : to_currency($amount_change * -1) || $this->config->item('round_value')==1 ? to_currency(round($amount_change)) :to_currency($amount_change); ?> 
-							</td>
-						</tr>	
-					<?php } ?>
+				
 					<?php if (isset($customer_balance_for_sale) && $customer_balance_for_sale !== FALSE && !$this->config->item('hide_balance_receipt_payment')) {?>
 						<tr>
 							<td class="right_text_align" colspan="<?php echo $discount_exists ? '4' : '3'; ?>">

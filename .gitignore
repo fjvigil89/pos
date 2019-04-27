@@ -2,7 +2,7 @@ nbproject/
 node_modules/
 application/config/database.php
 application/config/config.php
-application/config/constants.php
+#application/config/constants.php
 .htaccess
 !tools/.htaccess
 !database/.htaccess

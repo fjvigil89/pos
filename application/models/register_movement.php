@@ -234,9 +234,15 @@ class Register_movement extends CI_Model
 		$info_register  = $this->Register->get_info($id_register);
 		$payments       = $this->Sale->get_sales_totaled_payments($start_date, $end_date, $id_register);
 		$payments_petty_cash=$this->Sale->get_petty_cash_totaled_payments($start_date, $end_date, $id_register);
-		$payments_types = array('Efectivo', 'Cheque', 'Tarjeta de Débito','Tarjeta de Crédito', 'Tarjeta de regalo',lang("sales_store_account"));
+		$payments_types = array(lang('sales_cash'), lang('sales_check'), lang('sales_debit'),lang('sales_credit'), lang('sales_giftcard'),lang("sales_store_account"));
 		$entrada= $this->entrada_salida($start_date,$end_date,$register_log_id,1);
 		$salida= $this->entrada_salida($start_date,$end_date,$register_log_id,0);
+
+		foreach($this->Appconfig->get_additional_payment_types() as $additional_payment_type)
+		{
+			array_push($payments_types,$additional_payment_type);
+		}
+
 		if ($register != null) {
 
 			$amount_register_open  = $register->open_amount;

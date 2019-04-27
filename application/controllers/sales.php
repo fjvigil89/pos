@@ -2611,7 +2611,7 @@ class Sales extends Secure_area
 
 		$data['subtotal']=$this->sale_lib->get_subtotal($quote_id);
 		$data['taxes']=$this->sale_lib->get_taxes_quotes($quote_id);
-		$data['total']=$this->sale_lib->get_total($quote_id);
+		$data['total']=$this->sale_lib->get_total_quotes($quote_id);
 		$data['receipt_title']=lang('sales_receipt');
 		$data['comment'] = $this->Sale->get_comment_quotes($quote_id);
 		$data['show_comment_on_receipt'] = $this->Sale->get_comment_on_receipt_quotes($quote_id);
