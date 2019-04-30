@@ -28,6 +28,8 @@ class Hour_access extends CI_Model
             }
         }	
         $this->db->query("COMMIT");
+        $this->db->query("SET autocommit=1");
+        
         
         return $success;
     }
@@ -81,6 +83,8 @@ class Hour_access extends CI_Model
         }
            
         $this->db->query("COMMIT");
+        $this->db->query("SET autocommit=1");
+        
         
         return $success;
     }

@@ -2013,8 +2013,12 @@ class Sale_lib
 		if ($quote_id)
 		{
 			$taxes_from_sale = array_merge($this->CI->Sale->get_sale_items_taxes_quotes($quote_id));
+
 			foreach($taxes_from_sale as $key=>$tax_item)
 			{
+				$cur_item_info = $this->CI->Item->get_info($tax_item['item_id']);
+				if($cur_item_info->tax_included!=1){
+				
 				$name = $tax_item['percent'].'% ' . $tax_item['name'];
 				
 				if ($tax_item['cumulative'])
@@ -2032,6 +2036,7 @@ class Sale_lib
 					$taxes[$name] = 0;
 				}
 				$taxes[$name] += $tax_amount;
+				}
 			}
 		}
 		else

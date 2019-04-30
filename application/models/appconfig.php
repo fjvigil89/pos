@@ -64,6 +64,7 @@ class Appconfig extends CI_Model
 		 "Suministros"=>"Suministros",
 		 "Mantenimiento"=>"Mantenimiento", 
 		 "Limpieza"=>"Limpieza",
+		 "otros"=>"otros",
 		 "Combustible"=>"Combustible");
 		return $expense_category;
 	}

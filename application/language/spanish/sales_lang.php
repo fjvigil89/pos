@@ -279,6 +279,8 @@ $lang['cash_flows_cash_help'] = 'Introducir  el saldo que desea retirar o ingres
 $lang['cash_flows_description_help'] = 'La descripción  es obligatoria ';
 $lang['ntable'] = 'Mesa';
 $lang['sales_crdit'] = 'Crédito';
+$lang['sales_others'] = 'Cual?';
+$lang['sales_others_help'] = 'Otros tipos de categorias';
 
 $lang["sales_numero_cuenta"]="N° de cuenta";
 $lang["sales_docuemento"]="Documento";
