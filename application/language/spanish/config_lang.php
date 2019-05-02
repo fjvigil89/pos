@@ -1,4 +1,5 @@
 <?php
+$lang['show_option_policy_returns_sales']='Mostrar opción políticas de devolución en módulo ventas';
 $lang['config_control_access_employee']='Activar control de acceso empleado';
 $lang['config_info']='Guarda Información de Configuración';
 $lang['config_company']='Nombre de la Compañía';

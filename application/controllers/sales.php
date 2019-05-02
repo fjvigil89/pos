@@ -465,6 +465,10 @@ class Sales extends Secure_area
 	{
  	  $this->sale_lib->set_show_receipt($this->input->post('show_receipt'));
 	}
+	function set_without_policy()
+	{
+ 	  $this->sale_lib->set_without_policy($this->input->post('without_policy'));
+	}
 
 	function set_comment_ticket()
 	{
@@ -1371,7 +1375,7 @@ class Sales extends Secure_area
 			$data['payments_petty_cashes']=$this->Sale->get_petty_cash($customer_id,false,5);			
 		}
       
-        if( $this->sale_lib->get_show_receipt() )
+        if($this->sale_lib->get_show_receipt() || $this->sale_lib->get_without_policy())
         {
             $this->sale_lib->clear_all();
             redirect('sales'); 
@@ -1997,6 +2001,7 @@ class Sales extends Secure_area
 		$data['ntable'] = $this->sale_lib->get_ntable();
 		$data['show_comment_on_receipt'] = $this->sale_lib->get_comment_on_receipt();
 		$data['show_receipt'] = $this->sale_lib->get_show_receipt();
+		$data['without_policy'] = $this->sale_lib->get_without_policy();
 		$data['show_comment_ticket'] = $this->sale_lib->get_comment_ticket();
 		$data['email_receipt'] = $this->sale_lib->get_email_receipt();
 		$data['payments_total']=$this->sale_lib->get_payments_totals_excluding_store_account();

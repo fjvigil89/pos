@@ -1570,8 +1570,8 @@
                                     </div>
                                 </div>
                             </div>
-                        
-                            <div id="container_ftp_hostname">
+							</div>
+                            <div id="container_ftp_hostname" class="form-group">
                                 <?php echo form_label(lang('config_ftp_hostname').':', 'value_max_cash_flow',array('class'=>'col-md-3 control-label')); ?>
                                 <div class="col-md-4">
                                     <?php echo form_input(array(
@@ -1584,7 +1584,7 @@
                                 </div>
                             </div>
                             
-                            <div id="container_ftp_username">
+                            <div id="container_ftp_username" class="form-group">
                                 <?php echo form_label(lang('config_ftp_username').':', 'value_max_cash_flow',array('class'=>'col-md-3 control-label')); ?>
                                 <div class="col-md-4">
                                     <?php echo form_input(array(
@@ -1597,7 +1597,7 @@
                                 </div>
                             </div>
                             
-                            <div id="container_ftp_password">
+                            <div id="container_ftp_password" class="form-group">
                                 <?php echo form_label(lang('config_ftp_password').':', 'value_max_cash_flow',array('class'=>'col-md-3 control-label')); ?>
                                 <div class="col-md-4">
                                     <?php echo form_input(array(
@@ -1610,7 +1610,7 @@
                                 </div>
                             </div>
                             
-                            <div id="container_ftp_route">
+                            <div id="container_ftp_route" class="form-group">
                                 <?php echo form_label(lang('config_ftp_route').':', 'value_max_cash_flow',array('class'=>'col-md-3 control-label')); ?>
                                 <div class="col-md-4">
                                     <?php echo form_input(array(
@@ -1622,8 +1622,27 @@
                                     ?> 
                                 </div>
                             </div>
-                            
-                        </div>
+							<!--mostrar opcion de politicas de devolucion modulo ventas -->
+							<div class="form-group">	
+                            <?php echo form_label(lang('show_option_policy_returns_sales').':', 'show_option_policy_returns_sales',array('class'=>'col-md-3 control-label')); ?>
+								<div class="col-md-2">
+									<div class="md-checkbox-inline">
+										<div class="md-checkbox">
+											<?php echo form_checkbox(array(
+												'name'=>'show_option_policy_returns_sales',
+												'id'=>'show_option_policy_returns_sales',
+												'value'=>'show_option_policy_returns_sales',
+												'checked'=>$this->config->item('show_option_policy_returns_sales')));
+											?>
+											<label for="show_option_policy_returns_sales">
+											<span></span>
+											<span class="check"></span>
+											<span class="box"></span>
+											</label>
+										</div>
+									</div>
+								</div>
+							</div>
                         
 					</div>
 				</div>

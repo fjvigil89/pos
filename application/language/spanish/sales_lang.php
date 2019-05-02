@@ -1,4 +1,18 @@
 <?php
+// movimiento caja gastos 
+$lang['Nomina']='Nomina';
+$lang['Transporte']='Transporte';
+$lang['Comida']='Comida';
+$lang['Arriendo']='Arriendo';
+$lang['Reparaciones']='Reparaciones'; 
+$lang['Publicidad']='Publicidad';
+$lang['Servicios_publicos']='Servicios publicos';
+$lang['Suministros']='Suministros';
+$lang['Mantenimiento']='Mantenimiento'; 
+$lang['Limpieza']='Limpieza';
+$lang['otros']='otros';
+$lang['Combustible']='Combustible';
+
 $lang['Last_payments_made_line_credit']='Últimos pagos realizados línea de crédito';
 $lang['error_subcategory_item']="Debe seleccionar la categoría de todos los productos antes de completar la venta";
 $lang['tipo_pago']='Pago automático';

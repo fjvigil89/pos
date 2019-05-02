@@ -117,7 +117,10 @@ class Registers_movement extends Secure_area
 			$register_id = $this->input->post('register_id'); 
 			$description = $this->input->post('description');
 			$cash        = abs($this->input->post('cash'));
-			$categorias_gastos        =$this->input->post('categorias_gastos');
+			$categorias_gastos    =$this->input->post('categorias_gastos');
+			if($categorias_gastos=="otros" && $this->input->post('others_category')!=""){
+				$categorias_gastos=$this->input->post('others_category');
+			}
 			$imprimir       =$this->input->post('imprimir');
 			
 			if ($operation == "withdrawcash") {

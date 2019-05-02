@@ -199,7 +199,7 @@
 
 			$( "#categorias_gastos" ).change(function() {
 				
-				if ($("#categorias_gastos").val()=="otros"){
+				if ($("#categorias_gastos").val()=='<?php echo lang('otros')?>'){
 					$("#others_category").show();
 				}else{
 					$("#others_category").hide();

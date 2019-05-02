@@ -270,6 +270,10 @@ class Sale_lib
 	{
 		return $this->CI->session->userdata('show_receipt') ? $this->CI->session->userdata('show_receipt') : '';
 	}
+	function get_without_policy() 
+	{
+		return $this->CI->session->userdata('without_policy') ? $this->CI->session->userdata('without_policy') : '';
+	}
 
 	function set_comment($comment) 
 	{
@@ -317,6 +321,10 @@ class Sale_lib
 	{
 		$this->CI->session->set_userdata('show_receipt', $show_receipt);
 	}
+	function set_without_policy($without_policy) 
+	{
+		$this->CI->session->set_userdata('without_policy', $without_policy);
+	}
     
 	function set_comment_ticket($comment_ticket) 
 	{
@@ -342,6 +350,10 @@ class Sale_lib
 	function clear_show_receipt() 	
 	{
 		$this->CI->session->unset_userdata('show_receipt');
+	}
+	function clear_without_policy() 	
+	{
+		$this->CI->session->unset_userdata('without_policy');
 	}
 	function clear_show_comment_ticket() 	
 	{
@@ -1626,6 +1638,7 @@ class Sale_lib
 		$this->clear_ntable();
 		$this->clear_show_comment_on_receipt();
 		$this->clear_show_receipt();
+		$this->clear_without_policy();
 		$this->clear_show_comment_ticket();
 		$this->clear_change_sale_date();
 		$this->clear_change_sale_date_enable();

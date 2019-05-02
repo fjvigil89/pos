@@ -905,6 +905,7 @@
 					</div>
 
 					<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+						
 						<?php
 							echo '<div class="md-checkbox-inline">';
 							echo '<div class="md-checkbox">';
@@ -924,7 +925,30 @@
 							echo '</label>';
 							echo '</div>';
 							echo '</div>';
+
+							if($this->config->Item('show_option_policy_returns_sales'))
+							{
+								echo '<div class="md-checkbox-inline">';
+								echo '<div class="md-checkbox">';
+								echo form_checkbox(array(
+									'name'=>'without_policy',
+									'id'=>'without_policy',
+									'value'=>'1',
+									'class'=>'md-check',
+									'checked'=>(boolean)$without_policy)
+								);
+
+								echo '<label id="without_policy" for="without_policy">';
+								echo '<span></span>';
+								echo '<span class="check"></span>';
+								echo '<span class="box"></span>';
+								echo lang("sales_without").' '.lang("common_return_policy"); 
+								echo '</label>';
+								echo '</div>';
+								echo '</div>';
+							}
 						?>
+
 					</div>
 
                     <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
@@ -1913,6 +1937,10 @@
 			$('#show_receipt').change(function()
 			{
 				$.post('<?php echo site_url("sales/set_show_receipt");?>', {show_receipt:$('#show_receipt').is(':checked') ? '1' : '0'});
+			});
+			$('#without_policy').change(function()
+			{
+				$.post('<?php echo site_url("sales/set_without_policy");?>', {without_policy:$('#without_policy').is(':checked') ? '1' : '0'});
 			});
 
             $('#show_comment_ticket').change(function()

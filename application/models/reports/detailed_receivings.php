@@ -33,6 +33,10 @@ class Detailed_receivings extends Report
 		{
 			$this->db->where('quantity_purchased < 0');
 		}
+		if( (int)$this->params['supplier_id'] > 0)
+		{
+			$this->db->where('supplier_id',  $this->params['supplier_id']);
+		}
 		$this->db->where('receivings_items_temp.deleted', 0);
 		$this->db->group_by('receiving_id');
 		$this->db->order_by('receiving_date');
@@ -88,6 +92,10 @@ class Detailed_receivings extends Report
 		elseif ($this->params['sale_type'] == 'returns')
 		{
 			$this->db->where('quantity_purchased < 0');
+		}
+		if( (int)$this->params['supplier_id'] > 0)
+		{
+			$this->db->where('supplier_id',  $this->params['supplier_id']);
 		}
 		$this->db->where('receivings_items_temp.deleted', 0);
 		$ret = $this->db->get()->row_array();

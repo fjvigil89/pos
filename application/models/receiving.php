@@ -125,7 +125,7 @@ class Receiving extends CI_Model
 				'line'=>$item['line'],
 				'description'=>$item['description'],
 				'serialnumber'=>$item['serialnumber'],
-				'quantity_purchased'=>$item['quantity'],
+				'quantity_purchased'=>($mode!="receive")?$item['quantity']*-1:$item['quantity'],
 				'discount_percent'=>$item['discount'],
 				'item_cost_price' => $cost_price,
 				'item_unit_price'=>$item['price'],
