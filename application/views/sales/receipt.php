@@ -778,11 +778,13 @@
 								<?php echo nl2br($this->config->item('return_policy_credit')); ?>
 						   	<br />  
 						<?php }
-							else{?>
+							else{
+								if(!isset($without_policy) && !$without_policy ){
+								?>
 							<div id="sale_return_policy">
 								<?php echo nl2br($this->config->item('return_policy')); ?>
 						   	<br />   
-						<?php	} ?>
+						<?php	}}?>
 						<?php if($this->Location->get_info_for_key('show_rango')==1):?>
 							<div id="sale_rango">
 								<?php echo nl2br("Rango autorizado: "/*.$this->Location->get_info_for_key('serie_number')." "*/.

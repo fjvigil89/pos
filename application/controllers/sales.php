@@ -1375,13 +1375,14 @@ class Sales extends Secure_area
 			$data['payments_petty_cashes']=$this->Sale->get_petty_cash($customer_id,false,5);			
 		}
       
-        if($this->sale_lib->get_show_receipt() || $this->sale_lib->get_without_policy())
+        if($this->sale_lib->get_show_receipt())
         {
             $this->sale_lib->clear_all();
             redirect('sales'); 
         }
         else
-        {
+        {	
+			$data['without_policy']=$this->sale_lib->get_without_policy();
             $this->load->view("sales/receipt",$data);
         }
         $this->sale_lib->clear_all();
@@ -1745,6 +1746,7 @@ class Sales extends Secure_area
 				$data['sale_type'] = lang('sales_estimate');
 			}
 		}
+		$data['without_policy']=null;
 
 		$this->load->view("sales/receipt",$data);
 		$this->sale_lib->clear_all();

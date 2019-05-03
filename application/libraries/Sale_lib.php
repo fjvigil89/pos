@@ -1637,8 +1637,8 @@ class Sale_lib
 		$this->clear_comment();
 		$this->clear_ntable();
 		$this->clear_show_comment_on_receipt();
-		$this->clear_show_receipt();
-		$this->clear_without_policy();
+		//$this->clear_show_receipt();
+		//$this->clear_without_policy();
 		$this->clear_show_comment_ticket();
 		$this->clear_change_sale_date();
 		$this->clear_change_sale_date_enable();
