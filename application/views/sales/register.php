@@ -210,6 +210,7 @@
 											?>
 										</li>
 									<?php } ?>
+						
 
 								</ul>
 							</div>
@@ -1042,11 +1043,29 @@
 					<?php if ($select_seller_during_sale) :?>
 						<div class="col-lg-6 col-md-12 col-sm-12 col-xs-12" id="div_employees"></div>
 					<?php endif; ?>
-					<?php if ($this->Employee->has_module_action_permission('sales', 'overwrite_tax', $logged_in_employee_id)) :?>
-
+					
 						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 							<br>
-							<div >
+							<div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
+							<?php if ($this->Employee->has_module_action_permission('sales', 'module_allow_open_money_box', $logged_in_employee_id)) :?>
+									<div class="form-group no_margin_bottom">
+										<div class="col-md-3 col-sm-12 col-xs-12">
+											<div class="input-group">
+												<span class="input-group-btn">
+													<?php echo anchor(site_url('sales/open_money_drawer'),
+													lang('sales_open_money_drawer'),
+													array('class'=>'btn btn-success','title'=>lang('sales_open_money_info')));
+													?>
+												</span>
+											</div>
+										</div>
+									</div>
+							<?php endif; ?>
+							</div>
+							
+
+							<?php if ($this->Employee->has_module_action_permission('sales', 'overwrite_tax', $logged_in_employee_id)) :?>
+							<div  class="col-lg-8 col-md-6 col-sm-6 col-xs-6">
 								<?php echo form_open("sales/set_new_tax", array('id' => 'new_tax_form', 'class'=>'form-horizontal', 'autocomplete'=> 'off'));?>
 									<div class="form-group no_margin_bottom">
 										<label class="col-md-9 col-sm-12 col-xs-12 control-label" id="new_tax" for="new_tax"><?php echo $this->config->item('name_new_tax').': ';?></label>
@@ -1062,9 +1081,9 @@
 										</div>
 									</div>
 								</form>
-							</div>								
+							</div>
+							<?php endif; ?>							
 						</div>
-					<?php endif; ?>
 				</div>
 			</div>
 

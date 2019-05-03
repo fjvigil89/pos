@@ -1,4 +1,6 @@
 <?php
+
+$lang['module_allow_open_money_box']='Allow to open cashier box, without making sales';
 $lang['module_action_show_column_cash_flow']='Do show the column (in cash flow), cash flow.';
 $lang["module_action_delete_sale_offline"]="Remove Offline Sales";
 

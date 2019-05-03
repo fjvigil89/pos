@@ -13,6 +13,8 @@ $lang['Limpieza']='Clean';
 $lang['otros']='Others';
 $lang['Combustible']='Fuel';
 
+$lang['sales_open_money_info']='A blank receipt is printed';
+$lang['sales_open_money_drawer']='open cashiers box ';
 $lang['error_subcategory_item']="You must select the category of all products before completing the sale";
 $lang['Last_payments_made_line_credit']='Last payments made line of credit';
 $lang['report_tables'] = 'Tables';

@@ -1388,6 +1388,10 @@ class Sales extends Secure_area
 
 	}
 
+	function open_money_drawer(){
+		$this->load->view("sales/receipt_clear_open_money_drawer");
+	}
+
 	function email_receipt($sale_id)
 	{
 		//Before changing the sale session data, we need to save our current state in case they were in the middle of a sale

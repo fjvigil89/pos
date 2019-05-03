@@ -13,6 +13,8 @@ $lang['Limpieza']='Limpieza';
 $lang['otros']='otros';
 $lang['Combustible']='Combustible';
 
+$lang['sales_open_money_info']='Se imprime un recibo en blanco';
+$lang['sales_open_money_drawer']='Abrir cajon monedero';
 $lang['Last_payments_made_line_credit']='Últimos pagos realizados línea de crédito';
 $lang['tipo_pago']='Pago automático';
 $lang['sales_details']='DETALLES DE LA VENTA';

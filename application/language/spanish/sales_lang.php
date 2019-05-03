@@ -13,6 +13,8 @@ $lang['Limpieza']='Limpieza';
 $lang['otros']='otros';
 $lang['Combustible']='Combustible';
 
+$lang['sales_open_money_info']='Se imprime un recibo en blanco';
+$lang['sales_open_money_drawer']='Abrir cajon monedero';
 $lang['Last_payments_made_line_credit']='Últimos pagos realizados línea de crédito';
 $lang['error_subcategory_item']="Debe seleccionar la categoría de todos los productos antes de completar la venta";
 $lang['tipo_pago']='Pago automático';
