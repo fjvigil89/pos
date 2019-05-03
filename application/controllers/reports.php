@@ -3048,7 +3048,6 @@ class Reports extends Secure_area {
                 $details_data[$key][] = $details_data_row;
             }
         }
-
         $data = array(
             "title" => lang('reports_detailed_sales_report'),
             "subtitle" => date(get_date_format(), strtotime($start_date)) . '-' . date(get_date_format(), strtotime($end_date)),
