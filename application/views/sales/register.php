@@ -728,7 +728,7 @@
 														}
 														else
 														{
-															echo form_input(array('name'=>'quantity','value'=>to_quantity($item['quantity']),'class'=>'form-control form-inps-sale text-center', 'id' => 'quantity_'.$line, 'tabindex'=>'2'));
+															echo form_input(array('name'=>'quantity','type'=>'number','value'=>to_quantity($item['quantity']),'class'=>'form-control form-inps-sale text-center', 'id' => 'quantity_'.$line, 'tabindex'=>'2'));
 														}?>
 													</form>
 												</td>
