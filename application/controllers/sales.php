@@ -1746,7 +1746,7 @@ class Sales extends Secure_area
 				$data['sale_type'] = lang('sales_estimate');
 			}
 		}
-		$data['without_policy']=null;
+		$data['without_policy']=true;
 
 		$this->load->view("sales/receipt",$data);
 		$this->sale_lib->clear_all();
