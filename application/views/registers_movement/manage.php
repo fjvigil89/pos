@@ -50,7 +50,7 @@
 			</div>
 			<div class="portlet-body">
 				<div class="row">
-					<div class="col-md-4 ">
+					<div class="col-md-8">
 						<?php if (count($location_registers) > 1) {?>
 							<div class="pull-left">							
 								<label style="padding:3px;"><?=lang('sales_register');?>: </label>
@@ -59,9 +59,31 @@
 									<?php echo form_dropdown('location_registers', $location_registers, $register_id, 'id="location_registers" class="bs-select form-control"'); ?>
 								</div>							
 							</div >	
-						<?php }?>
+							
+							
+							<div style="padding-left:230px;">
+								<div class="md-checkbox-inline">
+									<div class="md-checkbox">
+									<?php echo form_checkbox(array(
+										'name'=>'open_box',
+										'id'=>'open_box',
+										'value'=>'1',
+										'class'=>'md-check',
+										'checked'=>(boolean)$open_box)
+									);
+									?>
+										<label id="open_box" for="open_box">
+											<span></span>
+											<span class="check"></span>
+											<span class="box"></span>
+											Caja Abierta 
+										</label>
+									</div>
+								</div>
+							</div>
+						<?php } ?>
 					</div>
-					<div class="col-md-8 ">
+					<div class="col-md-4">
 						<div class="pull-right margin-bottom-10">
 								<div class="btn-group">
 									<?php
@@ -75,7 +97,7 @@
 										echo anchor("registers_movement/operations/depositcash",
 											'<i title="Depositar dinero" class="fa fa-plus tip-bottom hidden-lg fa fa-2x"></i><span class="visible-lg">' . lang('cash_flows_deposit_money') . '</span>',
 											array('class' => 'btn hidden-xs btn-success', 'title' => 'Depositar dinero'));
-										}?>
+									}?>
 									</div>
 								</div>
 
@@ -228,6 +250,18 @@
 				window.location = "<?=site_url("registers_movement/index")?>/"+$(this).val();
 
 			});
+			// caja abierta
+			$('#open_box').change(function(){
+				if ($("#open_box").is(':checked')) {
+					window.location = "<?=site_url("registers_movement/index")?>/"+$("#location_registers").val()+"?open_box="+$("#open_box").val();
+				}else{
+				window.location = "<?=site_url("registers_movement/index")?>/"+$("#location_registers").val();
+
+				}
+				
+
+			});
+
 
 			$('#findbydate').click(function(){
 				var strdatestart = $("#datestart").val();
@@ -235,6 +269,7 @@
 				var id_empleado = $("#empleado").val();
 				var filter = $("#filter").val();
 				var search = $("#search").val();
+				
 				if (strdatestart === null || strdatestart === ""){
 					alert("Debe llenar la fecha de inicio con la que quiere hacer la busqueda");
 					return false;

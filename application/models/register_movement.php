@@ -124,7 +124,7 @@ class Register_movement extends CI_Model
 	
 	//function find by date
 	//funcion que busca por fecha
-	function get_by_date($register_id, $date_start, $date_end, $categoria="", $employee=false, $filter="", $search=""){
+	function get_by_date($register_id, $date_start, $date_end, $categoria="", $employee=false, $filter="", $search="",$open_box=0){
 		if ($date_start == null){
 			$datestring = '%Y-%m-%d';
 			$date_start1 = now();
@@ -148,10 +148,13 @@ class Register_movement extends CI_Model
 				 ->where('FROM_unixtime(UNIX_TIMESTAMP(register_date),"%Y-%m-%d") >=', $date_start)
 				 ->where('FROM_unixtime(UNIX_TIMESTAMP(register_date),"%Y-%m-%d") <=', $date_end);
 				 
+				if($open_box){
+					$this->db->where('register_log.employee_id_close', null);
+				 }
 				 if($categoria!=""){
 					$this->db->where('registers_movement.categorias_gastos', $categoria);
 				 }
-				 if($permision and $employee!=false ){
+				 if($permision and $employee!=false and $employee!="undefined" ){
 					$this->db->where('registers_movement.id_employee', 	$employee );
 				 }else if(!$permision ){
 					$this->db->where('registers_movement.id_employee', $employee_id); 

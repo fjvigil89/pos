@@ -53,6 +53,7 @@ class Registers_movement extends Secure_area
 		$data['register_id'] = $register_id;
 		$desde = $this->input->get("desde");
 		$hasta = $this->input->get("hasta");
+		$open_box=$this->input->get("open_box")?1:0;
 
 		$id_empleado = $this->input->get("empleado")? $this->input->get("empleado"): false;
 		$filter = $this->input->get('filter')? $this->input->get('filter') : "";
@@ -73,11 +74,12 @@ class Registers_movement extends Secure_area
 		$data["empleados"]=$empleados;
 		$data["filter"]=$filter;
 		$data["search"]=$search;
+		$data["open_box"]=$open_box;
 
 		//$data['registers_movement'] = $this->Register_movement->get_all($register_id); //Obtener todos los movimientos de la caja seleccionada
 		
 
-		$data['registers_movement'] = $this->Register_movement->get_by_date($register_id,$desde,$hasta,"",$id_empleado, $filter, $search); //obtener todos los movimiento comprendidos en un rango de fecha o si es null los ultimos 30 dias
+		$data['registers_movement'] = $this->Register_movement->get_by_date($register_id,$desde,$hasta,"",$id_empleado, $filter, $search,$open_box); //obtener todos los movimiento comprendidos en un rango de fecha o si es null los ultimos 30 dias
 		$this->load->view('registers_movement/manage',$data);
 	}
 
