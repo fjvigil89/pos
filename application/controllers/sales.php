@@ -1029,8 +1029,6 @@ class Sales extends Secure_area
 				$invoice_type['serie_number_invoice']=$serie_number;
             }
 		}
-		
-
 
         $data['sale_type'] = ($this->sale_lib->get_comment_ticket() == 1) ? lang('sales_ticket_on_receipt') : lang('sales_invoice');
 
@@ -1080,8 +1078,8 @@ class Sales extends Secure_area
 					$cash        = $this->Sale->get_payment_cash($this->sale_lib->get_payments());
 					$amount_diff = $suspended_change_sale_id ? $this->Sale->get_cash_available($suspended_change_sale_id, $cash) : 0;
 
-					if ($amount_diff < 0) {
-
+					if ($amount_diff < 0)
+					{
 						$this->_reload(array('error' => "¡La caja no tiene suficiente efectivo para realizar la operación!"), false);
 
 						return;
@@ -1111,11 +1109,11 @@ class Sales extends Secure_area
 
 		$emp_info=$this->Employee->get_info($employee_id);
 		$sale_emp_info=$this->Employee->get_info($sold_by_employee_id);
-		$data['payments']=$this->sale_lib->get_payments();
+		$data['payments'] = $this->sale_lib->get_payments();
 		$data['is_sale_cash_payment'] = $this->sale_lib->is_sale_cash_payment();
 		$data['amount_change']=$this->sale_lib->get_amount_due() * -1;
-		$data['balance']=$this->sale_lib->get_payment_amount(lang('sales_store_account'));
-		$data['employee']=$emp_info->first_name.' '.$emp_info->last_name.($sold_by_employee_id && $sold_by_employee_id != $employee_id ? '/'. $sale_emp_info->first_name.' '.$sale_emp_info->last_name: '');
+		$data['balance'] = $this->sale_lib->get_payment_amount(lang('sales_store_account'));
+		$data['employee'] = $emp_info->first_name.' '.$emp_info->last_name.($sold_by_employee_id && $sold_by_employee_id != $employee_id ? '/'. $sale_emp_info->first_name.' '.$sale_emp_info->last_name: '');
 		$data['ref_no'] = $this->session->userdata('ref_no') ? $this->session->userdata('ref_no') : '';
 		$data['auth_code'] = $this->session->userdata('auth_code') ? $this->session->userdata('auth_code') : '';
 		$data['discount_exists'] = $this->_does_discount_exists($data['cart']);
@@ -1138,6 +1136,7 @@ class Sales extends Secure_area
 		$data["overwrite_tax"]= $overwrite_tax; 
 		$data["new_tax"]= $new_tax;
 		$data["value_other_currency"]=$this->sale_lib->get_equivalencia_divisa();
+		
 		if($this->config->item('system_point') && $this->sale_lib->get_mode() == 'sale')
 		{
 			$total=$data['total'];
@@ -1201,8 +1200,6 @@ class Sales extends Secure_area
 		if($this->sale_lib->get_mode() == 'sale'  && isset($data['balance']) && $customer_id)
 		{
 			$add_customer=$this->Sale->add_petty_cash_customer($customer_id, $data['balance']);
-
-			
 		}
 
 		if($data['store_account_payment']==1  && isset($data['balance']) && $customer_id)
@@ -1216,7 +1213,6 @@ class Sales extends Secure_area
 		}
 		else
 		{
-
 			$mode=$this->sale_lib->get_mode() ;
 			$tier_id = $this->sale_lib->get_selected_tier_id();
 			$deleted_taxes=$this->sale_lib->get_deleted_taxes();
@@ -1232,12 +1228,9 @@ class Sales extends Secure_area
 				$deleted_taxes,
 				$data['store_account_payment'],$data['total'],$data['amount_change'],$invoice_type, null,$data["divisa"],$data["opcion_sale"],
 				$data["transaction_rate"],$data["transaction_cost"],$data["another_currency"],$data["currency"],$data["total_other_currency"],
-				$overwrite_tax,$new_tax,$data["value_other_currency"]);
-				
+				$overwrite_tax,$new_tax,$data["value_other_currency"]);				
            
 			}
-
-
 		}
 		
 		if($data['store_account_payment']==1)
@@ -1247,7 +1240,6 @@ class Sales extends Secure_area
 		else
 		{
 		   $data['sale_id']=$this->config->item('sale_prefix').' '.$sale_id_raw;
-
 		}
 
 		$data['sale_id_raw']=$sale_id_raw;
@@ -1378,9 +1370,16 @@ class Sales extends Secure_area
         }
         else
         {
-            $this->load->view("sales/receipt",$data);
+			$txt_receipt_file  = $data['sale_id'].'.txt';
+            $txt_receipt_route = 'tmp/'.$txt_receipt_file;
+
+
+            //saves receipts in a temporary folder and then sends them with ftp
+             write_file($txt_receipt_route, $this->load->view("sales/txt_receipt_2",$data, true));
+            
+            //$this->load->view("sales/receipt",$data);
         }
-        $this->sale_lib->clear_all();
+        //$this->sale_lib->clear_all();
 
 	}
 

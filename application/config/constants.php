@@ -47,7 +47,7 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 define('APPLICATION_VERSION', '5.3.0'); 
 define('DATABASE_VERSION', '0');
 define('DB_NAME_PREFIX','inpos_');
-define('URL_LICENCIA','https://panel.accesopos.com/index.php');
+define('URL_LICENCIA','http://panel.accesopos.com/index.php');
 define("URL_COMPANY","http://facilpos.co/");
 define("URL_POS","https://accesopos.com/");
 define("NAME_COMPANY","Facil Pos");
