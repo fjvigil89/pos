@@ -186,9 +186,7 @@
 						<?php endif;?>
 						<th class="gift_receipt_element left_text_align" style="width:20%;"><?php echo lang('common_price'); ?></th>
 						<th class="text-center" style="width:15%;" colspan="<?php echo $discount_exists ? 1 : 2 ?>;"><?php echo lang('sales_quantity_short'); ?></th>
-						<?php if($discount_exists) { ?>
-							<th class="gift_receipt_element text-center" style="width:16%;"><?php echo lang('sales_discount_short'); ?></th>
-						<?php } ?>
+						
 						<th class="gift_receipt_element right_align" style="width:5%;" colspan="3"><?php echo lang('sales_total'); ?></th>
 					</tr>
 					<?php
@@ -327,20 +325,16 @@
 									if (isset($item['model'])){ 
 								 		echo ($item['unit']);} ?>
 							</td>
-							<?php if($discount_exists) { ?>
-								<td class="gift_receipt_element text-center">
-									<?php echo $item['discount'].'%'; ?>
-								</td>
-							<?php } ?>
+							
 
 							<?php
 							 if ($item['name']==lang('sales_giftcard')) { 
 								
-								$Total=$item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100;
+								$Total=$item['price']*$item['quantity'];
 							}	
 						 	else
 						 	{
-							    $Total=$price_with_tax*$item['quantity']-$price_with_tax*$item['quantity']*$item['discount']/100;
+							    $Total=$price_with_tax*$item['quantity'];
 							} ?>
 							<td class="gift_receipt_element right_text_align" colspan="2">
 								<?php
@@ -414,7 +408,19 @@
 						?>
 						</td>							
 					</tr>
-
+					<!-- total descuento -->
+					<?php if($discount_exists) { ?>
+					<tr class="gift_receipt_element">
+						<td class="right_text_align" colspan="<?php echo $discount_exists ? '6' : '4'; ?>">
+							<?php echo lang('sales_discount'); ?>: 
+						</td>
+						<td class="right_text_align" colspan="2" >
+						<?php
+							echo $this->config->item('round_value')==1 ? to_currency(round($discount)) :to_currency($discount) ;
+						?>
+						</td>							
+					</tr>
+					<?php } ?>
 					<tr class="gift_receipt_element">
 						<td class="right_text_align "colspan="<?php echo $discount_exists ? '6' : '4'; ?>">
 							<strong><?php echo $this->config->item('activar_casa_cambio') ==0? lang('saleS_total_invoice'):"Total ".$this->config->item('sale_prefix'); ?>:</strong>

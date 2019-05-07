@@ -581,7 +581,7 @@ class Sale_lib
 			$item_unit_price = $item_location_info->unit_price ? $item_location_info->unit_price : $item_info->unit_price;
 			return to_currency_no_money($item_unit_price *(1-($item_location_tier_row->percent_off/100)), $this->CI->config->item('round_tier_prices_to_2_decimals') ? 2 : 10);
 		}
-		elseif (!empty($item_tier_row) && $item_tier_row->unit_price)
+		elseif (!empty($item_tier_row) && $item_tier_row->unit_price && $item_tier_row->unit_price!=0)
 		{
 			return to_currency_no_money($item_tier_row->unit_price, $this->CI->config->item('round_tier_prices_to_2_decimals') ? 2 : 10);
 		}
@@ -2114,10 +2114,23 @@ class Sale_lib
 		foreach($this->get_cart() as $item)
 		{
 			$price_to_use = $this->_get_price_for_item_in_cart($item, $sale_id);
-			$subtotal+=($price_to_use*$item['quantity']-$price_to_use*$item['quantity']*$item['discount']/100);
+			//$subtotal+=($price_to_use*$item['quantity']-$price_to_use*$item['quantity']*$item['discount']/100);
+			$subtotal+=($price_to_use*$item['quantity']);
 		}
 		
 		return to_currency_no_money($subtotal);
+	}
+
+	function get_discount($sale_id = FALSE)
+	{
+		$discount = 0;
+		foreach($this->get_cart() as $item)
+		{
+			$price_to_use = $this->_get_price_for_item_in_cart($item, $sale_id);
+			$discount+=($price_to_use*$item['quantity']*$item['discount']/100);
+		}
+		
+		return to_currency_no_money($discount);
 	}
 	
 	function _get_price_for_item_in_cart($item, $sale_id = FALSE)

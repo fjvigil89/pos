@@ -1101,6 +1101,7 @@ class Sales extends Secure_area
 		$data["serie_number"]=$serie_number;
 		$data['register_name'] = $this->Register->get_register_name($this->Employee->get_logged_in_employee_current_register_id());
 		$data['subtotal']=$this->sale_lib->get_subtotal();
+		$data['discount']=$this->sale_lib->get_discount();
 		//$data['taxes']=$this->sale_lib->get_taxes();
 		$data['detailed_taxes']=$this->sale_lib->get_detailed_taxes();
 		$data['detailed_taxes_total']=$this->sale_lib->get_detailed_taxes_total();
@@ -1642,6 +1643,7 @@ class Sales extends Secure_area
 		$data['register_name'] = $this->Register->get_register_name($sale_info['register_id']);
 
 		$data['subtotal']=$this->sale_lib->get_subtotal($sale_id);
+		$data['discount']=$this->sale_lib->get_discount($sale_id);
 		//$data['taxes']=$this->sale_lib->get_taxes($sale_id);
         $data['detailed_taxes']=$this->sale_lib->get_detailed_taxes($sale_id);
         $data['detailed_taxes_total']=$this->sale_lib->get_detailed_taxes_total($sale_id);

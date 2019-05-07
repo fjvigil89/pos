@@ -50,7 +50,7 @@
 			</div>
 			<div class="portlet-body">
 				<div class="row">
-					<div class="col-md-8">
+					<div class="col-md-6">
 						<?php if (count($location_registers) > 1) {?>
 							<div class="pull-left">							
 								<label style="padding:3px;"><?=lang('sales_register');?>: </label>
@@ -83,13 +83,18 @@
 							</div>
 						<?php } ?>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-6">
 						<div class="pull-right margin-bottom-10">
 								<div class="btn-group">
 									<?php
 									$CI = &get_instance();
 									$permision = $CI->Employee->has_module_action_permission('registers_movement', 'add_update', $CI->Employee->get_logged_in_employee_info()->person_id);
 									if ($permision == true) {
+										echo anchor("registers_movement/operations/withdrawcash",
+											'<i title="traslado" class="fa fa-minus tip-bottom hidden-lg fa fa-2x"></i><span class="visible-lg">Trasladar dinero</span>',
+											array('class' => 'btn hidden-xs btn-primary', 'title' => 'Traslado'));
+
+
 										echo anchor("registers_movement/operations/withdrawcash",
 											'<i title="Registar gasto" class="fa fa-minus tip-bottom hidden-lg fa fa-2x"></i><span class="visible-lg">Registar gasto</span>',
 											array('class' => 'btn hidden-xs btn-danger', 'title' => 'Registar gasto'));

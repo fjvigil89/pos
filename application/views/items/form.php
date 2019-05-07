@@ -579,9 +579,9 @@
 									'name'=>'item_tier['.$tier->id.']',
 									'size'=>'8',
 									'class'=>'form-control form-inps margin-bottom-05',
-									'value'=> $tier_prices[$tier->id] !== FALSE ? ($tier_prices[$tier->id]->unit_price != NULL ? to_currency_no_money($tier_prices[$tier->id]->unit_price, 10) : $tier_prices[$tier->id]->percent_off): '')
+									'value'=> $tier_prices[$tier->id] !== FALSE ? ($tier_prices[$tier->id]->unit_price != 0 ? to_currency_no_money($tier_prices[$tier->id]->unit_price, 10) : $tier_prices[$tier->id]->percent_off): '')
 								);?>
-								<?php echo form_dropdown('tier_type['.$tier->id.']', $tier_type_options, $tier_prices[$tier->id] !== FALSE && $tier_prices[$tier->id]->unit_price === NULL ? 'percent_off' : 'unit_price', 'class="bs-select form-control"');?>
+								<?php echo form_dropdown('tier_type['.$tier->id.']', $tier_type_options, $tier_prices[$tier->id] !== FALSE && $tier_prices[$tier->id]->unit_price==0 ? 'percent_off' : 'unit_price', 'class="bs-select form-control"');?>
 							</div>
 						</div>
 					<?php } ?>
