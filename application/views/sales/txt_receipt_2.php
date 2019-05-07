@@ -1,399 +1,394 @@
-<div class="portlet light no-padding-general">
-    <div class="portlet-body">
-        <div>
-            <?php 
-            
-                echo $this->Location->get_info_for_key('overwrite_data')==1 ? $this->Location->get_info_for_key('name') : $this->config->item('company') ; 
-                echo"\n";
-                echo lang('config_company_dni').'. ' .($this->Location->get_info_for_key('overwrite_data')==1 ? $this->Location->get_info_for_key('company_dni') : $this->config->item('company_dni')); 
-                echo"\n";
-                echo nl2br($this->Location->get_info_for_key('overwrite_data')==1 ? $this->Location->get_info_for_key('address'): $this->config->item('address'));           
-                echo"\n";
-                echo $this->Location->get_info_for_key('phone'); 
-                echo"\n";
+<?php    
+        $space2 ="\t\t";
+        $space1 ="\t";
 
-                if(($this->Location->get_info_for_key('overwrite_data')==1 and  $this->Location->get_info_for_key('website') ) or $this->config->item('website')) 
+        $lines = 40;
+        $type_line ="-";
+
+        echo $this->Location->get_info_for_key('overwrite_data')==1 ? $this->Location->get_info_for_key('name') : $this->config->item('company') ; 
+        echo"\n";
+        echo lang('config_company_dni').'. ' .($this->Location->get_info_for_key('overwrite_data')==1 ? $this->Location->get_info_for_key('company_dni') : $this->config->item('company_dni')); 
+        echo"\n";
+        echo nl2br($this->Location->get_info_for_key('overwrite_data')==1 ? $this->Location->get_info_for_key('address'): $this->config->item('address'));           
+        echo"\n";
+        echo $this->Location->get_info_for_key('phone'); 
+        echo"\n";
+
+        if(($this->Location->get_info_for_key('overwrite_data')==1 and  $this->Location->get_info_for_key('website') ) or $this->config->item('website')) 
+        {
+            echo $this->Location->get_info_for_key('overwrite_data')==1 ? $this->Location->get_info_for_key('website') : $this->config->item('website') ;
+            echo"\n";
+        } 
+        if(!empty($this->Location->get_info_for_key('codigo')))
+        {                 
+            echo lang("locations_code").". ".  $this->Location->get_info_for_key('codigo') ;
+            echo"\n";
+        }           
+        if(isset($mode) && $mode == 'return') 
+        {
+            echo lang('items_sale_mode').$sale_type." ".$sale_number;
+            echo "\n"; 
+            if($this->Location->get_info_for_key('show_serie') == 1)
+            {									
+                echo"\nSerie: ".$serie_number;	
+                echo "\n"; 								
+            }		                 	
+        } 
+        elseif(isset($mode) && $store_account_payment == 1) 
+        {
+            echo lang('sales_store_account_name').' '.$sale_id;
+            echo "\n"; 
+        } 
+        elseif($show_comment_ticket==1)
+        {
+            echo 'BOLETA '.$sale_number;
+            echo "\n"; 
+            if($this->Location->get_info_for_key('show_serie') == 1)
+            {
+                echo "Serie: ".$serie_number;
+                echo "\n"; 
+            }			                 	
+        } 
+        else
+        {
+            echo $this->config->item('sale_prefix').' '.$sale_number;
+            echo "\n"; 
+            if($this->Location->get_info_for_key('show_serie')==1){
+                echo "Serie: ".$serie_number;
+                echo "\n"; 									
+            }
+        } 
+        
+        echo $transaction_time;
+        echo "\n";
+        
+        if(isset($customer))
+        { 
+            echo lang('customers_customer').": ".$customer."\n";
+        }               
+        if(!empty($customer_address_1))
+        {                 
+            echo lang('common_address').": ". $customer_address_1. ' '.$customer_address_2."\n";
+        }
+        if (!empty($customer_city)) 
+        { 
+            echo $customer_city.' '.$customer_state.', '.$customer_zip."\n";
+        } 
+        if (!empty($customer_country)) 
+        { 
+            echo $customer_country."\n";
+        }            
+        if(!empty($customer_phone))
+        {                
+            echo lang('common_phone_number')." : ". $customer_phone."\n";                 
+        } 
+        if(!empty($customer_email))
+        {                
+            echo lang('common_email')." : ". $customer_email."\n"; 
+        } 
+        if (isset($sale_type)) 
+        {                 
+            echo $sale_type."\n";               
+        } 
+        if ($register_name) 
+        {
+            echo lang('locations_register_name').' : '.$register_name."\n";
+        }
+        if ($tier) 
+        { 
+            echo lang('items_tier_name').': '.$tier."\n";                 
+        }
+        echo lang('employees_employee').": ".$employee."\n";
+
+        echo"\n";
+
+        for ($i = 0; $i < $lines ; $i++) { 
+            echo $type_line;
+        }      
+         
+        echo"\n";
+        // se crea la tabla se productos
+
+        echo lang('items_item').  $space2; 
+
+        if($this->config->item('subcategory_of_items') )
+        {                    
+            echo ($this->config->item('inhabilitar_subcategory1')==1 ? "":($this->config->item("custom_subcategory1_name")."/")). $this->config->item("custom_subcategory2_name");
+            echo  $space2;                   
+        }
+        if($show_number_item)
+        {                   
+            echo "UPC";
+            echo  $space2;
+        }
+        echo lang('common_price'); 
+        echo  $space2;  
+
+        echo lang('sales_quantity_short');
+        echo  $space1;
+
+        if($discount_exists)
+        { 
+            echo lang('sales_discount_short');
+            echo  $space2;  
+        } 
+        echo lang('sales_total');
+        echo  $space2;  
+    
+        echo"\n";
+
+        for ($i = 0; $i < $lines ; $i++) { 
+            echo $type_line;
+        }      
+         
+        echo"\n";
+?>
+<?php
+    foreach(array_reverse($cart, true) as $line=>$item) 
+    {
+
+        echo character_limiter($item['name'], 10,"...");
+
+       /* if (isset($item['size']) and !empty($item['size']))
+        { 
+            echo "-".$item['size']; 
+        } 
+        if (isset($item['colour']) and !empty($item['colour']))
+        {
+            echo  "-".$item['colour']; 
+        } 
+        if (isset($item['model']) and !empty($item['model']))
+        {
+            echo  "-".$item['model']; 
+        } 
+        if (isset($item['marca']) and !empty($item['marca']))
+        {
+            echo  "-".$item['marca'];
+        } */
+        echo  $space2; 
+        if($this->config->item('subcategory_of_items') )
+        { 
+                    
+            if (isset($item['item_id']))
+            {        
+                echo(
+                    ($this->config->item('inhabilitar_subcategory1')==1?"":($item['custom1_subcategory']?$item['custom1_subcategory']:"--")."/").
+                    ($item['custom2_subcategory']?$item['custom2_subcategory']:"--")
+                );
+                echo  $space2; 
+            }
+            else
+            {
+                echo"--/--";
+                echo  $space2; 
+            }
+
+        }
+        if($show_number_item)
+        {
+            if (isset($item['item_number']))
+            { 
+                echo $item['item_number']." ";
+                echo  $space2; 
+            }
+            else if (isset($item['item_kit_number']))
+            {
+                echo $item['item_kit_number']." ";
+                echo  $space2; 
+            }
+        }
+        if (isset($item['item_id']) && $item['name'] != lang('sales_giftcard')) 
+        {
+            $tax_info = $this->Item_taxes_finder->get_info($item['item_id']);
+            $i = 0;
+            $prev_tax = array();
+            
+            foreach($tax_info as $key => $tax)
+            {
+                $prev_tax[$item['item_id']][$i] = $tax['percent'] / 100;
+                $i ++;
+            }						
+            if (isset($prev_tax[$item['item_id']]) && $item['name']!=lang('sales_giftcard')) 
+            {									
+                if(!$overwrite_tax)
                 {
-                    echo $this->Location->get_info_for_key('overwrite_data')==1 ? $this->Location->get_info_for_key('website') : $this->config->item('website') ;
-                    echo"\n";
-                } 
-                if(!empty($this->Location->get_info_for_key('codigo')))
-                {                 
-                    echo lang("locations_code").". ".  $this->Location->get_info_for_key('codigo') ;
-                    echo"\n";
-                }           
-                if(isset($mode) && $mode=='return') 
-                {
-                    echo lang('items_sale_mode').$sale_type." ".$sale_number;
-                    echo "\n"; 
-                    if($this->Location->get_info_for_key('show_serie')==1)
-                    {									
-                        echo"\nSerie: ".$serie_number;									
-                    }		                 	
-                } 
-                elseif(isset($mode) && $store_account_payment == 1) 
-                {
-                    echo lang('sales_store_account_name').' '.$sale_id;
-                } 
-                elseif($show_comment_ticket==1)
-                {
-                    echo '\nBOLETA '.$sale_number;
-                    if($this->Location->get_info_for_key('show_serie')==1)
-                    {
-                        echo "\nSerie: ".$serie_number;
-                        echo "\n"; 
-                    }			                 	
-                } 
+                    $sum_tax = array_sum($prev_tax[$item['item_id']]);
+                    $value_tax = $item['price'] * $sum_tax;										
+                    $price_with_tax = $item['price'] + $value_tax;
+                                                                                            
+                }
                 else
                 {
-                    echo $this->config->item('sale_prefix').' '.$sale_number;
-                    if($this->Location->get_info_for_key('show_serie')==1){
-                        echo "\nSerie: ".$serie_number;
-                        echo "\n"; 									
-                    }
-                } 
-                
-                echo $transaction_time;
-                echo "\n";
-                
-                if(isset($customer))
-                { 
-                    echo lang('customers_customer').": ".$customer."\n";
-                }               
-                if(!empty($customer_address_1))
-                {                 
-                    echo lang('common_address').": ". $customer_address_1. ' '.$customer_address_2."\n";
+                    $value_tax = get_nuevo_iva($new_tax,$item['price']);
+                    $price_with_tax = get_precio_con_nuevo_iva($new_tax,$item['price']);
+                }	
+            }	
+            elseif (!isset($prev_tax[$item['item_id']]) && $item['name'] != lang('sales_giftcard'))
+            {									
+                if(!$overwrite_tax)
+                {											
+                    $sum_tax = 0;
+                    $value_tax=$item['price'] * $sum_tax;										
+                    $price_with_tax = $item['price'] + $value_tax;
+                                                
                 }
-                if (!empty($customer_city)) 
-                { 
-					echo $customer_city.' '.$customer_state.', '.$customer_zip."\n";
-				} 
-                if (!empty($customer_country)) 
-                { 
-					echo $customer_country."\n";
-                }            
-                if(!empty($customer_phone))
-                {                
-                    echo lang('common_phone_number')." : ". $customer_phone."\n";                 
-                } 
-                if(!empty($customer_email))
-                {                
-                    echo lang('common_email')." : ". $customer_email."\n"; 
-                } 
-                if (isset($sale_type)) 
-                {                 
-                    echo $sale_type;                
-                } 
-                if ($register_name) 
+                else
                 {
-                   echo lang('locations_register_name').' : '.$register_name."\n";
+                    $value_tax = get_nuevo_iva($new_tax,$item['price']);
+                    $price_with_tax = get_precio_con_nuevo_iva($new_tax,$item['price']);
+                }	
+            }	
+        }
+
+        if (isset($item['item_kit_id']) && $item['name'] != lang('sales_giftcard')) 
+        {
+            $tax_kit_info = $this->Item_kit_taxes_finder->get_info($item['item_kit_id']);
+            $i = 0;									
+            
+            foreach($tax_kit_info as $key => $tax)
+            {
+                $prev_tax[$item['item_kit_id']][$i] = $tax['percent'] / 100;
+                $i ++;
+            }
+            if (isset($prev_tax[$item['item_kit_id']]) && $item['name']!= lang('sales_giftcard')) 
+            {										
+                if(!$overwrite_tax)
+                {
+                    $sum_tax = array_sum($prev_tax[$item['item_id']]);
+                    $value_tax = $item['price'] * $sum_tax;										
+                    $price_with_tax = $item['price'] + $value_tax;											
                 }
-                if ($tier) 
-                { 
-                    echo lang('items_tier_name').': '.$tier."\n";                 
+                else
+                {
+                    $value_tax = get_nuevo_iva($new_tax,$item['price']);
+                    $price_with_tax = get_precio_con_nuevo_iva($new_tax,$item['price']);
                 }
-                echo lang('employees_employee').": ".$employee."\n";
-                echo"-------------------------------------------------------";
-            ?>
+            }
+            elseif (!isset($prev_tax[$item['item_kit_id']]) && $item['name'] != lang('sales_giftcard')) 
+            {										
+                if(!$overwrite_tax)
+                {
+                    $sum_tax = 0;
+                    $value_tax = $item['price'] * $sum_tax;										
+                    $price_with_tax = $item['price'] + $value_tax;											
+                }
+                else
+                {
+                    $value_tax = get_nuevo_iva($new_tax,$item['price']);
+                    $price_with_tax = get_precio_con_nuevo_iva($new_tax,$item['price']);
+                }
+            }
+        }																											
+        echo $this->config->item('round_value')==1 ? to_currency(round($item['price'])) :to_currency($item['price']);
+        echo  $space2;
 
-            <table id="receipt_items">
-                <tr style="border-bottom: 1px solid #000000;border-top: 1px solid #000000;">
-                    <th class="left_text_align" style="width:<?php echo $discount_exists ? "33%" : "55%"; ?>;"
-                        colspan="<?php echo $discount_exists ? 3 : 1 ?>;"><?php echo lang('items_item'); ?></th>
+        echo to_quantity($item['quantity']);
+        if (isset($item['model']))
+        { 
+            echo ($item['unit']);
+        } 
+        echo  $space1;
 
-                    <?php if($this->config->item('subcategory_of_items') ){ ?>
-                    <th class="gift_receipt_element left_text_align" style="width:50%;">
-                        <?php 
-							echo ($this->config->item('inhabilitar_subcategory1')==1?"":($this->config->item("custom_subcategory1_name")."/")). $this->config->item("custom_subcategory2_name");?>
-                    </th>
-                    <?php }?>
-                    <?php if($show_number_item):?>
-                    <th class="gift_receipt_element text-center" style="width:30%;">
-                        <?php echo "UPC"/*lang('items_item_number')*/;?></th>
+        if($discount_exists) 
+        { 
+            echo $item['discount'].'%';
+            echo  $space2;
+        } 
+        if ($item['name'] == lang('sales_giftcard')) 
+        {								
+            $Total = $item['price'] * $item['quantity'] - $item['price'] * $item['quantity'] * $item['discount'] / 100;
+        }	
+        else
+        {
+            $Total=$price_with_tax*$item['quantity']-$price_with_tax*$item['quantity']*$item['discount']/100;
+        } 
+        echo $this->config->item('round_value' )== 1 ? to_currency(round($Total)) :to_currency($Total); 								 	
+        echo  $space2;
 
-                    <?php endif;?>
-                    <th class="gift_receipt_element left_text_align" style="width:20%;">
-                        <?php echo lang('common_price'); ?></th>
-                    <th class="text-center" style="width:15%;" colspan="<?php echo $discount_exists ? 1 : 2 ?>;">
-                        <?php echo lang('sales_quantity_short'); ?></th>
-                    <?php if($discount_exists) { ?>
-                    <th class="gift_receipt_element text-center" style="width:16%;">
-                        <?php echo lang('sales_discount_short'); ?></th>
-                    <?php } ?>
-                    <th class="gift_receipt_element right_align" style="width:5%;" colspan="3">
-                        <?php echo lang('sales_total'); ?></th>
-                </tr>
-                <?php
-					foreach(array_reverse($cart, true) as $line=>$item) {?>
+        if($item['description'] != "" and $this->config->item('hide_description') == 0)
+        { 
+            echo "\n" . $item['description']; 
+        }
+        if( isset($item['serialnumber']) and $item["serialnumber"]!=null )
+        {
+            echo "\n" . "Serial: ".$item['serialnumber'];
+        }
+        if($this->config->item('activar_casa_cambio') )
+        {
+            
+            echo "\n" . lang("sales_titular_cuenta");
+            echo "\n" .  $item["titular_cuenta"];
+            echo "\n" . lang("sales_docuemento");
+            echo "\n" . $item["numero_documento"];
+            echo "\n" . lang("sales_numero_cuenta");
+            echo "\n" . $item["numero_cuenta"];
+            echo "\nTotal : ";
+            
+            $total2 = 0;
+            $Total_por_item = $item['price'] * $item['quantity'];
+            $tasa = (($item["tasa"]!= 0|| $item["tasa"]!= null)? $item["tasa"]: 1 );
+            
+            if($opcion_sale == "venta")
+            {
+                $total2 += $Total_por_item / $tasa;
+            }
+            else
+            {
+                $total2 += $Total_por_item * $tasa;
+            }	
+            echo to_currency($total2,3,lang("sales_".$divisa)." ");
+        }
+        echo"\n";
+    } 
+    
 
-                <tr
-                    <?php echo $this->config->item('activar_casa_cambio')==1 ? 'style="border-top: 1px dashed #000000;"':"";?>>
-                    <td class="left_text_align" colspan="<?php echo $discount_exists ? 3 : 1 ?>;">
-                        <?php echo character_limiter(H($item['name']), $this->config->item('show_fullname_item') ? 200 : 25); ?>
+    for ($i = 0; $i < $lines ; $i++) { 
+        echo $type_line;
+    }      
+     
+    echo"\n";
+    echo lang('sales_sub_total')." ";
+	echo $this->config->item('round_value')== 1 ? to_currency(round($subtotal)) : to_currency($subtotal) ;
+    echo "\n";
+    echo $this->config->item('activar_casa_cambio') == 0 ? lang('saleS_total_invoice') : "Total ".$this->config->item('sale_prefix'); 
+    
+    $subtotal_ = 0;
 
-                        <?php if (isset($item['size'])){ ?>
-                        <span class="hidden-print"><?php echo $item['size']; ?></span>
-                        <?php } ?>
-                        <?php if (isset($item['colour'])){ ?>
-                        <span class="hidden-print"><?php echo $item['colour']; ?></span>
-                        <?php } ?>
-                        <?php if (isset($item['model'])){ ?>
-                        <span class="hidden-print"><?php echo $item['model']; ?></span>
-                        <?php } ?>
-                        <?php if (isset($item['marca'])){ ?>
-                        <span class="hidden-print"><?php echo $item['marca']; ?></span>
-                        <?php } ?>
-                    </td>
-                    <?php if($this->config->item('subcategory_of_items') ){ ?>
-                    <td class="gift_receipt_element left_text_align">
-                        <?php if (isset($item['item_id'])){ 
-										echo(
-											($this->config->item('inhabilitar_subcategory1')==1?"":($item['custom1_subcategory']?$item['custom1_subcategory']:"--")."/").
-											($item['custom2_subcategory']?$item['custom2_subcategory']:"--")
-										);
-									}else{
-										echo"--/--";
-									}?>
-                    </td>
+    if( $this->config->item('round_cash_on_sales') == 1 && $is_sale_cash_payment )
+    {
+		$subtotal_ = to_currency(round_to_nearest_05($total));
+	} 
+    else if($this->config->item('round_value') == 1  )
+    {
+		$subtotal_= to_currency(round($total));
+    }
+    else
+    {
+		$subtotal_ = to_currency($total);
+	}
+	echo " ".$subtotal_;
+    echo "\n";
 
-                    <?php }?>
-                    <?php if($show_number_item):?>
-                    <td class=" gift_receipt_element text-center" colspan="1">
-                        <?php 
-										if (isset($item['item_number'])){ 
-											echo $item['item_number']." ";
-										}else if (isset($item['item_kit_number'])){
-											echo $item['item_kit_number']." ";
-										}
-									 ?>
-                    </td>
+    if(isset($another_currency) and $another_currency == 1)
+    { 
+        echo "Total en ". get_currency_symbol($currency)." ";
+        echo  to_currency_no_money($total_other_currency,4); 
+        echo "\n";
+    }
+   
+    if($this->config->item('activar_casa_cambio') == true)
+    {
+        echo $this->config->item('activar_casa_cambio') == 0 ? lang('saleS_total_invoice'):"Total ".lang("sales_".$divisa)." ";
+        echo to_currency($total_divisa,3,lang("sales_".$divisa)." ");
+    }   
 
-                    <?php endif;?>
-
-
-                    <?php
-								if (isset($item['item_id']) && $item['name']!=lang('sales_giftcard')) 
-								{
-									$tax_info = $this->Item_taxes_finder->get_info($item['item_id']);
-									$i=0;
-									$prev_tax=array();
-									foreach($tax_info as $key=>$tax)
-									{
-										$prev_tax[$item['item_id']][$i]=$tax['percent']/100;
-										$i++;
-									}						
-
-									if (isset($prev_tax[$item['item_id']]) && $item['name']!=lang('sales_giftcard')) 
-									{									
-										if(!$overwrite_tax){
-											$sum_tax=array_sum($prev_tax[$item['item_id']]);
-											$value_tax=$item['price']*$sum_tax;										
-											$price_with_tax=$item['price']+$value_tax;
-																						
-										}else{
-											$value_tax=get_nuevo_iva($new_tax,$item['price']);
-											$price_with_tax =get_precio_con_nuevo_iva($new_tax,$item['price']);
-										}	
-									}	
-									elseif (!isset($prev_tax[$item['item_id']]) && $item['name']!=lang('sales_giftcard'))
-									{									
-										if(!$overwrite_tax){
-											
-											$sum_tax=0;
-											$value_tax=$item['price']*$sum_tax;										
-											$price_with_tax=$item['price']+$value_tax;
-											
-										}else{
-											$value_tax=get_nuevo_iva($new_tax,$item['price']);
-											$price_with_tax =get_precio_con_nuevo_iva($new_tax,$item['price']);
-										}	
-									}	
-								}
-
-								if (isset($item['item_kit_id']) && $item['name']!=lang('sales_giftcard')) 
-								{
-									$tax_kit_info = $this->Item_kit_taxes_finder->get_info($item['item_kit_id']);
-									$i=0;									
-									foreach($tax_kit_info as $key=>$tax)
-									{
-									   	$prev_tax[$item['item_kit_id']][$i]=$tax['percent']/100;
-										$i++;
-									}
-									if (isset($prev_tax[$item['item_kit_id']]) && $item['name']!=lang('sales_giftcard')) 
-									{										
-										if(!$overwrite_tax){
-											$sum_tax=array_sum($prev_tax[$item['item_id']]);
-											$value_tax=$item['price']*$sum_tax;										
-											$price_with_tax=$item['price']+$value_tax;
-											
-										}else{
-											$value_tax=get_nuevo_iva($new_tax,$item['price']);
-											$price_with_tax =get_precio_con_nuevo_iva($new_tax,$item['price']);
-										}
-									}
-									elseif (!isset($prev_tax[$item['item_kit_id']]) && $item['name']!=lang('sales_giftcard')) 
-									{										
-										if(!$overwrite_tax){
-											$sum_tax=0;
-											$value_tax=$item['price']*$sum_tax;										
-											$price_with_tax=$item['price']+$value_tax;
-											
-										}else{
-											$value_tax=get_nuevo_iva($new_tax,$item['price']);
-											$price_with_tax =get_precio_con_nuevo_iva($new_tax,$item['price']);
-										}
-									}
-								}																											
-							?>
-
-                    <td class="gift_receipt_element left_text_align">
-                        <?php
-									echo $this->config->item('round_value')==1 ? to_currency(round($item['price'])) :to_currency($item['price']);
-										
-								?>
-                    </td>
-
-
-                    <td class="text-center" colspan="<?php echo $discount_exists ? 1 : 2 ?>;">
-                        <?php echo to_quantity($item['quantity']); ?>
-                        <?php
-									if (isset($item['model'])){ 
-								 		echo ($item['unit']);} ?>
-                    </td>
-                    <?php if($discount_exists) { ?>
-                    <td class="gift_receipt_element text-center">
-                        <?php echo $item['discount'].'%'; ?>
-                    </td>
-                    <?php } ?>
-
-                    <?php
-							 if ($item['name']==lang('sales_giftcard')) { 
-								
-								$Total=$item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100;
-							}	
-						 	else
-						 	{
-							    $Total=$price_with_tax*$item['quantity']-$price_with_tax*$item['quantity']*$item['discount']/100;
-							} ?>
-                    <td class="gift_receipt_element right_text_align" colspan="2">
-                        <?php
-									echo $this->config->item('round_value')==1 ? to_currency(round($Total)) :to_currency($Total); 								 	
-								?>
-                    </td>
-                </tr>
-
-                <tr>
-                    <?php if($item['description']!="" and $this->config->item('hide_description')==0){ ?>
-                    <td colspan="3" align="left">
-                        <?= $item['description']; ?>
-                    </td>
-                    <?php } ?>
-                    <?php if( isset($item['serialnumber']) and $item["serialnumber"]!=null ):?>
-                    <td colspan="1">
-                        <?= "Serial: ".$item['serialnumber']  ?>
-                    </td>
-                    <?php endif; ?>
-                </tr>
-                <?php if($this->config->item('activar_casa_cambio') ):?>
-                <tr>
-                    <td colspan="5">
-                        <strong><?php echo lang("sales_titular_cuenta");?></strong><br>
-                        <?php echo $item["titular_cuenta"];?>
-                    </td>
-
-                </tr>
-                <tr>
-                    <td colspan="4">
-                        <strong><?php echo lang("sales_docuemento");?></strong><br>
-                        <?php echo $item["numero_documento"];?>
-                    </td>
-                </tr>
-                <tr>
-
-                    <td colspan="5">
-                        <strong><?php echo lang("sales_numero_cuenta");?></strong><br>
-                        <?php echo $item["numero_cuenta"];?>
-                    </td>
-
-                </tr>
-                <tr>
-
-                    <td colspan="5">
-                        <strong><?php echo "Total : ";?></strong>
-                        <?php
-										$total2=0;
-										$Total_por_item=$item['price']*$item['quantity'];
-										$tasa=(($item["tasa"]!=0|| $item["tasa"]!=null)?$item["tasa"]:1);
-										if($opcion_sale=="venta"){
-											$total2+=$Total_por_item/$tasa;
-										}else{
-											$total2+=$Total_por_item*$tasa;
-										}	
-										echo to_currency($total2,3,lang("sales_".$divisa)." ")
-									//echo to_currency_no_money($total2,4);
-									?>
-
-                    </td>
-
-                </tr>
-                <?php endif;?>
-                </tr>
-                <?php } ?>
-
-                <tr class="gift_receipt_element">
-                    <td class="right_text_align" colspan="<?php echo $discount_exists ? '6' : '4'; ?>"
-                        style="border-top:1px solid #000000;">
-                        <?php echo lang('sales_sub_total'); ?>:
-                    </td>
-                    <td class="right_text_align" colspan="2" style='border-top:1px solid #000000;'>
-                        <?php
-							echo $this->config->item('round_value')==1 ? to_currency(round($subtotal)) :to_currency($subtotal) ;
-						?>
-                    </td>
-                </tr>
-
-                <tr class="gift_receipt_element">
-                    <td class="right_text_align " colspan="<?php echo $discount_exists ? '6' : '4'; ?>">
-                        <strong><?php echo $this->config->item('activar_casa_cambio') ==0? lang('saleS_total_invoice'):"Total ".$this->config->item('sale_prefix'); ?>:</strong>
-                    </td>
-                    <td class="right_text_align" colspan="2">
-
-                        <?php
-							$subtotal_= 0;							
-							if( $this->config->item('round_cash_on_sales')==1 && $is_sale_cash_payment ){
-								$subtotal_=to_currency(round_to_nearest_05($total));
-							} 
-							else if($this->config->item('round_value')==1  ){
-								$subtotal_= to_currency(round($total));
-							}else{
-								$subtotal_= to_currency($total);
-							}
-							echo $subtotal_;
-							?>
-                    </td>
-                </tr>
-                <?php if(isset($another_currency) and $another_currency==1){ ?>
-                <tr class="gift_receipt_element">
-                    <td class="right_text_align " colspan="4">
-                        <strong>Total en <?php echo get_currency_symbol($currency) ?>:</strong>
-                    </td>
-                    <td class="right_text_align" colspan="2">
-                        <?php echo  to_currency_no_money($total_other_currency,4); ?>
-
-                    </td>
-                </tr>
-                <?php } ?>
-                <?php if($this->config->item('activar_casa_cambio')==true):?>
-                <tr class="gift_receipt_element">
-                    <td class="right_text_align " colspan="<?php echo $discount_exists ? '6' : '4'; ?>">
-                        <strong><?php echo $this->config->item('activar_casa_cambio') ==0? lang('saleS_total_invoice'):"Total ".lang("sales_".$divisa); ?>:</strong>
-                    </td>
-                    <td class="right_text_align" colspan="2">
-                        <?= to_currency($total_divisa,3,lang("sales_".$divisa)." ") ?>
-                    </td>
-                </tr>
-                <?php endif;?>
-
+    for ($i = 0; $i < $lines ; $i++) { 
+        echo $type_line;
+    }      
+     
+    echo"\n";
+    // fin tabla producto 
+    ?>
                 <?php foreach($payments as $payment_id=>$payment) { ?>
                 <tr class="gift_receipt_element">
                     <td class="right_text_align" colspan="<?php echo $discount_exists ? '6' : '4'; ?>">

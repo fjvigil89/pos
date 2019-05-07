@@ -1,0 +1,204 @@
+
+Almacén de Moda
+RUT. 89-9545885
+Cll 21 45 N 31 52
+555-555-7777
+http://facilpos.co
+Código de la empresa. 35375--
+FACTURA 65
+Serie: 434
+05/06/2019 08:25 pm
+Factura
+Vendedor : caja 2
+Empleado: Fredys  Cardenas
+
+----------------------------------------
+Artículo		Precio		Cant	Total		
+----------------------------------------
+Bogot??		$1.000,00		1	$1.000,00		
+----------------------------------------
+Subtotal$1.000,00
+TOTAL FACTURA $1.000,00
+
+
+----------------------------------------
+                                <tr class="gift_receipt_element">
+                    <td class="right_text_align" colspan="4">
+                        Canceló:
+                    </td>
+                    <td class="right_text_align" colspan="2">
+                        $1.000,00                    </td>
+                </tr>
+                                <tr>
+
+
+            </table>
+
+                        <table id="details_taxes">
+                <tr>
+                    <th class="text-center" style="width:100%" colspan="6">DETALLE DEL IMPUESTO</th>
+                </tr>
+                <tr style="border-bottom: 1px dashed #000000;border-top: 1px dashed #000000;">
+                    <th class="text-center" colspan="2">Tipo</th>
+                    <th class="right_text_align" style="width:20%">Base/Imp</th>
+                    <th class="right_text_align" style="width:25%">Impuesto</th>
+                    <th class="right_text_align" style="width:18%" colspan="2">
+                        Compra</th>
+                </tr>
+
+                                <tr style="border-top: 1px dashed #000000;">
+                    <th class="text-center" colspan="2">Total=</th>
+                                        <th class="right_text_align" style="width:15%">
+                        $0,00</th>
+                    <th class="right_text_align" style="width:25%">
+                        $0,00</th>
+                    <th class="right_text_align" style="width:25%" colspan="2">
+                        $0,00                    </th>
+                                    </tr>
+
+            </table>
+            
+                        <table id="details_payments">
+                <tr>
+                    <th class="text-center" style="width:100%" colspan="7">FORMA DE PAGO                    </th>
+                </tr>
+                <tr style="border-bottom: 1px dashed #000000;border-top: 1px dashed #000000;">
+                    <th class="left_text_align" style="width:30%" colspan="3">Fecha                    </th>
+                    <th class="right_text_align" style="width:45%" colspan="3">Tipo                    </th>
+                    <th class="right_text_align" style="width:2%" colspan="2">Valor                    </th>
+                </tr>
+                                <tr class="gift_receipt_element">
+                    <td class="left_text_align" colspan="3">
+                        Método de Pago                    </td>
+
+                    <div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Notice</p>
+<p>Message:  Undefined variable: is_integrated_credit_sale</p>
+<p>Filename: sales/txt_receipt_2.php</p>
+<p>Line Number: 528</p>
+
+</div>                    <td class="right_text_align" colspan="3">
+                        Efectivo                    </td>
+                    <td class="right_text_align" colspan="2">
+                        $1.000,00                    </td>
+                                    </tr>
+                
+
+
+                                <tr class="gift_receipt_element">
+                    <td class="right_text_align" colspan="6">
+                        Cambio:
+                    </td>
+                    <td class="right_text_align" colspan="2">
+                        $0,00                    </td>
+                </tr>
+                                            </table>
+
+            
+            <table id="details_options">
+                                                
+                
+                                <tr>
+                    <td class="right_text_align" colspan="3">
+                        Puntos acumulado:
+                    </td>
+                    <td class="right_text_align" colspan="2">
+                        2575                    </td>
+                </tr>
+                                                <tr>
+                    <td colspan="4" align="right">
+                                            </td>
+                </tr>
+
+
+            </table>
+
+                        <div id="sale_company_regimen">
+                SIMPLIFICADO                <br />
+
+            </div>
+            <div id="sale_resolution">
+                <strng>RESLUIN DE UTRIZIN NÚMER 400001 DEL 2013-07-26 NUMERIN DESDE 02-400001 HST 02-700000</strng><br />
+<br>                <br />
+
+            </div>
+                            <div id="sale_return_policy">
+                    Grntí except pr glpes  dñs eléctrics.                    <br />
+                                                            <div id="sale_rango">
+                        Rango autorizado: 4 a la 7777                        <br />
+                    </div>
+                    
+                </div>
+                
+                                <div id='barcode'>
+                    <img src='http://localhost/pos/index.php/barcode?barcode=$573&text= ID 573' />                </div>
+                                                <div id="signature">
+                                                                            </div>
+                <div id="domain_ing">
+
+                    <br />
+                </div>
+                
+            </div>
+
+            <div id="duplicate_receipt_holder">
+
+            </div>
+        </div>
+    </div>
+
+
+        <script type="text/javascript">
+    $(window).bind("load", function() {
+        print_receipt();
+        window.location = 'http://localhost/pos/index.php/sales';
+    });
+    </script>
+    
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $("#email_receipt").click(function() {
+            $.get($(this).attr('href'), function() {
+                toastr.success('Recibo enviado',
+                    "\u00c9xito");
+            });
+
+            return false;
+        });
+    });
+
+    function print_receipt() {
+                window.print();
+            }
+
+    function toggle_gift_receipt() {
+        var gift_receipt_text = "Recibo de regalos";
+        var regular_receipt_text = "Recibo Regular";
+
+        if ($("#gift_receipt_button").hasClass('regular_receipt')) {
+            $('#gift_receipt_button').addClass('gift_receipt');
+            $('#gift_receipt_button').removeClass('regular_receipt');
+            $("#gift_receipt_button").text(gift_receipt_text);
+            $('.gift_receipt_element').show();
+        } else {
+            $('#gift_receipt_button').removeClass('gift_receipt');
+            $('#gift_receipt_button').addClass('regular_receipt');
+            $("#gift_receipt_button").text(regular_receipt_text);
+            $('.gift_receipt_element').hide();
+        }
+    }
+    </script>
+
+    <div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Notice</p>
+<p>Message:  Undefined variable: is_integrated_credit_sale</p>
+<p>Filename: sales/txt_receipt_2.php</p>
+<p>Line Number: 837</p>
+
+</div>
