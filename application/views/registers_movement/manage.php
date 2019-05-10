@@ -90,9 +90,9 @@
 									$CI = &get_instance();
 									$permision = $CI->Employee->has_module_action_permission('registers_movement', 'add_update', $CI->Employee->get_logged_in_employee_info()->person_id);
 									if ($permision == true) {
-										echo anchor("registers_movement/operations/withdrawcash",
-											'<i title="traslado" class="fa fa-minus tip-bottom hidden-lg fa fa-2x"></i><span class="visible-lg">Trasladar dinero</span>',
-											array('class' => 'btn hidden-xs btn-primary', 'title' => 'Traslado'));
+										echo anchor("registers_movement/operations/move_money",
+											'<i title='.lang('move_money').' class="fa fa-minus tip-bottom hidden-lg fa fa-2x"></i><span class="visible-lg">'.lang('move_money').'</span>',
+											array('class' => 'btn hidden-xs btn-primary', 'title' => lang('move_money')));
 
 
 										echo anchor("registers_movement/operations/withdrawcash",
@@ -202,7 +202,13 @@
 													<td align='center'>INGRESO</td>
 
 													<?php } 
-													else {?>
+													else if ($movement->type_movement == 2) {?>
+														<td align='center'></td>
+														<td align='center'><?=$amount;?></td>
+
+													<td align='center'>TRASLADO</td>
+													<?php }
+													else  {?>
 														<td align='center'></td>
 														<td align='center'><?=$amount;?></td>
 

@@ -1026,12 +1026,12 @@
 						<?php if ($this->Employee->has_module_action_permission('sales', 'give_discount', $logged_in_employee_id) && $mode != 'store_account_payment'){ ?>
 							<div class="" id="global_discount">
 								<?php echo form_open("sales/discount_all", array('id' => 'discount_all_form', 'class'=>'form-horizontal', 'autocomplete'=> 'off'));
-									echo '<div class="form-group no_margin_bottom"><label class="col-md-7 col-sm-12 col-xs-12 control-label" id="discount_all_percent_label" for="discount_all_percent">';
+									echo '<div class="form-group no_margin_bottom" ><label style="text-align: left;" class="col-md-5 col-sm-12 col-xs-12 control-label" id="discount_all_percent_label" for="discount_all_percent">';
 									echo lang('sales_global_sale_discount').': ';
 									echo '</label>';
-									echo '<div class="col-md-5 col-sm-12 col-xs-12">';
+									echo '<div class="col-md-6 col-sm-12 col-xs-12">';
 									echo '<div class="input-group"><div class="input-icon right"><i class="icon-percent"></i>';
-									echo form_input(array('name'=>'discount_all_percent','value'=> '','size'=>'3', 'class' => 'form-control' , 'id' => 'discount_all_percent'));
+									echo form_input(array('name'=>'discount_all_percent','value'=> '','size'=>'3', 'type'=>'number' ,'class' => 'form-control' , 'id' => 'discount_all_percent'));
 									echo '</div><span class="input-group-btn">';
 									echo form_button(array('name'=>'submit_discount_form','type'=>'submit', 'class'=>'btn btn-success'), lang('common_submit'));
 									echo '</span></div></div></div>'
@@ -1328,7 +1328,7 @@
 						<div class="side-heading">
 							<?php echo lang('sales_total'); ?>:
 						</div>
-						<div id="total-amount" class="amount animation-count font-green-jungle" data-speed="1000" data-decimals="2">
+						<div id="total-amount" class="amount animation-count font-green-jungle" data-speed="1000" data-decimals="<?php echo $this->config->item('remove_decimals')==1?0:2; ?>">
 							<?php echo $this->config->item('round_value')==1 ? to_currency(round($total)) :to_currency($total) ; ?>
 							<br>
 						</div>
@@ -1339,7 +1339,7 @@
 						<div class="side-heading">
 							<?php echo lang('sales_amount_due'); ?>:
 						</div>
-						<div id="amount-due" class="amount animation-count <?php if($payments_cover_total) { echo 'font-green-jungle'; } else { echo 'text-danger'; }?>"  data-speed="1000" data-decimals="2">
+						<div id="amount-due" class="amount animation-count <?php if($payments_cover_total) { echo 'font-green-jungle'; } else { echo 'text-danger'; }?>"  data-speed="1000" data-decimals="<?php echo $this->config->item('remove_decimals')==1?0:2 ?>">
 							<?php echo $this->config->item('round_value')==1 ? to_currency(round($amount_due)) : to_currency($amount_due)?>
 						</div>
 					</div>

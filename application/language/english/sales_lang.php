@@ -1,5 +1,10 @@
 <?php
 // movimiento caja gastos 
+$lang['deliver_to']="Deliver to";
+$lang['option_register']="Option to register";
+$lang['move_money_category']="Transfer";
+$lang['move_money']="Transfer money";
+
 $lang['Nomina']='Payroll';
 $lang['Transporte']='Transportation';
 $lang['Comida']='Foot';
