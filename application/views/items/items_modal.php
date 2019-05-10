@@ -34,9 +34,10 @@
 										}
 										?></td>
 								</tr>
-								<?php if ($this->Employee->has_module_action_permission('items','see_cost_price', $this->Employee->get_logged_in_employee_info()->person_id) or $item_info->name=="")	{ ?>
+								<!-- Quitandole el Costo a los View de los productos de inventario -->
+								<?php /*if ($this->Employee->has_module_action_permission('items','see_cost_price', $this->Employee->get_logged_in_employee_info()->person_id) or $item_info->name=="")	{ ?>
 								<tr> <td><strong><?php echo lang('items_cost_price'); ?></strong></td> <td> <?php echo to_currency($item_info->cost_price, 10); ?></td></tr>
-								<?php } ?>
+								<?php } */?>
 								<tr> <td><strong><?php echo lang('items_unit_price'); ?></strong></td> <td> <?php echo to_currency($item_info->unit_price, 10); ?></td></tr>
 								<tr> <td><strong><?php echo lang('items_price_tax_include'); ?></strong></td> <td> <?php echo to_currency($item_price_with_tax, 10); ?></td></tr>
 								<tr> <td><strong><?php echo lang('items_promo_price'); ?></strong></td> <td> <?php echo to_currency($item_info->promo_price, 10); ?></td></tr>
