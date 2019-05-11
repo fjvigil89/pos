@@ -47,6 +47,9 @@ $lang['module_item_kits_desc']='Add, Update, Delete and Search Item Kits';
 $lang['module_locations']='Locations';
 $lang['module_locations_desc']='Add, Update, Delete, and Search locations';
 
+$lang['module_viewers']='Viewer';
+$lang['module_viewers_desc']='Update, Viewer';
+
 $lang['module_action_add_update'] = 'Add, Update';
 $lang['module_action_delete'] = 'Delete';
 $lang['module_action_search_customers'] = 'Search customers';

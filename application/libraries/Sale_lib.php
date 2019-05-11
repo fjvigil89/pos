@@ -981,7 +981,8 @@ class Sale_lib
 				"fecha_estado"=>$fecha_estado,
 				"tipo_cuenta"=>$tipo_cuenta,
 				"observaciones"=>$observaciones,
-				"celular"=>$celular
+				"celular"=>$celular,
+				"tax_included"=>$item_info->tax_included,
 				)
 			);
 		//Item already exists and is not serialized, add to quantity
@@ -1087,7 +1088,8 @@ class Sale_lib
 					'discount'=>$discount,
 					'price'=>$price!=null ? $price: $price_to_use,
 					"id_tier"=>$id_tier,
-					"has_subcategory"=>0
+					"has_subcategory"=>0,
+					"tax_included"=>$item_kit_info->tax_included,
 					)
 				);
 
@@ -2102,7 +2104,7 @@ class Sale_lib
 		$items_in_cart = 0;
 		foreach($this->get_cart() as $item)
 		{
-			$items_in_cart+=$item['quantity'];
+			$items_in_cart += $item['quantity'];
 		}
 		
 		return $items_in_cart;

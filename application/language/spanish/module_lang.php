@@ -14,6 +14,9 @@ $lang['module_suppliers_desc']='Agregar, Actualizar, Borrar y Buscar proveedores
 $lang['module_employees']='Empleados';
 $lang['module_employees_desc']='Agregar, Actualizar, Borrar y Buscar empleados';
 
+$lang['module_viewers']='Visor';
+$lang['module_viewers_desc']='Actualizar, Visor';
+
 $lang['module_sales']='Ventas';
 $lang['module_sales_desc']='Procesar ventas y reintegros';
 

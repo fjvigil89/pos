@@ -388,6 +388,88 @@ function get_supplier_data_row($supplier,$controller)
 	$table_data_row.='</tr>';
 	return $table_data_row;
 }
+function get_img_carousel_manage_table($data,$controller)
+{
+	$CI =& get_instance();
+	$table='<table  class="table table-bordered table-hover no_margin_bottom " cellspacing="0" width="100%" id="sortable_table">';	
+
+	$headers=array(		
+		'<input type="checkbox" id="select_all"
+		class="css-checkbox"><label for="select_all"
+		class="css-label cb0"></label>',
+		lang("items_image"),
+		lang("common_title"),
+		lang("items_description"),
+		""		
+
+	);
+		
+	$table.='<thead><tr>';
+
+	$count = 0;
+	foreach($headers as $header)
+	{
+		$count++;
+		
+		if ($count == 1)
+		{
+			$table.="<th class='leftmost'>$header</th>";
+		}
+		elseif ($count == count($headers))
+		{
+			$table.="<th class='rightmost'>$header</th>";
+		}
+		else
+		{
+			$table.="<th>$header</th>";		
+		}
+	}	
+	$table.='</tr></thead><tbody>';
+	$table.=get_img_carousel_table_data_rows($data,$controller);
+	$table.='</tbody></table>';
+	return $table;
+}
+function get_img_carousel_table_data_rows($data,$controller)
+{
+	$CI =& get_instance();
+	$table_data_rows='';
+	
+	foreach($data->result() as $item)
+	{
+		$table_data_rows.=get_img_carousel_data_row($item,$controller);
+	}
+	return $table_data_rows;
+}
+function get_img_carousel_data_row($image_data,$controller)
+{
+	$CI =& get_instance();	
+	$store = $CI->Employee->get_store();
+	$table_data_row = '<tr>';
+	$table_data_row .= '<td width="1%"><input type="checkbox" class="css-checkbox" id="img_'.$image_data->id.'"
+				value="'.$image_data->id.'"><label for="img_'.$image_data->id.'" class="css-label cb0"></label></td>';
+	
+	$table_data_row .= '<td width="15%" align="center">
+	<a href="'.base_url(). PATH_RECUSE.'/'.$store.'/img/'.$image_data->new_name.'" class="fancybox rollover">
+		<img id="avatar" src="'.base_url(). PATH_RECUSE.'/'.$store.'/img/'.$image_data->new_name.'" width="40"
+			height="35" class="img-polaroid">
+	</a>
+	</td>';
+
+	$table_data_row .= '<td width="25%" align="center">'.H($image_data->title).'</td>';
+	$table_data_row .='<td class="rightmost">'.H($image_data->description).'</td>';
+	
+
+	$table_data_row .= '<td width="10%" class="rightmost">'. anchor("$controller/view_img/$image_data->id",
+		'<i class="fa fa-edit   hidden-lg fa fa-2x tip-bottom" data-original-title="Editar"></i><span class="visible-lg">Editar</span>',
+		array('class'=>'btn btn-xs btn-block default',
+			'title'=>"Editar",
+	   'data-toggle'=>'modal',
+	   'data-target'=>'#myModal')).'
+	 
+	</td>';
+	$table_data_row.='</tr>';
+	return $table_data_row;
+}
 function get_warehouse_home_manage_table($data,$controller)
 {
 	$CI =& get_instance();
