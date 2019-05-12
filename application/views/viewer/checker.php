@@ -87,7 +87,10 @@
     }
 
 
-
+    #input{
+        margin-bottom:4px;
+        
+    }
     .total {
         background-color: #565555;
         margin-right: 5px;
@@ -104,10 +107,10 @@
     <br>
     <div style="display:none" id="container-1" class="container-fluid ">
         <div class="row">
-            <div id="input" class="col-xs-9 ">
-                <?= form_open_multipart('all/get_item',array('id'=>'item_form','class'=>'form-horizontal')); ?>
+            <div id="input" class="<?=false ? 'col-md-5 col-sm-5 col-xs-6' : 'col-md-offset-2 col-md-8 col-sm-offset-1 col-sm-10 col-xs-12' ?>  ">
+                <?= form_open_multipart('all/get_item',array('id'=>'item_form','class'=>'form-horizontal', "autocomplete"=>"off")); ?>
 
-                    <input  name="item" class="form-control">
+                    <input style=" font-weight: bold; text-align:center;" maxlength="30" placeholder="Escanee el código de barra" autocomplete="off" name="item" id="item" class="form-control">
                 </form>
             </div>
             <div id="info-item" style="display:none"
@@ -189,15 +192,18 @@
         url = "<?=site_url("all/get_item")?>",
         base_url = "<?=base_url()?>",
         base_url_img = "<?=site_url("app_files/view")?>",
+        code_input ="";
         height_window = $(window).height();
 
 
     change_window();
-
+    $("#item").focus(); 
     $("#container-1").show();
     $('#item_form').submit(function(e) {
 
         var data_send = $('#item_form').serializeArray();
+        code_input = $("#item").val();  
+        $("#item").val("");  
         get_item_data(url, data_send);
         e.preventDefault();
     });
@@ -248,8 +254,9 @@
     });
 
     function change_window() {
-        $(".contenedor").height(height_window - 30);
-        $(".img-c").height(height_window - 30);
+        $(".contenedor").height(height_window - 60);
+        $(".img-c").height(height_window - 60);
+        $("#img_item").height(height_window /2);
     }
     jQuery(document).ready(function() {
         Metronic.init(); // init metronic core components
@@ -263,7 +270,9 @@
             $.get('<?php echo site_url('home/keep_alive'); ?>');
         }, 300000);
 
-
+        setInterval(function() {
+            $("#item").focus();            
+        },3);
         $('.carousel').carousel({
             interval: <?= (int) $this->config->item("interval_img_carousel") ? $this->config->item("interval_img_carousel"):"3000"?>
         })
