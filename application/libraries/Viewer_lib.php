@@ -97,7 +97,7 @@ class Viewer_lib
                 "tax_included"=>$item_info->tax_included,
                 "price"=>$this->CI->sale_lib->get_price_for_item_kit($item_info->item_kit_id,false)
             );
-            return $this->CI->sale_lib->get_price_for_item_kit($item_info->item_kit_id,false);
+            
         }
         if(isset($tem_trans))
         {

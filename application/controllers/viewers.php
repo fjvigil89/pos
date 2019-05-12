@@ -15,43 +15,55 @@ class Viewers extends  Secure_area
 
     function config1()
     {
+       
         $this->load->view("viewer/config1_modal");       
     }
 
     function save_config1()
-    {      
-        $batch_save_data = array
-        (
-            "interval_img_carousel" => $this->input->post('interval_img_carousel'),
-            "msg_cange_cart_viewer" => $this->input->post('msg_cange_cart_viewer'),
-            "msg_thank_cart_viewer" => $this->input->post('msg_thank_cart_viewer')
-        );
+    {  
+        if ($this->Employee->has_module_action_permission("viewers", 'config_viewer', $this->Employee->get_logged_in_employee_info()->person_id)) {    
+           
+            $batch_save_data = array
+            (
+                "interval_img_carousel" => $this->input->post('interval_img_carousel'),
+                "msg_cange_cart_viewer" => $this->input->post('msg_cange_cart_viewer'),
+                "msg_thank_cart_viewer" => $this->input->post('msg_thank_cart_viewer')
+            );
 
-		if($this->Appconfig->batch_save($batch_save_data))        
-             echo json_encode(array("success"=>true));
+            if($this->Appconfig->batch_save($batch_save_data))        
+                echo json_encode(array("success"=>true));
+            else 
+            echo json_encode(array("success"=>false)); 
+        }
         else 
-         echo json_encode(array("success"=>false)); 
+            echo json_encode(array("success"=>false)); 
     }
 
     function save_viewer()
     {
-        $batch_save_data = array(
-            "show_carrousel" => $this->input->get('show_carrousel'),
-            "show_viewer" => $this->input->get('show_viewer')
-        );
+        if ($this->Employee->has_module_action_permission("viewers", 'config_viewer', $this->Employee->get_logged_in_employee_info()->person_id)) { 
+            $batch_save_data = array(
+                "show_carrousel" => $this->input->get('show_carrousel'),
+                "show_viewer" => $this->input->get('show_viewer')
+            );
 
-        $this->Appconfig->batch_save($batch_save_data) ;
+            $this->Appconfig->batch_save($batch_save_data) ;
+        }
         
     }
     function delete()
     {
-        $img_to_delete = $this->input->post('ids');
-        $path_long =  PATH_RECUSE."/".$this->Employee->get_store()."/img";
+        if ($this->Employee->has_module_action_permission("viewers", 'add_update_img',  $this->Employee-> person_id_logged_in())) {
+            $img_to_delete = $this->input->post('ids');
+            $path_long =  PATH_RECUSE."/".$this->Employee->get_store()."/img";
 
-        if ($this->Viewer_file->delete_list($img_to_delete, $path_long))        
-            echo json_encode(array('success' => true, 'message' => lang('items_successful_deleted') ."item"));
+            if ($this->Viewer_file->delete_list($img_to_delete, $path_long))        
+                echo json_encode(array('success' => true, 'message' => lang('items_successful_deleted') ."item"));
+            else 
+                echo json_encode(array('success' => false, 'message' => lang('items_cannot_be_deleted')));
+        }
         else 
-            echo json_encode(array('success' => false, 'message' => lang('items_cannot_be_deleted')));
+            echo json_encode(array('success' => false, 'message' => "No tiene permiso"));
     }
 
     function table_manage()
@@ -71,6 +83,7 @@ class Viewers extends  Secure_area
         $location_id = $this->Employee->get_logged_in_employee_current_location_id();
         $data_list = $this->Viewer_file->get_list_by_location($location_id);
         $data["manage_table"] =  get_img_carousel_manage_table($data_list,$data["controller_name"]);
+        $data["in_employee_info"] = $this->Employee->get_logged_in_employee_info();
 
         $this->load->view("viewer/index", $data);
     }
@@ -87,103 +100,111 @@ class Viewers extends  Secure_area
     }
 
     function save_img($id = -1)
-    {    
-       $response = array("success" => true, "message"=>"");
-       $is_guarded = true;
+    { 
+        if ($this->Employee->has_module_action_permission("viewers", 'add_update_img', $this->Employee-> person_id_logged_in())) {   
+            $response = array("success" => true, "message"=>"");
+            $is_guarded = true;
+                    
+            $path_long =  PATH_RECUSE."/".$this->Employee->get_store()."/img";
+            $image_data = $this->Viewer_file->get_info($id);
+            $name_file = $image_data->new_name;
+            $original_name = $image_data->original_name;  
+            $location_id = $this->Employee->get_logged_in_employee_current_location_id();
+            $title = $this->input->post('title') ? $this->input->post('title'): null;
+            $description = $this->input->post('description') ? $this->input->post('description'): null;
             
-       $path_long =  PATH_RECUSE."/".$this->Employee->get_store()."/img";
-       $image_data = $this->Viewer_file->get_info($id);
-       $name_file = $image_data->new_name;
-       $original_name = $image_data->original_name;  
-       $location_id = $this->Employee->get_logged_in_employee_current_location_id();
-       $title = $this->input->post('title') ? $this->input->post('title'): null;
-       $description = $this->input->post('description') ? $this->input->post('description'): null;
-       
-       if($id <= 0 and empty($_FILES["image"]))
-       {
-            echo json_encode( array("success" => false, "message"=>"Imagen es requerida"));
-            return;
-       }
-
-       if(!file_exists( $path_long))
-       {        
-            if(!mkdir($path_long, 0777, true))
-            {               
-                $response = array("success" => false, "message"=>"Error al crear directorio");
-            }
-       }
-       
-       if(!empty($_FILES["image"]) && $_FILES["image"]["error"] == UPLOAD_ERR_OK)
-		{
-            $allowed_extensions = array('png', 'jpg', 'jpeg', 'gif');
-            $extension = strtolower(pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION));            
-            
-            if($id != -1)           
-                unlink($path_long."/". $image_data->new_name);
-
-            if (in_array($extension, $allowed_extensions))
+            if($id <= 0 and empty($_FILES["image"]))
             {
-                $original_name = $_FILES["image"]["name"];
-                $rand = rand(1, 2000);
-                $name_file = time()."-". $rand.".".$extension;
-                
-                while(file_exists( $path_long."/". $name_file))
-                {
-                    $name_file = time()."-". $rand.".".$extension;
-                    $rand = rand(1, 1000);
-                }                          
+                    echo json_encode( array("success" => false, "message"=>"Imagen es requerida"));
+                    return;
+            }
 
-                $config['allowed_types'] = 'gif|jpg|jpeg|png';
-                $config['upload_path'] = $path_long;
-                $config['file_name'] = $name_file;
-                $config['max_size'] = "5120";
-                $config['max_width'] = "2000";
-                $config['max_height'] = "2000";
-        
-                $this->load->library('upload', $config);
+            if(!file_exists( $path_long))
+            {        
+                    if(!mkdir($path_long, 0777, true))
+                    {               
+                        $response = array("success" => false, "message"=>"Error al crear directorio");
+                    }
+            }
+            
+            if(!empty($_FILES["image"]) && $_FILES["image"]["error"] == UPLOAD_ERR_OK)
+                {
+                    $allowed_extensions = array('png', 'jpg', 'jpeg', 'gif');
+                    $extension = strtolower(pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION));            
+                    
+                    if($id != -1)           
+                        unlink($path_long."/". $image_data->new_name);
+
+                    if (in_array($extension, $allowed_extensions))
+                    {
+                        $original_name = $_FILES["image"]["name"];
+                        $rand = rand(1, 2000);
+                        $name_file = time()."-". $rand.".".$extension;
+                        
+                        while(file_exists( $path_long."/". $name_file))
+                        {
+                            $name_file = time()."-". $rand.".".$extension;
+                            $rand = rand(1, 1000);
+                        }                          
+
+                        $config['allowed_types'] = 'gif|jpg|jpeg|png';
+                        $config['upload_path'] = $path_long;
+                        $config['file_name'] = $name_file;
+                        $config['max_size'] = "5120";
+                        $config['max_width'] = "2000";
+                        $config['max_height'] = "2000";
                 
-                if (!$this->upload->do_upload("image")) 
+                        $this->load->library('upload', $config);
+                        
+                        if (!$this->upload->do_upload("image")) 
+                        {
+                            $response = array(
+                                "success" => false,
+                                "message" =>"Error al subir la imagen");
+                            $is_guarded = false;
+                        }                                
+                    }
+                    else
+                    {
+                        $response = array(
+                            "success" => false,
+                            "message" =>"El tipo de imagen no es válido.");
+                        $is_guarded = false;
+                    }           
+                }
+                elseif($id <= 0) 
                 {
                     $response = array(
                         "success" => false,
-                        "message" =>"Error al subir la imagen");
+                        "message" =>"No se pudo cargar la imagen.");
                     $is_guarded = false;
-                }                                
+                }
+                if($is_guarded)
+                {
+                    $data = array(                
+                        "type" => 1, // 1 para carousel del visor
+                        "location_id" => $location_id,
+                        "title" => $title,
+                        "description" => $description,
+                        "original_name" => $original_name ,
+                        "new_name" => $name_file,
+                    );
+                    
+                if(!$this->Viewer_file->save($id,$data)){
+                        unlink($path_long."/". $name_file);
+                        $response = array(
+                            "success" => false,
+                            "message" =>"No se pudo guardar los datos.");
+                }
+                }
+
+            
             }
             else
-            {
                 $response = array(
                     "success" => false,
-                    "message" =>"El tipo de imagen no es válido.");
-                $is_guarded = false;
-            }           
-        }
-        elseif($id <= 0) 
-        {
-            $response = array(
-                "success" => false,
-                "message" =>"No se pudo cargar la imagen.");
-            $is_guarded = false;
-        }
-        if($is_guarded)
-        {
-            $data = array(                
-                "type" => 1, // 1 para carousel del visor
-                "location_id" => $location_id,
-                "title" => $title,
-                "description" => $description,
-                "original_name" => $original_name ,
-                "new_name" => $name_file,
-            );
-            
-           if(!$this->Viewer_file->save($id,$data)){
-                unlink($path_long."/". $name_file);
-                $response = array(
-                    "success" => false,
-                    "message" =>"No se pudo guardar los datos.");
-           }
-        }
+                    "message" =>"No tiene permisos");
 
-       echo json_encode($response);
+        echo json_encode($response);
     }
 }

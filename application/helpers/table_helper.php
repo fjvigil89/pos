@@ -392,7 +392,7 @@ function get_img_carousel_manage_table($data,$controller)
 {
 	$CI =& get_instance();
 	$table='<table  class="table table-bordered table-hover no_margin_bottom " cellspacing="0" width="100%" id="sortable_table">';	
-
+	
 	$headers=array(		
 		'<input type="checkbox" id="select_all"
 		class="css-checkbox"><label for="select_all"
@@ -443,8 +443,17 @@ function get_img_carousel_table_data_rows($data,$controller)
 function get_img_carousel_data_row($image_data,$controller)
 {
 	$CI =& get_instance();	
+	static $has_igm_permission;
+	
+	if($has_igm_permission === null)
+		$has_igm_permission = $CI->Employee->has_module_action_permission('viewers','add_update_img', $CI->Employee->get_logged_in_employee_info()->person_id);
+	
+	
 	$store = $CI->Employee->get_store();
 	$table_data_row = '<tr>';
+	
+	
+
 	$table_data_row .= '<td width="1%"><input type="checkbox" class="css-checkbox" id="img_'.$image_data->id.'"
 				value="'.$image_data->id.'"><label for="img_'.$image_data->id.'" class="css-label cb0"></label></td>';
 	
@@ -454,19 +463,22 @@ function get_img_carousel_data_row($image_data,$controller)
 			height="35" class="img-polaroid">
 	</a>
 	</td>';
-
 	$table_data_row .= '<td width="25%" align="center">'.H($image_data->title).'</td>';
 	$table_data_row .='<td class="rightmost">'.H($image_data->description).'</td>';
 	
-
-	$table_data_row .= '<td width="10%" class="rightmost">'. anchor("$controller/view_img/$image_data->id",
-		'<i class="fa fa-edit   hidden-lg fa fa-2x tip-bottom" data-original-title="'.lang("common_edit").'"></i><span class="visible-lg">'.lang("common_edit").'</span>',
-		array('class'=>'btn btn-xs btn-block default',
-			'title'=>"Editar",
-	   'data-toggle'=>'modal',
-	   'data-target'=>'#myModal')).'
-	 
-	</td>';
+	
+	$table_data_row .= '<td width="10%" class="rightmost">';
+	if ($has_igm_permission)
+	{
+			$table_data_row .= anchor("$controller/view_img/$image_data->id",
+			'<i class="fa fa-edit   hidden-lg fa fa-2x tip-bottom" data-original-title="'.lang("common_edit").'"></i><span class="visible-lg">'.lang("common_edit").'</span>',
+			array('class'=>'btn btn-xs btn-block default',
+				'title'=>"Editar",
+		'data-toggle'=>'modal',
+		'data-target'=>'#myModal'));
+		
+	}
+	$table_data_row.='</td>';
 	$table_data_row.='</tr>';
 	return $table_data_row;
 }

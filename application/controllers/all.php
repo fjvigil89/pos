@@ -12,16 +12,33 @@ class All extends  Secure_area
     }
     function get_item()
     {
+
         $item_code = $this->input->post("item");
-        $item_id = $this->Item->get_item_id($item_code);
-        $item_info = $this->Item->get_info($item_id);
+        $item_kit_id =  $this->Item_kit->get_item_kit_id($item_code);
+        $no_found = false;
+        if($item_kit_id !== false)
+        {
+            $item_info = $this->Item_kit->get_info($item_kit_id);
+            $no_found = !is_numeric($item_info->item_kit_id) ? true : false ;
+            $kit = true;
+        }
+        else
+        {  
+            $item_id = $this->Item->get_item_id($item_code);
+            $item_info = $this->Item->get_info($item_id);            
+            $no_found = !is_numeric($item_info->item_id) ? true : false;
+            $kit = false;
+        }    
+
+      
         $this->load->library('sale_lib');
 
         $data = array(
-            "name"=>  character_limiter(H($item_info->name), 18),
+            "name"=>  character_limiter(H($item_info->name), 22),
             "price"=> to_currency($this->viewer_lib->get_price_item_expe($item_info)),
-            "image_id" =>$item_info->image_id,
-            "item_id" =>$item_info->item_id
+            "image_id" =>isset($item_info->image_id)?$item_info->image_id:null,
+            "no_found" => $no_found,
+            "kit" => $kit
         );
         echo json_encode( $data);
     }

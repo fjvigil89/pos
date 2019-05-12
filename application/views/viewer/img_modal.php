@@ -113,10 +113,11 @@
                     data = JSON.parse(data);
                     if (data.success == true) 
                     {
-                        $.get( "<?=site_url("viewers/table_manage")?>", function( data ) {
-                            $( "#manage_table" ).html(data);                           
+                        /*$.get( "<?=site_url("viewers/table_manage")?>", function( data ) {
+                            $( "#manage_table" ).html(data); */ 
+                            location.reload();                         
                             $("#close").click();
-                        });                      
+                        //});                      
                     } 
                     else 
                     {

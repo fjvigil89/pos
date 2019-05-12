@@ -3,7 +3,7 @@
 <div class="page-title">
     <h1>
         <i class="icon fa fa-eye"></i>
-        <?php echo lang('module_viewers'); ?>
+        <?= lang('module_viewers'); ?>
         <!--<a class="icon fa fa-youtube-play help_button" id='maxitems' data-toggle="modal" data-target="#stack888"></a>-->
         <?php 
 			$extra="";
@@ -64,29 +64,34 @@
                             <div class="col-md-12 ">
                                 <div class="pull-right margin-bottom-10">
                                     <div class="btn-group">
-                                        <?php   echo anchor("$controller_name/view_img/-1",
-											'<i class="fa fa-camera  hidden-lg fa fa-2x tip-bottom" data-original-title="'.lang("common_new_img").'"></i><span class="visible-lg">'.lang("common_new_img").'</span>',
-											array('class'=>'btn btn-medium green-seagreen',
-												'title'=>lang("common_new_img"),
-												'data-toggle'=>'modal',
-												'data-target'=>'#myModal'));
-										
-                                        echo anchor("$controller_name/config1",
-											'<i class="fa fa-cog   hidden-lg fa fa-2x tip-bottom" data-original-title="'.lang("common_settings").'"></i><span class="visible-lg">'.lang("common_settings").'</span>',
-											array('class'=>'btn  btn-medium green-seagreen',
-												'title'=>lang("common_settings"),
-												'data-toggle'=>'modal',
-												'data-target'=>'#myModal'));
-										
+                                        <?php   
+                                        if ($this->Employee->has_module_action_permission($controller_name, 'add_update_img', $in_employee_info->person_id)) {
+                                            echo anchor("$controller_name/view_img/-1",
+                                                '<i class="fa fa-camera  hidden-lg fa fa-2x tip-bottom" data-original-title="'.lang("common_new_img").'"></i><span class="visible-lg">'.lang("common_new_img").'</span>',
+                                                array('class'=>'btn btn-medium green-seagreen',
+                                                    'title'=>lang("common_new_img"),
+                                                    'data-toggle'=>'modal',
+                                                    'data-target'=>'#myModal'));
+                                        }
+                                        if ($this->Employee->has_module_action_permission($controller_name, 'config_viewer', $in_employee_info->person_id)) {
+                                            echo anchor("$controller_name/config1",
+                                                '<i class="fa fa-cog   hidden-lg fa fa-2x tip-bottom" data-original-title="'.lang("common_settings").'"></i><span class="visible-lg">'.lang("common_settings").'</span>',
+                                                array('class'=>'btn  btn-medium green-seagreen',
+                                                    'title'=>lang("common_settings"),
+                                                    'data-toggle'=>'modal',
+                                                    'data-target'=>'#myModal'));
+                                        }
                                         echo anchor("all/viewer/$employee_id",
 											'<i class="fa fa-eye   hidden-lg fa fa-eye tip-bottom" data-original-title="'.lang('module_viewers').'"></i><span class="visible-lg">'.lang('module_viewers').'</span>',
 											array('class'=>'btn btn-medium red-haze',
 												'title'=>lang('module_viewers'),
                                                 'target'=>'_blank'));
-                                        echo anchor("$controller_name/delete",
-                                                '<i class="fa fa-trash-o hidden-lg fa fa-2x tip-bottom" data-original-title="'.lang('common_delete').'"></i><span class="visible-lg">'.lang("common_delete").'</span>',
-                                                array('id'=>'delete', 
-                                                    'class'=>'btn btn-danger disabled','title'=>lang("common_delete"))); 
+                                        if ($this->Employee->has_module_action_permission($controller_name, 'add_update_img', $in_employee_info->person_id)) {
+                                            echo anchor("$controller_name/delete",
+                                                    '<i class="fa fa-trash-o hidden-lg fa fa-2x tip-bottom" data-original-title="'.lang('common_delete').'"></i><span class="visible-lg">'.lang("common_delete").'</span>',
+                                                    array('id'=>'delete', 
+                                                        'class'=>'btn btn-danger disabled','title'=>lang("common_delete"))); 
+                                        }
                                 ?>
                                     </div>
                                 </div>
@@ -94,6 +99,7 @@
                         </div>
                         <!-- aqui body-->
                         <div class="row">
+                        <?php if ($this->Employee->has_module_action_permission($controller_name, 'config_viewer', $in_employee_info->person_id)) {?>	
                             <div class="col-md-12">
                                 <?php echo form_open_multipart('viewers/save_viewer',array('id'=>'viewers_form','class'=>'form-horizontal ')); ?>
                                 <div class="icheck-inline">
@@ -110,6 +116,7 @@
                                 </div>
                                 </form>
                             </div>
+                        <?php }?>	
                             <div class="col-md-12">
                                 <div class="table-responsive" id="manage_table">
                                     <?=$manage_table; ?>
@@ -121,7 +128,7 @@
                     <!--fin visir and carousel-->
 
                     <div class="tab-pane fade" id="tab_2">
-                    <a href="<?=site_url("all/checker")?>" class="btn btn-xs btn-block default" title="Abrir" >Abrir Verificador</a>
+                    <a href="<?=site_url("all/checker")?>" class="btn btn-lg btn-block default" title="Abrir" >Abrir Verificador</a>
                     </div>
                 </div>
             </div>
