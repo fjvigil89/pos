@@ -62,9 +62,9 @@ class Viewer_lib
             $cart_new[$key] = array(               
                 "line" => $item["line"],
                 "name" => character_limiter(H($item['name']), 18),                
-                "unit" => isset($item["item_id"]) ? $item["unit"]: "",
+                //"unit" => isset($item["item_id"]) ? $item["unit"]: "",
                 "serialnumber" => isset($item["item_id"]) ? $item["serialnumber"] : $item["item_kit_number"] ,               
-                "discount" => to_currency_no_money($item["discount"],1),
+                "discount" => 0,//to_currency_no_money($item["discount"],1),
                 "price" => ($this->get_price_item($item)),
                 "quantity" => $item["quantity"],
                 "total_tax" => ($this->get_price_tax($item,$data["overwrite_tax"],$new_tax ))
@@ -72,6 +72,40 @@ class Viewer_lib
         }
 
         return $cart_new;
+    }
+    function get_price_item_expe($item_info)
+    {
+        if(isset($item_info->item_id) and is_numeric($item_info->item_id))
+        {
+           $tem_trans = array(
+                "item_id" =>$item_info->item_id,
+                "name"=>$item_info->name,
+                "quantity"=>1,
+                "discount"=>0,
+                "tax_included"=>$item_info->tax_included,
+                "price"=>$this->CI->sale_lib->get_price_for_item($item_info->item_id,false)
+            );
+            
+        }
+        elseif(isset($item_info->item_kit_id) and is_numeric($item_info->item_kit_id))
+        {
+            $tem_trans = array(
+                "item_kit_id"=>$item_info->item_kit_id,
+                "name"=>$item_info->name,
+                "quantity"=>1,
+                "discount"=>0,
+                "tax_included"=>$item_info->tax_included,
+                "price"=>$this->CI->sale_lib->get_price_for_item_kit($item_info->item_kit_id,false)
+            );
+            return $this->CI->sale_lib->get_price_for_item_kit($item_info->item_kit_id,false);
+        }
+        if(isset($tem_trans))
+        {
+            //$tem_trans["price"]= $this->get_price_item($tem_trans);
+            return $this->get_price_tax($tem_trans, $overwrite_tax = false,$new_tax = array());
+        }
+        
+        return 0;
     }
     function get_price_item($item)
     {
@@ -94,6 +128,7 @@ class Viewer_lib
 
         return $item["price"];
     }
+
     function get_price_tax($item, $overwrite_tax = false,$new_tax = array())
     {
        

@@ -3,7 +3,7 @@
         <div class="portlet box green">
             <div class="portlet-title">
                 <div class="caption">
-                    <i class="fa fa-info-circle"></i>
+                    <i class="fa fa-camera"></i>
                     <span class="caption-subject bold">
                         <?=lang("items_image")?>
                     </span>
@@ -81,7 +81,9 @@
 <script>
         $("#image").fileinput({
         initialPreview: [
-            "<img src='<?= $image_data->id ? base_url(). PATH_RECUSE."/".$store."/img/$image_data->new_name": base_url().'img/no-photo.jpg'; ?>' class='file-preview-image' alt='Avatar' title='Avatar'>"
+            <?php if($image_data->id > 0):?>
+                "<img src='<?= $image_data->id ? base_url(). PATH_RECUSE."/".$store."/img/$image_data->new_name": base_url().'img/no-photo.jpg'; ?>' class='file-preview-image' alt='Avatar' title='Avatar'>"
+            <?php endif;?>
         ],
         overwriteInitial: true,
         initialCaption: "<?=$image_data->original_name? $image_data->original_name :""?>"

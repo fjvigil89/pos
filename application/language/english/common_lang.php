@@ -104,4 +104,5 @@ $lang ["config_custom1_subcategory"] = "Custom field 1 subcategory";
 $lang ["config_custom1_subcategory_help"] = "Indicates one of the names that identifies the subcategory, it will be shown in the sales module if the subcategory is active in the store.It will be mandatory to indicate for each product before completing a sale if the product has subcategory ";
 $lang ["items_quantity_stock_subcategory_help"] = "Enter the corresponding amount of this subcategory in the store NOTE: The sum of all subcategory quantities can not exceed or be less than the amount available in the store";
 $lang["common_title"] ="Title";
+$lang["common_new_img"]="New image";
 ?>

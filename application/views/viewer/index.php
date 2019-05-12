@@ -41,31 +41,42 @@
                     <span class="icon">
                         <i class="fa fa-th"></i>
                     </span>
-                    <?php echo lang('common_list_of')." Pedidos"; ?>
-
+                    <?= lang('module_viewers')." ".lang("viewer_and")." " .lang("common_settings")?>
                 </div>
                 <div class="tools">
                     <span data-original-title="" class="label label-primary tip-left tooltips"></span>
                 </div>
             </div>
             <div class="portlet-body">
-                <div class="row">
-                    <div class="col-md-12 ">
-                        <div class="pull-right margin-bottom-10">
-                            <div class="btn-group">
-                                <?php   echo anchor("$controller_name/view_img/-1",
-											'<i class="fa fa-download   hidden-lg fa fa-2x tip-bottom" data-original-title="Nueva imagen"></i><span class="visible-lg">Nueva imagen</span>',
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#tab_1" data-toggle="tab" aria-expanded="true"> <?php echo lang('module_viewers')." ".lang("viewer_and")." " .lang("viewer_carousel")?></a>
+                    </li>
+                    <li class="">
+                        <a href="#tab_2" data-toggle="tab" aria-expanded="false"><?=lang("viewer_price_consultant")?></a>
+                    </li>
+
+                </ul>
+                <!--visir and carousel-->
+                <div class="tab-content">
+                    <div class="tab-pane fade active in" id="tab_1">
+                        <div class="row">
+                            <div class="col-md-12 ">
+                                <div class="pull-right margin-bottom-10">
+                                    <div class="btn-group">
+                                        <?php   echo anchor("$controller_name/view_img/-1",
+											'<i class="fa fa-camera  hidden-lg fa fa-2x tip-bottom" data-original-title="'.lang("common_new_img").'"></i><span class="visible-lg">'.lang("common_new_img").'</span>',
 											array('class'=>'btn btn-medium green-seagreen',
-												'title'=>"Nueva imagen",
+												'title'=>lang("common_new_img"),
 												'data-toggle'=>'modal',
 												'data-target'=>'#myModal'));
 										
-                                        /*echo anchor("$controller_name/options_excel_export/",
-											'<i class="fa fa-download   hidden-lg fa fa-2x tip-bottom" data-original-title="Configuración"></i><span class="visible-lg">Configuración</span>',
+                                        echo anchor("$controller_name/config1",
+											'<i class="fa fa-cog   hidden-lg fa fa-2x tip-bottom" data-original-title="'.lang("common_settings").'"></i><span class="visible-lg">'.lang("common_settings").'</span>',
 											array('class'=>'btn  btn-medium green-seagreen',
-												'title'=>"Configuración",
+												'title'=>lang("common_settings"),
 												'data-toggle'=>'modal',
-												'data-target'=>'#myModal'));*/
+												'data-target'=>'#myModal'));
 										
                                         echo anchor("all/viewer/$employee_id",
 											'<i class="fa fa-eye   hidden-lg fa fa-eye tip-bottom" data-original-title="'.lang('module_viewers').'"></i><span class="visible-lg">'.lang('module_viewers').'</span>',
@@ -77,30 +88,40 @@
                                                 array('id'=>'delete', 
                                                     'class'=>'btn btn-danger disabled','title'=>lang("common_delete"))); 
                                 ?>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <!-- aqui body-->
-                <div class="row">
-                    <div class="col-md-12">
-                        <?php echo form_open_multipart('viewers/save_viewer',array('id'=>'viewers_form','class'=>'form-horizontal ')); ?>
-                            <div class="icheck-inline">
-                                <label>
-                                    <input value="1" name="show_carrousel" <?=$this->config->item("show_carrousel") ? "checked":""?> onclick="checkbox(this)" type="checkbox" > Activar Carousel</label>
-                                <label>
-                                <label>
-                                    <input value="1" name="show_viewer" <?=$this->config->item("show_viewer") ? "checked":""?> onclick="checkbox(this)" type="checkbox" > Activar Visor</label>
-                                <label>
-                                
+                        <!-- aqui body-->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <?php echo form_open_multipart('viewers/save_viewer',array('id'=>'viewers_form','class'=>'form-horizontal ')); ?>
+                                <div class="icheck-inline">
+                                    <label>
+                                        <input value="1" name="show_carrousel"
+                                            <?=$this->config->item("show_carrousel") ? "checked":""?>
+                                            onclick="checkbox(this)" type="checkbox"> <?=lang("viewer_activate")." ".lang("viewer_carousel")?></label>
+                                    <label>
+                                        <label>
+                                            <input value="1" name="show_viewer"
+                                                <?=$this->config->item("show_viewer") ? "checked":""?>
+                                                onclick="checkbox(this)" type="checkbox"> <?=lang("viewer_activate")." ".lang("module_viewers")?></label>
+                                        <label>
+                                </div>
+                                </form>
                             </div>
-                        </form>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="table-responsive" id="manage_table">
-                            <?=$manage_table; ?>
+                            <div class="col-md-12">
+                                <div class="table-responsive" id="manage_table">
+                                    <?=$manage_table; ?>
 
+                                </div>
+                            </div>
                         </div>
+                    </div>
+                    <!--fin visir and carousel-->
+
+                    <div class="tab-pane fade" id="tab_2">
+                    <a href="<?=site_url("all/checker")?>" class="btn btn-xs btn-block default" title="Abrir" >Abrir Verificador</a>
                     </div>
                 </div>
             </div>
@@ -109,17 +130,16 @@
     </div>
 </div>
 <script>
-    enable_select_all();
-    enable_checkboxes();
-    enable_delete("Esta seguro que quiere eliminar la imagen?");
+enable_select_all();
+enable_checkboxes();
+enable_delete("Esta seguro que quiere eliminar la imagen?");
 
-    function checkbox(element)
-    {
-       data = $("#viewers_form").serializeArray();
-       url =  $("#viewers_form").attr('action');
+function checkbox(element) {
+    data = $("#viewers_form").serializeArray();
+    url = $("#viewers_form").attr('action');
 
-       $.get( url ,data, function( data ) { });
-    }
+    $.get(url, data, function(data) {});
+}
 </script>
 
 <?php $this->load->view("partial/footer"); ?>

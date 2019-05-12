@@ -1,16 +1,38 @@
-<?php  if (!defined('BASEPATH')) 
-exit('No direct script access allowed');
+<?php  
+if (!defined('BASEPATH')) 
+    exit('No direct script access allowed');
+
 require_once ("secure_area.php");
+
 class Viewers extends  Secure_area
 {
     function __construct() {
         parent::__construct('viewers');
-
         $this->load->library('viewer_lib');
         $this->load->model('Viewer');
-        $this->load->model('Viewer_file');       
-
+        $this->load->model('Viewer_file');
     }
+
+    function config1()
+    {
+        $this->load->view("viewer/config1_modal");       
+    }
+
+    function save_config1()
+    {      
+        $batch_save_data = array
+        (
+            "interval_img_carousel" => $this->input->post('interval_img_carousel'),
+            "msg_cange_cart_viewer" => $this->input->post('msg_cange_cart_viewer'),
+            "msg_thank_cart_viewer" => $this->input->post('msg_thank_cart_viewer')
+        );
+
+		if($this->Appconfig->batch_save($batch_save_data))        
+             echo json_encode(array("success"=>true));
+        else 
+         echo json_encode(array("success"=>false)); 
+    }
+
     function save_viewer()
     {
         $batch_save_data = array(
@@ -18,22 +40,20 @@ class Viewers extends  Secure_area
             "show_viewer" => $this->input->get('show_viewer')
         );
 
-		$this->Appconfig->batch_save($batch_save_data) ;
+        $this->Appconfig->batch_save($batch_save_data) ;
+        
     }
     function delete()
     {
         $img_to_delete = $this->input->post('ids');
         $path_long =  PATH_RECUSE."/".$this->Employee->get_store()."/img";
 
-        if ($this->Viewer_file->delete_list($img_to_delete, $path_long)) 
-        {
+        if ($this->Viewer_file->delete_list($img_to_delete, $path_long))        
             echo json_encode(array('success' => true, 'message' => lang('items_successful_deleted') ."item"));
-        }
         else 
-        {
             echo json_encode(array('success' => false, 'message' => lang('items_cannot_be_deleted')));
-        }
     }
+
     function table_manage()
     {
         $location_id = $this->Employee->get_logged_in_employee_current_location_id();
@@ -42,6 +62,7 @@ class Viewers extends  Secure_area
         
         echo $manage_table;
     }
+
     function index()
     {
         $data = array();
@@ -53,6 +74,7 @@ class Viewers extends  Secure_area
 
         $this->load->view("viewer/index", $data);
     }
+
     function view_img($id = -1)
     {
         $data = array(
@@ -63,9 +85,9 @@ class Viewers extends  Secure_area
 
         $this->load->view("viewer/img_modal", $data);
     }
+
     function save_img($id = -1)
-    {
-    
+    {    
        $response = array("success" => true, "message"=>"");
        $is_guarded = true;
             
@@ -82,9 +104,9 @@ class Viewers extends  Secure_area
             echo json_encode( array("success" => false, "message"=>"Imagen es requerida"));
             return;
        }
+
        if(!file_exists( $path_long))
-       {
-        
+       {        
             if(!mkdir($path_long, 0777, true))
             {               
                 $response = array("success" => false, "message"=>"Error al crear directorio");
@@ -126,8 +148,7 @@ class Viewers extends  Secure_area
                         "success" => false,
                         "message" =>"Error al subir la imagen");
                     $is_guarded = false;
-                }
-                                
+                }                                
             }
             else
             {
@@ -161,12 +182,8 @@ class Viewers extends  Secure_area
                     "success" => false,
                     "message" =>"No se pudo guardar los datos.");
            }
-        }  
-       
+        }
+
        echo json_encode($response);
     }
-
-   
-    
-
 }

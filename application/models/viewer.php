@@ -16,10 +16,13 @@ class Viewer extends CI_Model
         return $result;
     }
     
-    function update_viewer($employee_id, $data_cart)
+    function update_viewer($employee_id, $data_cart,$type = false)
     {
         if(!$this->exists_viewer_by_employe($employee_id))
             $this->crate_viewer();
+
+        if($type !== false)
+            $this->db->where('is_cart',$type);
 
         $result = $this->db->update('viewer_cart',$data_cart);
         if($data_cart["is_cart"]== 3)

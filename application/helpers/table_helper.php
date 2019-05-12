@@ -460,7 +460,7 @@ function get_img_carousel_data_row($image_data,$controller)
 	
 
 	$table_data_row .= '<td width="10%" class="rightmost">'. anchor("$controller/view_img/$image_data->id",
-		'<i class="fa fa-edit   hidden-lg fa fa-2x tip-bottom" data-original-title="Editar"></i><span class="visible-lg">Editar</span>',
+		'<i class="fa fa-edit   hidden-lg fa fa-2x tip-bottom" data-original-title="'.lang("common_edit").'"></i><span class="visible-lg">'.lang("common_edit").'</span>',
 		array('class'=>'btn btn-xs btn-block default',
 			'title'=>"Editar",
 	   'data-toggle'=>'modal',

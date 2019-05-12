@@ -596,7 +596,11 @@ class Sales extends Secure_area
 	{
 		$this->sale_lib->delete_payment($payment_id);		
 		$this->_reload(array(),true,true);
-		$this->update_viewer(2);
+		$payment = $this->sale_lib->get_payments();
+		if(is_array($payment) and count($payment) > 0 )		
+			$this->update_viewer(2);
+		else
+			$this->update_viewer(1);
 	}
 	function add_transaction(){
 		$item_id = $this->input->post('item');

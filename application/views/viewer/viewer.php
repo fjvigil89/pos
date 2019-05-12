@@ -43,7 +43,8 @@
     .panel-t {
         margin-top: 4px;
     }
-    .b1{
+
+    .b1 {
         font-weight: bold;
         font-size: 15px;
     }
@@ -65,22 +66,25 @@
         border-radius: 10px 10px 10px 10px;
         overflow: hidden;
     }
-    .opacity-1{
-        background-color:#7D7C7C;
-        opacity:0.85;        
+
+    .opacity-1 {
+        background-color: #565555;
+        opacity: 0.85;
         margin-top: 4px;
         padding-top: 4px;
         border-radius: 5px 5px 5px 5px;
     }
-    .title-1{
-        background-color:#3E3E3E;
+
+    .title-1 {
+        background-color: #3E3E3E;
         border-radius: 5px 5px 5px 5px;
-        padding:5px;
+        padding: 5px;
         font-weight: bold;
         color: #FCFAFA
     }
-    .title-2{
-       
+
+    .title-2 {
+
         font-weight: bold;
     }
 
@@ -90,19 +94,21 @@
         padding: 5px;
         font-size: 25px;
         border-radius: 10px 10px 10px 10px;
-        color:#FDFBFB;
+        color: #FDFBFB;
     }
-    hr{
+
+    hr {
         border: 0;
         border-bottom: 1px dashed #ccc;
         background: #999;
-        margin-top:0px;
-        margin-bottom:5px;
+        margin-top: 0px;
+        margin-bottom: 5px;
     }
+
     .f-total {
         overflow: hidden;
-        position: fixed; 
-        bottom: 30px; 
+        position: fixed;
+        bottom: 30px;
         margin-left: 5px;
     }
     </style>
@@ -116,7 +122,7 @@
             <div id="payment" style="display:none"
                 class=" <?=$show_carrousel ? 'col-md-5 col-sm-5 col-xs-6' : 'col-md-offset-2 col-md-8 col-sm-offset-1 col-sm-10 col-xs-12' ?>   ">
                 <div class="contenedor"><br><br><br><br>
-                    <h1 class="text-center"><strong>Su cambio es</strong></h1><br>
+                    <h1 class="text-center"><strong><?=$this->config->item("msg_cange_cart_viewer") ? $this->config->item("msg_cange_cart_viewer"):"Su cambio es" ?></strong></h1><br>
                     <h1 class="text-center"> <span id="change" style=" background-color: #010101;"
                             class="label label-default">0.0</span></h1>
 
@@ -125,7 +131,7 @@
             <div id="finish" style="display:none"
                 class=" <?=$show_carrousel ? 'col-md-5 col-sm-5 col-xs-6' : 'col-md-offset-2 col-md-8 col-sm-offset-1 col-sm-10 col-xs-12' ?>   ">
                 <div class="contenedor"><br>
-                    <h1 class="text-center"><strong>Gracias por su compra</strong></h1><br>
+                    <h1 class="text-center"><strong><?=$this->config->item("msg_thank_cart_viewer") ? $this->config->item("msg_thank_cart_viewer"):"Gracias por su compra" ?></strong></h1><br>
                     <center>
                         <img style="width:200px; height:200px" src="<?=base_url()."/img/smile.png"?>">
                     </center>
@@ -156,8 +162,8 @@
                         </tbody>
                     </table>
                     <!--Table-->
-                        <hr>
-                    <div id="total" class="f-total total pull-right" >0.0</div>
+                    <hr>
+                    <div id="total" class="f-total total pull-right">0.0</div>
                 </div>
             </div>
             <?php }
@@ -168,7 +174,7 @@
                     <div class="row" style="padding:2px;">
                         <div class="col-md-12">
                             <h1 class="title-1 text-center">Tasa de hoy
-                                <span ><?=$rate?></span>
+                                <span><?=$rate?></span>
                             </h1>
                         </div>
                         <div class="col-md-12">
@@ -177,7 +183,7 @@
                         <div class="col-xs-6">
                             <div class="form-group">
                                 <label for="email" class="title-2">Cantidad en pesos:</label>
-                                <input  style=" font-weight: bold; font-size:19px; text-align: center"
+                                <input style=" font-weight: bold; font-size:19px; text-align: center"
                                     placeholder="Ingrese cantidad $" type="number" class="form-control" readonly
                                     id="catidad">
                             </div>
@@ -232,16 +238,16 @@
                         <!-- Wrapper for slides -->
                         <div class="carousel-inner">
                             <?php foreach ($data_list as $key => $data): ?>
-                                <div class="item <?=$key==0 ? 'active':''?>">
-                                    <img class="img-c" style="width:1200px; height:450px"
-                                        src="<?=$path_long."/".$data->new_name?>">
-                                        <?php if(!empty($data->title) || !empty($data->description)): ?>
-                                            <div class="opacity-1 carousel-caption">                                            
-                                                    <h4><strong><?=H($data->title)?></strong></h4>
-                                                    <p><?=H($data->description)?></p>
-                                                </div>
-                                            <?php endif;?>
+                            <div class="item <?=$key==0 ? 'active':''?>">
+                                <img class="img-c" style="width:1200px; height:450px"
+                                    src="<?=$path_long."/".$data->new_name?>">
+                                <?php if(!empty($data->title) || !empty($data->description)): ?>
+                                <div class="opacity-1 carousel-caption">
+                                    <h4><strong><?=H($data->title)?></strong></h4>
+                                    <p><?=H($data->description)?></p>
                                 </div>
+                                <?php endif;?>
+                            </div>
                             <?php endforeach;?>
                         </div>
 
@@ -278,6 +284,8 @@
         setInterval('download()', 3000);
     }
 
+
+
     function download() {
 
         $.ajax({
@@ -303,6 +311,7 @@
                             $("#finish").hide();
                             $("#payment").hide();
                         } else if (data["is_cart"] == 2) {
+
                             $("#cart").hide();
                             $("#finish").hide();
                             $("#payment").show();
@@ -312,7 +321,7 @@
                             $("#cart").hide();
                             $("#finish").show();
                             $("#payment").hide();
-                        }                       
+                        }
 
                     }
                 } catch (e) {
@@ -342,10 +351,9 @@
             $("#body-table").html(html);
         }
         var quantity = 0;
-        
-        for (var i in key) 
-        {                   
-            
+
+        for (var i in key) {
+
             let item = items[key[i]];
 
             html = '<tr>';
@@ -356,40 +364,38 @@
             html += '</tr>';
 
             $("#body-table").append(html);
-        }        
+        }
         flota();
         $("#total").html("<strong>Total: " + data["total"] + "</strong>");
     }
     <?php } 
         else {?>
-        var rate = "<?=$rate?>";
-        $("input[type='button'").click(function(e) 
-        {
-            var cant = $("#catidad").val();
-            var value = $(this).val();
+    var rate = "<?=$rate?>";
+    $("input[type='button'").click(function(e) {
+        var cant = $("#catidad").val();
+        var value = $(this).val();
 
-            if ($.isNumeric(value))
-                $("#catidad").val(cant + value)
+        if ($.isNumeric(value))
+            $("#catidad").val(cant + value)
 
-            else if (value == "C")
-                $("#catidad").val("")
+        else if (value == "C")
+            $("#catidad").val("")
 
-            else if (cant.length > 0) {
-                $("#catidad").val(cant.substr(0, cant.length - 1));
-            }
-
-            if ($("#catidad").val() > 0) {
-                var total = convert($("#catidad").val(), rate);
-                total = accounting.formatNumber(total, 2, "");
-                $("#convertido").val(total);
-            }
-
-        });
-
-        function convert(cant, tasa = 1)
-        { 
-            return cant / tasa;
+        else if (cant.length > 0) {
+            $("#catidad").val(cant.substr(0, cant.length - 1));
         }
+
+        if ($("#catidad").val() > 0) {
+            var total = convert($("#catidad").val(), rate);
+            total = accounting.formatNumber(total, 2, "");
+            $("#convertido").val(total);
+        }
+
+    });
+
+    function convert(cant, tasa = 1) {
+        return cant / tasa;
+    }
 
     <?php }?>
 
@@ -406,7 +412,7 @@
         }, 300000);
 
         $('.carousel').carousel({
-            interval: 3000
+            interval: <?= (int) $this->config->item("interval_img_carousel") ? $this->config->item("interval_img_carousel"):"3000"?>
         })
 
     });
@@ -416,14 +422,14 @@
         change_window();
         flota();
     });
-    function flota()
-    {
+
+    function flota() {
         // se valida si la tabla a pasado los limites, y se flota el total
-        if($("#table-cart").height() +  $("#total").height() + 60 > (height_window))
-                    $( "#total" ).addClass( "f-total" );
+        if ($("#table-cart").height() + $("#total").height() + 60 > (height_window))
+            $("#total").addClass("f-total");
         else
-            $( "#total" ).removeClass( "f-total" );   
-             
+            $("#total").removeClass("f-total");
+
     }
 
     function change_window() {
@@ -431,7 +437,7 @@
         $(".img-c").height(height_window - 30);
     }
     </script>
-
+<script> var csfrData={};csfrData['<?php echo $this->security->get_csrf_token_name();?>']= '<?php echo $this->security->get_csrf_hash();?>';$(function(){$.ajaxSetup({data: csfrData});});</script>	
 </body>
 
 </html>

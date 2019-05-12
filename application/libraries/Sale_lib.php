@@ -2179,7 +2179,7 @@ class Sale_lib
 		foreach($this->get_cart() as $item)
 		{
 			$price_to_use = $this->_get_price_for_item_in_cart($item, $sale_id);
-			$total+=($price_to_use*$item['quantity']-$price_to_use*$item['quantity']*$item['discount']/100);
+			$total += ($price_to_use * $item['quantity'] - $price_to_use * $item['quantity']*$item['discount']/100);
 		}
 
 		foreach($this->get_taxes($sale_id) as $tax)
@@ -2196,7 +2196,7 @@ class Sale_lib
 		foreach($this->get_cart() as $item)
 		{
 			$price_to_use = $this->_get_price_for_item_in_cart($item, $sale_id);
-			$total+=($price_to_use*$item['quantity']-$price_to_use*$item['quantity']*$item['discount']/100);
+			$total += ($price_to_use * $item['quantity'] - $price_to_use * $item['quantity']*$item['discount']/100);
 		}
 
 		foreach($this->get_taxes_quotes($sale_id) as $tax)
@@ -2210,38 +2210,37 @@ class Sale_lib
 	function get_total_divisa()
 	{
 		$total = 0;
-		$opcion_sale=$this->get_opcion_sale();		
+		$opcion_sale = $this->get_opcion_sale();		
 		foreach($this->get_cart() as $item)
 		{		
-			$Total_por_item=$item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100;
-			$tasa=(($item["tasa"]!=0|| $item["tasa"]!=null)?$item["tasa"]:1);
-			if($opcion_sale=="venta"){
-				$total+=$Total_por_item/$tasa;
-			}else{
-				$total+=$Total_por_item*$tasa;
-			}			
-					
+			$Total_por_item = $item['price'] * $item['quantity'] - $item['price'] * $item['quantity'] * $item['discount'] / 100;
+			$tasa=( ($item["tasa"] != 0 || $item["tasa"] != null) ? $item["tasa"] : 1);
 			
+			if($opcion_sale=="venta")
+				$total += $Total_por_item / $tasa;
+			else
+				$total += $Total_por_item * $tasa;			
 		}
 
-		
 		$total = $this->CI->config->item('round_cash_on_sales') && $this->is_sale_cash_payment() ?  round_to_nearest_05($total) : $total;
 		return to_currency_no_money($total,4);
 	}
-	function get_utilidad(){
-		$total=0;
-		$total_divisa=$this->get_total_divisa();
-		$total_divisa_transaccion=$this->get_total_price_transaction_divisa();
-		$total = $total_divisa_transaccion-$total_divisa;
-		$opcion_sale=$this->get_opcion_sale();
-		$tasa=$this->get_rate_price();
+	function get_utilidad()
+	{
+		$total = 0;
+		$total_divisa = $this->get_total_divisa();
+		$total_divisa_transaccion = $this->get_total_price_transaction_divisa();
+		$total = $total_divisa_transaccion - $total_divisa;
+		$opcion_sale = $this->get_opcion_sale();
+		$tasa = $this->get_rate_price();
 		
-		if($opcion_sale=="venta"){
-			$total=$total*$tasa;
-		}else{
-			$total=$total/$tasa;
-		}		
+		if($opcion_sale == "venta")
+			$total=$total * $tasa;
+		else
+			$total = $total / $tasa;
+			
 		$total = $this->CI->config->item('round_cash_on_sales') && $this->is_sale_cash_payment() ?  round_to_nearest_05($total) : $total;
+		
 		return to_currency_no_money($total,4);
 
 	}
@@ -2254,11 +2253,11 @@ class Sale_lib
 		{		
 			$Total_por_item=$item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100;
 			//$tasa=(($item["tasa"]!=0|| $item["tasa"]!=null)?$item["tasa"]:1);
-			if($opcion_sale=="venta"){
+			if($opcion_sale=="venta")
 				$total+=$Total_por_item/$tasa;
-			}else{
+			else
 				$total+=$Total_por_item*$tasa;
-			}					
+								
 			
 		}	
 		$total = $this->CI->config->item('round_cash_on_sales') && $this->is_sale_cash_payment() ?  round_to_nearest_05($total) : $total;
