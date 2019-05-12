@@ -14,7 +14,7 @@ class Register_movement extends CI_Model
 
 	function save($cash, $description=" ", $register_id = false, 
 	$valid_greater_than_zero_cash = true, $categorias_gastos="",
-	$id_employee=false,$retorna_id=false,$date=null,$register_log_id=null)
+	$id_employee=false,$retorna_id=false,$date=null,$register_log_id=null,$operation=null)
 	{ 
         
 		if($id_employee==false){
@@ -37,8 +37,11 @@ class Register_movement extends CI_Model
 
 				$new_cash_amount = 0;
 			}
-
-			if ($cash < 0) { //Es una salida sino una entrada
+			if($operation=="move_money"){
+				$cash = abs($cash);
+				$type_movement = 2;
+			}
+			else if ($cash < 0 ) { //Es una salida sino una entrada
 
 				$cash = abs($cash);
 				$type_movement = 0;
@@ -168,7 +171,7 @@ class Register_movement extends CI_Model
 
 	}
 
-	function save_operation($register_id, $cash, $description,$categorias_gastos )
+	function save_operation($register_id, $cash, $description,$categorias_gastos,$operation )
 	{
 		$register = $this->Sale->get_current_register_log($register_id);
 		$error = "";
@@ -193,7 +196,7 @@ class Register_movement extends CI_Model
 
 			}else {
 				$id_employee= $this->CI->Employee->get_logged_in_employee_info()->person_id;
-				$success = $this->save($cash, $description, $register_id,true,$categorias_gastos,$id_employee,true); //Registrar movimiento
+				$success = $this->save($cash, $description, $register_id,true,$categorias_gastos,$id_employee,true,null,null,$operation); //Registrar movimiento
 				
 			}
 		}

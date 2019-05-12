@@ -4,11 +4,16 @@ class Home extends Secure_area
 {
 	function __construct()
 	{
-		parent::__construct();	
+        parent::__construct();
+        $this->load->model('Statistics');
+        $this->load->model('reports/Summary_profit_and_loss');	
 	}
 	
 	function index($start_date=false,$end_date=false)
 	{
+        
+        $profit_and_loss = $this->Summary_profit_and_loss;
+        
 		//check the current day
 		if ($start_date == false) 
 		{
@@ -44,15 +49,16 @@ class Home extends Secure_area
 			$end_date;
 		}
  
-        $this->load->model('Statistics');
-        $this->load->model('reports/Summary_profit_and_loss');
-        $profit_and_loss = $this->Summary_profit_and_loss;
+       // ventas totales por tienda
+       $data['sales_total_by_store'] = $this->Statistics->get_all_sales_by_store();
+       $data['sales_total_by_store_money'] = $this->Statistics->get_sales_store_money();
 
         //Variable que me trae un array con los 10 productos mas vendidos
     	$data['best_sellers_items'] = $this->Statistics->get_best_seller_items();
     	//Obtener solo el producto y cantidad mas vendido
     	$data['best_seller_item_name'] = $data['best_sellers_items'][0]['name'];
     	$data['best_seller_item_quantity'] = $data['best_sellers_items'][0]['quantity_purchased'];
+        
 
     	//Variable que me trae los dias en los que se hicieron ventas
     	if($start_date!=false && $end_date!=false)
@@ -90,7 +96,16 @@ class Home extends Secure_area
 		$data['total_giftcards']=$this->Giftcard->count_all();
         $data['total_sales']=$this->Sale->count_all();
 		$this->load->view("home",$data);
-	}	
+    }
+    function get_sales_store($start_date,$end_date){
+        $data = $this->Statistics->get_all_sales_by_store($start_date,$end_date);
+        echo json_encode ($data);  
+    }
+    //ventas totales por tienda en dinero
+    function get_sales_store_money($start_date,$end_date){
+        $data = $this->Statistics->get_sales_store_money($start_date,$end_date);
+        echo json_encode ($data);  
+    }	
 
 	function logout()
 	{

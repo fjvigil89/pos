@@ -64,7 +64,6 @@ class Appconfig extends CI_Model
 		lang('Suministros')=>lang('Suministros'),
 		lang('Mantenimiento')=>lang('Mantenimiento'), 
 		lang('Limpieza')=>lang('Limpieza'),
-		lang('otros')=>lang('otros'),
 		lang('Combustible')=>lang('Combustible'));
 		return $expense_category;
 	}

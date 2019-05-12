@@ -2099,7 +2099,7 @@ class Reports extends Secure_area {
             $tabular_data[] = $data_row;
         }
         
-
+        $as=$model->getSummaryData();
         $data = array(
             "title" => "Movimiento de caja resumen",
             "subtitle" => date(get_date_format(), strtotime($start_date)) . '-' . date(get_date_format(), strtotime($end_date)),
@@ -4146,7 +4146,7 @@ class Reports extends Secure_area {
         $this->Receiving->create_receivings_items_temp_table(array('start_date' => $start_date, 'end_date' => $end_date,'listar_contado'=>true));
 		$this->Receiving->create_store_payments_temp_table(array('start_date' => $start_date, 'end_date' => $end_date));
         $this->Register_movement->create_movement_items_temp_table(array('start_date' => $start_date, 'end_date' => $end_date));
-
+        
         $data = array(
             "title" => lang('reports_detailed_profit_and_loss'),
             "subtitle" => date(get_date_format(), strtotime($start_date)) . '-' . date(get_date_format(), strtotime($end_date)),

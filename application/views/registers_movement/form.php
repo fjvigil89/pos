@@ -54,7 +54,7 @@
 							</div>	
 						<?php } ?>
 						<div class="form-group">	
-								<?php echo form_label('<a class="help_config_options tooltips"  data-placement="left"  title="Categoría a registrar">'.lang('config_categoria').'</a>'.':', 'categoria',array('class'=>'col-md-3 control-label ')); ?>
+								<?php echo form_label('<a class="help_config_options tooltips"  data-placement="left"  title="'.lang('option_register').'">'.$info_categoria.'</a>'.':', 'categoria',array('class'=>'col-md-3 control-label ')); ?>
 								<div class="col-md-2">
 									<div class="btn-group">									
 										<?php echo form_dropdown('categorias_gastos', $categorias_gastos,'','id="categorias_gastos" class="bs-select form-control"'); ?>

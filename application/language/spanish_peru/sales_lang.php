@@ -1,5 +1,10 @@
 <?php
 // movimiento caja gastos 
+$lang['deliver_to']="Entregar a";
+$lang['option_register']="Opcion a registrar";
+$lang['move_money_category']="Traslado";
+$lang['move_money']="Trasladar dinero";
+
 $lang['Nomina']='Nomina';
 $lang['Transporte']='Transporte';
 $lang['Comida']='Comida';
@@ -172,7 +177,7 @@ $lang['sales_auth_code'] = 'Código de autorización';
 $lang['sales_store_account_payment'] = 'Abono a línea de crédito';
 $lang['sales_payment_amount'] = 'Cantidad de pago';
 $lang['sales_recent_sales'] = 'Ventas recientes de';
-$lang['sales_global_sale_discount'] = 'Descuento en toda la Venta';
+$lang['sales_global_sale_discount'] = 'Desc. toda Venta';
 $lang['sales_back_to_categories'] = 'Volver a categorías';
 $lang['sales_show_grid'] = 'Mostrar Artículos';
 $lang['sales_hide_grid'] = 'Ocultar Artículos';

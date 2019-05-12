@@ -32,6 +32,7 @@ class summary_movement extends Report
 		$this->db->select_sum("IF(`type_movement`=1,0,`mount`) ","egreso");
 		$this->db->select(" categorias_gastos,date(register_date) as register_date ");
 		$this->db->from('movement_items_temp');
+		$this->db->where('type_movement !=', 2);
 		//$this->where_categoria();
 		$this->db->group_by('date(register_date),categorias_gastos');
 		$this->db->order_by('date(register_date) DESC ,categorias_gastos DESC');

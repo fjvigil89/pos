@@ -257,6 +257,103 @@
 		</div>
 
 		<?php } ?>
+		<!-- ventas totales por tienda -->
+		<?php if ($this->Employee->has_module_action_permission('reports', 'allow_graphics_by_store', $this->Employee->get_logged_in_employee_info()->person_id)) { ?>
+		<div class="col-md-12">
+			<div class="portlet light">
+				<div class="portlet-title">
+					<div class="caption">
+						<i class="icon-bar-chart font-green-haze"></i>
+						<span class="caption-subject bold uppercase font-green-haze"><?php echo lang('reports_sales_by_store_total'); ?></span>
+					</div>
+					<div class="actions">
+						<a href="javascript:;" class="btn btn-circle btn-default btn-icon-only fullscreen" data-original-title="" title=""><span class="md-click-circle md-click-animate" style="height: 28px; width: 28px; top: -0.986113px; left: -8.24658px;"></span></a>
+					</div>
+
+				</div>
+				<div class="portlet-body">
+					<div class="form-body">
+						<div class="form-group">
+							<label class="control-label col-md-6"><?php echo lang('weekly_sales_message_filter')?></label>
+							<div class="col-md-6">
+					            <div class="form-group">
+
+									<div class="input-group date" data-date="10/11/2012" data-date-format="mm/dd/yyyy" id='weekly_sales_store_total'>
+                                        <input type="text" class="form-control" name="from" id="sales_store_date_start" >
+                                        <span class="input-group-addon"> to </span>
+										<input type="text" class="form-control" name="to" id="sales_store_date_end">
+										<span class="input-group-addon" onclick="cargar_data_sales_by_store()"> Buscar </span>
+										
+									</div>
+								</div>
+								
+						    </div>
+						</div>
+					</div>
+					<p class="text-center">
+						<?php
+							if ($sales_total_by_store == null)
+							{
+								echo "No hay productos vendidos";
+							}
+						?>
+					</p>
+					<div id="chartdiv_sales_by_store_total" class="chart_custom">
+						<?php $this->load->view("charts/sales_by_store"); ?>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-12">
+			<div class="portlet light">
+				<div class="portlet-title">
+					<div class="caption">
+						<i class="icon-bar-chart font-green-haze"></i>
+						<span class="caption-subject bold uppercase font-green-haze"><?php echo lang('reports_sales_by_store_total'); ?></span>
+					</div>
+					<div class="actions">
+						<a href="javascript:;" class="btn btn-circle btn-default btn-icon-only fullscreen" data-original-title="" title=""><span class="md-click-circle md-click-animate" style="height: 28px; width: 28px; top: -0.986113px; left: -8.24658px;"></span></a>
+					</div>
+
+				</div>
+				<div class="portlet-body">
+					<div class="form-body">
+						<div class="form-group">
+							<label class="control-label col-md-6"><?php echo lang('weekly_sales_message_filter')?></label>
+							<div class="col-md-6">
+					            <div class="form-group">
+
+									<div class="input-group date" data-date="10/11/2012" data-date-format="mm/dd/yyyy" id='weekly_sales_store_total_money'>
+                                        <input type="text" class="form-control" name="sales_store_date_start_money" id="sales_store_date_start_money" >
+                                        <span class="input-group-addon"> to </span>
+										<input type="text" class="form-control" name="sales_store_date_end_money" id="sales_store_date_end_money">
+										<span class="input-group-addon" onclick="cargar_data_sales_by_store_money()"> Buscar </span>
+										
+									</div>
+								</div>
+								
+						    </div>
+						</div>
+					</div>
+					<p class="text-center">
+						<?php
+							if ($sales_total_by_store_money == null)
+							{
+								echo "No hay productos vendidos";
+							}
+						?>
+					</p>
+					<div id="chartdiv_sales_by_store_total_money" class="chart_custom">
+						<?php $this->load->view("charts/sales_by_store_money"); ?>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<?php } ?>
+
+
 	    <?php if ($this->Employee->has_module_action_permission('reports', 'view_graph_amount_module', $this->Employee->get_logged_in_employee_info()->person_id)) { ?>
 		<div class="col-md-6">
 			<div class="portlet light">
@@ -434,6 +531,141 @@
 		        });
 			});
 		});
+	</script>
+	<script>
+	$(document).ready(function()
+	{
+
+	// Ventas totales por tienda
+		$('#sales_store_date_start').datetimepicker({
+			locale: 'es',
+			format: 'YYYY-MM-DD',
+			defaultDate: new Date(),
+		});
+		$('#sales_store_date_end').datetimepicker({
+			locale: 'es',
+			format: 'YYYY-MM-DD',
+			defaultDate: new Date(),
+		});
+		
+			//Obtener el valor del input
+			value_input = $("#sales_store_date_start").val();
+			date_end = moment(value_input).startOf('day').add(1, 'day').format('YYYY-MM-DD');  
+
+			$("#sales_store_date_end").val(date_end); //Agrega un dia a la fecha fin
+				
+			//fecha inicio
+			$('#sales_store_date_start').on('dp.change', function (e) {
+			    if($("#sales_store_date_start").val()>=$("#sales_store_date_end").val()){
+					value_input = $("#sales_store_date_start").val();
+					date_end = moment(value_input).startOf('day').add(1, 'day').format('YYYY-MM-DD'); 
+					$("#sales_store_date_end").val(date_end); //Agrega un dia a la fecha fin
+				}
+
+			});
+			//fecha fin
+			$('#sales_store_date_end').on('dp.change', function (e) {
+			    if($("#sales_store_date_end").val()<=$("#sales_store_date_start").val()){
+					value_input = $("#sales_store_date_end").val();
+					date_end = moment(value_input).startOf('day').add(-1, 'day').format('YYYY-MM-DD'); 
+					$("#sales_store_date_start").val(date_end); //Agrega un dia a la fecha fin
+				}
+
+			});
+
+			
+		});
+		function cargar_data_sales_by_store(){
+				date_start = $("#sales_store_date_start").val();
+				value_input = $("#sales_store_date_end").val();
+				date_end = moment(value_input).startOf('day').add(1, 'day').format('YYYY-MM-DD');
+
+			    strdateto= date_start.replace("/", "-");
+     			strdatefrom= date_end.replace("/", "-");
+				tstrdateto= strdateto.replace("/", "-");
+				tstrdatefrom= strdatefrom.replace("/", "-");
+			    $.ajax({
+		            method: "POST",
+		            url: '<?=site_url();?>/home/get_sales_store/'+ tstrdateto+'/'+tstrdatefrom,
+		            data: { start_date:date_start, end_date:date_end },
+		            success: function(data)
+		            {
+						if(JSON.parse(data)!=null){
+							set_sales_by_store_total(JSON.parse(data));
+						}else{
+							set_sales_by_store_total([]);
+						}
+						
+					},
+		        });
+			}
+		$(document).ready(function()
+		{
+			// Ventas totales por tienda mostrar dinero
+		$('#sales_store_date_start_money').datetimepicker({
+			locale: 'es',
+			format: 'YYYY-MM-DD',
+			defaultDate: new Date(),
+		});
+		$('#sales_store_date_end_money').datetimepicker({
+			locale: 'es',
+			format: 'YYYY-MM-DD',
+			defaultDate: new Date(),
+		});
+		
+			//Obtener el valor del input
+			value_input = $("#sales_store_date_start__money").val();
+			date_end = moment(value_input).startOf('day').add(1, 'day').format('YYYY-MM-DD');  
+
+			$("#sales_store_date_end_money").val(date_end); //Agrega un dia a la fecha fin
+				
+			//fecha inicio
+			$('#sales_store_date_start_money').on('dp.change', function (e) {
+			    if($("#sales_store_date_start_money").val()>=$("#sales_store_date_end_money").val()){
+					value_input = $("#sales_store_date_start_money").val();
+					date_end = moment(value_input).startOf('day').add(1, 'day').format('YYYY-MM-DD'); 
+					$("#sales_store_date_end_money").val(date_end); //Agrega un dia a la fecha fin
+				}
+
+			});
+			//fecha fin
+			$('#sales_store_date_end_money').on('dp.change', function (e) {
+			    if($("#sales_store_date_end_money").val()<=$("#sales_store_date_start_money").val()){
+					value_input = $("#sales_store_date_end_money").val();
+					date_end = moment(value_input).startOf('day').add(-1, 'day').format('YYYY-MM-DD'); 
+					$("#sales_store_date_start_money").val(date_end); //Agrega un dia a la fecha fin
+					
+				}
+				
+
+			});
+
+			
+		});
+		function cargar_data_sales_by_store_money(){
+				date_start = $("#sales_store_date_start_money").val();
+				value_input = $("#sales_store_date_end_money").val();
+				date_end = moment(value_input).startOf('day').add(1, 'day').format('YYYY-MM-DD');
+
+			    strdateto= date_start.replace("/", "-");
+     			strdatefrom= date_end.replace("/", "-");
+				tstrdateto= strdateto.replace("/", "-");
+				tstrdatefrom= strdatefrom.replace("/", "-");
+			    $.ajax({
+		            method: "POST",
+		            url: '<?=site_url();?>/home/get_sales_store_money/'+ tstrdateto+'/'+tstrdatefrom,
+		            data: { start_date:date_start, end_date:date_end },
+		            success: function(data)
+		            {
+						if(JSON.parse(data)!=null){
+							set_sales_by_store_total_money(JSON.parse(data));
+						}else{
+							set_sales_by_store_total_money([]);
+						}
+						
+					},
+		        });
+			}
 	</script>
 <?php if($this->config->item('initial_config') == 0){ ?>
                         <script type="text/javascript">$(document).ready(function(){$('#language > option[value="<?php echo $this->Appconfig->get_raw_language_value(); ?>"]').attr('selected', 'selected');});</script>
