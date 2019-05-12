@@ -118,7 +118,7 @@
     .f-total {
         overflow: hidden;
         position: fixed;
-        bottom: 30px;
+        bottom: 15px;
         margin-left: 5px;
     }
     .panel-input{
@@ -129,8 +129,8 @@
 </head>
 
 <body>
-    <br>
-    <div style="display:none" id="container-1" class="container-fluid ">
+   
+    <div style="display:none; margin-top:5px;" id="container-1" class="container-fluid ">
         <div class="row">
             <?php if(!$this->config->item('activar_casa_cambio') and $show_viewer ) {?>
             <div id="payment" style="display:none"
@@ -403,7 +403,7 @@
 
         else if (cant.length > 0) {
             $("#catidad").val(cant.substr(0, cant.length - 1));
-            
+
             if(cant.length == 0)
                 $("#convertido").val(0);
         }
@@ -456,8 +456,8 @@
     }
 
     function change_window() {
-        $(".contenedor").height(height_window - 30);
-        $(".img-c").height(height_window - 30);
+        $(".contenedor").height(height_window -12);
+        $(".img-c").height(height_window - 12);
     }
     </script>
 <script> var csfrData={};csfrData['<?php echo $this->security->get_csrf_token_name();?>']= '<?php echo $this->security->get_csrf_hash();?>';$(function(){$.ajaxSetup({data: csfrData});});</script>	
