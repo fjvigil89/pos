@@ -46,7 +46,15 @@
 
     .b1 {
         font-weight: bold;
-        font-size: 15px;
+        font-size: 16px; 
+        padding-left:30px;
+        padding-right:30px;
+    }
+    .b2 {
+        font-weight: bold;
+        font-size: 16px; 
+        padding-left:28px;
+        padding-right:28px;
     }
 
     table thead {
@@ -78,9 +86,11 @@
     .title-1 {
         background-color: #3E3E3E;
         border-radius: 5px 5px 5px 5px;
-        padding: 5px;
+        padding: 4px;
         font-weight: bold;
-        color: #FCFAFA
+        color: #FCFAFA;
+        margin: 2px;
+        font-size:25px;
     }
 
     .title-2 {
@@ -110,6 +120,10 @@
         position: fixed;
         bottom: 30px;
         margin-left: 5px;
+    }
+    .panel-input{
+        margin:2px;
+        padding:3px;
     }
     </style>
 </head>
@@ -181,7 +195,7 @@
                             <hr>
                         </div>
                         <div class="col-xs-6">
-                            <div class="form-group">
+                            <div class="panel-input form-group">
                                 <label for="email" class="title-2">Cantidad en pesos:</label>
                                 <input style=" font-weight: bold; font-size:19px; text-align: center"
                                     placeholder="Ingrese cantidad $" type="number" class="form-control" readonly
@@ -189,7 +203,7 @@
                             </div>
                         </div>
                         <div class="col-xs-6">
-                            <div class="form-group">
+                            <div class="panel-input form-group">
                                 <label for="email" class="title-2">Cantida de BS:</label>
                                 <input value="" style=" font-size:19px; font-weight: bold; text-align: center"
                                     type="number" class="form-control" readonly id="convertido">
@@ -198,23 +212,27 @@
                         <div class="<?=$show_carrousel ?'col-xs-12': 'col-xs-12'?>">
                             <center>
                                 <div>
-                                    <input class="btn b1 " name="5" type="button" value="5" />
-                                    <input class="btn b1" name="6" type="button" value="6" />
                                     <input class="btn b1 " name="7" type="button" value="7" />
                                     <input class="btn b1" name="8" type="button" value="8" />
-                                    <input class="btn b1" name="9" type="button" value="9" />
+                                    <input class="btn b1 " name="9" type="button" value="9" />
+                                    
                                 </div>
                                 <div class="panel-t">
-                                    <input class="btn b1" name="0" type="button" value="0" />
+                                    <input class="btn b1" name="4" type="button" value="4" />
+                                    <input class="btn b1" name="5" type="button" value="5" />
+                                    <input class="btn b1" name="6" type="button" value="6" />
+                                    
+                                </div>
+                                <div class="panel-t">
                                     <input class="btn b1" name="1" type="button" value="1" />
                                     <input class="btn b1" name="2" type="button" value="2" />
-                                    <input class="btn b1" name="3" type="button" value="3" />
-                                    <input class="btn b1" name="4" type="button" value="4" />
+                                    <input class="btn b1" name="3" type="button" value="3" />                        
                                 </div>
                                 <div class="panel-t">
-                                    <input class="btn b1" name="c" type="button" value="C" />
-                                    <input class="btn b1" name="accent" type="button"
-                                        value="&nbsp;&nbsp; ←-- &nbsp;&nbsp;" />
+                                    <input class="btn b2" name="C" type="button" value="C" />
+                                    <input class="btn b1" name="0" type="button" value="0" />                                    
+                                    <input class="btn b2" name="accent" type="button"
+                                        value="←" />
                                 </div>
                             </center>
                         </div>
@@ -378,11 +396,16 @@
         if ($.isNumeric(value))
             $("#catidad").val(cant + value)
 
-        else if (value == "C")
-            $("#catidad").val("")
+        else if (value == "C"){
+            $("#catidad").val("");
+            $("#convertido").val(0);
+        }
 
         else if (cant.length > 0) {
             $("#catidad").val(cant.substr(0, cant.length - 1));
+            
+            if(cant.length == 0)
+                $("#convertido").val(0);
         }
 
         if ($("#catidad").val() > 0) {
