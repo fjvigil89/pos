@@ -927,8 +927,15 @@ class Items extends Secure_area implements iData_controller
 
     public function clear_state()
     {
-        $this->session->unset_userdata('item_search_data');
+        $this->session->unset_userdata('item_search_data');        
         redirect('items');
+    }
+
+    public function clear_state_consultant()
+    {
+        $this->session->unset_userdata('item_search_data');
+        redirect('items/view_consultant');
+        
     }
 
     public function bulk_update()

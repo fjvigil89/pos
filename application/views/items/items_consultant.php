@@ -176,7 +176,9 @@
                                 <?php echo form_submit('submit', lang('common_search'),'class="btn btn-primary btn-block"'); ?>
                             </div>							
                         </form>
-                        
+                        <div class="col-xs-12 col-md-12 col-lg-3 margin-bottom-05 ">
+                            <a href="<?php echo site_url($controller_name.'/clear_state_consultant'); ?>" class="btn btn-info btn-block clear-state pull-right effect"><?php echo lang('common_clear_search'); ?></a>
+                        </div>
 					<!--boton de consultor-->
                         <div class="col-xs-12 col-md-12 col-lg-3 margin-bottom-05 ">
                             <a href="<?php echo site_url('items/view_consultant'); ?>" class="btn btn-info btn-block clear-state pull-right effect"><?php echo lang('common_consultant'); ?></a>
