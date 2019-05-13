@@ -110,6 +110,10 @@ class Home extends Secure_area
 
 	function logout()
 	{
+        
+		$this->load->library('viewer_lib');
+		$this->load->model('Viewer');
+		$this->viewer_lib->update_viewer_cart($this->Employee->person_id_logged_in(),array(),10,array(),0,array());
 		$this->Employee->logout();
 	}
     
