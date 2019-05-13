@@ -75,6 +75,7 @@ $lang['common_enter_amount_tendered'] = 'Enter amount tendered';
 $lang['common_person_id'] = 'Person ID';
 $lang['common_choose_avatar'] = 'Choose Avatar';
 $lang['common_clear_search'] = 'clear search';
+$lang['common_consultant'] = 'Consultant';
 $lang['common_cancel'] = 'Cancel';
 $lang['common_session_hijacking_attempt_no_access_allowed'] = 'Session Hijacking attempt. You have been denied access';
 $lang['common_delete_my_session'] = 'You have updated incorrectly please delete';

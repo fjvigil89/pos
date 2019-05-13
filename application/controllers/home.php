@@ -131,7 +131,8 @@ class Home extends Secure_area
 		//Set keep alive session to prevent logging out
 		$this->session->set_userdata("keep_alive",time());
 		echo $this->session->userdata('keep_alive');
-	}
+    }
+
 	function view_item_modal($item_id)
 	{
 
