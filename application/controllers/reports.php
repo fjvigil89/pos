@@ -2390,6 +2390,12 @@ class Reports extends Secure_area {
         $this->load->view("reports/movement_input_excel_export", $data);
     }
     
+    function specific_movement_cash_input_move_money() {
+        $data = $this->_get_common_report_data(TRUE);
+
+        $this->load->view("reports/movement_input_excel_export_move_money", $data);
+    }
+    
     function only_cash($start_date, $end_date,$register_id, $export_excel = 0, $export_pdf = 0, $offset = 0)
     {
        
@@ -2459,6 +2465,65 @@ class Reports extends Secure_area {
         
        
         $this->load->view("reports/tabular", $data);
+    }
+    function detailed_of_move_money($start_date, $end_date, $export_excel = 0, $export_pdf = 0, $offset = 0){
+        $start_date = rawurldecode($start_date);
+        $end_date = rawurldecode($end_date);
+        $this->check_action_permission('view_movement_cash');
+
+        $this->load->model('reports/specific_movement');
+        $model = $this->specific_movement;
+        $params=array('type_movement'=>2,'start_date' => $start_date, 'end_date' => $end_date, 'export_excel' => $export_excel, 'export_pdf' => $export_pdf, 'offset' => $offset);
+
+        $model->setParams(array('type_movement'=>2,'start_date' => $start_date, 'end_date' => $end_date, 'export_excel' => $export_excel, 'export_pdf' => $export_pdf, 'offset' => $offset));
+
+        $this->Register_movement->create_movement_items_temp_table(array('type_movement'=>2,'start_date' => $start_date, 'end_date' => $end_date,));
+
+        $config = array();
+        $config['base_url'] = site_url("reports/specific_movement_cash/" . rawurlencode($start_date) . '/' . rawurlencode($end_date) . "/$export_excel/$export_pdf");
+        $config['total_rows'] = $model->getTotalRows();
+        $config['per_page'] = $this->config->item('number_of_items_per_page') ? (int) $this->config->item('number_of_items_per_page') : 20;
+        $config['uri_segment'] = 8;
+
+        $this->pagination->initialize($config);
+        
+        $tabular_data = array();
+        $report_data = $model->getData();
+       
+        foreach ($report_data["details"] as $row) {
+            $data_row = array();
+            $data_row[] = array('data' => anchor('registers_movement/receipt/' . $row['register_movement_id'], '<i class="fa fa-print fa fa-2x vertical-align"></i>', array('target' => '_blank', 'class' => 'hidden-print')) ,'align' => 'left' );
+            
+             $data_row[] = array('data' => $row['register_movement_id'], 'align' => 'right');
+
+            $data_row[] = array('data' => date(get_date_format() . ' ' . get_time_format(), strtotime($row['register_date'])), 'align' => 'right');
+
+            $data_row[] = array('data' => $row['description'], 'align' => 'right');
+
+            $data_row[] = array('data' =>$row['first_name']." ".$row['last_name'], 'align' => 'right');
+            $data_row[] = array('data' => $row['entregado_a'], 'align' => 'right');
+            $data_row[] = array('data' => $row['name_caja'], 'align' => 'right');
+            $data_row[] = array('data' => $row['name_tienda'], 'align' => 'right');
+            $data_row[] = array('data' => to_currency($row['mount']), 'align' => 'right');
+            
+            $tabular_data[] = $data_row;
+        }
+        $d=$model->getSummaryData_move_money();
+        $data = array(
+            "title" => "Movimiento de traslados",
+            "subtitle" => date(get_date_format(), strtotime($start_date)) . '-' . date(get_date_format(), strtotime($end_date)),
+            "headers" => $model->getDataColumns_move_money(),
+            "data" => $tabular_data,
+            "summary_data" => $model->getSummaryData_move_money(),
+            "export_excel" => $export_excel,
+            "export_pdf" => $export_pdf,
+            "pagination" => $this->pagination->create_links(),
+        );
+
+        
+       
+        $this->load->view("reports/tabular", $data);
+        
     }
     
     function specific_movement_cash($start_date, $end_date,$register_id, $export_excel = 0, $export_pdf = 0, $offset = 0)

@@ -61,8 +61,21 @@
 								   								
 									</div>
 								</div>
+								
+								<?php  if($employees_info!=null){ ?>
+								<div class="col-md-7"  id="employees_info_categoria" style="display:block;" >
+								<?php echo form_label('<a class="help_config_options tooltips"  data-placement="left"  title="'.lang('employees_one_or_multiple').'">'.lang('employees_employee').'</a>'.':', 'categoria',array('class'=>'col-md-3 control-label ')); ?>
+									<div class="col-md-6">
+										<div class="btn-group">									
+											<?php echo form_dropdown('employees_info', $employees_info,'','id="employees_info" class="bs-select form-control"'); ?>
+																	
+										</div>
+									</div>
+								</div>
+								<?php }?>
+
 								<div class="col-md-7"  id="others_category" style="display:none;" >
-									<?php echo form_label('<a class="help_config_options  tooltips" data-placement="left" title="'.lang("sales_others_help").'">'.lang('sales_others').'</a>'.':', 'others_category',array('class'=>'col-md-3 control-label requireds')); ?>
+									<?php echo form_label('<a class="help_config_options  tooltips" data-placement="left">'.lang('sales_others').'</a>'.':', 'others_category',array('class'=>'col-md-3 control-label requireds')); ?>
 									<div class="col-md-6">
 										
 										<input id="input_others_category" type="text"  name="others_category" class="form-control form-inps">
@@ -83,7 +96,7 @@
 						<input type="hidden" name="operation" value="<?=$operation;?>">
 
 						<div class="form-group">	
-							<?php echo form_label('<a class="help_config_required  tooltips" data-placement="left" title="'.lang("cash_flows_description_help").'">'.lang('cash_flows_description').'</a>'.':', 'description',array('class'=>'col-md-3 control-label requireds')); ?>
+							<?php echo form_label('<a class="help_config_options  tooltips" data-placement="left" title="'.lang("cash_flows_description_help").'">'.lang('cash_flows_description').'</a>'.':', 'description',array('class'=>'col-md-3 control-label ')); ?>
 	
 							<div class="col-md-8">
 								
@@ -166,8 +179,7 @@
 					cash: {
 						required: true,
 						number: true
-					},
-					description: "required"
+					}
 		       	},
 				errorClass: "text-danger",
 				errorElement: "span",
@@ -188,7 +200,6 @@
 						number: <?php echo json_encode(lang('cash_flows_cash_number')); ?>
 					},
 					
-			        description: <?php echo json_encode(lang('cash_flows_description_required')); ?>,
 				}
 			});
 
@@ -198,9 +209,13 @@
 			}
 
 			$( "#categorias_gastos" ).change(function() {
-				
-				if ($("#categorias_gastos").val()=='<?php echo lang('otros')?>'){
+				$("#input_others_category").val("");
+				if ($("#categorias_gastos").val()=='<?php echo lang('otros')?>' || $("#categorias_gastos").val()=='<?php echo lang('change_item')?>'){
+					$("#employees_info_categoria").hide();
 					$("#others_category").show();
+				}else if($("#categorias_gastos").val()=='<?php echo lang('employees_employee')?>'){
+					$("#others_category").hide();
+					$("#employees_info_categoria").show();
 				}else{
 					$("#others_category").hide();
 				}

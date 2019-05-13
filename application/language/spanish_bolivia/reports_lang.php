@@ -1,4 +1,6 @@
 <?php
+$lang['reports_move_money']="Reporte detallado traslado de dinero";
+$lang['reports_traslado']="Total Traslados";
 $lang['detailed']="detallado";
 $lang['reports_daily_cut']="Corte diario";
 $lang['tables_report']="Entrada Mesa: Rotación de mesas ";
@@ -292,7 +294,7 @@ $lang['reports_graph_sale_employee'] = 'Grafica ventas por empleado';
 $lang['reports_graph_sale_daily'] = 'Grafica ventas diarias';
 $lang["gage"]="Página";
 $lang["total"]="Total";
-$lang["reports_movement_cash"]="Movimiento  de decaja";
+$lang["reports_movement_cash"]="Movimiento  de caja";
 $lang["reports_entrada"]="Entrada"; 
 $lang["reports_salida"]="Salida";
 $lang['reports_costo_proveedor'] ="Costo de proveedor";

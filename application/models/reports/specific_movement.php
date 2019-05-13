@@ -36,6 +36,32 @@ class specific_movement extends Report
 		
 		return $columns;
 	}
+	//cabeceras reporte traslado de dinero
+	public function getDataColumns_move_money($type='')
+	{
+		
+		$return = array();
+		
+	
+		$columns = array();
+		$columns[] = array('data'=>"", 'align'=> 'left');
+		$columns[] = array('data'=>"ID", 'align'=> 'left');
+		$columns[] = array('data'=>"Fecha", 'align'=> 'left');
+
+		
+		$columns[] = array('data'=>"Descripción", 'align'=> 'left');
+		$columns[] = array('data'=>"Realizado por", 'align'=> 'left');
+		$columns[] = array('data'=>"Entregado a", 'align'=> 'left');
+		$columns[] = array('data'=>"Tienda", 'align'=> 'left');	
+		$columns[] = array('data'=>"Caja", 'align'=> 'right');
+		if(!$type){	
+		$columns[] = array('data'=>"Valor", 'align'=> 'right');
+		}
+		
+				
+		
+		return $columns;
+	}
 	
 	public function getData()
 	{ 
@@ -211,6 +237,26 @@ class specific_movement extends Report
 
 		$ret = $this->db->get()->row_array();
 		$return["entrada"]= $ret["suma"];		
+		
+		return $return;
+	}
+
+	public function getSummaryData_move_money()
+	{
+		$return = array(
+			'traslado' => 0
+			
+		);
+		
+		// suma total traslado
+		$this->db->select(' SUM(mount) as suma');
+		$this->db->from('movement_items_temp');
+		//$this->where_categoria();
+
+		$this->db->where('type_movement', 2);
+
+		$ret = $this->db->get()->row_array();
+		$return["traslado"]= $ret["suma"];
 		
 		return $return;
 	}

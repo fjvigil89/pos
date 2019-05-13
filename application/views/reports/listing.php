@@ -848,7 +848,16 @@
 									<?php echo lang('detailed_report_all_means_of_payment');  ?>
 								</div>
 							</a>
-						</div>						
+						</div>
+						<div class="btn-group btn-group-justified">
+							<a href="<?php echo site_url('reports/detailed_of_move_money');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-calendar"></i>
+								<div>
+
+									<?php echo lang('reports_move_money');  ?>
+								</div>
+							</a>
+						</div>					
 					</div>
 					<div class="list-group view_change_house hidden">
 						<div class="btn-group btn-group-justified">

@@ -58,7 +58,8 @@ class Home extends Secure_area
     	//Obtener solo el producto y cantidad mas vendido
     	$data['best_seller_item_name'] = $data['best_sellers_items'][0]['name'];
     	$data['best_seller_item_quantity'] = $data['best_sellers_items'][0]['quantity_purchased'];
-        
+       
+        $data['items_scarce']=$this->Statistics->get_items_scarce($this->Employee->get_logged_in_employee_current_location_id());
 
     	//Variable que me trae los dias en los que se hicieron ventas
     	if($start_date!=false && $end_date!=false)
@@ -72,8 +73,9 @@ class Home extends Secure_area
     	$data['sales_by_employees'] = $this->Statistics->get_all_sale_payments_by_employeer();
     	
         //Profit and loss statistic
-        $pnl_start_date = date("Y-m-d H:i:s",strtotime("-1 month"));
+        $pnl_start_date = date("Y-m-d H:i:s",strtotime("-1 day"));
         $pnl_end_date   = date("Y-m-d H:i:s");
+        
 
         $profit_and_loss->setParams(array('start_date'=>$pnl_start_date, 'end_date'=>$pnl_end_date));
         $this->Sale->create_sales_items_temp_table(array('start_date'=>$pnl_start_date, 'end_date'=>$pnl_end_date));
@@ -82,9 +84,8 @@ class Home extends Secure_area
 
 		$this->Receiving->create_store_payments_temp_table(array('start_date' => $pnl_start_date, 'end_date' => $pnl_end_date));
 
-    
-
-        $data['profit_and_loss'] = $this->Statistics->profit_and_loss($profit_and_loss->getData()); 
+        
+        $data['profit_and_loss'] = $this->Statistics->get_sales_earnings_monsth_day(); 
 
         //Cantidad total por modulos
 		$data['total_items']=$this->Item->count_all();

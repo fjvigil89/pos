@@ -97,13 +97,16 @@ class Registers_movement extends Secure_area
 			$data['operation'] = $operation;
 			$data['info_categoria']=$operation=="move_money"? lang('deliver_to'):lang('config_categoria');
 			$categorias_gastos=$operation!="move_money"? array("no establecido"=>"Seleccionar"):'';
-			$info_categoria=$operation=="move_money"?$this->Employee->get_all()->result_object():$this->Appconfig->get_categorias_gastos();
-			foreach($info_categoria as $categoria){
-				$info=$operation=="move_money"?$categoria->first_name.' '.$categoria->first_name:$categoria;
-				$categorias_gastos[$info]=$info;
+			$categorias_gastos=$operation=="move_money"?array(lang('employees_employee')=>lang('employees_employee'),lang('change_item')=>lang('change_item'),lang('otros')=>lang('otros')):$this->Appconfig->get_categorias_gastos();
+			$employees=$operation=="move_money"?$this->Employee->get_all(50,0,'first_name','ASC')->result_object():null;
+			if($employees!=null){
+				foreach($employees as $employee){
+					$employees_info=$employee->first_name.' '.$employee->last_name;
+					$employees_info_all[$employees_info]=$employees_info;
+				}
 			}
-			$categorias_gastos[lang('otros')]=lang('otros');
 			$data["categorias_gastos"]=$categorias_gastos;
+			$data["employees_info"]=$employees==null?null:$employees_info_all;
 			$this->load->view("registers_movement/form",$data);
 		} else {
 			redirect('/registers_movement/', 'refresh');
@@ -120,22 +123,30 @@ class Registers_movement extends Secure_area
 	{
 
 		if ($operation == "depositcash" || $operation == "withdrawcash" || $operation=="move_money") {
-
+			$entregado_a="";
 			$register_id = $this->input->post('register_id'); 
-			$cash        = abs($this->input->post('cash'));
+			$cash = abs($this->input->post('cash'));
 			$categorias_gastos =$this->input->post('categorias_gastos');
-			if($categorias_gastos==lang('otros') && $this->input->post('others_category')!=""){
-				$categorias_gastos=$this->input->post('others_category');
+			if(($categorias_gastos==lang('otros') || $categorias_gastos==lang('change_item')) && $this->input->post('others_category')!=""){
+				if($operation=='move_money'){
+					$entregado_a=$this->input->post('others_category');
+				}else{
+					$categorias_gastos=$this->input->post('others_category');
+				}
+				
 			}
-			$description =$operation=='move_money'? ('<strong>'.$categorias_gastos.'</strong><br>'.$this->input->post('description')):$this->input->post('description');
-			$categorias_gastos  =$operation=='move_money'? lang('move_money_category'):$this->input->post('categorias_gastos');
+			if($categorias_gastos==lang('employees_employee')){
+				$entregado_a=$this->input->post('employees_info');
+			}
+			$categorias_gastos=$operation=='move_money'? lang('move_money_category'):$categorias_gastos;
+			$description =$this->input->post('description');
 
 			$imprimir=$this->input->post('imprimir');
 			
 			if ($operation == "withdrawcash" || $operation == "move_money" ) {
 				$cash = $cash* (-1);
 			}
-			$status = $this->Register_movement->save_operation($register_id, $cash, $description,$categorias_gastos,$operation);			
+			$status = $this->Register_movement->save_operation($register_id, $cash, $description,$categorias_gastos,$entregado_a,$operation);			
 			
 			if ($status['success']) {	
 				

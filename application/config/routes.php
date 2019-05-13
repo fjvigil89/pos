@@ -104,6 +104,7 @@ $route['reports/detailed_commissions'] = "reports/specific_employee_input";
 
 $route['reports/specific_movement_cash'] = "reports/specific_movement_cash_input";
 $route['reports/only_cash'] = "reports/specific_movement_cash_input";
+$route['reports/detailed_of_move_money'] = "reports/specific_movement_cash_input_move_money";
 $route['reports/detailed_of_payment'] = "reports/detailed_of_payment_input";
 
 $route['reports/summary_movement_cash'] = "reports/movement_cash_date_input_excel_export";

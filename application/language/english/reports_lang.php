@@ -1,4 +1,6 @@
 <?php 
+$lang['reports_move_money']="Detailed report transfer of money";
+$lang['reports_traslado']="Total Transfers";
 $lang['detailed']="detailed";
 $lang['daily_cut']="daily cut";
 $lang['detailed_report_table']="Table rotation summary";
@@ -241,6 +243,7 @@ $lang['reports_costo_proveedor'] ="Cost of provider";
 $lang['reports_precio_factura']="Invoice price";
 $lang['best_sellers_items'] = 'The 10 best-selling products of the month.';
 
+$lang['reports_earnings_monsth'] = 'Reporte ganancias ultimos 7 dias';
 $lang['quantity_module_total'] = 'Total amount by module'; 
 $lang['best_seller_item'] = 'The best-selling product is: ';
 $lang['sales_by_employees'] = 'Sales by employee';

@@ -81,7 +81,7 @@ class Config extends Secure_area
 		
 	function save()
 	{
-		if(!empty($_FILES["company_logo"]) && $_FILES["company_logo"]["error"] == UPLOAD_ERR_OK && !is_on_demo_host())
+		if(!empty($_FILES["company_logo"]) && $_FILES["company_logo"]["error"] == UPLOAD_ERR_OK && !is_on_demo_host() && !$this->Employee->es_demo())
 		{
 			$allowed_extensions = array('png', 'jpg', 'jpeg', 'gif');
 			$extension = strtolower(pathinfo($_FILES["company_logo"]["name"], PATHINFO_EXTENSION));

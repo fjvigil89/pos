@@ -367,8 +367,8 @@
 					</div>
 				</div>
 				<div class="portlet-body">
-					<div id="chartdiv_statistics_general" class="chart_custom">
-						<?php $this->load->view("charts/statistics_general"); ?>
+					<div id="chartdiv_items_scarce" class="chart_custom">
+						<?php $this->load->view("charts/items_scarce"); ?>
 					</div>
 				</div>
 			</div>
@@ -449,6 +449,26 @@
 			</div>
 		</div>
 		-->
+		<?php if ($this->Employee->has_module_action_permission('reports', 'allow_graphics_arnings_monsth', $this->Employee->get_logged_in_employee_info()->person_id)) { ?>
+		<div class="col-md-12">
+			<div class="portlet light">
+				<div class="portlet-title">
+					<div class="caption">
+						<i class="icon-bar-chart font-green-haze"></i>
+						<span class="caption-subject bold uppercase font-green-haze"><?php echo lang('reports_earnings_monsth')?></span>
+					</div>
+					<div class="actions">
+						<a href="javascript:;" class="btn btn-circle btn-default btn-icon-only fullscreen" data-original-title="" title=""><span class="md-click-circle md-click-animate" style="height: 28px; width: 28px; top: -0.986113px; left: -8.24658px;"></span></a>
+					</div>
+				</div>
+				<div class="portlet-body">
+					<div id="chartdiv_get_earnings_monsth" class="chart_custom">
+						<?php $this->load->view("charts/earnings_monsth"); ?>
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php }?>
 	</div>
 	<!-- END CHARTS -->
 

@@ -1,4 +1,6 @@
 <?php
+$lang['reports_move_money']="Reporte detallado traslado de dinero";
+$lang['reports_traslado']="Total Traslados";
 $lang['detailed']="detallado";
 $lang['reports_daily_cut']="Corte diario";
 $lang['tables_report']="Entrada Mesa: Rotación de mesas ";
@@ -258,11 +260,12 @@ $lang['reports_select_by_empleados']='Seleccione Empleado';
 
 //Language Graphics Home (Charts)
 $lang['reports_sales_by_store_total'] = 'Ventas totales por tienda';
-$lang['quantity_module_total'] = 'Cantidad total por módulo'; 
+$lang['quantity_module_total'] = 'Productos Escasos de inventario minimo'; 
 $lang['best_sellers_items'] = 'Los 10 productos más vendidos del mes';
 $lang['best_seller_item'] = 'El producto más vendido es: ';
 $lang['sales_by_employees'] = 'Ventas por empleado';
 $lang['weekly_sales'] = 'Ventas diarias (De lunes a domingo)';
+$lang['reports_earnings_monsth'] = 'Reporte ganancias ultimos 7 dias';
 $lang['weekly_sales_message_filter'] = 'Seleccione el rango de días de la semana que desea visualizar: ';
 $lang['reports_fixed_range_help'] = 'Seleccionar una fecha fija para generar  reporte';
 $lang['reports_custom_range_help'] = 'Seleccionar fecha de inicio y fin para generar reporte';
@@ -291,7 +294,7 @@ $lang['reports_graph_sale_employee'] = 'Grafica ventas por empleado';
 $lang['reports_graph_sale_daily'] = 'Grafica ventas diarias';
 $lang["gage"]="Página";
 $lang["total"]="Total";
-$lang["reports_movement_cash"]="Movimiento  de decaja";
+$lang["reports_movement_cash"]="Movimiento  de caja";
 $lang["reports_entrada"]="Entrada"; 
 $lang["reports_salida"]="Salida";
 $lang['reports_costo_proveedor'] ="Costo de proveedor";

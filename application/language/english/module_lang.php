@@ -1,5 +1,5 @@
 <?php
-
+$lang['module_allow_graphics_arnings_monsth']='Profit graph';
 $lang['module_allow_graphics_by_store']='Sales graphs per store';
 $lang['module_allow_open_money_box']='Allow to open cashier box, without making sales';
 $lang['module_action_show_column_cash_flow']='Do show the column (in cash flow), cash flow.';

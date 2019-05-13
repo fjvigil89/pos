@@ -64,7 +64,8 @@ class Appconfig extends CI_Model
 		lang('Suministros')=>lang('Suministros'),
 		lang('Mantenimiento')=>lang('Mantenimiento'), 
 		lang('Limpieza')=>lang('Limpieza'),
-		lang('Combustible')=>lang('Combustible'));
+		lang('Combustible')=>lang('Combustible'),
+		lang('otros')=>lang('otros'));
 		return $expense_category;
 	}
 	function get_all()
@@ -329,10 +330,10 @@ class Appconfig extends CI_Model
 			$return = array_map('trim', explode(',',$categoria_gastos));
 		}
 		foreach($this->get_expense_category()as $category){
-			$return[]=$category;
+			$return[$category]=$category;
 		}
 		$return= array_unique($return);
-		sort($return);
+		//sort($return);
 		return $return;
 	}
     
