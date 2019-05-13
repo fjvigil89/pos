@@ -14,12 +14,12 @@ function sale_has_partial_credit_card_payment()
 }
 
 function get_precio_con_nuevo_iva($ivas=array(),$price){	
-	$total = $price + get_nuevo_iva($ivas,$price);
+	$total=$price+get_nuevo_iva($ivas,$price);
 	return $total;
 }
 function get_nuevo_iva($ivas=array(),$price){
-	$sum_tax = $ivas["percent"] / 100.0;
-	$value_tax = $price * $sum_tax;
+	$sum_tax=$ivas["percent"]/100.0;
+	$value_tax=$price*$sum_tax;
 	return $value_tax;
 }
 ?>

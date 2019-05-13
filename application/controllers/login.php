@@ -8,16 +8,16 @@ class Login extends CI_Controller
 	}
 
 	function login2()
-    {
-		$this->load->view("partial/cache_control");
-         $this->load->view("login2/login");
-	}
+        {
+			$this->load->view("partial/cache_control");
+            $this->load->view("login2/login");
+		}
 	function no_access()
-	{
-		$data['hour']=date(get_time_format(),time());
-		$this->load->view("login/no_access",$data);
+		{
+			$data['hour']=date(get_time_format(),time());
+			$this->load->view("login/no_access",$data);
 			
-	}
+		}
 	
 	function index($demo=0)
 	{
@@ -50,15 +50,11 @@ class Login extends CI_Controller
 		$data_company= $this->Appconfig->get_data_commpany_by_domain(base_url()) ;
 		$data["data_company"]=$data_company;
 		$data["es_franquicia"]=count($data_company)==1? true : false;
-		
-		if($demo==1 and !$data["es_franquicia"])
-		{
+        if($demo==1 and !$data["es_franquicia"]){
 			$data['user'] = 'demo2017' ;
 			$data['store'] = 'demo2017';
 			$data["pass_"]="demo2017";
-		}
-		elseif($demo==1)
-		{
+		}elseif($demo==1){
 			$data['user'] = $data_company->user_demo ;
 			$data['store'] = $data_company->store_demo ;;
 			$data["pass_"]=$data_company->password_demo ;

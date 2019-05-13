@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-05-2019 a las 19:34:22
+-- Tiempo de generación: 03-11-2018 a las 05:13:54
 -- Versión del servidor: 10.1.28-MariaDB
 -- Versión de PHP: 5.6.32
 
@@ -25,26 +25,12 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `phppos_access_employees`
---
-
-CREATE TABLE `phppos_access_employees` (
-  `location` int(11) NOT NULL,
-  `id_day_access` int(11) NOT NULL,
-  `id_hour_access` int(11) NOT NULL,
-  `employee_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `phppos_additional_item_numbers`
 --
 
 CREATE TABLE `phppos_additional_item_numbers` (
   `item_id` int(11) NOT NULL,
-  `item_number` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `update_additional_item_number` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `item_number` varchar(255) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -75,19 +61,16 @@ CREATE TABLE `phppos_app_config` (
 
 INSERT INTO `phppos_app_config` (`key`, `value`) VALUES
 ('activar_casa_cambio', '0'),
-('activar_pago_segunda_moneda', '0'),
-('activate_sale_by_serial', '0'),
+('activate_sale_by_serial', '1'),
 ('active_keyboard', '0'),
 ('add_cart_by_id_item', '0'),
 ('additional_payment_types', ''),
-('address', 'll 21 45 N 31 52'),
 ('always_show_item_grid', '0'),
 ('auto_focus_on_item_after_sale_and_receiving', '1'),
 ('automatically_email_receipt', '0'),
 ('automatically_show_comments_on_receipt', '0'),
 ('averaging_method', 'moving_average'),
 ('barcode_price_include_tax', '0'),
-('cache_control_max-age_offline', '28800'),
 ('calculate_average_cost_price_from_receivings', '1'),
 ('categoria_gastos', ''),
 ('change_sale_date_when_completing_suspended_sale', '0'),
@@ -95,7 +78,6 @@ INSERT INTO `phppos_app_config` (`key`, `value`) VALUES
 ('commission_default_rate', '0'),
 ('company', 'Facil Pos'),
 ('company_dni', '89-9545885'),
-('company_giros', ''),
 ('company_regimen', 'SIMPLIFICADO'),
 ('config_remember_saved', '0'),
 ('currency_symbol', '$'),
@@ -132,10 +114,6 @@ INSERT INTO `phppos_app_config` (`key`, `value`) VALUES
 ('divisa', 'VEF'),
 ('due_date_alarm', '0'),
 ('enabled_for_Restaurant', '0'),
-('equivalencia', '1'),
-('equivalencia1', '1'),
-('equivalencia2', '1'),
-('equivalencia3', '1'),
 ('es_franquicia', '0'),
 ('expire_date', '2020-02-20 23:26:33'),
 ('expire_date_franquicia', '0000-00-00 00:00:00'),
@@ -143,8 +121,6 @@ INSERT INTO `phppos_app_config` (`key`, `value`) VALUES
 ('ftp_password', '0'),
 ('ftp_route', '0'),
 ('ftp_username', '0'),
-('ganancia_distribuidor', '10'),
-('Generate_simplified_order', '0'),
 ('group_all_taxes_on_receipt', '0'),
 ('hide_balance_receipt_payment', '0'),
 ('hide_barcode_on_sales_and_recv_receipt', '0'),
@@ -153,7 +129,6 @@ INSERT INTO `phppos_app_config` (`key`, `value`) VALUES
 ('hide_description', '1'),
 ('hide_invoice_taxes_details', '0'),
 ('hide_layaways_sales_in_reports', '0'),
-('hide_modal', '0'),
 ('hide_signature', '0'),
 ('hide_store_account_payments_from_report_totals', '0'),
 ('hide_store_account_payments_in_reports', '0'),
@@ -171,42 +146,29 @@ INSERT INTO `phppos_app_config` (`key`, `value`) VALUES
 ('hide_video_stack8', '0'),
 ('id_to_show_on_sale_interface', 'number'),
 ('in_suppliers', '0'),
-('inhabilitar_subcategory1', '0'),
 ('initial_config', '0'),
 ('language', 'spanish'),
-('last_login', '2019-04-26 23:29:28'),
+('last_login', '2018-11-03 00:02:25'),
 ('legacy_detailed_report_export', '0'),
 ('license', '13e54b2467f91de15325e00fd35abb35'),
 ('license_type', 'lifetime'),
 ('limit_cash_flow', '0'),
 ('max_registers', '20'),
-('moneda', 'USD'),
-('moneda1', 'USD'),
-('moneda2', 'EUR'),
-('moneda3', 'MXN'),
-('monitor_product_rank', '0'),
-('name_new_tax', 'IVA02'),
 ('number_of_items_per_page', '20'),
 ('ocultar_forma_pago', '0'),
-('offline_sales', '1'),
 ('order_star', '0'),
-('padding_ticket', '0'),
 ('percent_point', '2'),
-('phone', '5555-555-555'),
 ('prices_include_tax', '0'),
 ('print_after_receiving', '0'),
 ('print_after_sale', '1'),
-('quantity_subcategory_of_items', '5'),
 ('receipt_copies', '1'),
 ('receipt_text_size', 'small'),
 ('remove_decimals', '0'),
-('reproducrir_sonido_orden', '0'),
 ('require_customer_for_sale', '0'),
 ('resellers_id', '1'),
-('resolution', ''),
-('return_policy', ''),
-('return_policy_credit', ''),
-('return_policy_support', 'Garantía exepto por golpes o daños elétrios.'),
+('resolution', '<strong>RESOLUIÖN DE AUTORIZAIÓN NÚMERO 400001 DEL 2013-07-26 NUMERAIÓN DESDE 02-400001 HASTA 02-700000</strong>\n<br>'),
+('return_policy', 'Garantía exepto por golpes o daños elétrios.'),
+('return_policy_support', ''),
 ('round_cash_on_sales', '0'),
 ('round_tier_prices_to_2_decimals', '0'),
 ('round_value', '0'),
@@ -222,8 +184,6 @@ INSERT INTO `phppos_app_config` (`key`, `value`) VALUES
 ('show_inventory_isbn', '0'),
 ('show_inventory_model', '0'),
 ('show_inventory_size', '0'),
-('show_number_item', '0'),
-('show_payments_ticket', '1'),
 ('show_point', '1'),
 ('show_receipt_after_suspending_sale', '0'),
 ('show_receivings_cost_iva', '0'),
@@ -234,8 +194,7 @@ INSERT INTO `phppos_app_config` (`key`, `value`) VALUES
 ('show_receivings_inventory', '0'),
 ('show_receivings_num_item', '0'),
 ('show_receivings_price_sales', '0'),
-('show_report_register_close', '1'),
-('show_return_policy_credit', '0'),
+('show_report_register_close', '0'),
 ('show_sales_description', '0'),
 ('show_sales_discount', '0'),
 ('show_sales_inventory', '0'),
@@ -310,33 +269,8 @@ CREATE TABLE `phppos_customers` (
   `cc_preview` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `card_issuer` varchar(255) COLLATE utf8_unicode_ci DEFAULT '',
   `tier_id` int(10) DEFAULT NULL,
-  `deleted` int(1) NOT NULL DEFAULT '0',
-  `update_customer` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `deleted` int(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `phppos_day_access`
---
-
-CREATE TABLE `phppos_day_access` (
-  `id` int(11) NOT NULL,
-  `key_language` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `phppos_day_access`
---
-
-INSERT INTO `phppos_day_access` (`id`, `key_language`) VALUES
-(1, 'day_2'),
-(2, 'day_3'),
-(3, 'day_4'),
-(4, 'day_5'),
-(5, 'day_6'),
-(6, 'day_7'),
-(7, 'day_1');
 
 -- --------------------------------------------------------
 
@@ -382,8 +316,6 @@ CREATE TABLE `phppos_employees` (
   `type` varchar(25) COLLATE utf8_unicode_ci DEFAULT NULL,
   `account_balance` decimal(23,10) NOT NULL DEFAULT '0.0000000000',
   `deleted` int(1) NOT NULL DEFAULT '0',
-  `password_offline` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `update_employee` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `id_rate` int(11) DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -391,8 +323,8 @@ CREATE TABLE `phppos_employees` (
 -- Volcado de datos para la tabla `phppos_employees`
 --
 
-INSERT INTO `phppos_employees` (`id`, `username`, `password`, `person_id`, `language`, `commission_percent`, `type`, `account_balance`, `deleted`, `password_offline`, `update_employee`, `id_rate`) VALUES
-(1, 'admin', '1c9f0d7603b88771977ca30e271dc907', 1, 'spanish', '0.0000000000', NULL, '0.0000000000', 0, NULL, '2019-01-20 04:38:19', 1);
+INSERT INTO `phppos_employees` (`id`, `username`, `password`, `person_id`, `language`, `commission_percent`, `type`, `account_balance`, `deleted`, `id_rate`) VALUES
+(1, 'admin', '1c9f0d7603b88771977ca30e271dc907', 1, 'spanish', '0.0000000000', NULL, '0.0000000000', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -423,50 +355,8 @@ CREATE TABLE `phppos_giftcards` (
   `giftcard_number` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `value` decimal(23,10) NOT NULL,
   `customer_id` int(10) DEFAULT NULL,
-  `deleted` int(1) NOT NULL DEFAULT '0',
-  `update_giftcard` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `deleted` int(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `phppos_hour_access`
---
-
-CREATE TABLE `phppos_hour_access` (
-  `id` int(11) NOT NULL,
-  `hour_access` time NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `phppos_hour_access`
---
-
-INSERT INTO `phppos_hour_access` (`id`, `hour_access`) VALUES
-(1, '01:00:00'),
-(2, '02:00:00'),
-(3, '03:00:00'),
-(4, '04:00:00'),
-(5, '05:00:00'),
-(6, '06:00:00'),
-(7, '07:00:00'),
-(8, '08:00:00'),
-(9, '09:00:00'),
-(10, '10:00:00'),
-(11, '11:00:00'),
-(12, '12:00:00'),
-(13, '13:00:00'),
-(14, '14:00:00'),
-(15, '15:00:00'),
-(16, '16:00:00'),
-(17, '17:00:00'),
-(18, '18:00:00'),
-(19, '19:00:00'),
-(20, '20:00:00'),
-(21, '21:00:00'),
-(22, '22:00:00'),
-(23, '23:00:00'),
-(24, '00:00:00');
 
 -- --------------------------------------------------------
 
@@ -523,20 +413,11 @@ CREATE TABLE `phppos_items` (
   `commission_percent` decimal(23,10) DEFAULT '0.0000000000',
   `commission_fixed` decimal(23,10) DEFAULT '0.0000000000',
   `deleted` int(1) NOT NULL DEFAULT '0',
-  `update_item` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `custom1` varchar(25) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `custom2` varchar(25) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `custom3` varchar(25) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `subcategory` tinyint(4) NOT NULL,
-  `activate_range` tinyint(4) NOT NULL DEFAULT '0'
+  `subcategory` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Volcado de datos para la tabla `phppos_items`
---
-
-INSERT INTO `phppos_items` (`name`, `category`, `supplier_id`, `item_number`, `product_id`, `description`, `size`, `colour`, `model`, `marca`, `unit`, `tax_included`, `cost_price`, `unit_price`, `items_discount`, `costo_tax`, `promo_price`, `promo_quantity`, `start_date`, `end_date`, `expiration_date`, `expiration_day`, `reorder_level`, `item_id`, `allow_alt_description`, `is_serialized`, `image_id`, `override_default_tax`, `is_service`, `commission_percent`, `commission_fixed`, `deleted`, `update_item`, `custom1`, `custom2`, `custom3`, `subcategory`, `activate_range`) VALUES
-('Abono a línea de crédito', 'Abono a línea de crédito', NULL, NULL, NULL, '', '', '', '', '', '', 0, '0.0000000000', '0.0000000000', '0.0000000000', '0.0000000000', NULL, 0, NULL, NULL, NULL, '', NULL, 1, 0, 0, NULL, 1, 1, '0.0000000000', '0.0000000000', 0, '2019-03-01 17:23:39', '', '', '', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -574,8 +455,7 @@ CREATE TABLE `phppos_items_subcategory` (
   `custom1` varchar(80) NOT NULL,
   `custom2` varchar(80) NOT NULL,
   `quantity` decimal(23,10) NOT NULL,
-  `deleted` tinyint(4) NOT NULL,
-  `update_subcategory_item` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `deleted` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -601,8 +481,7 @@ CREATE TABLE `phppos_items_taxes` (
   `item_id` int(10) NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `percent` decimal(4,1) DEFAULT NULL,
-  `cumulative` int(1) NOT NULL DEFAULT '0',
-  `update_item_taxes` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `cumulative` int(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -615,8 +494,7 @@ CREATE TABLE `phppos_items_tier_prices` (
   `tier_id` int(10) NOT NULL,
   `item_id` int(10) NOT NULL,
   `unit_price` decimal(23,10) DEFAULT '0.0000000000',
-  `percent_off` int(11) DEFAULT NULL,
-  `update_items_tier_price` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `percent_off` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -638,8 +516,7 @@ CREATE TABLE `phppos_item_kits` (
   `override_default_tax` int(1) NOT NULL DEFAULT '0',
   `commission_percent` decimal(23,10) DEFAULT '0.0000000000',
   `commission_fixed` decimal(23,10) DEFAULT '0.0000000000',
-  `deleted` int(1) NOT NULL DEFAULT '0',
-  `update_kit` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `deleted` int(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -678,25 +555,8 @@ CREATE TABLE `phppos_item_kits_tier_prices` (
 CREATE TABLE `phppos_item_kit_items` (
   `item_kit_id` int(11) NOT NULL,
   `item_id` int(11) NOT NULL,
-  `quantity` decimal(23,10) NOT NULL,
-  `update_item_kit_item` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `quantity` decimal(23,10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `phppos_item_range`
---
-
-CREATE TABLE `phppos_item_range` (
-  `range_id` int(11) NOT NULL,
-  `item_id` int(11) NOT NULL,
-  `register_log_id` int(11) NOT NULL,
-  `start_range` decimal(23,10) NOT NULL DEFAULT '0.0000000000',
-  `final_range` decimal(23,10) NOT NULL DEFAULT '0.0000000000',
-  `extra_charge` decimal(23,10) NOT NULL DEFAULT '0.0000000000',
-  `employee_id_recharge` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -729,29 +589,15 @@ CREATE TABLE `phppos_locations` (
   `default_tax_4_name` text COLLATE utf8_unicode_ci,
   `default_tax_5_rate` text COLLATE utf8_unicode_ci,
   `default_tax_5_name` text COLLATE utf8_unicode_ci,
-  `overwrite_data` tinyint(4) NOT NULL DEFAULT '0',
-  `company_dni` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `company_giros` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `company_regimen` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `website` text COLLATE utf8_unicode_ci,
-  `image_id` int(11) DEFAULT '0',
-  `deleted` int(1) DEFAULT '0',
-  `serie_number` varchar(30) COLLATE utf8_unicode_ci NOT NULL DEFAULT '1',
-  `start_range` int(11) NOT NULL DEFAULT '1',
-  `final_range` int(11) DEFAULT NULL,
-  `limit_date` date NOT NULL DEFAULT '0000-00-00',
-  `increment` int(11) NOT NULL DEFAULT '1',
-  `show_serie` tinyint(4) NOT NULL DEFAULT '0',
-  `show_rango` tinyint(4) NOT NULL DEFAULT '0',
-  `codigo` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL
+  `deleted` int(1) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `phppos_locations`
 --
 
-INSERT INTO `phppos_locations` (`location_id`, `name`, `address`, `phone`, `fax`, `email`, `receive_stock_alert`, `stock_alert_email`, `timezone`, `mailchimp_api_key`, `enable_credit_card_processing`, `merchant_id`, `merchant_password`, `default_tax_1_rate`, `default_tax_1_name`, `default_tax_2_rate`, `default_tax_2_name`, `default_tax_2_cumulative`, `default_tax_3_rate`, `default_tax_3_name`, `default_tax_4_rate`, `default_tax_4_name`, `default_tax_5_rate`, `default_tax_5_name`, `overwrite_data`, `company_dni`, `company_giros`, `company_regimen`, `website`, `image_id`, `deleted`, `serie_number`, `start_range`, `final_range`, `limit_date`, `increment`, `show_serie`, `show_rango`, `codigo`) VALUES
-(1, 'Tienda Principal', 'Cll 21 45 No 31 52', '555-555-5555', '', 'no-reply@facilpos.com', '0', '', 'America/Bogota', '0', '0', 'admin', '123', NULL, 'Sales Tax', NULL, 'Sales Tax 2', '0', NULL, '', NULL, '', NULL, '0', 0, '89-9545885', '', 'SIMPLIFICADO', 'http://facilpos.co', NULL, 0, '00-00-00-', 1, 1, '2020-12-31', 1, 0, 0, '0000-0000-0000-0000');
+INSERT INTO `phppos_locations` (`location_id`, `name`, `address`, `phone`, `fax`, `email`, `receive_stock_alert`, `stock_alert_email`, `timezone`, `mailchimp_api_key`, `enable_credit_card_processing`, `merchant_id`, `merchant_password`, `default_tax_1_rate`, `default_tax_1_name`, `default_tax_2_rate`, `default_tax_2_name`, `default_tax_2_cumulative`, `default_tax_3_rate`, `default_tax_3_name`, `default_tax_4_rate`, `default_tax_4_name`, `default_tax_5_rate`, `default_tax_5_name`, `deleted`) VALUES
+(1, 'Tienda Principal', 'Cll 21 45 No 31 52', '555-555-5555', '', 'no-reply@facilpos.com', '0', '', 'America/Bogota', '0', '0', 'admin', '123', NULL, 'Sales Tax', NULL, 'Sales Tax 2', '0', NULL, '', NULL, '', NULL, '0', 0);
 
 -- --------------------------------------------------------
 
@@ -774,8 +620,7 @@ CREATE TABLE `phppos_location_items` (
   `quantity_defect` decimal(23,10) DEFAULT NULL,
   `reorder_level` decimal(23,10) DEFAULT NULL,
   `override_default_tax` int(1) NOT NULL DEFAULT '0',
-  `override_defect` int(1) NOT NULL DEFAULT '0',
-  `update_item_location` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `override_defect` int(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -790,8 +635,7 @@ CREATE TABLE `phppos_location_items_taxes` (
   `item_id` int(10) NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `percent` decimal(16,3) NOT NULL,
-  `cumulative` int(1) NOT NULL DEFAULT '0',
-  `update_item_taxes_location` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `cumulative` int(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -819,8 +663,7 @@ CREATE TABLE `phppos_location_item_kits` (
   `item_kit_id` int(11) NOT NULL,
   `unit_price` decimal(23,10) DEFAULT NULL,
   `cost_price` decimal(23,10) DEFAULT NULL,
-  `override_default_tax` int(1) NOT NULL DEFAULT '0',
-  `update_location_item_kits` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `override_default_tax` int(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -882,15 +725,13 @@ INSERT INTO `phppos_modules` (`name_lang_key`, `desc_lang_key`, `sort`, `icon`, 
 ('module_items', 'module_items_desc', 20, 'table', 'items', 'blue-madison'),
 ('module_licenses', 'module_licenses_desc', 140, 'calendar', 'licenses', 'red-thunderbird'),
 ('module_locations', 'module_locations_desc', 110, 'home', 'locations', 'purple'),
-('module_offline', 'module_module_offline_desc', 145, 'plug', 'offline', 'blue-hoki'),
 ('module_receivings', 'module_receivings_desc', 60, 'cloud-download', 'receivings', 'purple-plum'),
 ('module_recharges', 'module_recharges_desc', 120, 'phone-square', 'recharges', 'grey-cascade'),
 ('module_registers_movement', 'module_registers_movement_desc', 123, 'money', 'registers_movement', 'yellow-casablanca'),
 ('module_reports', 'module_reports_desc', 50, 'bar-chart-o', 'reports', 'yellow'),
 ('module_sales', 'module_sales_desc', 70, 'shopping-cart', 'sales', 'grey-gallery'),
 ('module_suppliers', 'module_suppliers_desc', 40, 'download', 'suppliers', 'yellow-gold'),
-('module_technical_supports', 'module_technical_supports_desc', 142, 'wrench', 'technical_supports', 'green-haze'),
-('module_warehouse', 'module_warehouse_desc', 146, 'university', 'warehouse', 'grey');
+('module_technical_supports', 'module_technical_supports_desc', 142, 'wrench', 'technical_supports', 'green-haze');
 
 -- --------------------------------------------------------
 
@@ -919,9 +760,6 @@ INSERT INTO `phppos_modules_actions` (`action_id`, `module_id`, `action_name_key
 ('add_update', 'registers_movement', 'module_action_add_update', 213),
 ('add_update', 'suppliers', 'module_action_add_update', 100),
 ('add_update', 'technical_supports', 'module_action_add_update', 308),
-('agregar_o_sustraer', 'items', 'module_action_agregar_o_sustraer', 502),
-('allow_graphics_arnings_monsth', 'reports', 'module_allow_graphics_arnings_monsth', 332),
-('allow_graphics_by_store', 'reports', 'module_allow_graphics_by_store', 311),
 ('assign_all_locations', 'employees', 'module_action_assign_all_locations', 151),
 ('cancel_sale_suspend', 'sales', 'module_cancel_sale_suspend', 313),
 ('delete', 'customers', 'module_action_delete', 20),
@@ -932,15 +770,11 @@ INSERT INTO `phppos_modules_actions` (`action_id`, `module_id`, `action_name_key
 ('delete', 'locations', 'module_action_delete', 250),
 ('delete', 'suppliers', 'module_action_delete', 110),
 ('delete', 'technical_supports', 'module_action_delete_technical_supports', 310),
-('delete_payments_to_credit', 'receivings', 'module_delete_payments_to_credit', 336),
 ('delete_payments_to_credit', 'sales', 'module_delete_payments_to_credit', 331),
 ('delete_sale', 'sales', 'module_action_delete_sale', 230),
-('delete_sale_offline', 'offline', 'module_action_delete_sale_offline', 230),
-('delete_serial', 'items', 'module_action_delete_serial', 501),
 ('delete_suspended_sale', 'sales', 'module_action_delete_suspended_sale', 181),
 ('delete_taxes', 'sales', 'module_action_delete_taxes', 182),
 ('edit_balance_employee', 'changes_house', 'module_edit_balance_employee', 315),
-('edit_quantity', 'items', 'module_action_edit_quantity', 332),
 ('edit_rate', 'changes_house', 'module_edit_rate', 316),
 ('edit_rate_transition', 'changes_house', 'module_rate_transition', 328),
 ('edit_sale', 'sales', 'module_edit_sale', 190),
@@ -950,12 +784,7 @@ INSERT INTO `phppos_modules_actions` (`action_id`, `module_id`, `action_name_key
 ('edit_tier_all', 'sales', 'module_edit_tier_all', 312),
 ('give_discount', 'sales', 'module_give_discount', 180),
 ('include_other_employees_report', 'changes_house', 'module_include_other_employees_report', 329),
-('module_allow_open_money_box', 'sales', 'module_allow_open_money_box', 230),
-('mostrar_valor_cierre_caja', 'registers_movement', 'module_action_mostrar_valor_cierre_caja', 233),
-('overwrite_tax', 'sales', 'module_overwrite_tax', 315),
 ('refuse_approve', 'changes_house', 'module_refuse_approve', 314),
-('return_item', 'sales', 'module_return_item', 334),
-('return_item_with_invoice', 'sales', 'module_action_return_item_with_invoice', 503),
 ('search', 'customers', 'module_action_search_customers', 30),
 ('search', 'employees', 'module_action_search_employees', 150),
 ('search', 'giftcards', 'module_action_search_giftcards', 220),
@@ -969,8 +798,6 @@ INSERT INTO `phppos_modules_actions` (`action_id`, `module_id`, `action_name_key
 ('see_cost_price', 'items', 'module_see_cost_price', 61),
 ('see_quantity_defect', 'items', 'module_see_quantity_defect', 23),
 ('see_sales_uniqued', 'sales', 'module_sales_see_sales_uniqued', 91),
-('select_seller_during_sale', 'sales', 'module_select_seller_during_sale', 335),
-('show_column_cash_flow', 'registers_movement', 'module_action_show_column_cash_flow', 233),
 ('show_cost_price', 'reports', 'reports_show_cost_price', 290),
 ('show_profit', 'reports', 'reports_show_profit', 280),
 ('view_categories', 'reports', 'reports_categories', 100),
@@ -1025,65 +852,6 @@ CREATE TABLE `phppos_movement_balance_employees` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `phppos_orders_sales`
---
-
-CREATE TABLE `phppos_orders_sales` (
-  `order_sale_id` int(11) NOT NULL,
-  `sale_id` int(11) DEFAULT NULL,
-  `number` int(11) NOT NULL,
-  `location_id` int(11) NOT NULL,
-  `deleted` tinyint(4) NOT NULL DEFAULT '0',
-  `state` varchar(30) NOT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `employee_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `phppos_pay_cash`
---
-
-CREATE TABLE `phppos_pay_cash` (
-  `pay_cash_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `supplier_id` int(10) DEFAULT NULL,
-  `employee_id` int(10) NOT NULL DEFAULT '0',
-  `sold_by_employee_id` int(10) DEFAULT NULL,
-  `comment` text COLLATE utf8_unicode_ci NOT NULL,
-  `show_comment_on_receipt` int(1) NOT NULL DEFAULT '0',
-  `pay_cash_id` int(10) NOT NULL,
-  `payment_type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `cc_ref_no` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `auth_code` varchar(255) COLLATE utf8_unicode_ci DEFAULT '',
-  `deleted_by` int(10) DEFAULT NULL,
-  `deleted` int(1) NOT NULL DEFAULT '0',
-  `suspended` int(1) NOT NULL DEFAULT '0',
-  `store_account_payment` int(1) NOT NULL DEFAULT '0',
-  `location_id` int(11) NOT NULL,
-  `register_id` int(11) DEFAULT NULL,
-  `receiving_id` int(11) DEFAULT NULL,
-  `monton_total` double NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `phppos_pay_cash_payments`
---
-
-CREATE TABLE `phppos_pay_cash_payments` (
-  `payment_id` int(11) NOT NULL,
-  `pay_cash_id` int(11) NOT NULL,
-  `payment_type` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `payment_amount` decimal(26,0) NOT NULL,
-  `payment_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `phppos_people`
 --
 
@@ -1100,16 +868,15 @@ CREATE TABLE `phppos_people` (
   `country` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `comments` text COLLATE utf8_unicode_ci NOT NULL,
   `image_id` int(10) DEFAULT NULL,
-  `person_id` int(10) NOT NULL,
-  `update_people` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `person_id` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `phppos_people`
 --
 
-INSERT INTO `phppos_people` (`first_name`, `last_name`, `phone_number`, `email`, `address_1`, `address_2`, `city`, `state`, `zip`, `country`, `comments`, `image_id`, `person_id`, `update_people`) VALUES
-('SuperAdministrador ', '', '555-555-5555', 'no-reply@facilpos.com', 'Address 1', '', '', '', '', '', '', NULL, 1, '2019-03-04 04:09:07');
+INSERT INTO `phppos_people` (`first_name`, `last_name`, `phone_number`, `email`, `address_1`, `address_2`, `city`, `state`, `zip`, `country`, `comments`, `image_id`, `person_id`) VALUES
+('John', 'Doe', '555-555-5555', 'no-reply@facilpos.com', 'Address 1', '', '', '', '', '', '', NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -1137,15 +904,13 @@ INSERT INTO `phppos_permissions` (`module_id`, `person_id`) VALUES
 ('items', 1),
 ('licenses', 1),
 ('locations', 1),
-('offline', 1),
 ('receivings', 1),
 ('recharges', 1),
 ('registers_movement', 1),
 ('reports', 1),
 ('sales', 1),
 ('suppliers', 1),
-('technical_supports', 1),
-('warehouse', 1);
+('technical_supports', 1);
 
 -- --------------------------------------------------------
 
@@ -1185,24 +950,15 @@ INSERT INTO `phppos_permissions_actions` (`module_id`, `person_id`, `action_id`)
 ('item_kits', 1, 'search'),
 ('item_kits', 1, 'see_cost_price'),
 ('items', 1, 'add_update'),
-('items', 1, 'agregar_o_sustraer'),
 ('items', 1, 'delete'),
-('items', 1, 'delete_serial'),
-('items', 1, 'edit_quantity'),
 ('items', 1, 'search'),
 ('items', 1, 'see_cost_price'),
 ('items', 1, 'see_quantity_defect'),
 ('locations', 1, 'add_update'),
 ('locations', 1, 'delete'),
 ('locations', 1, 'search'),
-('offline', 1, 'delete_sale_offline'),
-('receivings', 1, 'delete_payments_to_credit'),
 ('registers_movement', 1, 'add_update'),
-('registers_movement', 1, 'mostrar_valor_cierre_caja'),
 ('registers_movement', 1, 'see_cash_flows_uniqued'),
-('registers_movement', 1, 'show_column_cash_flow'),
-('reports', 1, 'allow_graphics_arnings_monsth'),
-('reports', 1, 'allow_graphics_by_store'),
 ('reports', 1, 'show_cost_price'),
 ('reports', 1, 'show_profit'),
 ('reports', 1, 'view_categories'),
@@ -1234,7 +990,6 @@ INSERT INTO `phppos_permissions_actions` (`module_id`, `person_id`, `action_id`)
 ('reports', 1, 'view_tables'),
 ('reports', 1, 'view_taxes'),
 ('reports', 1, 'view_transfer_location'),
-('sales', 1, 'delete_payments_to_credit'),
 ('sales', 1, 'delete_sale'),
 ('sales', 1, 'delete_suspended_sale'),
 ('sales', 1, 'delete_taxes'),
@@ -1243,12 +998,7 @@ INSERT INTO `phppos_permissions_actions` (`module_id`, `person_id`, `action_id`)
 ('sales', 1, 'edit_tier'),
 ('sales', 1, 'edit_tier_all'),
 ('sales', 1, 'give_discount'),
-('sales', 1, 'module_allow_open_money_box'),
-('sales', 1, 'overwrite_tax'),
-('sales', 1, 'return_item'),
-('sales', 1, 'return_item_with_invoice'),
 ('sales', 1, 'see_sales_uniqued'),
-('sales', 1, 'select_seller_during_sale'),
 ('suppliers', 1, 'add_update'),
 ('suppliers', 1, 'delete'),
 ('suppliers', 1, 'search'),
@@ -1306,8 +1056,7 @@ CREATE TABLE `phppos_petty_cash_payments` (
 CREATE TABLE `phppos_points` (
   `id_point` int(11) NOT NULL,
   `customer_id` int(10) NOT NULL,
-  `points` int(11) NOT NULL,
-  `update_points_customer` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `points` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -1357,7 +1106,6 @@ CREATE TABLE `phppos_quotes` (
   `store_account_payment` int(1) NOT NULL DEFAULT '0',
   `location_id` int(11) NOT NULL,
   `register_id` int(11) DEFAULT NULL,
-  `overwrite_tax` tinyint(4) DEFAULT '0',
   `tier_id` int(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -1430,9 +1178,9 @@ CREATE TABLE `phppos_rates` (
 --
 
 INSERT INTO `phppos_rates` (`id_rate`, `name`, `sale_rate`, `rate_buy`, `deleted`) VALUES
-(1, 'Casa de cambio', '1.0000000000', '1.0000000000', 0),
-(2, 'Distribuidor', '1.0000000000', '1.0000000000', 0),
-(3, 'Bolívares', '1.0000000000', '1.0000000000', 0);
+(1, 'Distribuidor1', '1.0000000000', '1.0000000000', 0),
+(2, 'Distribuidor2', '1.0000000000', '1.0000000000', 0),
+(3, 'Distribuidor3', '1.0000000000', '1.0000000000', 0);
 
 -- --------------------------------------------------------
 
@@ -1451,9 +1199,7 @@ CREATE TABLE `phppos_receivings` (
   `deleted_by` int(10) DEFAULT NULL,
   `suspended` int(1) NOT NULL DEFAULT '0',
   `location_id` int(11) NOT NULL,
-  `transfer_to_location_id` int(11) DEFAULT NULL,
-  `mount` decimal(26,2) DEFAULT NULL,
-  `credit` tinyint(1) DEFAULT '0'
+  `transfer_to_location_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -1472,10 +1218,7 @@ CREATE TABLE `phppos_receivings_items` (
   `item_cost_price` decimal(23,10) NOT NULL,
   `item_unit_price` decimal(23,10) NOT NULL,
   `discount_percent` int(11) NOT NULL DEFAULT '0',
-  `item_cost_transport` decimal(23,10) NOT NULL,
-  `custom1_subcategory` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `custom2_subcategory` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `quantity_subcategory` decimal(23,10) DEFAULT NULL
+  `item_cost_transport` decimal(23,10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -1492,22 +1235,6 @@ CREATE TABLE `phppos_receivings_items_taxes` (
   `percent` decimal(15,3) NOT NULL,
   `cumulative` int(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `phppos_receivings_payments`
---
-
-CREATE TABLE `phppos_receivings_payments` (
-  `payment_id` int(10) NOT NULL,
-  `receiving_id` int(10) DEFAULT NULL,
-  `payment_type` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `payment_amount` decimal(23,10) DEFAULT NULL,
-  `truncated_card` varchar(255) COLLATE utf8_unicode_ci DEFAULT '',
-  `card_issuer` varchar(255) COLLATE utf8_unicode_ci DEFAULT '',
-  `payment_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
 
 -- --------------------------------------------------------
 
@@ -1546,8 +1273,7 @@ CREATE TABLE `phppos_registers_movement` (
   `type_movement` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `mount_cash` decimal(23,0) NOT NULL,
   `categorias_gastos` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `id_employee` int(11) DEFAULT NULL,
-  `delivered_to` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL
+  `id_employee` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -1566,12 +1292,7 @@ CREATE TABLE `phppos_register_log` (
   `open_amount` decimal(23,10) NOT NULL,
   `close_amount` decimal(23,10) NOT NULL,
   `cash_sales_amount` decimal(23,10) NOT NULL,
-  `deleted` int(1) NOT NULL DEFAULT '0',
-  `synchronizations_offline_id` int(11) DEFAULT NULL,
-  `register_log_id_offline` int(11) DEFAULT NULL,
-  `created_online` tinyint(4) NOT NULL DEFAULT '1',
-  `closed_manual` tinyint(4) DEFAULT NULL,
-  `descripcion` text COLLATE utf8_unicode_ci
+  `deleted` int(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -1593,7 +1314,6 @@ CREATE TABLE `phppos_sales` (
   `auth_code` varchar(255) COLLATE utf8_unicode_ci DEFAULT '',
   `deleted_by` int(10) DEFAULT NULL,
   `deleted` int(1) NOT NULL DEFAULT '0',
-  `support_id` int(11) DEFAULT NULL,
   `ticket_number` int(11) DEFAULT NULL,
   `invoice_number` int(11) DEFAULT NULL,
   `is_invoice` int(1) NOT NULL DEFAULT '1',
@@ -1601,16 +1321,8 @@ CREATE TABLE `phppos_sales` (
   `store_account_payment` int(1) NOT NULL DEFAULT '0',
   `location_id` int(11) NOT NULL,
   `register_id` int(11) DEFAULT NULL,
-  `serie_number_invoice` varchar(30) COLLATE utf8_unicode_ci NOT NULL DEFAULT '1',
   `tier_id` int(10) DEFAULT NULL,
   `ntable` int(11) DEFAULT NULL COMMENT 'cantidad de mesas para restaurante',
-  `overwrite_tax` tinyint(4) NOT NULL DEFAULT '0',
-  `synchronizations_offline_id` int(11) DEFAULT NULL,
-  `sale_id_offline` int(11) DEFAULT NULL,
-  `another_currency` tinyint(4) NOT NULL DEFAULT '0',
-  `currency` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `total_other_currency` decimal(23,10) DEFAULT NULL,
-  `value_other_currency` decimal(23,10) DEFAULT NULL,
   `transaction_rate` decimal(23,10) DEFAULT NULL COMMENT 'tasa de  transacción puesto pos la casa ',
   `opcion_sale` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `divisa` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL
@@ -1643,9 +1355,6 @@ CREATE TABLE `phppos_sales_items` (
   `tipo_documento` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `fecha_estado` timestamp NULL DEFAULT NULL,
   `tipo_cuenta` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `observaciones` text COLLATE utf8_unicode_ci,
-  `celular` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `file_id` bigint(20) DEFAULT NULL,
   `transaction_status` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
   `comentarios` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -1751,7 +1460,7 @@ CREATE TABLE `phppos_spare_parts` (
   `name` varchar(30) DEFAULT NULL,
   `quantity` decimal(10,0) NOT NULL,
   `id_support` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Esta tabla en la nueva version se dejó de usar';
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1774,25 +1483,6 @@ CREATE TABLE `phppos_store_accounts` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `phppos_store_payments`
---
-
-CREATE TABLE `phppos_store_payments` (
-  `sno` int(11) NOT NULL,
-  `supplier_id` int(11) NOT NULL,
-  `pay_cash_id` int(11) DEFAULT NULL,
-  `transaction_amount` decimal(23,10) NOT NULL DEFAULT '0.0000000000',
-  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `balance` decimal(23,10) NOT NULL DEFAULT '0.0000000000',
-  `comment` text COLLATE utf8_unicode_ci,
-  `movement_type` tinyint(4) DEFAULT NULL COMMENT '1 resta saldo, 0 agregar saldo',
-  `category` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `abono` tinyint(1) DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `phppos_suppliers`
 --
 
@@ -1802,46 +1492,8 @@ CREATE TABLE `phppos_suppliers` (
   `company_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `account_number` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `type` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
-  `deleted` int(1) NOT NULL DEFAULT '0',
-  `balance` decimal(23,10) NOT NULL DEFAULT '0.0000000000'
+  `deleted` int(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `phppos_support_cart`
---
-
-CREATE TABLE `phppos_support_cart` (
-  `id` bigint(20) NOT NULL,
-  `id_support` int(11) NOT NULL,
-  `line` int(11) NOT NULL,
-  `item_id` int(11) NOT NULL,
-  `tax_included` tinyint(4) NOT NULL,
-  `description` text,
-  `serialnumber` varchar(100) DEFAULT NULL,
-  `quantity` int(11) NOT NULL,
-  `discount` decimal(20,10) DEFAULT NULL,
-  `custom1_subcategory` varchar(30) DEFAULT NULL,
-  `custom2_subcategory` varchar(30) DEFAULT NULL,
-  `price` decimal(20,10) NOT NULL,
-  `id_tier` int(11) DEFAULT NULL,
-  `deleted` tinyint(4) DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `phppos_support_cart_taxes`
---
-
-CREATE TABLE `phppos_support_cart_taxes` (
-  `support_cart_id` bigint(20) NOT NULL,
-  `name` varchar(50) DEFAULT NULL,
-  `percent` decimal(20,10) NOT NULL,
-  `cumulative` tinyint(4) NOT NULL,
-  `line` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1856,20 +1508,6 @@ CREATE TABLE `phppos_support_payments` (
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `deleted` tinyint(4) NOT NULL,
   `type` varchar(30) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `phppos_synchronizations_offline`
---
-
-CREATE TABLE `phppos_synchronizations_offline` (
-  `id` int(11) NOT NULL,
-  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `person_id` int(11) NOT NULL,
-  `token` varchar(150) NOT NULL,
-  `ip` varchar(40) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -1994,39 +1632,16 @@ INSERT INTO `phppos_time_zones` (`time_zone`, `language`) VALUES
 ('America/Montevideo', 'spanish_uruguay'),
 ('America/Caracas', 'spanish_venezuela');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `phppos_transfer_files`
---
-
-CREATE TABLE `phppos_transfer_files` (
-  `file_id` bigint(20) NOT NULL,
-  `name_file` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `data_file` longblob NOT NULL,
-  `date_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
 --
 -- Índices para tablas volcadas
 --
-
---
--- Indices de la tabla `phppos_access_employees`
---
-ALTER TABLE `phppos_access_employees`
-  ADD PRIMARY KEY (`employee_id`,`id_hour_access`,`id_day_access`,`location`) USING BTREE,
-  ADD KEY `phppos_access_employees_ibfk_2` (`id_day_access`),
-  ADD KEY `id_hour_access` (`id_hour_access`),
-  ADD KEY `location` (`location`);
 
 --
 -- Indices de la tabla `phppos_additional_item_numbers`
 --
 ALTER TABLE `phppos_additional_item_numbers`
   ADD PRIMARY KEY (`item_id`,`item_number`),
-  ADD UNIQUE KEY `item_number` (`item_number`),
-  ADD KEY `update_additional_item_number` (`update_additional_item_number`);
+  ADD UNIQUE KEY `item_number` (`item_number`);
 
 --
 -- Indices de la tabla `phppos_additional_item_seriales`
@@ -2063,14 +1678,7 @@ ALTER TABLE `phppos_customers`
   ADD KEY `person_id` (`person_id`),
   ADD KEY `deleted` (`deleted`),
   ADD KEY `cc_token` (`cc_token`),
-  ADD KEY `phppos_customers_ibfk_2` (`tier_id`),
-  ADD KEY `update_customer` (`update_customer`);
-
---
--- Indices de la tabla `phppos_day_access`
---
-ALTER TABLE `phppos_day_access`
-  ADD PRIMARY KEY (`id`);
+  ADD KEY `phppos_customers_ibfk_2` (`tier_id`);
 
 --
 -- Indices de la tabla `phppos_defective_audit`
@@ -2093,8 +1701,7 @@ ALTER TABLE `phppos_employees`
   ADD UNIQUE KEY `username` (`username`),
   ADD KEY `person_id` (`person_id`),
   ADD KEY `deleted` (`deleted`),
-  ADD KEY `id_rate` (`id_rate`),
-  ADD KEY `update_employee` (`update_employee`);
+  ADD KEY `id_rate` (`id_rate`);
 
 --
 -- Indices de la tabla `phppos_employees_locations`
@@ -2111,12 +1718,6 @@ ALTER TABLE `phppos_giftcards`
   ADD UNIQUE KEY `giftcard_number` (`giftcard_number`),
   ADD KEY `deleted` (`deleted`),
   ADD KEY `phppos_giftcards_ibfk_1` (`customer_id`);
-
---
--- Indices de la tabla `phppos_hour_access`
---
-ALTER TABLE `phppos_hour_access`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `phppos_inventory`
@@ -2137,8 +1738,7 @@ ALTER TABLE `phppos_items`
   ADD KEY `name` (`name`),
   ADD KEY `category` (`category`),
   ADD KEY `deleted` (`deleted`),
-  ADD KEY `phppos_items_ibfk_2` (`image_id`),
-  ADD KEY `update_item` (`update_item`);
+  ADD KEY `phppos_items_ibfk_2` (`image_id`);
 
 --
 -- Indices de la tabla `phppos_items_more`
@@ -2157,8 +1757,7 @@ ALTER TABLE `phppos_items_more_field`
 -- Indices de la tabla `phppos_items_subcategory`
 --
 ALTER TABLE `phppos_items_subcategory`
-  ADD PRIMARY KEY (`item_id`,`location_id`,`custom1`,`custom2`),
-  ADD KEY `update_subcategory_item` (`update_subcategory_item`);
+  ADD PRIMARY KEY (`item_id`,`location_id`,`custom1`,`custom2`);
 
 --
 -- Indices de la tabla `phppos_items_suppliers`
@@ -2172,16 +1771,14 @@ ALTER TABLE `phppos_items_suppliers`
 --
 ALTER TABLE `phppos_items_taxes`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `unique_tax` (`item_id`,`name`,`percent`),
-  ADD KEY `update_item_taxes` (`update_item_taxes`);
+  ADD UNIQUE KEY `unique_tax` (`item_id`,`name`,`percent`);
 
 --
 -- Indices de la tabla `phppos_items_tier_prices`
 --
 ALTER TABLE `phppos_items_tier_prices`
   ADD PRIMARY KEY (`tier_id`,`item_id`),
-  ADD KEY `phppos_items_tier_prices_ibfk_2` (`item_id`),
-  ADD KEY `update_items_tier_price` (`update_items_tier_price`);
+  ADD KEY `phppos_items_tier_prices_ibfk_2` (`item_id`);
 
 --
 -- Indices de la tabla `phppos_item_kits`
@@ -2212,17 +1809,7 @@ ALTER TABLE `phppos_item_kits_tier_prices`
 --
 ALTER TABLE `phppos_item_kit_items`
   ADD PRIMARY KEY (`item_kit_id`,`item_id`,`quantity`),
-  ADD KEY `phppos_item_kit_items_ibfk_2` (`item_id`),
-  ADD KEY `update_item_kit_item` (`update_item_kit_item`);
-
---
--- Indices de la tabla `phppos_item_range`
---
-ALTER TABLE `phppos_item_range`
-  ADD PRIMARY KEY (`range_id`),
-  ADD UNIQUE KEY `item_id` (`item_id`,`register_log_id`),
-  ADD KEY `employee_id_recharge` (`employee_id_recharge`),
-  ADD KEY `register_log_id` (`register_log_id`);
+  ADD KEY `phppos_item_kit_items_ibfk_2` (`item_id`);
 
 --
 -- Indices de la tabla `phppos_locations`
@@ -2236,8 +1823,7 @@ ALTER TABLE `phppos_locations`
 --
 ALTER TABLE `phppos_location_items`
   ADD PRIMARY KEY (`location_id`,`item_id`),
-  ADD KEY `phppos_location_items_ibfk_2` (`item_id`),
-  ADD KEY `update_item_location` (`update_item_location`);
+  ADD KEY `phppos_location_items_ibfk_2` (`item_id`);
 
 --
 -- Indices de la tabla `phppos_location_items_taxes`
@@ -2245,8 +1831,7 @@ ALTER TABLE `phppos_location_items`
 ALTER TABLE `phppos_location_items_taxes`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `unique_tax` (`location_id`,`item_id`,`name`,`percent`),
-  ADD KEY `phppos_location_items_taxes_ibfk_2` (`item_id`),
-  ADD KEY `update_item_taxes_location` (`update_item_taxes_location`);
+  ADD KEY `phppos_location_items_taxes_ibfk_2` (`item_id`);
 
 --
 -- Indices de la tabla `phppos_location_items_tier_prices`
@@ -2261,8 +1846,7 @@ ALTER TABLE `phppos_location_items_tier_prices`
 --
 ALTER TABLE `phppos_location_item_kits`
   ADD PRIMARY KEY (`location_id`,`item_kit_id`),
-  ADD KEY `phppos_location_item_kits_ibfk_2` (`item_kit_id`),
-  ADD KEY `update_location_item_kits` (`update_location_item_kits`);
+  ADD KEY `phppos_location_item_kits_ibfk_2` (`item_kit_id`);
 
 --
 -- Indices de la tabla `phppos_location_item_kits_taxes`
@@ -2305,39 +1889,6 @@ ALTER TABLE `phppos_movement_balance_employees`
   ADD KEY `location_id` (`location_id`);
 
 --
--- Indices de la tabla `phppos_orders_sales`
---
-ALTER TABLE `phppos_orders_sales`
-  ADD PRIMARY KEY (`order_sale_id`),
-  ADD KEY `sale_id` (`sale_id`),
-  ADD KEY `number` (`number`),
-  ADD KEY `deleted` (`deleted`),
-  ADD KEY `state` (`state`),
-  ADD KEY `employee_id` (`employee_id`);
-
---
--- Indices de la tabla `phppos_pay_cash`
---
-ALTER TABLE `phppos_pay_cash`
-  ADD PRIMARY KEY (`pay_cash_id`),
-  ADD KEY `supplier_id` (`supplier_id`),
-  ADD KEY `employee_id` (`employee_id`),
-  ADD KEY `deleted` (`deleted`),
-  ADD KEY `location_id` (`location_id`),
-  ADD KEY `phppos_receivings_ibfk_4` (`deleted_by`),
-  ADD KEY `pay_cash_search` (`location_id`,`store_account_payment`,`pay_cash_time`,`pay_cash_id`),
-  ADD KEY `phppos_pay_cash_ibfk_7` (`register_id`),
-  ADD KEY `phppos_pay_cash_ibfk_6` (`sold_by_employee_id`),
-  ADD KEY `receiving_id` (`receiving_id`);
-
---
--- Indices de la tabla `phppos_pay_cash_payments`
---
-ALTER TABLE `phppos_pay_cash_payments`
-  ADD PRIMARY KEY (`payment_id`),
-  ADD KEY `pay_cash_id` (`pay_cash_id`);
-
---
 -- Indices de la tabla `phppos_people`
 --
 ALTER TABLE `phppos_people`
@@ -2345,8 +1896,7 @@ ALTER TABLE `phppos_people`
   ADD KEY `first_name` (`first_name`),
   ADD KEY `last_name` (`last_name`),
   ADD KEY `email` (`email`),
-  ADD KEY `phppos_people_ibfk_1` (`image_id`),
-  ADD KEY `update_people` (`update_people`);
+  ADD KEY `phppos_people_ibfk_1` (`image_id`);
 
 --
 -- Indices de la tabla `phppos_permissions`
@@ -2471,13 +2021,6 @@ ALTER TABLE `phppos_receivings_items_taxes`
   ADD KEY `item_id` (`item_id`);
 
 --
--- Indices de la tabla `phppos_receivings_payments`
---
-ALTER TABLE `phppos_receivings_payments`
-  ADD PRIMARY KEY (`payment_id`),
-  ADD KEY `receiving_id` (`receiving_id`);
-
---
 -- Indices de la tabla `phppos_registers`
 --
 ALTER TABLE `phppos_registers`
@@ -2499,7 +2042,6 @@ ALTER TABLE `phppos_registers_movement`
 --
 ALTER TABLE `phppos_register_log`
   ADD PRIMARY KEY (`register_log_id`),
-  ADD UNIQUE KEY `synchronizations_offline_id` (`synchronizations_offline_id`,`register_log_id_offline`),
   ADD KEY `phppos_register_log_ibfk_1` (`employee_id_open`),
   ADD KEY `phppos_register_log_ibfk_2` (`register_id`),
   ADD KEY `phppos_register_log_ibfk_3` (`employee_id_close`);
@@ -2509,8 +2051,6 @@ ALTER TABLE `phppos_register_log`
 --
 ALTER TABLE `phppos_sales`
   ADD PRIMARY KEY (`sale_id`),
-  ADD UNIQUE KEY `offline_sales` (`synchronizations_offline_id`,`sale_id_offline`),
-  ADD UNIQUE KEY `support_id` (`support_id`),
   ADD KEY `customer_id` (`customer_id`),
   ADD KEY `employee_id` (`employee_id`),
   ADD KEY `deleted` (`deleted`),
@@ -2526,8 +2066,7 @@ ALTER TABLE `phppos_sales`
 --
 ALTER TABLE `phppos_sales_items`
   ADD PRIMARY KEY (`sale_id`,`item_id`,`line`),
-  ADD KEY `item_id` (`item_id`),
-  ADD KEY `file_id` (`file_id`);
+  ADD KEY `item_id` (`item_id`);
 
 --
 -- Indices de la tabla `phppos_sales_items_taxes`
@@ -2579,14 +2118,6 @@ ALTER TABLE `phppos_store_accounts`
   ADD KEY `phppos_store_accounts_ibfk_2` (`customer_id`);
 
 --
--- Indices de la tabla `phppos_store_payments`
---
-ALTER TABLE `phppos_store_payments`
-  ADD PRIMARY KEY (`sno`),
-  ADD KEY `phppos_store_accounts_ibfk_1` (`pay_cash_id`),
-  ADD KEY `phppos_store_accounts_ibfk_2` (`supplier_id`);
-
---
 -- Indices de la tabla `phppos_suppliers`
 --
 ALTER TABLE `phppos_suppliers`
@@ -2596,33 +2127,11 @@ ALTER TABLE `phppos_suppliers`
   ADD KEY `deleted` (`deleted`);
 
 --
--- Indices de la tabla `phppos_support_cart`
---
-ALTER TABLE `phppos_support_cart`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `line` (`line`,`id_support`),
-  ADD KEY `item_id` (`item_id`);
-
---
--- Indices de la tabla `phppos_support_cart_taxes`
---
-ALTER TABLE `phppos_support_cart_taxes`
-  ADD KEY `phppos_support_cart_taxes_ibfk_1` (`support_cart_id`),
-  ADD KEY `line` (`line`);
-
---
 -- Indices de la tabla `phppos_support_payments`
 --
 ALTER TABLE `phppos_support_payments`
   ADD PRIMARY KEY (`payment_id`),
   ADD KEY `id_support` (`id_support`);
-
---
--- Indices de la tabla `phppos_synchronizations_offline`
---
-ALTER TABLE `phppos_synchronizations_offline`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `token` (`token`);
 
 --
 -- Indices de la tabla `phppos_technical_supports`
@@ -2669,12 +2178,6 @@ ALTER TABLE `phppos_time_zones`
   ADD PRIMARY KEY (`language`);
 
 --
--- Indices de la tabla `phppos_transfer_files`
---
-ALTER TABLE `phppos_transfer_files`
-  ADD PRIMARY KEY (`file_id`);
-
---
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
@@ -2695,12 +2198,6 @@ ALTER TABLE `phppos_app_files`
 --
 ALTER TABLE `phppos_customers`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `phppos_day_access`
---
-ALTER TABLE `phppos_day_access`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `phppos_defective_audit`
@@ -2727,12 +2224,6 @@ ALTER TABLE `phppos_giftcards`
   MODIFY `giftcard_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `phppos_hour_access`
---
-ALTER TABLE `phppos_hour_access`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
-
---
 -- AUTO_INCREMENT de la tabla `phppos_inventory`
 --
 ALTER TABLE `phppos_inventory`
@@ -2742,7 +2233,7 @@ ALTER TABLE `phppos_inventory`
 -- AUTO_INCREMENT de la tabla `phppos_items`
 --
 ALTER TABLE `phppos_items`
-  MODIFY `item_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `item_id` int(10) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `phppos_items_more`
@@ -2769,12 +2260,6 @@ ALTER TABLE `phppos_item_kits_taxes`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `phppos_item_range`
---
-ALTER TABLE `phppos_item_range`
-  MODIFY `range_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT de la tabla `phppos_locations`
 --
 ALTER TABLE `phppos_locations`
@@ -2797,24 +2282,6 @@ ALTER TABLE `phppos_location_item_kits_taxes`
 --
 ALTER TABLE `phppos_movement_balance_employees`
   MODIFY `id_movement` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `phppos_orders_sales`
---
-ALTER TABLE `phppos_orders_sales`
-  MODIFY `order_sale_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `phppos_pay_cash`
---
-ALTER TABLE `phppos_pay_cash`
-  MODIFY `pay_cash_id` int(10) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `phppos_pay_cash_payments`
---
-ALTER TABLE `phppos_pay_cash_payments`
-  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `phppos_people`
@@ -2871,12 +2338,6 @@ ALTER TABLE `phppos_receivings`
   MODIFY `receiving_id` int(10) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `phppos_receivings_payments`
---
-ALTER TABLE `phppos_receivings_payments`
-  MODIFY `payment_id` int(10) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT de la tabla `phppos_registers`
 --
 ALTER TABLE `phppos_registers`
@@ -2919,34 +2380,16 @@ ALTER TABLE `phppos_store_accounts`
   MODIFY `sno` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `phppos_store_payments`
---
-ALTER TABLE `phppos_store_payments`
-  MODIFY `sno` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT de la tabla `phppos_suppliers`
 --
 ALTER TABLE `phppos_suppliers`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `phppos_support_cart`
---
-ALTER TABLE `phppos_support_cart`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT de la tabla `phppos_support_payments`
 --
 ALTER TABLE `phppos_support_payments`
   MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `phppos_synchronizations_offline`
---
-ALTER TABLE `phppos_synchronizations_offline`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `phppos_technical_supports`
@@ -2979,23 +2422,8 @@ ALTER TABLE `phppos_technical_supports_ubi_equipos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `phppos_transfer_files`
---
-ALTER TABLE `phppos_transfer_files`
-  MODIFY `file_id` bigint(20) NOT NULL AUTO_INCREMENT;
-
---
 -- Restricciones para tablas volcadas
 --
-
---
--- Filtros para la tabla `phppos_access_employees`
---
-ALTER TABLE `phppos_access_employees`
-  ADD CONSTRAINT `phppos_access_employees_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `phppos_employees` (`person_id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `phppos_access_employees_ibfk_2` FOREIGN KEY (`id_day_access`) REFERENCES `phppos_day_access` (`id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `phppos_access_employees_ibfk_3` FOREIGN KEY (`id_hour_access`) REFERENCES `phppos_hour_access` (`id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `phppos_access_employees_ibfk_4` FOREIGN KEY (`location`) REFERENCES `phppos_locations` (`location_id`) ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `phppos_additional_item_numbers`
@@ -3111,14 +2539,6 @@ ALTER TABLE `phppos_item_kit_items`
   ADD CONSTRAINT `phppos_item_kit_items_ibfk_2` FOREIGN KEY (`item_id`) REFERENCES `phppos_items` (`item_id`) ON DELETE CASCADE;
 
 --
--- Filtros para la tabla `phppos_item_range`
---
-ALTER TABLE `phppos_item_range`
-  ADD CONSTRAINT `phppos_item_range_ibfk_1` FOREIGN KEY (`employee_id_recharge`) REFERENCES `phppos_employees` (`person_id`),
-  ADD CONSTRAINT `phppos_item_range_ibfk_2` FOREIGN KEY (`item_id`) REFERENCES `phppos_items` (`item_id`),
-  ADD CONSTRAINT `phppos_item_range_ibfk_3` FOREIGN KEY (`register_log_id`) REFERENCES `phppos_register_log` (`register_log_id`);
-
---
 -- Filtros para la tabla `phppos_location_items`
 --
 ALTER TABLE `phppos_location_items`
@@ -3166,7 +2586,7 @@ ALTER TABLE `phppos_location_item_kits_tier_prices`
 -- Filtros para la tabla `phppos_modules_actions`
 --
 ALTER TABLE `phppos_modules_actions`
-  ADD CONSTRAINT `phppos_modules_actions_ibfk_1` FOREIGN KEY (`module_id`) REFERENCES `phppos_modules` (`module_id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `phppos_modules_actions_ibfk_1` FOREIGN KEY (`module_id`) REFERENCES `phppos_modules` (`module_id`);
 
 --
 -- Filtros para la tabla `phppos_movement_balance_employees`
@@ -3175,19 +2595,6 @@ ALTER TABLE `phppos_movement_balance_employees`
   ADD CONSTRAINT `phppos_movement_balance_employees_ibfk_1` FOREIGN KEY (`id_person`) REFERENCES `phppos_employees` (`person_id`),
   ADD CONSTRAINT `phppos_movement_balance_employees_ibfk_2` FOREIGN KEY (`registered_by`) REFERENCES `phppos_employees` (`person_id`),
   ADD CONSTRAINT `phppos_movement_balance_employees_ibfk_3` FOREIGN KEY (`location_id`) REFERENCES `phppos_locations` (`location_id`);
-
---
--- Filtros para la tabla `phppos_orders_sales`
---
-ALTER TABLE `phppos_orders_sales`
-  ADD CONSTRAINT `phppos_orders_sales_ibfk_1` FOREIGN KEY (`sale_id`) REFERENCES `phppos_sales` (`sale_id`),
-  ADD CONSTRAINT `phppos_orders_sales_ibfk_2` FOREIGN KEY (`employee_id`) REFERENCES `phppos_employees` (`person_id`);
-
---
--- Filtros para la tabla `phppos_pay_cash_payments`
---
-ALTER TABLE `phppos_pay_cash_payments`
-  ADD CONSTRAINT `phppos_pay_cash_payments_ibfk_1` FOREIGN KEY (`pay_cash_id`) REFERENCES `phppos_pay_cash` (`pay_cash_id`);
 
 --
 -- Filtros para la tabla `phppos_people`
@@ -3295,12 +2702,6 @@ ALTER TABLE `phppos_receivings_items_taxes`
   ADD CONSTRAINT `phppos_receivings_items_taxes_ibfk_2` FOREIGN KEY (`item_id`) REFERENCES `phppos_items` (`item_id`);
 
 --
--- Filtros para la tabla `phppos_receivings_payments`
---
-ALTER TABLE `phppos_receivings_payments`
-  ADD CONSTRAINT `phppos_receivings_payments_ibfk_1` FOREIGN KEY (`receiving_id`) REFERENCES `phppos_receivings` (`receiving_id`);
-
---
 -- Filtros para la tabla `phppos_registers`
 --
 ALTER TABLE `phppos_registers`
@@ -3319,8 +2720,7 @@ ALTER TABLE `phppos_registers_movement`
 ALTER TABLE `phppos_register_log`
   ADD CONSTRAINT `phppos_register_log_ibfk_1` FOREIGN KEY (`employee_id_open`) REFERENCES `phppos_employees` (`person_id`),
   ADD CONSTRAINT `phppos_register_log_ibfk_2` FOREIGN KEY (`register_id`) REFERENCES `phppos_registers` (`register_id`),
-  ADD CONSTRAINT `phppos_register_log_ibfk_3` FOREIGN KEY (`employee_id_close`) REFERENCES `phppos_employees` (`person_id`),
-  ADD CONSTRAINT `phppos_register_log_ibfk_4` FOREIGN KEY (`synchronizations_offline_id`) REFERENCES `phppos_synchronizations_offline` (`id`);
+  ADD CONSTRAINT `phppos_register_log_ibfk_3` FOREIGN KEY (`employee_id_close`) REFERENCES `phppos_employees` (`person_id`);
 
 --
 -- Filtros para la tabla `phppos_sales`
@@ -3332,17 +2732,14 @@ ALTER TABLE `phppos_sales`
   ADD CONSTRAINT `phppos_sales_ibfk_4` FOREIGN KEY (`deleted_by`) REFERENCES `phppos_employees` (`person_id`),
   ADD CONSTRAINT `phppos_sales_ibfk_5` FOREIGN KEY (`tier_id`) REFERENCES `phppos_price_tiers` (`id`),
   ADD CONSTRAINT `phppos_sales_ibfk_6` FOREIGN KEY (`sold_by_employee_id`) REFERENCES `phppos_employees` (`person_id`),
-  ADD CONSTRAINT `phppos_sales_ibfk_7` FOREIGN KEY (`register_id`) REFERENCES `phppos_registers` (`register_id`),
-  ADD CONSTRAINT `phppos_sales_ibfk_8` FOREIGN KEY (`synchronizations_offline_id`) REFERENCES `phppos_synchronizations_offline` (`id`),
-  ADD CONSTRAINT `phppos_sales_ibfk_9` FOREIGN KEY (`support_id`) REFERENCES `phppos_technical_supports` (`Id_support`);
+  ADD CONSTRAINT `phppos_sales_ibfk_7` FOREIGN KEY (`register_id`) REFERENCES `phppos_registers` (`register_id`);
 
 --
 -- Filtros para la tabla `phppos_sales_items`
 --
 ALTER TABLE `phppos_sales_items`
   ADD CONSTRAINT `phppos_sales_items_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `phppos_items` (`item_id`),
-  ADD CONSTRAINT `phppos_sales_items_ibfk_2` FOREIGN KEY (`sale_id`) REFERENCES `phppos_sales` (`sale_id`),
-  ADD CONSTRAINT `phppos_sales_items_ibfk_3` FOREIGN KEY (`file_id`) REFERENCES `phppos_transfer_files` (`file_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `phppos_sales_items_ibfk_2` FOREIGN KEY (`sale_id`) REFERENCES `phppos_sales` (`sale_id`);
 
 --
 -- Filtros para la tabla `phppos_sales_items_taxes`
@@ -3385,29 +2782,10 @@ ALTER TABLE `phppos_store_accounts`
   ADD CONSTRAINT `phppos_store_accounts_ibfk_3` FOREIGN KEY (`petty_cash_id`) REFERENCES `phppos_petty_cash` (`petty_cash_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Filtros para la tabla `phppos_store_payments`
---
-ALTER TABLE `phppos_store_payments`
-  ADD CONSTRAINT `phppos_store_payments_ibfk_1` FOREIGN KEY (`supplier_id`) REFERENCES `phppos_suppliers` (`person_id`),
-  ADD CONSTRAINT `phppos_store_payments_ibfk_2` FOREIGN KEY (`pay_cash_id`) REFERENCES `phppos_pay_cash` (`pay_cash_id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
 -- Filtros para la tabla `phppos_suppliers`
 --
 ALTER TABLE `phppos_suppliers`
   ADD CONSTRAINT `phppos_suppliers_ibfk_1` FOREIGN KEY (`person_id`) REFERENCES `phppos_people` (`person_id`);
-
---
--- Filtros para la tabla `phppos_support_cart`
---
-ALTER TABLE `phppos_support_cart`
-  ADD CONSTRAINT `phppos_support_cart_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `phppos_items` (`item_id`);
-
---
--- Filtros para la tabla `phppos_support_cart_taxes`
---
-ALTER TABLE `phppos_support_cart_taxes`
-  ADD CONSTRAINT `phppos_support_cart_taxes_ibfk_1` FOREIGN KEY (`support_cart_id`) REFERENCES `phppos_support_cart` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `phppos_support_payments`

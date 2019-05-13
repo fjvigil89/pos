@@ -134,7 +134,5 @@ $lang["common_id_employee_help"]="El empledo es obligatorio";
 $lang["common_type_falla_help"]="El tipo de falla es obligatoria";
 $lang["common_type_team_help"]="Tipo de Equipo";
 $lang["common_imprimir_recibo"]="Imprimir recibo";
-$lang["common_title"] ="Título";
-$lang["common_new_img"]="Nueva imagen";
 
 ?>

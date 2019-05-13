@@ -115,7 +115,6 @@ $route['reports/detailed_sales_serial'] = "reports/custom_serial_input_excel_exp
 $route['reports/purchase_provider']="reports/purchase_provider_input";
 
 
-
 //$route['reports/detailed_report_table'] = "reports/tables_report";
 
 /* End of file routes.php */

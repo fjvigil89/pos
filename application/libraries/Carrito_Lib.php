@@ -25,18 +25,261 @@ class Carrito_lib
 		$this->CI->session->set_userdata('sale_mode_support',$mode);
 	}
 
-	
-	function get_ivas($item_id)
+	/*public function getItem($item)
 	{
+		return $this->CI->CarritoModel->obtenerItems("$item");
+	}
+
+	public function getItemsTaxes($item)
+	{
+		return $this->CI->CarritoModel->obtenerItemsTaxes("$item");
+	}
+
+	public function getItemsLocationTaxes($item, $location)
+	{
+		return $this->CI->CarritoModel->obtenerItemsLocationTaxes("$item", "$location");
+	}
+
+	public function getLocationPrincipal($location)
+	{
+		return $this->CI->CarritoModel->obtenerItemsLocationPrincipal("$location");
+	}
+
+	public function getConfig()
+	{
+		return $this->CI->CarritoModel->obtenerConfig();
+	}*/
+	function get_ivas($item_id){
 		$ivas=$this->CI->Item_taxes_finder->get_info($item_id);
-		foreach ($ivas as $key=> $iva) 
-		{
+		foreach ($ivas as $key=> $iva) {
 			unset($ivas[$key]["id"]);
 			unset($ivas[$key]["item_id"]);
 		}
 		return 	$ivas;
 	}
-	
+	/*public function getIvaConfig()
+	{
+		$data = [];
+		$iva = [];
+		$array_config = $this->getConfig();
+
+		if ($array_config) {
+
+			foreach ($array_config as $row) {
+				$data += ["$row->key" => $row->value];
+			}
+
+			$iva[0] = ($data['default_tax_1_rate'] != "") ? $data['default_tax_1_rate'] : 0;
+			$iva[1] = ($data['default_tax_2_rate'] != "") ? $data['default_tax_2_rate'] : 0;
+			$iva[2] = ($data['default_tax_3_rate'] != "") ? $data['default_tax_3_rate'] : 0;
+			$iva[3] = ($data['default_tax_4_rate'] != "") ? $data['default_tax_4_rate'] : 0;
+			$iva[4] = ($data['default_tax_5_rate'] != "") ? $data['default_tax_5_rate'] : 0;
+
+			return $iva;
+
+		} else {
+
+			return false;
+
+		}
+
+	}
+
+	public function getIvaTiendaPrincipal($location)
+	{
+		$iva = [];
+
+		$row_location_principal = $this->getLocationPrincipal("$location");
+
+		if ($row_location_principal->default_tax_1_rate != "") {
+
+			$iva[0] = ($row_location_principal->default_tax_1_rate != "") ? $row_location_principal->default_tax_1_rate : 0;
+			$iva[1] = ($row_location_principal->default_tax_2_rate != "") ? $row_location_principal->default_tax_2_rate : 0;
+			$iva[2] = ($row_location_principal->default_tax_3_rate != "") ? $row_location_principal->default_tax_3_rate : 0;
+			$iva[3] = ($row_location_principal->default_tax_4_rate != "") ? $row_location_principal->default_tax_4_rate : 0;
+			$iva[4] = ($row_location_principal->default_tax_5_rate != "") ? $row_location_principal->default_tax_5_rate : 0;
+
+			return $iva;
+
+		} else {
+
+			return false;
+
+		}
+
+	}
+
+	public function getIvaTiendita($item, $location)
+	{
+		$iva = [];
+		$array_location_principal = $this->getItemsLocationTaxes("$item", "$location");
+
+		if ($array_location_principal) {
+
+			$iva[0] = 0;
+			$iva[1] = 0;
+			$iva[2] = 0;
+			$iva[3] = 0;
+			$iva[4] = 0;
+
+			$i = 0;
+
+			foreach ($array_location_principal as $row) {
+				$iva[$i] = ($row->percent != "") ? $row->percent : 0;
+				$i++;
+			}
+
+			return $iva;
+
+		} else {
+
+			return false;
+
+		}
+
+	}
+
+	public function getIvaItem($item)
+	{
+		$iva = [];
+		$array_item = $this->getItemsTaxes("$item");
+
+		if ($array_item) {
+
+			$iva[0] = 0;
+			$iva[1] = 0;
+			$iva[2] = 0;
+			$iva[3] = 0;
+			$iva[4] = 0;
+
+			$i = 0;
+
+			foreach ($array_item as $row) {
+				$iva[$i] = ($row->percent != "") ? $row->percent : 0;
+				$i++;
+			}
+
+			return $iva;
+
+		} else {
+
+			return false;
+
+		}
+
+	}*/
+
+	/*public function agregarItem($item, $location, $carrito = 'carrito')
+	{
+		if (!isset($_SESSION["car$carrito"])) {
+			$_SESSION["car$carrito"] = null;
+			$this->carrito["precio_total"] = 0;
+			$this->carrito["articulos_total"] = 0;
+		}
+
+		$this->carrito = $_SESSION["car$carrito"];
+
+		$row_item = $this->getItem("$item");
+
+		if ($this->getIvaConfig()) {
+			$this->iva_total = 0;
+			$iva = $this->getIvaConfig();
+			$this->iva_total = $iva[0] + $iva[1] + $iva[2] + $iva[3] + $iva[4];
+		}
+
+		if ($this->getIvaTiendaPrincipal("$location")) {
+			$this->iva_total = 0;
+			$iva = $this->getIvaTiendaPrincipal("$location");
+			$this->iva_total = $iva[0] + $iva[1] + $iva[2] + $iva[3] + $iva[4];
+		}
+
+		if ($this->getIvaTiendita("$item", "$location")) {
+			$this->iva_total = 0;
+			$iva = $this->getIvaTiendita("$item", "$location");
+			$this->iva_total = $iva[0] + $iva[1] + $iva[2] + $iva[3] + $iva[4];
+		}
+
+		if ($this->getIvaItem("$item")) {
+			$this->iva_total = 0;
+			$iva = $this->getIvaItem("$item");
+			$this->iva_total = $iva[0] + $iva[1] + $iva[2] + $iva[3] + $iva[4];
+		}
+
+		$articulo = [
+			'id' => $row_item->item_id,
+			'precio' => $row_item->unit_price,
+			'nombre' => $row_item->name,
+			'cantidad' => 1,
+			'iva_uno' => $iva[0],
+			'iva_dos' => $iva[1],
+			'iva_tres' => $iva[2],
+			'iva_cuatro' => $iva[3],
+			'iva_cinco' => $iva[4],
+		];
+
+		$unique_id = md5($articulo["id"]);
+		$articulo["unique_id"] = $unique_id;
+
+		if (!empty($this->carrito)) {
+			foreach ($this->carrito as $row) {
+				if ($row["unique_id"] === $unique_id) {
+					$articulo["cantidad"] = $row["cantidad"] + $articulo["cantidad"];
+				}
+			}
+		}
+
+		$articulo['precio_con_iva'] = $articulo['precio'] * (1 + ($this->iva_total / 100));
+
+		$articulo["subtotal"] = $articulo["cantidad"] * $articulo['precio'];
+
+		$articulo["total"] = $articulo["cantidad"] * $articulo['precio_con_iva'];
+
+		$_SESSION["car$carrito"]["$unique_id"] = $articulo;
+
+		$this->updateCarrito("$carrito");
+
+		$this->updatePrecioCantidad("$carrito");
+
+	}
+
+	public function updateCarrito($carrito)
+	{
+		if (!isset($_SESSION["car$carrito"])) {
+			$_SESSION["car$carrito"] = null;
+			$this->carrito["subtotal_total"] = 0;
+			$this->carrito["precio_total"] = 0;
+			$this->carrito["articulos_total"] = 0;
+		}
+
+		$this->carrito = $_SESSION["car$carrito"];
+	}
+
+	public function updatePrecioCantidad($carrito)
+	{
+		$total = 0;
+		$articulos = 0;
+		$subtotal = 0;
+
+		foreach ($this->carrito as $row) {
+			$total += ($row['precio_con_iva'] * $row['cantidad']);
+			$subtotal += ($row['precio'] * $row['cantidad']);
+			$articulos += $row['cantidad'];
+		}
+
+		$_SESSION["car$carrito"]["subtotal_total"] = $subtotal;
+		$_SESSION["car$carrito"]["precio_total"] = $total;
+		$_SESSION["car$carrito"]["articulos_total"] = $articulos;
+
+		$this->carrito = $_SESSION["car$carrito"];
+	}
+
+	public function getContenidoCarrito()
+	{
+		unset($this->carrito["articulos_total"]);
+		unset($this->carrito["precio_total"]);
+		unset($this->carrito["subtotal_total"]);
+		return $this->carrito == null ? null : $this->carrito;
+	}*/
 	public function get_payment_amount($payment_type)
 	{
 		$payment_amount = 0;
@@ -58,7 +301,7 @@ class Carrito_lib
 		
 		$payments=$this->getPagos();
 		
-		for($k = 0; $k < count($payments); $k ++)
+		for($k=0;$k<count($payments);$k++)
 		{
 			if ($payments[$k]['payment_type'] == $payment_type)
 			{
@@ -69,23 +312,21 @@ class Carrito_lib
 		return $payment_ids;
 	}
 	function suma_ivas($ivas){
-		$iva_total = 0;
-
-		foreach ($ivas as $iva) 
+		$iva_total=0;
+		foreach ($ivas as $iva) {
 			$iva_total += (double) $iva["percent"];
-		
+		}
 		return $iva_total;
 	}
 	function precio_sin_ivas_por_item($price,$ivas,$tax_included){
 			
-		if($tax_included)
+		if($tax_included){
 			$price = get_price_for_item_excluding_taxes_support($ivas, $price, $sale_id = FALSE);
-		
+		}
 		return $price;		
 	}
 	function add_item($item_id,$quantity=1,$discount=0,$price=null,$description=null,$serialnumber=null,  $line = FALSE,$custom1_subcategory=null,$custom2_subcategory=null,
-						$id_tier=0,$ivas=null,$tax_included=false)
-	{
+	$id_tier=0,$ivas=null,$tax_included=false){
 	
 		$store_account_item_id = $this->CI->Item->get_store_account_item_id();
 		if ( $store_account_item_id == $item_id)
@@ -538,6 +779,11 @@ class Carrito_lib
 		return $articulos;
 	}
 
+	/*public function getRepuestos($id_support)
+	{
+		return $this->CI->CarritoModel->getRespuestos($id_support);
+	}*/
+
 	public function getPagos()
 	{		
 		return $this->CI->session->userdata('pagos_servicio')? $this->CI->session->userdata('pagos_servicio'):array();		
@@ -574,6 +820,12 @@ class Carrito_lib
 		$this->CI->session->set_userdata('pagos_servicio', array_values($payments));			
 	}
 
+	/*public function destroy($carrito)
+	{
+		unset($_SESSION["car$carrito"]);
+		$this->carrito = null;
+		return true;
+	}*/
 	function edit_item($line,$description = FALSE,$serialnumber = FALSE,$quantity = FALSE,$discount = FALSE,$price = FALSE, $custom1_subcategory=false,$custom2_subcategory=false)
 	{
 		$items = $this->get_cart();
@@ -588,11 +840,20 @@ class Carrito_lib
 			if ($quantity !== FALSE ) {
 				$items[$line]['quantity'] = $quantity;
 			}
-			
+			/*if ($discount !== FALSE ) {
+				$items[$line]['discount'] = $discount;
+			}*/
 			if ($price !== FALSE ) {
 				$items[$line]['price'] = $price;
 				$items[$line]['precio_e_iva']=$this->precio_con_iva($items[$line]);
+			}/*
+			if ($custom1_subcategory !== FALSE ) {
+				$items[$line]['custom1_subcategory'] = $custom1_subcategory;
+				$items[$line]['custom2_subcategory'] = "";
 			}
+			if ($custom2_subcategory !== FALSE ) {
+				$items[$line]['custom2_subcategory'] = $custom2_subcategory;
+			}*/
 			
 			$this->set_cart($items);
 			
@@ -654,6 +915,7 @@ class Carrito_lib
 		}					
 	}
 	function get_point($value_point,$total)
+
 	{
 		$value_purchase =$total;
 
@@ -707,11 +969,13 @@ class Carrito_lib
 		return $cust_info->credit_limit !== NULL && $cust_info->balance + $current_sale_store_account_balance > $cust_info->credit_limit;
 		
 	}
-	function cargar_cart($support_id)
-	{		
+	function cargar_cart($support_id){
+		
 		$support = $this->get_edit_support_id();
+		//$mode=$this->get_mode();
 		$this->clear_all();
 		$this->set_edit_support_id($support);
+		//$this->set_mode($mode);
 		$respuestos= $this->CI->CarritoModel->get_respuestos($support_id);
 		foreach ($respuestos as $item) {
 			$ivas= $this->cargar_ivas($item->id,$item->line);
@@ -741,15 +1005,12 @@ class Carrito_lib
 	{
 		$this->CI->session->set_userdata('show_comment_ticket_2', $comment_ticket);
 	}
-
 	function limpiar_comment_ticket(){
 		$this->CI->session->unset_userdata('show_comment_ticket_2');
 	}
-
 	function limpiar_cart(){
 		$this->CI->session->unset_userdata('cart_servicio');
 	}
-
 	function limpiar_pagos(){
 		$this->CI->session->unset_userdata('pagos_servicio');
 	}
@@ -764,5 +1025,6 @@ class Carrito_lib
 		$this->limpiar_edit_support_id();
 		$this->limpiar_retira();
 	}
+
 }
 ?>

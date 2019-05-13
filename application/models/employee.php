@@ -527,7 +527,7 @@ class Employee extends Person
             
 			$this->update_config($expire_date, $license_type, $last_login, $max_registers,$license,
 			$es_franquicia,	$expire_date_franquicia,$resellers_id,$suspended);
-			
+            
 			return true;
 		}
         
@@ -713,13 +713,6 @@ class Employee extends Person
 	function is_logged_in()
 	{
 		return $this->session->userdata('person_id')!=false;
-	}
-	/**
-	 * Retorna el id del empleado logueado
-	 */
-	function person_id_logged_in()
-	{
-		return $this->session->userdata('person_id');
 	}
 	function get_all_location_employees()
 	{	
