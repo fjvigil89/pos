@@ -46,15 +46,16 @@
 
     .b1 {
         font-weight: bold;
-        font-size: 16px; 
-        padding-left:30px;
-        padding-right:30px;
+        font-size: 16px;
+        padding-left: 30px;
+        padding-right: 30px;
     }
+
     .b2 {
         font-weight: bold;
-        font-size: 16px; 
-        padding-left:28px;
-        padding-right:28px;
+        font-size: 16px;
+        padding-left: 28px;
+        padding-right: 28px;
     }
 
     table thead {
@@ -90,7 +91,7 @@
         font-weight: bold;
         color: #FCFAFA;
         margin: 2px;
-        font-size:25px;
+        font-size: 25px;
     }
 
     .title-2 {
@@ -121,22 +122,25 @@
         bottom: 15px;
         margin-left: 5px;
     }
-    .panel-input{
-        margin:2px;
-        padding:3px;
+
+    .panel-input {
+        margin: 2px;
+        padding: 3px;
     }
     </style>
 </head>
 
 <body>
-   
+
     <div style="display:none; margin-top:5px;" id="container-1" class="container-fluid ">
         <div class="row">
             <?php if(!$this->config->item('activar_casa_cambio') and $show_viewer ) {?>
             <div id="payment" style="display:none"
                 class=" <?=$show_carrousel ? 'col-md-5 col-sm-5 col-xs-6' : 'col-md-offset-2 col-md-8 col-sm-offset-1 col-sm-10 col-xs-12' ?>   ">
                 <div class="contenedor"><br><br><br><br>
-                    <h1 class="text-center"><strong><?=$this->config->item("msg_cange_cart_viewer") ? $this->config->item("msg_cange_cart_viewer"):"Su cambio es" ?></strong></h1><br>
+                    <h1 class="text-center">
+                        <strong><?=$this->config->item("msg_cange_cart_viewer") ? $this->config->item("msg_cange_cart_viewer"):"Su cambio es" ?></strong>
+                    </h1><br>
                     <h1 class="text-center"> <span id="change" style=" background-color: #010101;"
                             class="label label-default">0.0</span></h1>
 
@@ -145,7 +149,9 @@
             <div id="finish" style="display:none"
                 class=" <?=$show_carrousel ? 'col-md-5 col-sm-5 col-xs-6' : 'col-md-offset-2 col-md-8 col-sm-offset-1 col-sm-10 col-xs-12' ?>   ">
                 <div class="contenedor"><br>
-                    <h1 class="text-center"><strong><?=$this->config->item("msg_thank_cart_viewer") ? $this->config->item("msg_thank_cart_viewer"):"Gracias por su compra" ?></strong></h1><br>
+                    <h1 class="text-center">
+                        <strong><?=$this->config->item("msg_thank_cart_viewer") ? $this->config->item("msg_thank_cart_viewer"):"Gracias por su compra" ?></strong>
+                    </h1><br>
                     <center>
                         <img style="width:200px; height:200px" src="<?=base_url()."/img/smile.png"?>">
                     </center>
@@ -206,35 +212,45 @@
                             <div class="panel-input form-group">
                                 <label for="email" class="title-2">Cantida de BS:</label>
                                 <input value="" style=" font-size:19px; font-weight: bold; text-align: center"
-                                    type="number" class="form-control" readonly id="convertido">
+                                    type="text" class="form-control" readonly id="convertido">
                             </div>
                         </div>
-                        <div class="<?=$show_carrousel ?'col-xs-12': 'col-xs-12'?>">
-                            <center>
+                        <div  class="<?=$show_carrousel ?'col-xs-9': 'col-xs-9'?>">
+                            <center  style="margin:0px">
                                 <div>
                                     <input class="btn b1 " name="7" type="button" value="7" />
                                     <input class="btn b1" name="8" type="button" value="8" />
                                     <input class="btn b1 " name="9" type="button" value="9" />
-                                    
+
                                 </div>
                                 <div class="panel-t">
                                     <input class="btn b1" name="4" type="button" value="4" />
                                     <input class="btn b1" name="5" type="button" value="5" />
                                     <input class="btn b1" name="6" type="button" value="6" />
-                                    
+
                                 </div>
                                 <div class="panel-t">
                                     <input class="btn b1" name="1" type="button" value="1" />
                                     <input class="btn b1" name="2" type="button" value="2" />
-                                    <input class="btn b1" name="3" type="button" value="3" />                        
+                                    <input class="btn b1" name="3" type="button" value="3" />
                                 </div>
                                 <div class="panel-t">
                                     <input class="btn b2" name="C" type="button" value="C" />
-                                    <input class="btn b1" name="0" type="button" value="0" />                                    
-                                    <input class="btn b2" name="accent" type="button"
-                                        value="←" />
+                                    <input class="btn b1" name="0" type="button" value="0" />
+                                    <input class="btn b2" name="accent" type="button" value="←" />
                                 </div>
                             </center>
+                        </div>
+                        <div class="<?=$show_carrousel ?'col-xs-3': 'col-xs-3'?>">
+                            <table class="table" style="width:100%"> 
+                                <tbody id="t-history">     
+                                    <tr>
+                                        <td>
+                                            <button onclick='add_history()'; class='btn'>Agregar</button>
+                                        </tr>
+                                    </td> 
+                                <tbody>  
+                            </table>
                         </div>
                     </div>
 
@@ -290,7 +306,10 @@
     var show_carrousel = "<?=$this->config->item("show_carrousel")?>",
         show_viewer = "<?=$this->config->item("show_viewer")?>",
         updated = "0000-00-00 00:00:00",
-        height_window = $(window).height();
+        height_window = $(window).height(),
+        _history = [];
+        is_add = false;
+        time = 0;
 
     change_window();
 
@@ -301,8 +320,6 @@
         download();
         setInterval('download()', 3000);
     }
-
-
 
     function download() {
 
@@ -396,29 +413,52 @@
         if ($.isNumeric(value))
             $("#catidad").val(cant + value)
 
-        else if (value == "C"){
+        else if (value == "C") {
             $("#catidad").val("");
             $("#convertido").val(0);
-        }
-
-        else if (cant.length > 0) {
+        } else if (cant.length > 0) {
             $("#catidad").val(cant.substr(0, cant.length - 1));
 
-            if(cant.length == 0)
+            if (cant.length == 0)
                 $("#convertido").val(0);
         }
 
         if ($("#catidad").val() > 0) {
             var total = convert($("#catidad").val(), rate);
-            total = accounting.formatNumber(total, 2, "");
+            total = accounting.formatNumber(total, 0, ".");
             $("#convertido").val(total);
         }
 
     });
 
     function convert(cant, tasa = 1) {
+        time = 0;
         return cant / tasa;
+
     }
+    
+
+    function add_history() {
+        _history.unshift( $("#convertido").val());
+        if(_history.length >= 4)
+        {
+            _history.pop();
+        }
+        var  html = "<tr><td><button onclick='add_history()'; class='btn'>Agregar</button></tr></td>";
+       for (const key in _history){
+            html +="<tr><td>"+_history[key]+"</td></tr>";
+        }
+        $("#t-history").html(html);
+    }
+    setInterval(function() {
+        if(time > 60)
+        {
+            _history.length = 0;
+            time = 0;
+            $("#t-history").html("<tr><td><button onclick='add_history()'; class='btn'>Agregar</button></tr></td>");
+        }            
+        time ++; 
+    }, 1000);
 
     <?php }?>
 
@@ -433,6 +473,7 @@
         setInterval(function() {
             $.get('<?php echo site_url('home/keep_alive'); ?>');
         }, 300000);
+        
 
         $('.carousel').carousel({
             interval: <?= (int) $this->config->item("interval_img_carousel") ? $this->config->item("interval_img_carousel"):"3000"?>
@@ -456,11 +497,19 @@
     }
 
     function change_window() {
-        $(".contenedor").height(height_window -12);
+        $(".contenedor").height(height_window - 12);
         $(".img-c").height(height_window - 12);
     }
     </script>
-<script> var csfrData={};csfrData['<?php echo $this->security->get_csrf_token_name();?>']= '<?php echo $this->security->get_csrf_hash();?>';$(function(){$.ajaxSetup({data: csfrData});});</script>	
+    <script>
+    var csfrData = {};
+    csfrData['<?php echo $this->security->get_csrf_token_name();?>'] = '<?php echo $this->security->get_csrf_hash();?>';
+    $(function() {
+        $.ajaxSetup({
+            data: csfrData
+        });
+    });
+    </script>
 </body>
 
 </html>
