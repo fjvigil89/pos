@@ -816,14 +816,23 @@
 									<?php echo lang('reports_shop_reports'); ?>
 								</div>
 							</a>
+
 							<a href="<?php echo site_url('reports/specific_transfer_location');?>" class="btn icon-btn letter-space">
 								<i class="fa fa-exchange"></i>
 								<div>
 									<?php echo lang('reports_transfer_location'); ?>
 								</div>
 							</a>
+
+							<a href="<?php echo site_url('reports/report_consolidated_shop');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-bar-chart-o"></i>
+								<div>
+									<?php echo lang('reports_consolidated_shop'); ?>
+								</div>
+							</a>
 						</div>						
 					</div>
+					
 					
 					<div class="list-group movement_cash hidden">
 

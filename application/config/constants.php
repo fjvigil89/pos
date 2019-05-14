@@ -18,6 +18,7 @@ define('FILE_WRITE_MODE', 0666);
 define('DIR_READ_MODE', 0755);
 define('DIR_WRITE_MODE', 0777);
 
+
 /*
 |--------------------------------------------------------------------------
 | File Stream Modes
@@ -52,6 +53,7 @@ define("URL_COMPANY","http://facilpos.co/");
 define("URL_POS","https://accesopos.com/");
 define("NAME_COMPANY","Facil Pos");
 define("YEAR","2019");
+define("PATH_RECUSE","store_resource");
 
 
 /* End of file constants.php */

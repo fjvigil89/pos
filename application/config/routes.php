@@ -108,6 +108,7 @@ $route['reports/detailed_of_move_money'] = "reports/specific_movement_cash_input
 $route['reports/detailed_of_payment'] = "reports/detailed_of_payment_input";
 
 $route['reports/summary_movement_cash'] = "reports/movement_cash_date_input_excel_export";
+$route['reports/report_consolidated_shop'] = "reports/consolidated_shop_location_date";
 $route['reports/specific_transfer_location'] = "reports/specific_transfer_location_date_input_excel_export";
 $route['reports/depostos_salidas'] = "reports/depostos_salidas_input_excel_export";
 $route['reports/movement_balance'] = "reports/movement_balance_data_input_excel_export";

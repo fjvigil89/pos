@@ -2154,6 +2154,13 @@ class Reports extends Secure_area {
        
         $this->load->view("reports/specific_product_transfer", $data);
     }
+    function consolidated_shop_location_date(){
+        $data = $this->_get_common_report_data(TRUE);
+        $data['specific_input_name'] = "Consolidado";
+
+       
+        $this->load->view("reports/consolidated_shop_location_date", $data);
+    }
     function specific_transfer_location($start_date, $end_date,$store_id, $export_excel = 0, $export_pdf = 0, $offset = 0){
         $this->check_action_permission('view_transfer_location');
         $start_date = rawurldecode($start_date);
@@ -2211,6 +2218,72 @@ class Reports extends Secure_area {
         );
 
         $this->load->view("reports/tabular_details", $data);
+    }
+
+    function report_consolidated_shop($start_date, $end_date,$store_id){
+     
+        
+        $start_date = rawurldecode($start_date);
+        $end_date = rawurldecode($end_date);
+
+        $this->load->model('reports/Consolidated_shop');
+        $model = $this->Consolidated_shop;
+        $model->setParams(array('start_date' => $start_date, 'end_date' => $end_date, 'store_id' => $store_id));
+        $this->Location->get_all()->result();
+        //$this->Receiving->create_receivings_items_temp_table(array('start_date' => $start_date, 'end_date' => $end_date, 'store_id' => $store_id));
+        $config = array();
+        $config['base_url'] = site_url("reports/report_consolidated_shop/" . rawurlencode($start_date) . '/' . rawurlencode($end_date) . "/$store_id");
+        $config['total_rows'] = $model->getTotalRows();
+        $config['uri_segment'] = 8;
+        $this->pagination->initialize($config);
+
+
+        $headers = $model->getDataColumns();
+        $report_data = $model->getData(array('start_date' => $start_date, 'end_date' => $end_date, 'store_id' => $store_id));
+        $efectivo=0;
+        $datafonos=0;
+        $otros=0;
+        $credito=0;
+        $gastos=0;
+        $total=0;
+      
+        $summary_data = array();
+        foreach ($report_data['summary'] as $key => $row) {
+                $summary_data[$key] = array(array('data' => $row['name'], 'align' => 'left'),
+                    array('data' => to_currency($row['efectivo'], 10), 'align' => 'left'),
+                    array('data' => to_currency($row['datafono'], 10), 'align' => 'left'),
+                    array('data' => to_currency($row['otros'], 10), 'align' => 'left'),
+                    array('data' => to_currency($row['credito'], 10), 'align' => 'left'),
+                    array('data' => to_currency($row['gastos'], 10), 'align' => 'left'),
+                    array('data' => to_currency($row['efectivo']+$row['datafono']+$row['credito']+$row['otros']-$row['gastos']), 'align' => 'right'),
+                                
+                );
+                $efectivo+=$row['efectivo'];
+                $datafonos+=$row['datafono'];
+                $otros+=$row['otros'];
+                $credito+=$row['credito'];
+                $gastos+=$row['gastos'];
+                $total+=$row['efectivo']+$row['datafono']+$row['credito']+$row['otros']-$row['gastos'];
+            
+        }
+        $total_data=array('efectivo'=>to_currency($efectivo),'datafonos'=>to_currency($datafonos),'otros'=>to_currency($otros),'credito'=>to_currency($credito),'gastos'=>to_currency($gastos),'total'=>to_currency($total));
+            
+
+
+
+        $data = array(
+            "title" => "Consolidado",
+            "subtitle" => date(get_date_format(), strtotime($start_date)) . '-' . date(get_date_format(), strtotime($end_date)),
+            "headers" => $model->getDataColumns(),
+            "summary_data" => $summary_data,
+            "total_data" => $total_data,
+           // "overall_summary_data" => $model->getSummaryData(),
+            "export_excel" => 0,
+            "export_pdf" => 0,
+            "pagination" => $this->pagination->create_links(),
+        );
+
+        $this->load->view("reports/tabular_consolidated", $data);
     }
     function movement_balance_data_input_excel_export() {
         $data = $this->_get_common_report_data(TRUE);
