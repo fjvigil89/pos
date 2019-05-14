@@ -1,8 +1,19 @@
-<?php    
-        $space2 ="\t\t";
-        $space1 ="\t";
+<?php   
 
-        $lines = 40;
+function complete_string($string ,$canti, $p = "")
+{
+    while(strlen($string) < $canti)
+    {        
+        $string .= " ";    
+    }
+
+   return character_limiter($string, $canti, $p);
+
+}
+        $space2 ="  ";
+        $space1 =" ";
+        $str_table = 12;
+        $lines = 30;
         $type_line ="-";
 
         echo $this->Location->get_info_for_key('overwrite_data')==1 ? $this->Location->get_info_for_key('name') : $this->config->item('company') ; 
@@ -59,6 +70,8 @@
             }
         } 
         
+        echo "ID : ".$sale_id_raw."\n";
+        
         echo $transaction_time;
         echo "\n";
         
@@ -86,10 +99,10 @@
         {                
             echo lang('common_email')." : ". $customer_email."\n"; 
         } 
-        if (isset($sale_type)) 
+        /*if (isset($sale_type)) 
         {                 
             echo $sale_type."\n";               
-        } 
+        }*/
         if ($register_name) 
         {
             echo lang('locations_register_name').' : '.$register_name."\n";
@@ -109,9 +122,9 @@
         echo"\n";
         // se crea la tabla se productos
 
-        echo lang('items_item').  $space2; 
+        echo lang('items_item').  $space2.$space2.$space2; 
 
-        if($this->config->item('subcategory_of_items') )
+        /*if($this->config->item('subcategory_of_items') )
         {                    
             echo ($this->config->item('inhabilitar_subcategory1')==1 ? "":($this->config->item("custom_subcategory1_name")."/")). $this->config->item("custom_subcategory2_name");
             echo  $space2;                   
@@ -120,20 +133,21 @@
         {                   
             echo "UPC";
             echo  $space2;
-        }
-        echo lang('common_price'); 
-        echo  $space2;  
+        }*/
+        //echo lang('common_price'); 
+        //echo  $space2;  
 
         echo lang('sales_quantity_short');
         echo  $space1;
-
-        if($discount_exists)
+        echo  $space2;
+        echo  $space2;
+        /*if($discount_exists)
         { 
             echo lang('sales_discount_short');
             echo  $space2;  
-        } 
+        }*/
         echo lang('sales_total');
-        echo  $space2;  
+          
     
         echo"\n";
 
@@ -147,7 +161,7 @@
     foreach(array_reverse($cart, true) as $line=>$item) 
     {
 
-        echo character_limiter($item['name'], 10,"...");
+        echo complete_string($item['name'], $str_table,"");
 
        /* if (isset($item['size']) and !empty($item['size']))
         { 
@@ -166,7 +180,7 @@
             echo  "-".$item['marca'];
         } */
         echo  $space2; 
-        if($this->config->item('subcategory_of_items') )
+        /*if($this->config->item('subcategory_of_items') )
         { 
                     
             if (isset($item['item_id']))
@@ -196,7 +210,7 @@
                 echo $item['item_kit_number']." ";
                 echo  $space2; 
             }
-        }
+        }*/
         if (isset($item['item_id']) && $item['name'] != lang('sales_giftcard')) 
         {
             $tax_info = $this->Item_taxes_finder->get_info($item['item_id']);
@@ -279,21 +293,22 @@
                 }
             }
         }																											
-        echo $this->config->item('round_value')==1 ? to_currency(round($item['price'])) :to_currency($item['price']);
-        echo  $space2;
+       // echo $this->config->item('round_value')==1 ? to_currency(round($item['price'])) :to_currency($item['price']);
+       // echo  $space2;
 
-        echo to_quantity($item['quantity']);
-        if (isset($item['model']))
+        echo complete_string(to_quantity($item['quantity']),6);
+        /*if (isset($item['model']))
         { 
             echo ($item['unit']);
-        } 
-        echo  $space1;
+        } */
+        /*echo  $space1;
 
         if($discount_exists) 
         { 
             echo $item['discount'].'%';
             echo  $space2;
-        } 
+        } */
+        echo $space1;
         if ($item['name'] == lang('sales_giftcard')) 
         {								
             $Total = $item['price'] * $item['quantity'] - $item['price'] * $item['quantity'] * $item['discount'] / 100;
@@ -302,17 +317,17 @@
         {
             $Total=$price_with_tax*$item['quantity']-$price_with_tax*$item['quantity']*$item['discount']/100;
         } 
-        echo $this->config->item('round_value' )== 1 ? to_currency(round($Total)) :to_currency($Total); 								 	
-        echo  $space2;
+        echo complete_string($this->config->item('round_value' )== 1 ? to_currency(round($Total)) :to_currency($Total),11); 								 	
+       
 
-        if($item['description'] != "" and $this->config->item('hide_description') == 0)
+        /*if($item['description'] != "" and $this->config->item('hide_description') == 0)
         { 
             echo "\n" . $item['description']; 
         }
         if( isset($item['serialnumber']) and $item["serialnumber"]!=null )
         {
             echo "\n" . "Serial: ".$item['serialnumber'];
-        }
+        }*/
         if($this->config->item('activar_casa_cambio') )
         {
             
@@ -388,454 +403,203 @@
      
     echo"\n";
     // fin tabla producto 
-    ?>
-                <?php foreach($payments as $payment_id=>$payment) { ?>
-                <tr class="gift_receipt_element">
-                    <td class="right_text_align" colspan="<?php echo $discount_exists ? '6' : '4'; ?>">
-                        <?php echo $payment["payment_type"]!=lang('sales_store_account')?(
-								(isset($another_currency) and $another_currency==1)?lang('sales_value_cancel')." ".get_currency_symbol($currency):lang('sales_value_cancel'))
-								 : lang('sales_crdit'); ?>:
-                    </td>
-                    <td class="right_text_align" colspan="2">
-                        <?php 
-								$payment_amount= 0;
-								$payment_amount_value= (isset($another_currency) and $another_currency==1)?
-										($payment['payment_amount']/$value_other_currency):$payment['payment_amount'];
-								if( $this->config->item('round_cash_on_sales')==1 && $payment['payment_type'] == lang('sales_cash') ){
-									
-									$payment_amount=(round_to_nearest_05($payment_amount_value));
-								} 
-								else if($this->config->item('round_value')==1  ){
-									$payment_amount= (round($payment_amount_value));
-								}else{
-									$payment_amount= $payment_amount_value;
-								}
-								if(isset($another_currency) and $another_currency==1){
-									echo  to_currency_no_money($payment_amount,4);
-								}else{
-									echo to_currency($payment_amount);
-								}
-								?>
-                    </td>
-                </tr>
-                <?php } ?>
-                <tr>
+    
+    foreach($payments as $payment_id=>$payment) 
+    { 
+    
+        echo $payment["payment_type"] != lang('sales_store_account')?((isset($another_currency) and $another_currency == 1) ? lang('sales_value_cancel')." ".get_currency_symbol($currency) : lang('sales_value_cancel')) : lang('sales_crdit')." : ";
+                    
+        $payment_amount= 0;
+        $payment_amount_value= (isset($another_currency) and $another_currency==1)?
+                ($payment['payment_amount']/$value_other_currency):$payment['payment_amount'];
+        if( $this->config->item('round_cash_on_sales')==1 && $payment['payment_type'] == lang('sales_cash') ){
+            
+            $payment_amount=(round_to_nearest_05($payment_amount_value));
+        } 
+        else if($this->config->item('round_value')==1  ){
+            $payment_amount= (round($payment_amount_value));
+        }else{
+            $payment_amount= $payment_amount_value;
+        }
+        if(isset($another_currency) and $another_currency==1){
+            echo " ".  to_currency_no_money($payment_amount,4);
+        }else{
+            echo " ".to_currency($payment_amount);
+        }
+        echo "\n";
+    }
+
+    for ($i = 0; $i < $lines ; $i++) { 
+        echo $type_line;
+    } 
+    
+
+    if(isset($show_comment_ticket) && ($show_comment_ticket == 0 && $this->config->item('hide_invoice_taxes_details') == 0)  || ($this->config->item('hide_ticket_taxes')==0 && $show_comment_ticket == 1))
+    {
+        echo"\n";
+        echo"      ".lang('sales_details_tax'); 
+        echo"\n";
+        echo lang('sales_type_tax')."     "; 
+        echo lang('sales_base_tax')."     "; 
+        echo lang('sales_price_tax'); 
+        //echo lang('sales_value_receiving')." "; 
+        echo  "\n";
+
+        if ($this->config->item('group_all_taxes_on_receipt')) 
+        { 
+        	$total_tax = 0;
+			foreach($detailed_taxes as $name=>$value) 
+			{
+				$total_tax+=$value['total_tax'];
+			}
+		    echo complete_string(lang('reports_tax').": ",8)." ";
+        	echo complete_string($value['base'],11)." "; 	
+		    echo complete_string(to_currency_no_money(round($value['total_tax']),1),12);
+            //echo $this->config->item('round_value')==1 ? to_currency(round($total_tax)) :to_currency($total_tax) ;
+            echo "\n";
+        } 
+        else
+        {						
+            foreach($detailed_taxes as $name=>$value) 
+            {               
+               echo  complete_string($name.": ",8,"")." ";                   
+               echo  complete_string(to_currency($value['base'] ),11,"")." ";
+               echo  complete_string(to_currency(round($value['total_tax']),1),12,"");	
+               //echo $this->config->item('round_value')==1 ? to_currency(round($value['total'])) :to_currency($value['total']);
+               echo "\n";    
+            }
+		}
+        /*echo lang('sales_total').'= ';
+        echo to_currency($detailed_taxes_total['total_base_sum']); 
+        echo to_currency($detailed_taxes_total['total_tax_sum']); 
+        echo $this->config->item('round_value')==1 ? to_currency($detailed_taxes_total['total_sum']) :to_currency($detailed_taxes_total['total_sum']) ;
+        echo "\n";*/
+        for ($i = 0; $i < $lines ; $i++) { 
+            echo $type_line;
+        } 
+    }
+     
+
+   if($this->config->item('ocultar_forma_pago') == 0)
+   {
+        echo "\n     " .lang('sales_details_payments'); 
+        echo"\n";
+        
+        echo complete_string(lang('sales_payment_date'),11); 
+        echo complete_string(lang('sales_payment_type'),9); 
+        echo lang('sales_payment_value')." ";
+        echo "\n";
+
+        foreach($payments as $payment_id=>$payment) 
+        {
+                
+            echo complete_string(date(get_date_format(), strtotime($payment['payment_date'])) ,11);
+            
+            $splitpayment=explode(':',$payment['payment_type']); 
+            
+            echo complete_string($splitpayment[0],9); 
+
+            $payment_amount= 0;
+            $payment_amount_otro= (isset($another_currency) and $another_currency==1)?
+                    ($payment['payment_amount']/$value_other_currency):$payment['payment_amount'];
+            if( $this->config->item('round_cash_on_sales')==1 && $payment['payment_type'] == lang('sales_cash') )
+                $payment_amount=(round_to_nearest_05($payment_amount_otro));
+            
+            else if($this->config->item('round_value')==1  )
+                $payment_amount= (round($payment_amount_otro));
+            else
+                $payment_amount= ($payment_amount_otro);            
+            if(isset($mode) && $mode=='return') 
+                $payment_amount=$payment_amount*(-1);                            
+            if(isset($another_currency) and $another_currency==1)
+                echo   complete_string(to_currency_no_money($payment_amount,4),11);
+            else
+                echo  complete_string(to_currency($payment_amount),11);            
+
+            echo"\n";   
+        } 
+        for ($i = 0; $i < $lines ; $i++) { 
+            echo $type_line;
+        } 
+    }  
 
 
-            </table>
+if ($amount_change >= 0) 
+{
+    echo"\n". lang('sales_change_due').((isset($another_currency) and $another_currency==1)?" ".get_currency_symbol($currency):"").": ";
+    
+    $amount_change_= 0;
+    $amount_change_otro= (isset($another_currency) and $another_currency==1)?
+                ($amount_change/$value_other_currency):$amount_change;
+    if( $this->config->item('round_cash_on_sales')==1 && $is_sale_cash_payment ){
+        $amount_change_=(round_to_nearest_05($amount_change_otro));
+    } 
+    else if($this->config->item('round_value')==1  ){
+        $amount_change_= (round($amount_change_otro));
+    }else{
+        $amount_change_= ($amount_change_otro);
+    }
+    if(isset($another_currency) and $another_currency==1){
+        echo  to_currency_no_money($amount_change_,4);
+    }else{
+        echo to_currency($amount_change_);
+    }
+    
+}
+else 
+{ echo"\n";  
+    echo lang('sales_amount_due'); ": "; 
+    echo $this->config->item('round_cash_on_sales')  && $is_sale_cash_payment ?  to_currency(round_to_nearest_05($amount_change * -1)) : to_currency($amount_change * -1) || $this->config->item('round_value')==1 ? to_currency(round($amount_change)) :to_currency($amount_change);
+     
+}
+if (isset($customer_balance_for_sale) && $customer_balance_for_sale !== FALSE && !$this->config->item('hide_balance_receipt_payment')) 
+{ 
+    echo"\n";  
+    echo lang('sales_customer_account_balance').": ";
+    echo to_currency($customer_balance_for_sale); 
+    
+} 
+if (isset($points) && $this->config->item('show_point')==1 && $this->config->item('system_point')==1)
+{ 
+    echo"\n"; 
+    echo lang('config_value_point_accumulated')." ";
+    echo $points; 
+   
+} 
+if (!$store_account_payment==1)
+{ 
+    echo"\n";  
+   echo nl2br( $this->Location->get_info_for_key('overwrite_data')==1 ? $this->Location->get_info_for_key('company_regimen') : $this->config->item('company_regimen') ); 
+   echo"\n";  
 
-            <?php if(isset($show_comment_ticket) && ($show_comment_ticket == 0 && $this->config->item('hide_invoice_taxes_details') == 0)  || ($this->config->item('hide_ticket_taxes')==0 && $show_comment_ticket == 1)){ ?>
-            <table id="details_taxes">
-                <tr>
-                    <th class="text-center" style="width:100%" colspan="6"><?php echo lang('sales_details_tax'); ?></th>
-                </tr>
-                <tr style="border-bottom: 1px dashed #000000;border-top: 1px dashed #000000;">
-                    <th class="text-center" colspan="2"><?php echo lang('sales_type_tax'); ?></th>
-                    <th class="right_text_align" style="width:20%"><?php echo lang('sales_base_tax'); ?></th>
-                    <th class="right_text_align" style="width:25%"><?php echo lang('sales_price_tax'); ?></th>
-                    <th class="right_text_align" style="width:18%" colspan="2">
-                        <?php echo lang('sales_value_receiving'); ?></th>
-                </tr>
+   $str = $this->config->item('resolution');
+   $order   = array("<strng>", "</strng>", "<br>","</br>");        
+   $str = str_replace( $order,"",$str);
 
-                <?php if ($this->config->item('group_all_taxes_on_receipt')) { ?>
-                <?php 
-							$total_tax = 0;
-							foreach($detailed_taxes as $name=>$value) 
-							{
-								$total_tax+=$value['total_tax'];
-				 			}
-						?>
-                <tr class="gift_receipt_element">
-                    <td class="left_text_align" colspan="2">
-                        <?php echo lang('reports_tax'); ?>:
-                    </td>
-                    <td class="right_text_align">
-                        <?php 
-									echo $value['base']; 	
-								  
-								 ?>
-                    </td>
-                    <td class="right_text_align">
-                        <?php
-									echo to_currency_no_money(round($value['total_tax']),1); 	
-								  
-								?>
-                    </td>
-                    <td class="right_text_align" colspan="2">
-                        <?php echo $this->config->item('round_value')==1 ? to_currency(round($total_tax)) :to_currency($total_tax) ; ?>
-                    </td>
-                </tr>
-                <?php } 
+   echo nl2br($str); 
+   echo"\n"; 
 
-					else {						
-						foreach($detailed_taxes as $name=>$value) {  ?>
-                <tr class="gift_receipt_element">
-                    <td class="left_text_align" colspan="2">
-                        <?= $name; ?>:
-                    </td>
-                    <td class="right_text_align">
-                        <?= to_currency($value['base'] )?>
-                    </td>
-                    <td class="right_text_align">
-                        <?= to_currency(round($value['total_tax']),1);	?>
-                    </td>
-                    <td class="right_text_align" colspan="2">
-                        <?= $this->config->item('round_value')==1 ? to_currency(round($value['total'])) :to_currency($value['total']);?>
-                    </td>
-                </tr>
-                <?php
-						}
-					} ?>
-                <tr style="border-top: 1px dashed #000000;">
-                    <th class="text-center" colspan="2"><?php echo lang('sales_total').'='; ?></th>
-                    <?php ?>
-                    <th class="right_text_align" style="width:15%">
-                        <?php echo to_currency($detailed_taxes_total['total_base_sum']); ?></th>
-                    <th class="right_text_align" style="width:25%">
-                        <?php echo to_currency($detailed_taxes_total['total_tax_sum']); ?></th>
-                    <th class="right_text_align" style="width:25%" colspan="2">
-                        <?php echo $this->config->item('round_value')==1 ? to_currency($detailed_taxes_total['total_sum']) :to_currency($detailed_taxes_total['total_sum']) ; ?>
-                    </th>
-                    <?php //}
-							
-					   		 ?>
-                </tr>
-
-            </table>
-            <?php } ?>
-
-            <?php if($this->config->item('ocultar_forma_pago')==0):?>
-            <table id="details_payments">
-                <tr>
-                    <th class="text-center" style="width:100%" colspan="7"><?php echo lang('sales_details_payments'); ?>
-                    </th>
-                </tr>
-                <tr style="border-bottom: 1px dashed #000000;border-top: 1px dashed #000000;">
-                    <th class="left_text_align" style="width:30%" colspan="3"><?php echo lang('sales_payment_date'); ?>
-                    </th>
-                    <th class="right_text_align" style="width:45%" colspan="3"><?php echo lang('sales_payment_type'); ?>
-                    </th>
-                    <th class="right_text_align" style="width:2%" colspan="2"><?php echo lang('sales_payment_value'); ?>
-                    </th>
-                </tr>
-                <?php foreach($payments as $payment_id=>$payment) { ?>
-                <tr class="gift_receipt_element">
-                    <td class="left_text_align" colspan="3">
-                        <?php echo (isset($show_payment_times) && $show_payment_times) ?  date(get_date_format().' '.get_time_format(), strtotime($payment['payment_date'])) : lang('sales_payment'); ?>
-                    </td>
-
-                    <?php if ($is_integrated_credit_sale || sale_has_partial_credit_card_payment()) { ?>
-                    <td class="right_text_align" colspan="0">
-                        <?php $splitpayment=explode(':',$payment['payment_type']); echo $splitpayment[0]; ?>:
-                        <?php echo $payment['card_issuer']. ' '.$payment['truncated_card']; ?>
-                    </td>
-                    <?php } 
-							else { ?>
-                    <td class="right_text_align" colspan="3">
-                        <?php $splitpayment=explode(':',$payment['payment_type']); echo $splitpayment[0]; ?>
-                    </td>
-                    <td class="right_text_align" colspan="2">
-                        <?php 
-								$payment_amount= 0;
-								$payment_amount_otro= (isset($another_currency) and $another_currency==1)?
-										($payment['payment_amount']/$value_other_currency):$payment['payment_amount'];
-								if( $this->config->item('round_cash_on_sales')==1 && $payment['payment_type'] == lang('sales_cash') ){
-									$payment_amount=(round_to_nearest_05($payment_amount_otro));
-								} 
-								else if($this->config->item('round_value')==1  ){
-									$payment_amount= (round($payment_amount_otro));
-								}else{
-									$payment_amount= ($payment_amount_otro);
-								}
-								if(isset($mode) && $mode=='return') {
-									$payment_amount=$payment_amount*(-1);
-								}
-								if(isset($another_currency) and $another_currency==1){
-									echo  to_currency_no_money($payment_amount,4);
-								}else{
-									echo to_currency($payment_amount);
-								}
-								?>
-                    </td>
-                    <?php } ?>
-                </tr>
-                <?php } ?>
-
-
-
-                <?php if ($amount_change >= 0) { ?>
-                <tr class="gift_receipt_element">
-                    <td class="right_text_align" colspan="<?php echo $discount_exists ? '6' : '6'; ?>">
-                        <?php echo lang('sales_change_due').((isset($another_currency) and $another_currency==1)?" ".get_currency_symbol($currency):""); ?>:
-                    </td>
-                    <td class="right_text_align" colspan="2">
-                        <?php
-							$amount_change_= 0;
-							$amount_change_otro= (isset($another_currency) and $another_currency==1)?
-										($amount_change/$value_other_currency):$amount_change;
-							if( $this->config->item('round_cash_on_sales')==1 && $is_sale_cash_payment ){
-								$amount_change_=(round_to_nearest_05($amount_change_otro));
-							} 
-							else if($this->config->item('round_value')==1  ){
-								$amount_change_= (round($amount_change_otro));
-							}else{
-								$amount_change_= ($amount_change_otro);
-							}
-							if(isset($another_currency) and $another_currency==1){
-								echo  to_currency_no_money($amount_change_,4);
-							}else{
-								echo to_currency($amount_change_);
-							}
-							?>
-                    </td>
-                </tr>
-                <?php }
-					else { ?>
-                <tr>
-                    <td class="right_text_align" colspan="<?php echo $discount_exists ? '6' : '6'; ?>">
-                        <?php echo lang('sales_amount_due'); ?>:
-                    </td>
-                    <td class="right_text_align" colspan="2">
-                        <?php echo $this->config->item('round_cash_on_sales')  && $is_sale_cash_payment ?  to_currency(round_to_nearest_05($amount_change * -1)) : to_currency($amount_change * -1) || $this->config->item('round_value')==1 ? to_currency(round($amount_change)) :to_currency($amount_change); ?>
-                    </td>
-                </tr>
-                <?php } ?>
-                <?php if(isset($payments_petty_cashes) and !empty($payments_petty_cashes)):?>
-                <tr>
-                    <th class="text-center" style="width:100%" colspan="7">
-                        <?php echo lang('Last_payments_made_line_credit'); ?></th>
-                </tr>
-                </tr>
-                <tr style="border-bottom: 1px dashed #000000;border-top: 1px dashed #000000;">
-                    <th class="left_text_align" style="width:30%" colspan="2"><?php echo lang('sales_payment_date'); ?>
-                    </th>
-                    <th class="right_text_align" style="width:40%" colspan="3"><?php echo lang('sales_payment_type'); ?>
-                    </th>
-                    <th class="right_text_align" style="width30%" colspan="2"><?php echo lang('sales_total'); ?></th>
-                </tr>
-                <?php foreach($payments_petty_cashes as $petty_cash) { ?>
-                <tr>
-
-                    <td class="left_text_align" colspan="2">
-                        <?php 
-										echo date(get_date_format(), strtotime($petty_cash->petty_cash_time));
-										?>
-                    </td>
-                    <td class="right_text_align" colspan="3">
-                        <?php 
-										echo $petty_cash->payment_type;
-										?>
-                    </td>
-                    <td class="right_text_align" colspan="2">
-                        <?php 
-										echo to_currency($petty_cash->monton_total);
-										?>
-                    </td>
-                </tr>
-                <?php }?>
-                <?php endif; ?>
-            </table>
-
-            <?php endif; ?>
-
-            <table id="details_options">
-                <?php foreach($payments as $payment) { ?>
-                <?php if (strpos($payment['payment_type'], lang('sales_giftcard'))!== FALSE) { ?>
-                <tr class="gift_receipt_element">
-                    <td class="right_text_align" colspan="5">
-                        <?php echo lang('sales_giftcard_balance').$payment['payment_type'];?>
-                    </td>
-                    <?php $giftcard_payment_row = explode(':', $payment['payment_type']); ?>
-                    <td class="right_text_align" colspan="2">
-                        <?php echo to_currency($this->Giftcard->get_giftcard_value(end($giftcard_payment_row))); ?>
-                    </td>
-                </tr>
-                <?php }?>
-                <?php }?>
-
-                <?php if (isset($customer_balance_for_sale) && $customer_balance_for_sale !== FALSE && !$this->config->item('hide_balance_receipt_payment')) {?>
-                <tr>
-                    <td class="right_text_align" colspan="<?php echo $discount_exists ? '4' : '3'; ?>">
-                        <?php echo lang('sales_customer_account_balance'); ?>:
-                    </td>
-                    <td class="right_text_align" colspan="2">
-                        <?php echo to_currency($customer_balance_for_sale); ?>
-                    </td>
-                </tr>
-                <?php } ?>
-
-                <?php if (isset($points) && $this->config->item('show_point')==1 && $this->config->item('system_point')==1) { ?>
-                <tr>
-                    <td class="right_text_align" colspan="<?php echo $discount_exists ? '4' : '3'; ?>">
-                        <?php echo lang('config_value_point_accumulated'); ?>:
-                    </td>
-                    <td class="right_text_align" colspan="2">
-                        <?php echo $points; ?>
-                    </td>
-                </tr>
-                <?php } ?>
-                <?php if ($ref_no) { ?>
-                <tr>
-                    <td class="right_text_align" colspan="<?php echo $discount_exists ? '4' : '3'; ?>">
-                        <?php echo lang('sales_ref_no'); ?>
-                    </td>
-                    <td class="right_text_align" colspan="1">
-                        <?php echo $ref_no; ?>
-                    </td>
-                </tr>
-                <?php }
-					if (isset($auth_code) && $auth_code) { ?>
-                <tr>
-                    <td class="right_text_align" colspan="<?php echo $discount_exists ? '4' : '3'; ?>">
-                        <?php echo lang('sales_auth_code'); ?>
-                    </td>
-                    <td class="right_text_align" colspan="1">
-                        <?php echo $auth_code; ?>
-                    </td>
-                </tr>
-                <?php } ?>
-                <tr>
-                    <td colspan="<?php echo $discount_exists ? '5' : '4'; ?>" align="right">
-                        <?php if($show_comment_on_receipt==1)
-								{
-									echo $comment ;
-								}
-							?>
-                    </td>
-                </tr>
-
-
-            </table>
-
-            <?php if (!$store_account_payment==1) { ?>
-            <div id="sale_company_regimen">
-                <?php echo nl2br( $this->Location->get_info_for_key('overwrite_data')==1 ? $this->Location->get_info_for_key('company_regimen') : $this->config->item('company_regimen') ); ?>
-                <br />
-
-            </div>
-            <div id="sale_resolution">
-                <?php echo nl2br($this->config->item('resolution')); ?>
-                <br />
-
-            </div>
-            <?php if($show_return_policy_credit ==1){?>
-            <div id="sale_return_policy">
-                <?php echo nl2br($this->config->item('return_policy_credit')); ?>
-                <br />
-                <?php }
-							else{?>
-                <div id="sale_return_policy">
-                    <?php echo nl2br($this->config->item('return_policy')); ?>
-                    <br />
-                    <?php	} ?>
-                    <?php if($this->Location->get_info_for_key('show_rango')==1):?>
-                    <div id="sale_rango">
-                        <?php echo nl2br("Rango autorizado: "/*.$this->Location->get_info_for_key('serie_number')." "*/.
+    if($show_return_policy_credit ==1)
+    {
+        $str = $this->config->item('return_policy_credit');
+        $order   = array("<strng>", "</strng>", "<br>","</br>");        
+        $str = str_replace( $order,"",$str);
+        echo nl2br($str);
+        echo"\n";
+    }
+    else
+    {
+        $str = $this->config->item('return_policy');
+        $order   = array("<strng>", "</strng>", "<br>","</br>");        
+        $str = str_replace( $order,"",$str);
+        echo nl2br($str);
+        echo"\n";
+    } 
+    if($this->Location->get_info_for_key('show_rango')==1)
+    {        
+        echo nl2br("Rango autorizado: ".$this->Location->get_info_for_key('serie_number')." ".
 								$this->Location->get_info_for_key('start_range')." a la ".
-								$this->Location->get_info_for_key('final_range')); ?>
-                        <br />
-                    </div>
-                    <?php endif; ?>
-
-                </div>
-                <?php } ?>
-
-                <?php if (!$this->config->item('hide_barcode_on_sales_and_recv_receipt') && !$store_account_payment==1) { ?>
-                <div id='barcode'>
-                    <?php 
-							$code_barra="ID ".$sale_id_raw;
-					 		$bar ="<img src='".site_url('barcode')."?barcode=$$sale_id_raw&text="." $code_barra' />";
-						echo $bar;  ?>
-                </div>
-                <?php } ?>
-                <?php if(!$this->config->item('hide_signature')) { ?>
-                <div id="signature">
-                    <?php foreach($payments as $payment) {?>
-                    <?php if (strpos($payment['payment_type'], lang('sales_credit'))!== FALSE) { ?>
-                    <?php echo lang('sales_signature'); ?> --------------------------------- <br />
-                    <?php 
-									echo lang('sales_card_statement');
-									break;
-								?>
-                    <?php }?>
-                    <?php }?>
-                </div>
-                <div id="domain_ing">
-
-                    <br />
-                </div>
-                <?php } ?>
-
-            </div>
-
-            <div id="duplicate_receipt_holder">
-
-            </div>
-        </div>
-    </div>
-
-
-    <?php if ($this->config->item('print_after_sale')) { ?>
-    <script type="text/javascript">
-    $(window).bind("load", function() {
-        print_receipt();
-        window.location = '<?php echo site_url("sales"); ?>';
-    });
-    </script>
-    <?php } ?>
-
-    <script type="text/javascript">
-    $(document).ready(function() {
-        $("#email_receipt").click(function() {
-            $.get($(this).attr('href'), function() {
-                toastr.success('<?php echo lang('sales_receipt_sent'); ?>',
-                    <?php echo json_encode(lang('common_success')); ?>);
-            });
-
-            return false;
-        });
-    });
-
-    function print_receipt() {
-        <?php if ($this->config->item('receipt_copies') > 1): ?>
-        var receipt_amount = <?php echo $this->config->item('receipt_copies');?> - 2;
-        var receipt = $('#receipt_wrapper').clone();
-        $('#duplicate_receipt_holder').html(receipt);
-        $("#duplicate_receipt_holder").addClass('active');
-
-        for (i = 0; i < receipt_amount; i++) {
-            $('<div id="duplicate_receipt_holder_' + i + '"></div>').insertAfter("#receipt_wrapper");
-            $('#duplicate_receipt_holder_' + i).html(receipt.html());
-            $("#duplicate_receipt_holder_" + i).addClass('active');
-        }
-
-        window.print();
-        <?php else: ?>
-        window.print();
-        <?php endif; ?>
+								$this->Location->get_info_for_key('final_range')); 
+         
     }
-
-    function toggle_gift_receipt() {
-        var gift_receipt_text = <?php echo json_encode(lang('sales_gift_receipt')); ?>;
-        var regular_receipt_text = <?php echo json_encode(lang('sales_regular_receipt')); ?>;
-
-        if ($("#gift_receipt_button").hasClass('regular_receipt')) {
-            $('#gift_receipt_button').addClass('gift_receipt');
-            $('#gift_receipt_button').removeClass('regular_receipt');
-            $("#gift_receipt_button").text(gift_receipt_text);
-            $('.gift_receipt_element').show();
-        } else {
-            $('#gift_receipt_button').removeClass('gift_receipt');
-            $('#gift_receipt_button').addClass('regular_receipt');
-            $("#gift_receipt_button").text(regular_receipt_text);
-            $('.gift_receipt_element').hide();
-        }
-    }
-    </script>
-
-    <?php if($is_integrated_credit_sale && $is_sale) { ?>
-    <script type="text/javascript">
-    toastr.success(<?php echo json_encode(lang('sales_credit_card_processing_success'))?>,
-        <?php echo json_encode(lang('common_success')); ?>);
-    </script>
-    <?php } ?>
+} 
