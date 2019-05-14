@@ -1155,7 +1155,7 @@ class Sales extends Secure_area
 		$data["overwrite_tax"]= $overwrite_tax; 
 		$data["new_tax"]= $new_tax;
 		$data["value_other_currency"]=$this->sale_lib->get_equivalencia_divisa();
-		
+		$data["generate_txt"] = $this->sale_lib->get_generate_txt();
 		if($this->config->item('system_point') && $this->sale_lib->get_mode() == 'sale')
 		{
 			$total=$data['total'];
@@ -1225,7 +1225,6 @@ class Sales extends Secure_area
 		{				
             $sale_id_raw = $this->Sale->save_petty_cash($data['cart'], $customer_id, $employee_id, $sold_by_employee_id, $data['comment'],$data['show_comment_on_receipt'],$data['payments'], $suspended_change_sale_id, 0,$data['ref_no'],$data['auth_code'], $data['change_sale_date'], $data['balance'], $data['store_account_payment'],$data['total'],$data['amount_change'],-1);
 			if($sale_id_raw<0){
-
 				$this->load->view("sales/error_pagos");
 				return;
 			}
@@ -1381,12 +1380,12 @@ class Sales extends Secure_area
 		if($customer_id!=-1 and  $data['store_account_payment'] == 1 and $this->config->item('show_payments_ticket') == 1  ){
 			$data['payments_petty_cashes']=$this->Sale->get_petty_cash($customer_id,false,5);			
 		}
-		if(true)
+		if($data["generate_txt"])
 		{
 			$txt_receipt_file  = $data['sale_id']."-T".'.txt';
 			$data_txt = $this->load->view("sales/txt_receipt_2",$data, true);
 			$this->load->view("sales/download_txt",array("name"=>$txt_receipt_file,"data_txt"=>$data_txt));	
-			//$this->sale_lib->clear_all();	
+			$this->sale_lib->clear_all();	
 			$this->update_viewer(3);
 			return 0;
 		}

@@ -30,11 +30,11 @@ function complete_string($string ,$canti, $p = "")
             echo $this->Location->get_info_for_key('overwrite_data')==1 ? $this->Location->get_info_for_key('website') : $this->config->item('website') ;
             echo"\r\n";
         } 
-        if(!empty($this->Location->get_info_for_key('codigo')))
+       /* if(!empty($this->Location->get_info_for_key('codigo')))
         {                 
             echo lang("locations_code").". ".  $this->Location->get_info_for_key('codigo') ;
             echo"\r\n";
-        }           
+        } */         
         if(isset($mode) && $mode == 'return') 
         {
             echo lang('items_sale_mode').$sale_type." ".$sale_number;
@@ -54,20 +54,20 @@ function complete_string($string ,$canti, $p = "")
         {
             echo 'BOLETA '.$sale_number;
             echo "\r\n"; 
-            if($this->Location->get_info_for_key('show_serie') == 1)
+            /*if($this->Location->get_info_for_key('show_serie') == 1)
             {
                 echo "Serie: ".$serie_number;
                 echo "\r\n"; 
-            }			                 	
+            }	*/		                 	
         } 
         else
         {
             echo $this->config->item('sale_prefix').' '.$sale_number;
             echo "\r\n"; 
-            if($this->Location->get_info_for_key('show_serie')==1){
+            /*if($this->Location->get_info_for_key('show_serie')==1){
                 echo "Serie: ".$serie_number;
                 echo "\r\n"; 									
-            }
+            }*/
         } 
         
         echo "ID : ".$sale_id_raw."\r\n";
@@ -103,17 +103,15 @@ function complete_string($string ,$canti, $p = "")
         {                 
             echo $sale_type."\r\n";               
         }*/
-        if ($register_name) 
+        /*if ($register_name) 
         {
             echo lang('locations_register_name').' : '.$register_name."\r\n";
-        }
+        }*/
         if ($tier) 
         { 
             echo lang('items_tier_name').': '.$tier."\r\n";                 
         }
         echo lang('employees_employee').": ".$employee."\r\n";
-
-        echo"\r\n";
 
         for ($i = 0; $i < $lines ; $i++) { 
             echo $type_line;
@@ -333,8 +331,7 @@ function complete_string($string ,$canti, $p = "")
             
             echo "\r\n" . lang("sales_titular_cuenta");
             echo "\r\n" .  $item["titular_cuenta"];
-            echo "\r\n" . lang("sales_docuemento");
-            echo "\r\n" . $item["numero_documento"];
+            echo "\r\n" . lang("sales_docuemento").": " .$item["numero_documento"];
             echo "\r\n" . lang("sales_numero_cuenta");
             echo "\r\n" . $item["numero_cuenta"];
             echo "\r\nTotal : ";
@@ -362,9 +359,9 @@ function complete_string($string ,$canti, $p = "")
     }      
      
     echo"\r\n";
-    echo lang('sales_sub_total')." ";
+    /*echo lang('sales_sub_total')." ";
 	echo $this->config->item('round_value')== 1 ? to_currency(round($subtotal)) : to_currency($subtotal) ;
-    echo "\r\n";
+    echo "\r\n";*/
     echo $this->config->item('activar_casa_cambio') == 0 ? lang('saleS_total_invoice') : "Total ".$this->config->item('sale_prefix'); 
     
     $subtotal_ = 0;
@@ -395,6 +392,7 @@ function complete_string($string ,$canti, $p = "")
     {
         echo $this->config->item('activar_casa_cambio') == 0 ? lang('saleS_total_invoice'):"Total ".lang("sales_".$divisa)." ";
         echo to_currency($total_divisa,3,lang("sales_".$divisa)." ");
+        echo "\r\n";
     }   
 
     for ($i = 0; $i < $lines ; $i++) { 
@@ -593,13 +591,13 @@ if (!$store_account_payment==1)
         $order   = array("<strng>", "</strng>", "<br>","</br>");        
         $str = str_replace( $order,"",$str);
         echo nl2br($str);
-        echo"\r\n";
+       // echo"\r\n";
     } 
-    if($this->Location->get_info_for_key('show_rango')==1)
+    /*if($this->Location->get_info_for_key('show_rango')==1)
     {        
         echo nl2br("Rango autorizado: ".$this->Location->get_info_for_key('serie_number')." ".
 								$this->Location->get_info_for_key('start_range')." a la ".
 								$this->Location->get_info_for_key('final_range')); 
          
-    }
+    }*/
 } 

@@ -215,7 +215,7 @@
                                     type="text" class="form-control" readonly id="convertido">
                             </div>
                         </div>
-                        <div  class="<?=$show_carrousel ?'col-xs-9': 'col-xs-9'?>">
+                        <div  class="<?=$show_carrousel ?'col-xs-12': 'col-xs-12'?>">
                             <center  style="margin:0px">
                                 <div>
                                     <input class="btn b1 " name="7" type="button" value="7" />
@@ -241,7 +241,7 @@
                                 </div>
                             </center>
                         </div>
-                        <div class="<?=$show_carrousel ?'col-xs-3': 'col-xs-3'?>">
+                        <!--<div class="<?=$show_carrousel ?'col-xs-3': 'col-xs-3'?>">
                             <table class="table" style="width:100%"> 
                                 <tbody id="t-history">     
                                     <tr>
@@ -251,7 +251,7 @@
                                     </td> 
                                 <tbody>  
                             </table>
-                        </div>
+                        </div>-->
                     </div>
 
                 </div>
@@ -308,7 +308,6 @@
         updated = "0000-00-00 00:00:00",
         height_window = $(window).height(),
         _history = [];
-        is_add = false;
         time = 0;
 
     change_window();
@@ -425,7 +424,7 @@
 
         if ($("#catidad").val() > 0) {
             var total = convert($("#catidad").val(), rate);
-            total = accounting.formatNumber(total, 0, ".");
+            total = accounting.formatMoney(total, "BS ", 0);
             $("#convertido").val(total);
         }
 
@@ -438,7 +437,7 @@
     }
     
 
-    function add_history() {
+    /*function add_history() {
         _history.unshift( $("#convertido").val());
         if(_history.length >= 4)
         {
@@ -458,7 +457,7 @@
             $("#t-history").html("<tr><td><button onclick='add_history()'; class='btn'>Agregar</button></tr></td>");
         }            
         time ++; 
-    }, 1000);
+    }, 1000);*/
 
     <?php }?>
 
