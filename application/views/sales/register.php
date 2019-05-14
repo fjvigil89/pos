@@ -210,14 +210,19 @@
 											?>
 										</li>
 									<?php } ?>
-						
-
+									<?php if($this->config->item("show_viewer")):?>
+										<li>
+											<?php echo anchor("all/viewer/$logged_in_employee_id",
+													"Segunda pantalla",
+													array('class'=>'','target'=>'_blank','title'=>'Ventas realizadas hoy'));
+												?>
+										</li>
+									<?php endif; ?>
 								</ul>
 							</div>
 						</div>
 					</div>
 				</div>
-
 
 				<?php // cundo se va a realizar una venta
 				 if ($mode != 'store_account_payment')
@@ -951,9 +956,9 @@
 						?>
 
 					</div>
-
-                    <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
-                        <?php  if( ($mode=='sale' or $mode=='return') && $this->config->Item('hide_ticket')){
+					<?php   if( ($mode=='sale' or $mode=='return') && $this->config->Item('hide_ticket'))
+						{
+							echo '<div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">';			
 
 
                             echo '<div class="md-radio-inline">';
@@ -974,16 +979,17 @@
                             echo  lang('sales_ticket_on_receipt');
                             echo '</label>';
                             echo '</div>';
-                            echo '</div>';
+							echo '</div>';
+							echo "</div>";
                             }
                         ?>
 
-                    </div>
+                   
 
-                    <div class="col-lg-1 col-md-3 col-sm-12 col-xs-12">
+                    
                         <?php  if( ($mode=='sale' or $mode=='return') && $this->config->Item('hide_ticket')){
 
-
+							echo'<div class="col-lg-1 col-md-3 col-sm-12 col-xs-12">';
                             echo '<div class="md-radio-inline">';
                             echo '<div class="md-radio">';
                             echo form_radio(array(
@@ -1002,11 +1008,12 @@
                             echo ucfirst(strtolower($this->config->item('sale_prefix')));
                             echo '</label>';
                             echo '</div>';
-                            echo '</div>';
+							echo '</div>';
+							echo '</div>';
                             }
                         ?>
 
-					</div>
+					
 					<div class="clearfix"></div>
 
 					

@@ -55,7 +55,6 @@ define("NAME_COMPANY","Facil Pos");
 define("YEAR","2019");
 define("PATH_RECUSE","store_resource");
 
-
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
 ?>
