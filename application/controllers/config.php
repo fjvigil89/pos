@@ -223,6 +223,7 @@ class Config extends Secure_area
 			'show_inventory_colour' => (int)$this->input->post('show_inventory_colour'),
 			'show_inventory_brand' => (int)$this->input->post('show_inventory_brand'),
 			'show_fullname_item' => $this->input->post('show_fullname_item') ? 1 : 0,
+			'show_option_policy_returns_sales' => $this->input->post('show_option_policy_returns_sales') ? 1 : 0,
             'send_txt_invoice' => $this->input->post('send_txt_invoice')? 1 : 0,
             'ftp_hostname'     => $this->input->post('value_ftp_hostname') ? $this->input->post('value_ftp_hostname') : 0,
             'ftp_username'     => $this->input->post('value_ftp_username') ? $this->input->post('value_ftp_username') : 0,

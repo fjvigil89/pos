@@ -473,6 +473,13 @@ class Reports extends Secure_area {
         $this->load->view("reports/date_input_excel_export", $data);
     }
 
+    function detailed_receivings_input(){
+        $data = $this->_get_common_report_data(TRUE);
+        $data['specific_input_name'] = lang('reports_supplier');
+        $data['search_suggestion_url'] = site_url('reports/supplier_search');
+        $this->load->view("reports/detailed_receivings_input", $data);
+    }
+
     function suppliers_credit_specific_input() {
         $data = $this->_get_common_report_data(TRUE);
         $data['specific_input_name'] = lang('reports_supplier');
@@ -539,7 +546,8 @@ class Reports extends Secure_area {
     }
 
     /** also added for register log */
-    function purchase_provider($start_date, $end_date, $sale_type, $sale_ticket, $export_pdf = 0,$export_excel = 0, $offset = 0) {
+    function purchase_provider($start_date, $end_date, $sale_type, $sale_ticket, $export_pdf = 0,$export_excel = 0, $offset = 0) 
+    {
 
         $this->check_action_permission('view_receivings');
         $start_date = rawurldecode($start_date);
@@ -2091,7 +2099,7 @@ class Reports extends Secure_area {
             $tabular_data[] = $data_row;
         }
         
-
+        $as=$model->getSummaryData();
         $data = array(
             "title" => "Movimiento de caja resumen",
             "subtitle" => date(get_date_format(), strtotime($start_date)) . '-' . date(get_date_format(), strtotime($end_date)),
@@ -3040,7 +3048,6 @@ class Reports extends Secure_area {
                 $details_data[$key][] = $details_data_row;
             }
         }
-
         $data = array(
             "title" => lang('reports_detailed_sales_report'),
             "subtitle" => date(get_date_format(), strtotime($start_date)) . '-' . date(get_date_format(), strtotime($end_date)),
@@ -3668,14 +3675,23 @@ class Reports extends Secure_area {
         $this->load->view("reports/tabular_details", $data);
     }
 
-    function detailed_receivings($start_date, $end_date, $sale_type, $export_excel = 0, $export_pdf = 0, $offset = 0) {
+    function detailed_receivings($start_date, $end_date,$supplier_id,$sale_type, $export_excel = 0, $export_pdf = 0, $offset = 0) 
+    {
         $this->check_action_permission('view_receivings');
         $start_date = rawurldecode($start_date);
         $end_date = rawurldecode($end_date);
 
         $this->load->model('reports/Detailed_receivings');
         $model = $this->Detailed_receivings;
-        $model->setParams(array('start_date' => $start_date, 'end_date' => $end_date, 'sale_type' => $sale_type, 'offset' => $offset, 'export_excel' => $export_excel, 'export_pdf' => $export_pdf));
+        $model->setParams(array(
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'supplier_id' => $supplier_id,
+            'sale_type' => $sale_type,
+            'offset' => $offset,
+            'export_excel' => $export_excel,
+            'export_pdf' => $export_pdf
+            ));
 
         $this->Receiving->create_receivings_items_temp_table(array('start_date' => $start_date, 'end_date' => $end_date, 'sale_type' => $sale_type));
         $config = array();
@@ -3694,7 +3710,8 @@ class Reports extends Secure_area {
         $details_data = array();
 
         foreach ($report_data['summary'] as $key => $row) {
-            $summary_data[$key] = array(array('data' => anchor('receivings/edit/' . $row['receiving_id'], 'RECV ' . $row['receiving_id'], array('target' => '_blank')), 'align' => 'left'), array('data' => date(get_date_format(), strtotime($row['receiving_date'])), 'align' => 'left'), array('data' => to_quantity($row['items_purchased']), 'align' => 'left'), array('data' => $row['employee_name'], 'align' => 'left'), array('data' => $row['supplier_name'], 'align' => 'left'), array('data' => to_currency($row['total'], 10), 'align' => 'right'), array('data' => $row['payment_type'], 'align' => 'left'), array('data' => $row['comment'], 'align' => 'left'));
+            $type_buy=($row['items_purchased']<0)?'DEVC':'RECV';
+            $summary_data[$key] = array(array('data' => anchor('receivings/edit/' . $row['receiving_id'], $type_buy . $row['receiving_id'], array('target' => '_blank')), 'align' => 'left'), array('data' => date(get_date_format(), strtotime($row['receiving_date'])), 'align' => 'left'), array('data' => to_quantity($row['items_purchased']), 'align' => 'left'), array('data' => $row['employee_name'], 'align' => 'left'), array('data' => $row['supplier_name'], 'align' => 'left'), array('data' => to_currency($row['total'], 10), 'align' => 'right'), array('data' => $row['payment_type'], 'align' => 'left'), array('data' => $row['comment'], 'align' => 'left'));
 
             foreach ($report_data['details'][$key] as $drow) {
                 $report_taxes = $model->getTaxesForItems($row['receiving_id'], $drow['item_id']);
@@ -3728,7 +3745,7 @@ class Reports extends Secure_area {
         $this->load->view("reports/tabular_details", $data);
     }
 
-    function suppliers_credit($start_date, $end_date, $supplier_id, $sale_type, $export_excel = 0, $offset = 0) {
+    function suppliers_credit($start_date, $end_date, $supplier_id, $sale_type, $export_pdf=0, $export_excel = 0, $offset = 0) {
         $this->check_action_permission('view_receivings');
         $start_date = rawurldecode($start_date);
         $end_date = rawurldecode($end_date);
@@ -3780,7 +3797,7 @@ class Reports extends Secure_area {
                 );
             }
         }
-
+        $fdf=$model->getSummaryData();
         $data = array(
             "title" => lang('reports_detailed_receivings_report'),
             "subtitle" => date(get_date_format(), strtotime($start_date)) . '-' . date(get_date_format(), strtotime($end_date)),
@@ -3788,6 +3805,7 @@ class Reports extends Secure_area {
             "summary_data" => $summary_data,
             "details_data" => $details_data,
             "overall_summary_data" => $model->getSummaryData(),
+            "export_pdf" => $export_pdf,
             "export_excel" => $export_excel,
             "pagination" => $this->pagination->create_links(),
         );
@@ -4128,7 +4146,7 @@ class Reports extends Secure_area {
         $this->Receiving->create_receivings_items_temp_table(array('start_date' => $start_date, 'end_date' => $end_date,'listar_contado'=>true));
 		$this->Receiving->create_store_payments_temp_table(array('start_date' => $start_date, 'end_date' => $end_date));
         $this->Register_movement->create_movement_items_temp_table(array('start_date' => $start_date, 'end_date' => $end_date));
-
+        
         $data = array(
             "title" => lang('reports_detailed_profit_and_loss'),
             "subtitle" => date(get_date_format(), strtotime($start_date)) . '-' . date(get_date_format(), strtotime($end_date)),

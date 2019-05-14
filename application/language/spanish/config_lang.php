@@ -1,4 +1,6 @@
 <?php
+
+$lang['show_option_policy_returns_sales']='Mostrar opción políticas de devolución en módulo ventas';
 $lang['config_control_access_employee']='Activar control de acceso empleado';
 $lang['config_info']='Guarda Información de Configuración';
 $lang['config_company']='Nombre de la Compañía';
@@ -154,7 +156,7 @@ $lang['config_percent_point']='Valor del punto en porcentaje de la compra';
 $lang['config_error_value_points']='El valor debe ser un número';
 $lang['config_error_percent_points']='El porcentaje debe ser un número';
 $lang['config_show_image']='Mostrar imagen miniatura en reportes';
-$lang['config_round_value']='Usar sistema de redondeo ';
+$lang['config_round_value']='Usar sistema de redondeo';
 $lang['config_hide_support_chat']='Ocultar chat de soporte';
 $lang['config_denomination'] = 'Tipo de denominación';
 $lang['config_currency'] = 'Billete/Moneda';

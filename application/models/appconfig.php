@@ -54,17 +54,17 @@ class Appconfig extends CI_Model
 	}
 	function get_expense_category(){		
 		$expense_category=array(
-		 "Nomina"=>"Nomina", 
-		 "Transporte"=>"Transporte",
-		 "Comida"=>"Comida", 
-		 "Arriendo"=>"Arriendo", 
-		 "Reparaciones"=>"Reparaciones", 
-		 "Publicidad"=>"Publicidad",
-		 "Servicios públicos"=>"Servicios públicos",
-		 "Suministros"=>"Suministros",
-		 "Mantenimiento"=>"Mantenimiento", 
-		 "Limpieza"=>"Limpieza",
-		 "Combustible"=>"Combustible");
+		lang('Nomina')=>lang('Nomina'), 
+		lang('Transporte')=>lang('Transporte'),
+		lang('Comida')=>lang('Comida'), 
+		lang('Arriendo')=>lang('Arriendo'), 
+		lang('Reparaciones')=>lang('Reparaciones'), 
+		lang('Publicidad')=>lang('Publicidad'),
+		lang('Servicios_publicos')=>lang('Servicios_publicos'),
+		lang('Suministros')=>lang('Suministros'),
+		lang('Mantenimiento')=>lang('Mantenimiento'), 
+		lang('Limpieza')=>lang('Limpieza'),
+		lang('Combustible')=>lang('Combustible'));
 		return $expense_category;
 	}
 	function get_all()

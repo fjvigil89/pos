@@ -1,0 +1,1745 @@
+Almacén de Moda
+NIT/RUT. 89-9545885
+Cll 21 45 N 31 52
+555-555-7777
+http://facilpos.co
+Código de la empresa. 35375--
+FACTURA 141
+Serie: 434
+ID : 649
+05/14/2019 03:11 pm
+Vendedor : caja 2
+Empleado: Fredys  Cardenas
+
+------------------------------
+Artículo      Cant     Total
+------------------------------
+99999         1      $38.250,00 
+------------------------------
+Subtotal $34.459,46
+TOTAL FACTURA $38.250,00
+------------------------------
+Canceló $106.080,00
+Canceló $35.700,00
+------------------------------
+      DETALLE DEL IMPUESTO
+Tipo     Base/Imp     Impuesto
+5.000% I $34.459,46  $1.723,0    
+6.000% p $34.459,46  $2.068,0    
+------------------------------
+     FORMA DE PAGO
+Fecha      Tipo     Valor 
+05/14/2019 Efectivo $106.080,00
+05/14/2019 Efectivo $35.700,00 
+------------------------------
+Cambio: $103.530,00
+Puntos acumulado 8077
+SIMPLIFICADO
+RESLUIN DE UTRIZIN NÚMER 400001 DEL 2013-07-26 NUMERIN DESDE 02-400001 HST 02-700000<br />
+
+Grntí except pr glpes  dñs eléctrics.
+Rango autorizado: 434 4 a la 7777<div style="border:1px solid #990000;padding-left:20px;margin:0 0 10px 0;">
+
+<h4>A PHP Error was encountered</h4>
+
+<p>Severity: Warning</p>
+<p>Message:  Cannot modify header information - headers already sent by (output started at C:\xampp\htdocs\pos\application\controllers\sales.php:1399)</p>
+<p>Filename: controllers/sales.php</p>
+<p>Line Number: 1401</p>
+
+</div><!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Almacén de Moda -- Desarrollado por Facil Pos</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<base href="http://localhost/pos/" />
+<link rel="icon" href="http://localhost/pos/favicon.ico" type="image/x-icon"/>
+
+<!-- BEGIN CSS -->
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css"/>	<!-- IMPORTANTE -->
+<link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css"/>	<!-- IMPORTANTE -->
+<link href="css/confirm/jquery-confirm.css" rel="stylesheet">
+<link href="js/bootstrap-validator/bootstrapValidator.min.css" rel="stylesheet">
+<link href="http://localhost/pos/bin/bin.min.css" rel="stylesheet" type="text/css"/>	<!-- IMPORTANTE -->
+
+
+<!-- END CSS -->
+ 
+<!-- BEGIN JAVASCRIPT-->
+<script src="http://localhost/pos/bin/bin.min.js" type="text/javascript"></script>
+
+<!-- JAVASCRIPT OffLine-->
+<!-- JAVASCRIPT OffLine-->
+   <script>   
+        localStorage.setItem('store_login','store_phppos2');
+        localStorage.setItem('sales_offline','1');
+ </script>
+  
+   <script src=" https://momentjs.com/downloads/moment-with-locales.js" type="text/javascript"></script>
+
+    <script src="http://localhost/pos/js/lib/idb.js" type="text/javascript"></script>
+    <script src="http://localhost/pos/js/offline/dexie.min.js" type="text/javascript"></script>    
+    <script src="http://localhost/pos/js/offline/indexed.js" type="text/javascript"></script>
+    <script src="http://localhost/pos/js/offline/conexion_evento.js" type="text/javascript"></script>			
+
+
+    <!-- validacion indexedb browser--->
+    <script src="http://localhost/pos/js/compatible_browser.js" type="text/javascript"></script>
+    <script>    
+    
+	     $(document).ready(function(){
+			if(!validation_indexedDB_browser()){
+                    document.getElementById("btn-offline").style.display = "block";
+                    sessionStorage.setItem("person_id", 1);
+                    window.addEventListener('offline', handleConnectionChange);
+
+                }
+			
+		});
+	</script>
+
+
+    <script type="text/javascript">
+    var SITE_URL = "http://localhost/pos/index.php";
+    var BASE_URL = 'http://localhost/pos/';
+    </script>
+
+    <script type="text/javascript">
+    COMMON_SUCCESS = "\u00c9xito";
+    COMMON_ERROR = "Error";
+    $.ajaxSetup({
+        cache: false,
+        headers: {
+            "cache-control": "no-cache"
+        }
+    });
+
+    $(document).ready(function() {
+        //Ajax submit current location
+        $("#employee_current_location_id").change(function() {
+            $("#form_set_employee_current_location_id").ajaxSubmit(function() {
+                window.location.reload(true);
+            });
+        });
+
+        //Keep session alive by sending a request every 5 minutes
+        setInterval(function() {
+            $.get('http://localhost/pos/index.php/home/keep_alive');
+        }, 300000);
+    });
+    </script></head>
+
+<body class="page-md page-sidebar-closed-hide-logo page-container-bg-solid page-sidebar-closed" id="vContenido">
+    <div class="modal fade" id="myModal" tabindex="-1" role="myModal" aria-hidden="true"></div>
+    <!-- BEGIN HEADER -->
+    <div class="page-header navbar  md-shadow-z-1-i ">
+        <div id="ventanaVer" class="Ventana-modal"
+            style="z-index: 200000;height: auto;overflow: hidden;position: absolute;"></div>
+        <div class="page-header-inner ">
+            <!-- BEGIN LOGO -->
+            <div class="page-logo">
+                <a href="http://localhost/pos/index.php/home">
+                    <img src="http://localhost/pos/index.php/app_files/view/22" class="logo-default" id="header-logo" alt=""/>                </a>
+                <div class="menu-toggler sidebar-toggler">
+                    <!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
+                </div>
+            </div>
+            <!-- END LOGO -->
+            <!-- BEGIN RESPONSIVE MENU TOGGLER -->
+            <a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse"
+                data-target=".navbar-collapse"></a>
+            <!-- END RESPONSIVE MENU TOGGLER -->
+            <div class="page-top-left">
+                <div class="page-actions">
+                    <!--License renewal-->
+                    
+                    <!-- Button tutorials -->
+                                        <div class="btn-group nav-bars">
+                        <a href="javascript:;" class="btn-group btn red-haze" data-toggle="dropdown"
+                            data-hover="dropdown" data-close-others="true">
+                            <span class="hidden-sm hidden-xs">Tutoriales&nbsp;</span><i
+                                class="fa fa-life-ring"></i>
+                        </a>
+                        <ul class="dropdown-menu list_nav ">
+                            <li>
+                                <a class="icon fa fa-cogs">Básico</a>
+                                <ul>
+                                    <li><a onclick="ver_video(this)" data-video="PRESENTACIÓN"
+                                                                                        class="icon fa fa-dashboard">Presentación</a></li>
+                                    <li><a onclick="ver_video(this)" data-video="CONFIGURACIÓN"
+                                            target='_blank' href='https://www.youtube.com/watch?v=0Z1avVwAqZE&feature=youtu.be'                                            class="icon fa fa-cogs help_button">Configuración</a></li>
+                                    <!--<a class="icon fa fa-cogs" data-toggle="modal"  data-target="#stack2">Configuración</a>-->
+                            </li>
+                            <li><a onclick="ver_video(this)" data-video="TIENDAS"
+                                    target='_blank' href='https://www.youtube.com/watch?v=X7vpvIqo8Ww'                                    class="icon fa fa-home help_button">Tienda</a></li>
+                            <!--<a class="icon fa fa-home" data-toggle="modal"  data-target="#stack6">Tiendas</a>-->
+                            </li>
+                            <li><a onclick="ver_video(this)" data-video="PROVEEDORES"
+                                                                        class="icon fa fa-download">Proveedores</a></li>
+                            <li><a onclick="ver_video(this)" data-video="INVENTARIO"
+                                                                        class="icon fa fa-table">Inventario</a></li>
+                            <li><a onclick="ver_video(this)" data-video="VENTAS"
+                                                                        class="icon fa fa-shopping-cart">Ventas</a></li>
+                            <li><a onclick="ver_video(this)" data-video="SERVICIO TÉCNICO"
+                                                                        class="icon fa fa-bar-chart-o">Reportes</a></li>
+                            <li><a onclick="ver_video(this)" data-video="REPORTES"
+                                    target='_blank' href='https://www.youtube.com/watch?v=SzJnORvT2vY&t=3s'                                    class="icon fa fa-wrench help_button">Servicio Técnico</a>
+                                <!--<a class="icon fa fa-wrench" data-toggle="modal"  data-target="#stack7">Servicio Técnico</a>-->
+                            </li>
+
+                        </ul>
+
+                        </li>
+                        <li>
+                            <a class="icon fa fa-cogs" data-toggle="modal" data-target="#stack7">
+                                Intermedio                             </a>
+                        </li>
+                        <li>
+                            <a class="icon fa fa-cogs" data-toggle="modal" data-target="#stack8">
+                                Avanzado                            </a>
+                        </li>
+                        </ul>
+
+                    </div>
+
+
+
+                    <!-- Button Support -->
+
+                    <div class="btn-group pull-right">
+                                                <a class="btn green" target="_blank" href="https://goo.gl/qY2V8W">
+                            <span class="hidden-sm hidden-xs">APP&nbsp;</span><i class="fa fa-android"></i>
+                        </a>
+                    </div>
+                    <div class="btn-group pull-right">
+                                                <a class="btn green-jungle" target="_blank" href="https://api.whatsapp.com/send?phone=573175791505&text=Hola%20y%20bienvenido%20al%20sistema%20de%20soporte,%20dale%20click%20en%20enviar%20para%20comunicarte">
+                            <span class="hidden-sm hidden-xs">Soporte&nbsp;</span><i
+                                class="fa fa-whatsapp"></i>
+                        </a>
+                    </div>
+
+
+                    <!-- Button offline -->
+                                        <div class="btn-group pull-right">
+                        <button class="btn green" id="btn-offline" style="display:none;">
+                            <span class="hidden-sm hidden-xs">Offline&nbsp;</span><i id="icon-offline"
+                                class="fa fa-plug"></i>
+                        </button>
+                    </div>
+                                        <!-- Dropdown Locations -->
+                    <div class="btn-group">
+                                                <form action="http://localhost/pos/index.php/home/set_employee_current_location_id" method="post" accept-charset="utf-8" id="form_set_employee_current_location_id"><div style="display:none">
+<input type="hidden" name="csrf_test_name" value="ff9940048b46f29eb1eef2ba5777ee53" />
+</div>                        <select name="employee_current_location_id" id="employee_current_location_id" class="bs-select form-control">
+<option value="1" selected="selected">Fredys</option>
+<option value="2">Tienda2</option>
+<option value="5">Tienda Principa323</option>
+</select>                        </form>                                            </div>
+                </div>
+            </div>
+
+            <!-- BEGIN PAGE TOP -->
+            <div class="page-top">
+                <!-- BEGIN TOP NAVIGATION MENU -->
+                <div class="top-menu">
+                    <ul class="nav navbar-nav pull-right">
+                        <li class="flag-custom">
+                            <h3 id="">
+                                <span class='flag-icon flag-icon-ec' title='Ecuador'></span>                            </h3>
+                        </li>
+
+                        <li class="info-time">
+                            <h6 id="time">
+                                <i class="icon fa fa-clock-o"></i>
+                                <span class="text">
+                                    03:11 pm                                    05/14/2019                                </span>
+                            </h6>
+                        </li>
+
+                        <li class="separator hide">
+                        </li>
+
+                        <!-- BEGIN USER LOGIN DROPDOWN -->
+                        <li class="dropdown dropdown-user ">
+                            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
+                                data-close-others="true">
+                                <span class="username username-hide-on-mobile">
+                                    Fredys  Cardenas                                </span>
+                                <!-- DOC: Do not remove below empty space(&nbsp;) as its purposely used -->
+                                <img alt="" class="img-circle"
+                                    src="http://localhost/pos/index.php/app_files/view/4" />
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-default">
+                                <li>
+                                    <a
+                                        href="http://localhost/pos/index.php/employees/view/1">
+                                        <i class="icon-user"></i> Editar perfil </a>
+                                </li>
+                                                                <li>
+                                    <a href="http://localhost/pos/index.php/config"><i class="icon-settings"></i> Configuración</a>                                </li>
+                                
+                                <!--
+                                    <li>
+										<a href="" data-toggle="modal" data-target="#myModal" >
+											<i class="icon-directions"></i> 										</a>										
+									</li>
+                                    -->
+
+                                <li class="divider">
+                                </li>
+                                <li>
+                                    <a href="http://localhost/pos/index.php/home/logout"><i class="fa fa-power-off"></i>Salir</a>                                </li>
+                            </ul>
+                        </li>
+                        <!-- END USER LOGIN DROPDOWN -->
+                    </ul>
+                </div>
+                <!-- END TOP NAVIGATION MENU -->
+            </div>
+        </div>
+    </div>
+    <!-- END HEADER -->
+
+    <div class="clearfix">
+    </div>
+    <!-- BEGIN CONTAINER -->
+        <div class="page-container">
+        <!-- BEGIN SIDEBAR -->
+        <div class="page-sidebar-wrapper">
+            <div class="page-sidebar md-shadow-z-2-i  navbar-collapse collapse">
+                <!-- BEGIN SIDEBAR MENU -->
+                <!-- DOC: Apply "page-sidebar-menu-light" class right after "page-sidebar-menu" to enable light sidebar menu style(without borders) -->
+                <ul class="page-sidebar-menu page-sidebar-menu-closed" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+
+                    
+                    <li >
+                        <a href="http://localhost/pos/index.php/home">
+                            <i class="icon fa fa-dashboard"></i>
+                            <span class="title">Panel</span>
+                                                    </a>
+                    </li>
+                                        <li >
+                        <a href="http://localhost/pos/index.php/warehouse">
+                            <i class="fa fa-university"></i>
+                            <span class="title">Bodega</span>
+                                                    </a>
+                    </li>
+                                        <li >
+                        <a href="http://localhost/pos/index.php/campaigns">
+                            <i class="fa fa-bullhorn"></i>
+                            <span class="title">Campañas</span>
+                                                    </a>
+                    </li>
+                                        <li >
+                        <a href="http://localhost/pos/index.php/changes_house">
+                            <i class="fa fa-exchange"></i>
+                            <span class="title">Casa de cambio</span>
+                                                    </a>
+                    </li>
+                                        <li >
+                        <a href="http://localhost/pos/index.php/customers">
+                            <i class="fa fa-group"></i>
+                            <span class="title">Clientes</span>
+                                                    </a>
+                    </li>
+                                        <li >
+                        <a href="http://localhost/pos/index.php/receivings">
+                            <i class="fa fa-cloud-download"></i>
+                            <span class="title">Compras</span>
+                                                    </a>
+                    </li>
+                                        <li >
+                        <a href="http://localhost/pos/index.php/config">
+                            <i class="fa fa-cogs"></i>
+                            <span class="title">Configuración</span>
+                                                    </a>
+                    </li>
+                                        <li >
+                        <a href="http://localhost/pos/index.php/employees">
+                            <i class="fa fa-user"></i>
+                            <span class="title">Empleados</span>
+                                                    </a>
+                    </li>
+                                        <li >
+                        <a href="http://localhost/pos/index.php/items">
+                            <i class="fa fa-table"></i>
+                            <span class="title">Inventario</span>
+                                                    </a>
+                    </li>
+                                        <li >
+                        <a href="http://localhost/pos/index.php/item_kits">
+                            <i class="fa fa-inbox"></i>
+                            <span class="title">Kits</span>
+                                                    </a>
+                    </li>
+                                        <li >
+                        <a href="http://localhost/pos/index.php/licenses">
+                            <i class="fa fa-calendar"></i>
+                            <span class="title">Licencia</span>
+                                                    </a>
+                    </li>
+                                        <li >
+                        <a href="http://localhost/pos/index.php/registers_movement">
+                            <i class="fa fa-money"></i>
+                            <span class="title">Movimiento Caja</span>
+                                                    </a>
+                    </li>
+                                        <li >
+                        <a href="http://localhost/pos/index.php/offline">
+                            <i class="fa fa-plug"></i>
+                            <span class="title">OffLine</span>
+                                                    </a>
+                    </li>
+                                        <li >
+                        <a href="http://localhost/pos/index.php/suppliers">
+                            <i class="fa fa-download"></i>
+                            <span class="title">Proveedores</span>
+                                                    </a>
+                    </li>
+                                        <li >
+                        <a href="http://localhost/pos/index.php/recharges">
+                            <i class="fa fa-phone-square"></i>
+                            <span class="title">Recargas</span>
+                                                    </a>
+                    </li>
+                                        <li >
+                        <a href="http://localhost/pos/index.php/reports">
+                            <i class="fa fa-bar-chart-o"></i>
+                            <span class="title">Reportes</span>
+                                                    </a>
+                    </li>
+                                        <li >
+                        <a href="http://localhost/pos/index.php/technical_supports">
+                            <i class="fa fa-wrench"></i>
+                            <span class="title">Servicio Técnico</span>
+                                                    </a>
+                    </li>
+                                        <li >
+                        <a href="http://localhost/pos/index.php/giftcards">
+                            <i class="fa fa-credit-card"></i>
+                            <span class="title">Tarjeta de Regalo</span>
+                                                    </a>
+                    </li>
+                                        <li >
+                        <a href="http://localhost/pos/index.php/locations">
+                            <i class="fa fa-home"></i>
+                            <span class="title">Tiendas</span>
+                                                    </a>
+                    </li>
+                                        <li class="active">
+                        <a href="http://localhost/pos/index.php/sales">
+                            <i class="fa fa-shopping-cart"></i>
+                            <span class="title">Ventas</span>
+                            <span class="selected"></span>                        </a>
+                    </li>
+                                        <li >
+                        <a href="http://localhost/pos/index.php/viewers">
+                            <i class="fa fa-eye"></i>
+                            <span class="title">Visor</span>
+                                                    </a>
+                    </li>
+                                        <li>
+                        <a href="http://localhost/pos/index.php/home/logout"><i class="fa fa-power-off"></i><span class="title">Salir</span></a>                    </li>
+                </ul>
+                <!-- END SIDEBAR MENU -->
+            </div>
+        </div>
+        <!-- END SIDEBAR -->
+        <script>
+        function ver_video(elemento) {
+                        return true;
+        }
+        </script>
+        <!-- BEGIN CONTENT -->
+        <div class="page-content-wrapper">
+            <div class="page-content" id="content-page">
+                <div class="page-head">
+                    <!-- PAGE TOOLBAR -->
+
+	
+	<div class="row">
+		<div class="col-lg-8 col-md-7 col-sm-12 col-xs-12">
+			<div class="portlet light register-items margin-bottom-15">
+				<div id="ajax-loader" style="display: none;">por favor espere ... <img src="http://localhost/pos//img/ajax-loader.gif" alt=""/></div>
+				<div class="portlet-body">
+					<div class="row">
+													<div class="col-lg-9 col-md-8 col-sm-12 col-xs-12">
+								<form action="http://localhost/pos/index.php/sales/add" method="post" accept-charset="utf-8" id="add_item_form" class="" autocomplete="off"><div style="display:none">
+<input type="hidden" name="csrf_test_name" value="ff9940048b46f29eb1eef2ba5777ee53" />
+</div>									<div class="input-group">
+										<span class="input-group-btn">
+											<a href="http://localhost/pos/index.php/items/view/-1/1/sale" class="btn btn-success tooltips" data-original-title="Artículo Nuevo"><i class="icon-note hidden-lg"></i><span class="visible-lg">Artículo Nuevo</span></a>										</span>
+
+										<input type="text" name="item" value="" id="item" class="form-control form-inps-sale" accesskey="k" tabindex="1" placeholder="Ingresa un artículo o de código de barras escaneado"  />										<input type="hidden" name="no_valida_por_id" value="0">
+
+										<span class="input-group-btn">
+											<a href="javascript:void(0);" class="btn btn-success show-grid">
+												<i class="icon-magnifier-add hidden-lg"></i>
+												<span class="visible-lg">Mostrar Artículos</span>
+											</a>
+											<a href="javascript:void(0);" class="btn btn-success hide-grid hidden">
+												<i class="icon-magnifier-remove hidden-lg"></i>
+												<span class="visible-lg">Ocultar Artículos</span>
+											</a>
+										</span>
+									</div>
+								</form>
+							</div>
+							<div class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
+								<form action="http://localhost/pos/index.php/sales/change_mode" method="post" accept-charset="utf-8" id="mode_form" autocomplete="off"><div style="display:none">
+<input type="hidden" name="csrf_test_name" value="ff9940048b46f29eb1eef2ba5777ee53" />
+</div>									<select name="mode" id="mode" class="bs-select form-control">
+<option value="sale" selected="selected">Venta</option>
+<option value="return">Devolución Sin factura</option>
+</select>								</form>
+							</div>
+											</div>
+
+				</div>
+			</div>
+
+			<div class="portlet light register-items-table margin-bottom-15">
+
+				<div class="table-toolbar">
+					<div class="row">
+						<div class="col-lg-9 col-md-12">
+															<div class="sale-buttons">
+									<!-- Cancel and suspend buttons -->
+									<form action="http://localhost/pos/index.php/sales/cancel_sale" method="post" accept-charset="utf-8" id="cancel_sale_form" autocomplete="off"><div style="display:none">
+<input type="hidden" name="csrf_test_name" value="ff9940048b46f29eb1eef2ba5777ee53" />
+</div>										<div class="btn-group btn-group-sm btn-group-solid btn-group-justified ">
+																							<a type="button" class="btn yellow-gold letter-space" id="quotes">Crear Cotización</a>
+												<a type="button" class="btn yellow-gold letter-space" id="suspend_sale_button">Suspender</a>
+																								<a type="button" class="btn yellow-gold letter-space" id="layaway_sale_button" style="display: none;">Pago a plazos</a>
+												<a type="button" class="btn yellow-gold letter-space" id="estimate_sale_button" style="display: none;">Cotización</a>
+																									<a type="button" class="btn red-thunderbird" id="cancel_sale_button">Cancelar</a>
+																																	</div>
+									</form>
+								</div>
+													</div>
+						<div class="col-lg-2 col-md-12 pull-right">
+							<div class="btn-group pull-right">
+																<button  style="width: 100%" class="btn btn-sm btn-success dropdown-toggle tooltips " data-original-title="Dar clic para ver más opciones " data-toggle="dropdown">Más opciones<i class="fa fa-angle-down"></i>
+								</button>
+								<ul class="dropdown-menu pull-right">
+																			<li>
+											<a href="http://localhost/pos/index.php/sales/closeregister?continue=home" class="">Cerrar  Caja</a>										</li>
+																												<li>
+											<a href="http://localhost/pos/index.php/sales/offline" class="">Ir a ventas OffLine</a>										</li>
+																		<li>
+										<a href="http://localhost/pos/index.php/sales/sale_seriales_modal" class="" id="modal-serial" data-toggle="modal" data-target="#myModal">Búsqueda por Serial</a>									</li>
+																			<li>
+											<a href="http://localhost/pos/index.php/sales/modal_range" class="" id="modal_range" data-toggle="modal" data-target="#myModal">Cerrar rango</a>										</li>
+										<li>
+											<a href="http://localhost/pos/index.php/sales/add_balance" class="" id="modal_range" data-toggle="modal" data-target="#myModal">Agregar saldo</a>										</li>
+																		
+									
+																			<li>
+											<a href="http://localhost/pos/index.php/sales/clear_register" class="">Cambiar Registrarse</a>										</li>
+																												<li>
+											<a href="http://localhost/pos/index.php/sales/suspended" class="" title="Ventas Suspendidas">Ventas Suspendidas</a>										</li>
+										<li>
+											<a href="http://localhost/pos/index.php/sales/quoteses" class="" title="Cotizaciones">Cotizaciones</a>										</li>
+																					<li>
+												<a href="http://localhost/pos/index.php/sales/new_giftcard" title="Vender tarjetas de regalo">Vender tarjetas de regalo</a>											</li>
+																															<li>
+												<a href="http://localhost/pos/index.php/reports/sales_generator" title="  Buscar">  Buscar</a>											</li>
+																												<li>
+										<a href="http://localhost/pos/index.php/sales/batch_sale" class="" title="Venta de lotes">Venta de lotes</a>									</li>
+																			<li>
+											<a href="http://localhost/pos/index.php/reports/detailed_sales/2019-05-14 00:00:00/2019-05-14 23:59:59/all/0/0/-1" class="" target="_blank" title="Ventas realizadas hoy">Ventas del día</a>										</li>
+																												<li>
+											<a href="http://localhost/pos/index.php/all/viewer/1" class="" target="_blank" title="Ventas realizadas hoy">Segunda pantalla</a>										</li>
+																	</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+
+									<div class="register-items-holder">
+						<div class="table-scrollable">
+							<table id="register" class="table table-advance table-bordered table-custom">
+								<thead>
+									<tr>
+										<th ></th>
+
+										<th class="item_name_heading" >Nombre</th>
+																				
+
+																														<th class="sales_price">Precio</th>
+																					<th class="sales_edit_tiers">Tiers</th>
+																				
+										<th class="sales_quality">Cantidad</th>
+																					<th class="sales_discount">Descuento</th>
+																				
+										<th class="sales_total">Total</th>
+									</tr>
+								</thead>
+								<tbody id="cart_contents" class="register-item-content">
+																				<tr id="reg_item_top" class="register-item-details">
+												<td class="text-center">
+													<a href="http://localhost/pos/index.php/sales/delete_item/1" class="delete_item"><i class="fa fa-trash-o fa fa-2x font-red"></i></a>												</td>
+												<td  class="text text-success">
+													<a href="http://localhost/pos/index.php/home/view_item_kit_modal/3" data-toggle="modal" data-target="#myModal" >
+														99999													</a>
+												</td>
+
+																																						<td class="text-center">
+															<form action="http://localhost/pos/index.php/sales/edit_item/1" method="post" accept-charset="utf-8" class="line_item_form" autocomplete="off"><div style="display:none">
+<input type="hidden" name="csrf_test_name" value="ff9940048b46f29eb1eef2ba5777ee53" />
+</div><input type="text" name="price" value="38250.00" class="form-control form-inps-sale input-small text-center" id="price_1"  />															</form>
+														</td>
+																																					<td width="4%" class="text-center">
+													<form action="http://localhost/pos/index.php/sales/edit_item_tier/1/3" method="post" accept-charset="utf-8" class="line_item_form" autocomplete="off"><div style="display:none">
+<input type="hidden" name="csrf_test_name" value="ff9940048b46f29eb1eef2ba5777ee53" />
+</div><span class=""><select name="tier_id_item" style="width: 90px;" class="form-control tier_id_item">
+<option value="0" selected="selected">Ninguno</option>
+<option value="2">TALLER </option>
+<option value="3">COSTO 0 CON COMPRA DE MOTO</option>
+<option value="4">GARANTIA </option>
+<option value="5">des1</option>
+<option value="6">otro</option>
+<option value="7">para todos</option>
+</select></span>													</form>
+												</td>
+											
+												<td width="3%" class="text-center">
+													<form action="http://localhost/pos/index.php/sales/edit_item/1/3" method="post" accept-charset="utf-8" class="line_item_form" autocomplete="off"><div style="display:none">
+<input type="hidden" name="csrf_test_name" value="ff9940048b46f29eb1eef2ba5777ee53" />
+</div><input type="number" name="quantity" value="1" class="form-control form-inps-sale text-center" id="quantity_1" tabindex="2"  />													</form>
+												</td>
+
+																										<td width="3%">
+															<form action="http://localhost/pos/index.php/sales/edit_item/1" method="post" accept-charset="utf-8" class="line_item_form" autocomplete="off"><div style="display:none">
+<input type="hidden" name="csrf_test_name" value="ff9940048b46f29eb1eef2ba5777ee53" />
+</div><input type="text" name="discount" value="0" class="form-control form-inps-sale input-small text-center" id="discount_1"  />														  	</form>
+														</td>
+													
+																								
+												<td class="text-center">
+													$38.250,00												</td>
+											</tr>
+
+																			</tbody>
+							</table>
+						</div>
+					</div>
+
+				
+				<div class="row">
+					<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+						<div class="md-checkbox-inline"><div class="md-checkbox"><input type="checkbox" name="show_comment_on_receipt" value="1" id="show_comment_on_receipt" class="md-check"  /><label id="show_comment_on_receipt_label" for="show_comment_on_receipt"><span></span><span class="check"></span><span class="box"></span>Incluir comentarios en la factura</label></div></div>
+					</div>
+
+					<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+						
+						<div class="md-checkbox-inline"><div class="md-checkbox"><input type="checkbox" name="show_receipt" value="1" id="show_receipt" class="md-check"  /><label id="show_receipt_label" for="show_receipt"><span></span><span class="check"></span><span class="box"></span>No imprimir factura</label></div></div>
+					</div>
+					
+                   
+
+                    
+                        
+					
+					<div class="clearfix"></div>
+
+					
+					<div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+						<div class="row col-md-4 pull-right">
+							<div class="sale-buttons ">
+								<!-- Cancel and suspend buttons -->
+								<form action="http://localhost/pos/index.php/sales/cancel_sale" method="post" accept-charset="utf-8" id="cancel_sale_form" autocomplete="off"><div style="display:none">
+<input type="hidden" name="csrf_test_name" value="ff9940048b46f29eb1eef2ba5777ee53" />
+</div>									<div class="btn-group btn-group-sm btn-group-solid btn-group-justified ">
+																			</div>
+								</form>
+							</div>
+						</div>
+													<div class="" id="global_discount">
+								<form action="http://localhost/pos/index.php/sales/discount_all" method="post" accept-charset="utf-8" id="discount_all_form" class="form-horizontal" autocomplete="off"><div style="display:none">
+<input type="hidden" name="csrf_test_name" value="ff9940048b46f29eb1eef2ba5777ee53" />
+</div><div class="form-group no_margin_bottom" ><label style="text-align: left;" class="col-md-5 col-sm-12 col-xs-12 control-label" id="discount_all_percent_label" for="discount_all_percent">Desc. toda Venta: </label><div class="col-md-6 col-sm-12 col-xs-12"><div class="input-group"><div class="input-icon right"><i class="icon-percent"></i><input type="number" name="discount_all_percent" value="" size="3" class="form-control" id="discount_all_percent"  /></div><span class="input-group-btn"><button name="submit_discount_form" type="submit" class="btn btn-success" >Aceptar</button></span></div></div></div>								</form>
+							</div>
+											</div>
+											<div class="col-lg-6 col-md-12 col-sm-12 col-xs-12" id="div_employees"></div>
+										
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+							<br>
+							<div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
+																<div class="form-group no_margin_bottom">
+										<div class="col-md-3 col-sm-12 col-xs-12">
+											<div class="input-group">
+												<span class="input-group-btn">
+													<a href="http://localhost/pos/index.php/sales/open_money_drawer" class="btn btn-success" title="Se imprime un recibo en blanco">Abrir cajon monedero</a>												</span>
+											</div>
+										</div>
+									</div>
+														</div>
+							
+
+														<div  class="col-lg-8 col-md-6 col-sm-6 col-xs-6">
+								<form action="http://localhost/pos/index.php/sales/set_new_tax" method="post" accept-charset="utf-8" id="new_tax_form" class="form-horizontal" autocomplete="off"><div style="display:none">
+<input type="hidden" name="csrf_test_name" value="ff9940048b46f29eb1eef2ba5777ee53" />
+</div>									<div class="form-group no_margin_bottom">
+										<label class="col-md-7 col-sm-12 col-xs-12 control-label" id="new_tax" for="new_tax">Iva02: </label>
+										<div class="col-md-5 col-sm-12 col-xs-12">
+											<div class="input-group">
+												<div class="input-icon right"><i class="icon-percent"></i>
+													<input type="number" name="new_tax" value="" min="0" size="3" class="form-control pull-right" id="new_tax"  />												</div>
+												<span class="input-group-btn">
+													<button name="submit_tax_form" type="submit" class="btn btn-success" >Aceptar</button>												</span>
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>
+														
+						</div>
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+							<br>
+							<div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
+
+								<div class="md-checkbox-inline"><div class="md-checkbox"><input type="checkbox" name="generate_txt" value="1" checked="checked" id="generate_txt" class="md-check"  /><label id="generate_txt" for="generate_txt"><span></span><span class="check"></span><span class="box"></span>Generar TXT</label></div></div>								
+							</div>
+													
+						</div>
+				</div>
+			</div>
+
+			
+			
+		</div>
+
+		<!-- BEGIN RIGHT SMALL BOX  -->
+		<div class="col-lg-4 col-md-5 col-sm-12 col-xs-12 no-padding-left sale_register_rightbox" id="box-customers">
+			<!-- BEGIN SMALL BOX CUSTOMER -->
+			<div class="portlet light no-padding-left-right-box register-customer margin-bottom-15">
+				<div class="portlet-title padding">
+					<div class="caption">
+						<i class="fa fa-user"></i>
+						<span class="caption-subject bold">
+							Seleccionar Cliente (Opcional)						</span>
+						<a class="icon fa fa-youtube-play help_button" id='maxsales' data-toggle="modal" data-target="#stack5"></a>
+					</div>
+
+				</div>
+				<div class="portlet-body padding">
+											<div class="customer-search">
+							<div class="input-group">
+								<span class="input-group-btn">
+									<a href="http://localhost/pos/index.php/customers/view/-1/1" class="btn btn-success tooltips" data-original-title="Artículo Nuevo" title="Cliente Nuevo" id="new-customer"><i class="icon-user-follow hidden-lg"></i><span class="visible-lg">Cliente Nuevo</span></a>								</span>
+								<form action="http://localhost/pos/index.php/sales/select_customer" method="post" accept-charset="utf-8" id="select_customer_form" autocomplete="off"><div style="display:none">
+<input type="hidden" name="csrf_test_name" value="ff9940048b46f29eb1eef2ba5777ee53" />
+</div>									<input type="text" name="customer" value="Empieza a escribir el nombre del cliente..." id="customer" class="form-control form-inps-sale" size="30" placeholder="Empieza a escribir el nombre del cliente..." accesskey="c"  />								</form>
+							</div>
+						</div>
+					
+				</div>
+			</div>
+			<!-- END SMALL BOX CUSTOMERS -->
+
+			<!-- BEGIN SMALL BOX SALE SUMMARY-->
+			<div class="portlet light margin-top-15 no-padding">
+				<div class="portlet-title padding">
+					<div class="caption">
+						<i class="icon-basket-loaded"></i>
+						<span class="caption-subject bold">
+							Resumen de la venta						</span>
+					</div>
+					<div class="options">
+						<a href="http://localhost/pos/index.php/sales/view_shortcuts" data-toggle="modal" data-target="#myModal" class="pull-right tooltips" id="opener" data-original-title="Atajos de teclado"><i class="fa fa-keyboard-o" style="font-size: 30px"></i></a>
+					</div>
+				</div>
+				<ul class="list-group">
+					<li class="list-group-item tier-style"><div class="row"><div class="col-md-6"><span class="name-tier">Tiers artículo</span></div><div class="col-md-6"><span class=""><select name="tier_id" id="tier_id" class="bs-select form-control">
+<option value="0" selected="selected">Ninguno</option>
+<option value="2">TALLER </option>
+<option value="3">COSTO 0 CON COMPRA DE MOTO</option>
+<option value="4">GARANTIA </option>
+<option value="5">des1</option>
+<option value="6">otro</option>
+<option value="7">para todos</option>
+</select></span></div></div></li>				
+
+					<div class="item-subtotal-block">
+						<div class="num_items amount">
+							<span class="name-item-summary">
+								N° de artículos:
+							</span>
+							<span class="pull-right badge badge-cart badge-success">
+								1							</span>
+						</div>
+						<div class="subtotal">
+							<span class="name-item-summary">
+								Subtotal:
+							</span>
+							<span class="pull-right name-item-summary">
+								<strong>$34.459,46</strong>
+							</span>
+						</div>
+					</div>
+
+																											
+												<li class="list-group-item">
+								<span class="name-item-summary">
+																		5.000% IVA:
+								</span>
+								<span class="name-item-summary pull-right">
+									<strong>$1.722,97</strong>
+								</span>
+							</li>
+													<li class="list-group-item">
+								<span class="name-item-summary">
+																		6.000% prueba1:
+								</span>
+								<span class="name-item-summary pull-right">
+									<strong>$2.067,57</strong>
+								</span>
+							</li>
+										</ul>
+
+				<div class="amount-block">
+					<div class="total amount">
+						<div class="side-heading">
+							Total:
+						</div>
+						<div id="total-amount" class="amount animation-count font-green-jungle" data-speed="1000" data-decimals="2">
+							$38.250,00							<br>
+						</div>
+						
+						
+					</div>
+					<div class="total">
+						<div class="side-heading">
+							Cantidad a pagar:
+						</div>
+						<div id="amount-due" class="amount animation-count font-green-jungle"  data-speed="1000" data-decimals="2">
+							&#8209;$103.530,00						</div>
+					</div>
+				</div>
+				
+															<div class="payments">
+							<ul class="list-group">
+																	<li class="list-group-item no-border-top">
+										<span class="name-item-summary">
+											<a href="http://localhost/pos/index.php/sales/delete_payment/0" class="delete_payment"><i class="fa fa-times-circle fa-lg font-red"></i></a>											Efectivo										</span>
+										<span class="name-item-summary pull-right">
+											<strong>$106.080,00</strong>
+										</span>
+									</li>
+																	<li class="list-group-item no-border-top">
+										<span class="name-item-summary">
+											<a href="http://localhost/pos/index.php/sales/delete_payment/1" class="delete_payment"><i class="fa fa-times-circle fa-lg font-red"></i></a>											Efectivo										</span>
+										<span class="name-item-summary pull-right">
+											<strong>$35.700,00</strong>
+										</span>
+									</li>
+															<ul>
+						</div>
+					
+											<!-- BEGIN ADD PAYMENT -->
+						<div class="add-payment">
+
+							<form action="http://localhost/pos/index.php/sales/add_payment" method="post" accept-charset="utf-8" id="add_payment_form" autocomplete="off"><div style="display:none">
+<input type="hidden" name="csrf_test_name" value="ff9940048b46f29eb1eef2ba5777ee53" />
+</div>
+								<ul class="list-group"> 
+									<li class="list-group-item no-border-top tier-style">
+										<div class="row">
+											<div class="col-md-6">
+												<span class="name-addpay">
+													<a class="sales_help tooltips" data-placement="left" title="Aquí puedes poner el tipo de pago  y puedes pagar con diferentes tipos de pagos ">Agregar Pago </a>:
+												</span>
+											</div>
+											<div class="col-md-6">
+												<span class="">
+													<select name="payment_type" id="payment_types" class="bs-select form-control">
+<option value="Efectivo" selected="selected">Efectivo</option>
+<option value="Cheque">Cheque</option>
+<option value="Tarjeta de Regalo">Tarjeta de Regalo</option>
+<option value="Tarjeta de Débito">Tarjeta de Débito</option>
+<option value="Tarjeta de Crédito">Tarjeta de Crédito</option>
+</select>												</span>
+											</div>
+										</div>
+										<!--<div class="row margin-top-10">
+											<div class="col-md-12">
+												<div class="input-group">
+																										<input type="text" name="amount_tendered" value="-103530.00" id="amount_tendered" class="form-control form-inps-sale" accesskey="p"  />													<span class="input-group-btn">
+													<input class="btn btn-success" type="button" id="add_payment_button" value="Agregar Pago" />
+													</span>
+												</div>
+											</div>
+
+										</div>-->
+
+										<div class="row margin-top-10" id="panel1" style="display: block;">
+											<div class="col-md-12">
+												<div class="input-group">
+																										<input type="text" name="amount_tendered" value="-103530.00" id="amount_tendered" class="form-control form-inps-sale" accesskey="p"  />													<span class="input-group-btn">
+													<input class="btn btn-success" type="button" id="add_payment_button" value="Agregar Pago" />
+													</span>
+												</div>
+											</div>
+										</div>
+										<div class="row margin-top-10" id="panel2" style="display: none;">
+											<div class="col-md-12">
+												<div class="input-group">												
+													<div class="input-group">
+														<span class="input-group-addon" id="abreviatura"></span>
+														<input type="text" name="amount_tendered2" value="" id="amount_tendered2" class="form-control form-inps-sale" accesskey="p"  />														<span class="input-group-btn">
+															<input class="btn btn-success" type="button" id="add_payment_button2" value="Agregar Pago" />
+														</span>
+													</div>
+												</div>
+											</div>
+											
+										</div>
+										
+									</li>
+								</ul>
+							</form>
+						</div>
+						<!-- END ADD PAYMENT -->
+					
+					<div class="comment-sale">
+						<ul class="list-group">
+							<li class="list-group-item no-border-top tier-style">
+																		<div id="finish_sale">
+											<form action="http://localhost/pos/index.php/sales/complete" method="post" accept-charset="utf-8" id="finish_sale_form" autocomplete="off"><div style="display:none">
+<input type="hidden" name="csrf_test_name" value="ff9940048b46f29eb1eef2ba5777ee53" />
+</div>												<input type='button' class='btn btn-success btn-large btn-block' id='finish_sale_button' value='Completar Venta' />											</form>
+										</div>
+
+									<div id="container_comment" class="hidden"><div class="title-heading"<label id="comment_label" for="comment">Comentarios:</label></div><textarea name="comment" cols="40" rows="2" id="comment" class="form-control form-textarea" accesskey="o" ></textarea></div>
+															</li>
+						</ul>
+					</div>
+
+				
+				<div id="finish_sale" class="finish-sale">
+
+				</div>
+
+
+			</div>
+			<!-- END SMALL BOX SALE SUMMARY -->
+
+		</div>
+		<!-- END RIGHT SMALL BOX -->
+
+	</div>
+
+
+
+
+			<script type="text/javascript">
+					</script>
+	
+	<script type="text/javascript" language="javascript">
+
+				$( "input[type=radio][name=otra_moneda]").change(function(){
+			let moneda_numero= $(this).val();
+			let equivalencia= $(this).attr("equivalencia");
+			let abreviatura= $(this).attr("abreviatura");
+			if (moneda_numero>0) {
+				$.post('http://localhost/pos/index.php/sales/set_otra_moneda', {"otra_moneda": 1,"moneda_numero":moneda_numero},
+					function(data)
+					{	
+						$("#register_container").load('http://localhost/pos/index.php/sales/reload');
+					}
+				);		
+			}
+			else{
+				$.post('http://localhost/pos/index.php/sales/set_otra_moneda', {"otra_moneda": 0,"moneda_numero":"default"}, function()
+				{
+					$("#panel1").show();
+					$("#panel2").hide();
+				});		
+			}
+		});
+			//Table headers fixed
+		var $table_receivings = $('#register');
+		$table_receivings.floatThead({
+			scrollContainer: function($table){
+				return $table.closest('.table-scrollable');
+			}
+		});
+
+		$( ".select_custom_subcategory" ).change(function() {
+			$($(this).parent()).submit();
+		});
+
+		$( "#id_credito" ).change(function() {
+			var opt= $("#id_credito").val();
+			if(opt==2){
+				$.ajax(
+					{
+					url :'http://localhost/pos/index.php/sales/get_monton_pendiente/'+0,
+					type: "GET"
+
+					})
+					.done(function(data) {
+
+					$("input[name='price']").val(data);
+					$("input[name='price']").focus();					
+
+					})
+					.fail(function(data) {
+						alert( "error al consultar el Monto" );
+					})
+					.always(function(data) {
+				});
+			}  			
+		});
+		// Animation total sales
+		$('.animation-count').data('countToOptions', {
+	        formatter: function (value, options) {
+	          	return value.toFixed(options.decimals).replace('','$').replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+	        }
+		  });
+		  $("#add_payment_button2").click(function()
+			{
+				$("#add_payment_button").click();
+			});
+		//$('#total-amount').data('to',1);
+      	$('.animation-count').each(count);
+
+		$('#total-amount').data('from', last_total_amount);
+		$('#total-amount').html(last_total_amount);
+		$('#amount-due').data('from', last_total_amount_due);
+		$('#amount-due').html(last_total_amount_due);
+		var last_total_amount_due = -103530.00;
+        var last_total_amount = 38250.00;
+		$('#total-amount').data('to',last_total_amount);
+		$('#amount-due').data('to',last_total_amount_due);
+    	$('.animation-count').each(count);
+
+    	function count(options) {
+	        var $this = $(this);
+	        options = $.extend({}, options || {}, $this.data('countToOptions') || {});
+	        $this.countTo(options);
+      	}
+		//Remove attr small box sale summary
+		$('.list-group-item:first-child').css('border-top-left-radius', '0').css('border-top-right-radius','0');
+		$('.list-group-item').css('border', '0');
+		//
+		$(document).ready(function()
+		{
+			        	$('.modal.fade.in').click(function(e){
+
+				if($(e.target)[0].id == "stack5")
+				{
+					$('.modal.fade.in').removeClass('in');
+					$('#stack5').css({'display':'none'});
+				}
+			});
+
+			$('#closesales').click(function(){
+
+				$('.modal.fade.in').removeClass('in');
+				$('#stack5').css({'display':'none'});
+				$('#maxsales').removeClass('icon fa fa-youtube-play help_button');
+				$('#maxsales').html("<a href='javascript:;' id='maxhom' rel=1 class='tn-group btn red-haze' ><span class='hidden-sm hidden-xs'>Maximizar&nbsp;</span><i class='icon fa fa-youtube-play help_button'></i></a>");
+			});
+
+			$('#checkBoxStack5').click(function(e){
+
+				$.post('http://localhost/pos/index.php/config/show_hide_video_help',
+				{show_hide_video5:$(this).is(':checked') ? '1' : '0',video5:'hide_video_stack5'});
+			});
+
+			if($("#show_comment_on_receipt").is(":checked") == true)
+			{
+				$("#container_comment").removeClass('hidden');
+			}
+
+			$("#show_comment_on_receipt").click(function(event) {
+
+			    if ($(this).is(":checked"))
+			    {
+			      	$("#container_comment").removeClass('hidden');
+			    }
+			    else
+			    {
+			      	$("#container_comment").addClass('hidden');
+			    }
+		  	});
+
+			//Acomodar la tabla dependiendo la resolucion y el contenedor de customers en el padding izquierdo
+
+			//$(window).bind("resize",function(){
+			var size = $(this).width();
+
+		    if (size <= 1280)
+	    	{
+	    		$('.table-scrollable').css('height', '360px');
+	    	}
+	    	else if (size > 1280 && size <= 1366)
+	    	{
+	    		$('.table-scrollable').css('height', '410px');
+	    	}
+
+		    if(size < 992){
+			    $('#box-customers').removeClass('no-padding-left')
+		    }
+		    else{
+		    	$('#box-customers').addClass('no-padding-left')
+		    }
+		});
+
+		// Show or hide item grid
+		$(".show-grid").on('click',function(e)
+		{
+			e.preventDefault();
+			$("#sale-grid-big-wrapper").removeClass('hidden');
+			$("#category_item_selection_wrapper").slideDown();
+			$('.show-grid').addClass('hidden');
+			$('.hide-grid').removeClass('hidden');
+		});
+
+		$(".hide-grid").on('click',function(e)
+		{
+			e.preventDefault();
+			$("#category_item_selection_wrapper").slideUp();
+			$('.hide-grid').addClass('hidden');
+			$('.show-grid').removeClass('hidden');
+		});
+
+		//
+		$(document).keydown(function(event)
+		{
+			var mycode = event.keyCode;
+
+			if (mycode == 113)
+			{
+				$("#item").focus();
+			}
+
+			//F4
+			if (mycode == 115)
+			{
+				event.preventDefault();
+				$("input[name='quantity']").focus();
+				event.originalEvent.keyCode = 0;
+			}
+			//F1
+			if (mycode == 112)
+			{
+				event.preventDefault();
+				$("#modal-serial").click();
+				event.originalEvent.keyCode = 0;
+			}
+
+			//F7
+			if (mycode == 118)
+			{
+				event.preventDefault();
+				$("#amount_tendered").focus();
+				$("#amount_tendered").select();
+			}
+
+			//F8
+			if (mycode == 119)
+			{
+		    	$("#add_payment_button").click();
+			}
+
+			//F9
+			if (mycode == 120)
+			{
+				event.preventDefault();
+				$("#finish_sale_button").click();
+				event.originalEvent.keyCode = 0;
+			}
+
+			//F10
+			if (mycode == 121)
+			{
+				event.preventDefault();
+				$("#customer").focus();
+				$("#customer").select();
+				event.originalEvent.keyCode = 0;
+			}
+
+			//ESC
+			if (mycode == 27)
+			{
+		    	$("#cancel_sale_button").click();
+			}
+		});
+
+   		var submitting = false;
+		$(document).ready(function()
+		{
+			$(function() { $.keyTips(); });
+
+			$( "#keyboardhelp" ).dialog({
+				autoOpen: false,
+				show: {
+					effect: "blind",
+			  	 	duration: 1000
+				},
+			width: 800,
+			hide: {
+			  	 effect: "explode",
+				 duration: 1000
+				}
+			});
+
+			$( "#opener" ).click(function(e) {
+				e.preventDefault();
+				$( "#keyboardhelp" ).dialog( "open" );
+			});
+
+			//Here just in case the loader doesn't go away for some reason
+			$("#ajax-loader").hide();
+
+												setTimeout(function(){$('#item').focus();}, 10);
+								$(document).focusin(function(event)
+				{
+					last_focused_id = $(event.target).attr('id');
+				});
+						$('#mode_form, #select_customer_form, #add_payment_form, .line_item_form, #discount_all_form, #new_tax_form').ajaxForm({target: "#register_container", beforeSubmit: salesBeforeSubmit});
+
+			$('#add_item_form').ajaxForm({target: "#register_container", beforeSubmit: salesBeforeSubmit, success: itemScannedSuccess});
+			$("#cart_contents input").change(function()
+			{
+				$(this.form).ajaxSubmit({target: "#register_container", beforeSubmit: salesBeforeSubmit});
+			});
+
+			$( "#item" ).autocomplete({
+				source: 'http://localhost/pos/index.php/sales/item_search',
+				delay: 300,
+				autoFocus: false,
+				minLength: 1,
+				select: function(event, ui)
+				{
+					event.preventDefault();
+					$( "#item" ).val(ui.item.value);
+					$( "input[name='no_valida_por_id']" ).val("0");
+					$('#add_item_form').ajaxSubmit({target: "#register_container", beforeSubmit: salesBeforeSubmit, success: itemScannedSuccess});
+				}
+			});
+
+			$('#item,#customer').click(function()
+			{
+				$(this).attr('value','');
+			});
+ 
+			$( "#customer" ).autocomplete({
+				source: 'http://localhost/pos/index.php/sales/customer_search',
+				delay: 300,
+				autoFocus: false,
+				minLength: 1,
+				select: function(event, ui)
+				{
+					$("#customer").val(ui.item.value);
+					$('#select_customer_form').ajaxSubmit({target: "#register_container", beforeSubmit: salesBeforeSubmit});
+				}
+			});
+
+			$('#customer').blur(function()
+			{
+				$(this).attr('value',"Empieza a escribir el nombre del cliente...");
+			});
+
+			$('#item').blur(function()
+			{
+				$(this).attr('value',"Ingresa un art\u00edculo o de c\u00f3digo de barras escaneado");
+			});
+
+			//Datepicker change
+			$('#change_sale_date_picker').datetimepicker({
+					format: "MM\/DD\/YYYY",
+					locale: "es"
+				}).on('dp.change',function(){
+					$.post('http://localhost/pos/index.php/sales/set_change_sale_date', {
+						change_sale_date: $('#change_sale_date').val()});
+			});
+
+			//Input change
+			$("#change_sale_date").change(function(){
+				$.post('http://localhost/pos/index.php/sales/set_change_sale_date', {change_sale_date: $('#change_sale_date').val()});
+			});
+
+			$('#change_sale_date_enable').change(function()
+			{
+				$.post('http://localhost/pos/index.php/sales/set_change_sale_date_enable', {change_sale_date_enable: $('#change_sale_date_enable').is(':checked') ? '1' : '0'});
+			});
+
+			$('#ntable').change(function()
+			{
+				$.post('http://localhost/pos/index.php/sales/set_ntable', {comment: $('#ntable').val()});
+			});
+
+			$('#comment').change(function()
+			{
+				$.post('http://localhost/pos/index.php/sales/set_comment', {comment: $('#comment').val()});
+			});
+
+			$('#show_comment_on_receipt').change(function()
+			{
+				$.post('http://localhost/pos/index.php/sales/set_comment_on_receipt', {show_comment_on_receipt:$('#show_comment_on_receipt').is(':checked') ? '1' : '0'});
+			});
+
+			$('#show_receipt').change(function()
+			{
+				$.post('http://localhost/pos/index.php/sales/set_show_receipt', {show_receipt:$('#show_receipt').is(':checked') ? '1' : '0'});
+			});
+			$('#generate_txt').change(function()
+			{
+				$.post('http://localhost/pos/index.php/sales/set_generate_txt', {generate_txt:$('#generate_txt').is(':checked') ? '1' : '0'});
+			});
+			$('#without_policy').change(function()
+			{
+				$.post('http://localhost/pos/index.php/sales/set_without_policy', {without_policy:$('#without_policy').is(':checked') ? '1' : '0'});
+			});
+
+            $('#show_comment_ticket').change(function()
+            {
+                if($('#show_comment_ticket').is(':checked')==true){
+                    $.post('http://localhost/pos/index.php/sales/set_comment_ticket', {show_comment_ticket:1});
+                }
+            });
+
+			$('#email_receipt').change(function()
+			{
+				$.post('http://localhost/pos/index.php/sales/set_email_receipt', {email_receipt: $('#email_receipt').is(':checked') ? '1' : '0'});
+			});
+			
+			$('#change_sale_date_enable').is(':checked') ? $("#change_sale_input").show() : $("#change_sale_input").hide();
+
+			$('#change_sale_date_enable').click(function() {
+				if( $(this).is(':checked')) {
+					$("#change_sale_input").show();
+				} else {
+					$("#change_sale_input").hide();
+				}
+			});
+
+			$('#use_saved_cc_info').change(function()
+			{
+				$.post('http://localhost/pos/index.php/sales/set_use_saved_cc_info', {use_saved_cc_info:$('#use_saved_cc_info').is(':checked') ? '1' : '0'});
+			});
+
+			$("#finish_sale_button").click(function()
+			{
+				
+					
+					//Prevent double submission of form
+					$("#finish_sale_button").hide();
+					$("#register_container").plainOverlay('show');
+
+					
+				
+				
+					if ($("#comment").val())
+					{
+						$.post('http://localhost/pos/index.php/sales/set_comment', {comment: $('#comment').val()}, function()
+						{
+							$('#finish_sale_form').submit();
+						});
+					}
+					else
+					{
+						$('#finish_sale_form').submit();
+					}
+								});
+				
+			$("#print_sale_button").click(function(){	
+				if($('#ntable').val() <= 0){
+					alert("Debe seleccionar una mesa.")
+				}
+				else if($("#comment").val() != ""){
+					$.post('http://localhost/pos/index.php/sales/set_comment', {comment: $('#comment').val()}, function() {
+						window.location = 'http://localhost/pos/index.php/sales/receipt_command/'+$('#ntable').val();
+					});
+				}else{
+					window.location = 'http://localhost/pos/index.php/sales/receipt_command/'+$('#ntable').val();
+				}
+				
+			});
+			function _uspend_sale(){
+				if (confirm("\u00bfEst\u00e1s seguro(a) de querer suspender esta venta?"))
+				{
+					$.post('http://localhost/pos/index.php/sales/set_comment', {comment: $('#comment').val()}, function() {
+														$("#register_container").load('http://localhost/pos/index.php/sales/suspend/1');
+											});
+				}
+			}
+			$("#suspend_sale_button").click(function()
+			{
+				_uspend_sale();				
+			});
+
+			$("#table_number").change(function () {
+				var end = this.value;
+
+				if (end > 0){
+					location.href = 'http://localhost/pos/index.php/sales/unsuspend/' + end;
+				}
+			});
+
+	       $("#quotes").click(function()
+			{
+				if (confirm("\u00bfEst\u00e1s seguro(a) de crear la Cotizaci\u00f3n?"))
+				{
+					$.post('http://localhost/pos/index.php/sales/set_comment', {comment: $('#comment').val()}, function() {
+													$("#register_container").load('http://localhost/pos/index.php/sales/suspend/3');
+											});
+				}
+			});
+
+			$("#cancel_sale_button").click(function()
+			{
+				if (confirm("\u00bfEst\u00e1s seguro(a) de querer limpiar esta venta? Todos los art\u00edculos ser\u00e1n limpiados."))
+				{
+					$('#cancel_sale_form').ajaxSubmit({target: "#register_container", beforeSubmit: salesBeforeSubmit});
+				}
+			});
+
+			$("#add_payment_button").click(function()
+			{
+				$('#add_payment_form').ajaxSubmit({target: "#register_container", beforeSubmit: salesBeforeSubmit});
+			});
+
+			$("#payment_types").change(checkPaymentTypeGiftcard).ready(checkPaymentTypeGiftcard);
+			$('#mode').change(function()
+			{
+				if ($(this).val() == "store_account_payment")
+				{ // Hiding the category grid
+					$('#show_hide_grid_wrapper, #category_item_selection_wrapper').fadeOut();
+				}
+				else if($(this).val()=="return_ticket")
+				{
+					$("#modal-return-ticket").click();
+					return 0;
+				}
+				else 
+				{ // otherwise, show the categories grid
+					$('#show_hide_grid_wrapper, #show_grid').fadeIn();
+					$('#hide_grid').fadeOut();
+				}
+				$('#mode_form').ajaxSubmit({target: "#register_container", beforeSubmit: salesBeforeSubmit});
+			});
+
+			$('.delete_item, .delete_payment, #delete_customer, .delete_tax').click(function(event)
+			{
+				event.preventDefault();
+				$("#register_container").load($(this).attr('href'));
+			});
+
+			$("#tier_id").change(function()
+			{
+				$("#ajax-loader").show();
+				$.post('http://localhost/pos/index.php/sales/set_tier_id', {tier_id: $(this).val()}, function()
+				{
+					$("#register_container").load('http://localhost/pos/index.php/sales/reload');
+				});
+			});
+			
+			$(".tier_id_item").change(function()
+			{
+				$($(this).parent()).parent().submit();
+			});
+			$("#tipo_documento").change(function()
+			{			
+				$($(this).parent()).parent().submit();
+			});
+			
+			$("#opcion_sale").change(function()
+			{
+				$("#ajax-loader").show();
+				$.post('http://localhost/pos/index.php/sales/set_opcion_sale', {opcion_sale: $(this).val()}, function()
+				{
+					$("#register_container").load('http://localhost/pos/index.php/sales/reload');
+				});
+			});
+
+			$("input[type=text]").not(".description").click(function() {
+				$(this).select();
+			});
+
+			if(screen.width <= 768) //set the colspan on page load
+			{
+				jQuery('td.edit_description').attr('colspan', '2');
+				jQuery('td.edit_serialnumber').attr('colspan', '4');
+			}
+
+			 $(window).resize(function() {
+				var wi = $(window).width();
+
+				if (wi <= 768){
+					jQuery('td.edit_description').attr('colspan', '2');
+					jQuery('td.edit_serialnumber').attr('colspan', '4');
+				}
+				else {
+					jQuery('td.edit_description').attr('colspan', '4');
+					jQuery('td.edit_serialnumber').attr('colspan', '2');
+				}
+			});
+
+			$("#new-customer").click(function()
+			{
+				$("body").plainOverlay('show');
+			});
+		});
+
+		function checkPaymentTypeGiftcard()
+		{
+			if ($("#payment_types").val() == "Tarjeta de Regalo")
+			{
+				$("#amount_tendered").val('');
+
+									$("#amount_tendered").focus();
+													giftcard_swipe_field($("#amount_tendered"));
+							}
+		}
+
+		function salesBeforeSubmit(formData, jqForm, options)
+		{
+			if (submitting)
+			{
+				return false;
+			}
+			submitting = true;
+			//ajax-loader
+			$("#ajax-loader").show();
+			$("#add_payment_button").hide();
+			$("#finish_sale_button").hide();
+		}
+
+		function itemScannedSuccess(responseText, statusText, xhr, $form)
+		{
+			setTimeout(function(){$('#item').focus();}, 10);
+		}
+					crear_select_empleado(1 ,"div_employees");
+				function convertir_moneda($value, equivalencia=1){
+			let total =  $value/equivalencia;
+			return total;
+		}
+		function revertir_moneda($value,equivalencia=1){
+			let total =  $value*equivalencia;
+			return total;
+		}
+	</script>
+
+	<script>
+		jQuery(document).ready(function() {
+		   	Metronic.init(); // init metronic core componets
+		   	Layout.init(); // init layout
+		   	Demo.init(); // init demo features
+		 	ComponentsDropdowns.init();
+		});
+		//$('.selectpicker').selectpicker();
+
+	</script>
+
+				</div>
+			</div>
+			<!-- END CONTENT -->
+		</div>
+		<!-- END CONTAINER -->
+
+		<!-- BEGIN FOOTER --><div class="page-footer">
+				<div class="page-footer-inner">Todos los derechos reservados de Facil Pos, Estas usando la versión <span class='label label-info'>5.3.0</span> Facil Pos,  visita <a target='_blank' href='http://facilpos.co/'>FacilPos.co</a></div>	
+				<div class="scroll-to-top"><i class="fa fa-arrow-circle-up"></i></div>				
+			</div><!-- END FOOTER -->
+		<script>
+			jQuery(document).ready(function() {    
+			   	Metronic.init(); // init metronic core componets
+			   	Layout.init(); // init layout
+			   	Demo.init(); // init demo features
+			 	ComponentsDropdowns.init();
+			});
+		</script>
+		<script> var csfrData={};csfrData['csrf_test_name']= 'ff9940048b46f29eb1eef2ba5777ee53';$(function(){$.ajaxSetup({data: csfrData});});</script>		
+        <script src="js/publics.js"></script>
+        <script src="js/confirm/jquery-confirm.js"></script>
+        <script src="js/bootstrap-validator/bootstrapValidator.min.js"></script>
+		 			<script src="http://localhost/pos/js/offline/helper_data_sesion.js" type="text/javascript"></script>
+
+		    <script src="http://localhost/pos/js/offline/sale.js" type="text/javascript"></script>
+
+			<iframe style="display:none" src="http://localhost/pos/index.php/sincronizar/get_data_cache"> 
+			</iframe>
+			
+	</body>
+
+</html>
+	 
+	<div id="sale-grid-big-wrapper" class="clearfix hidden">
+		<div class="clearfix" id="category_item_selection_wrapper">
+			<div class="panel panel-success no_margin_bottom">
+				<div class="panel-heading">
+					<h3 class="panel-title">Panel de Items</h3>
+				</div>
+				<div class="panel-body">
+					<div class="pagination hidden-print alternate text-center fg-toolbar ui-toolbar"></div> 
+					<div id="category_item_selection" class="row"></div>
+					<div class="pagination hidden-print alternate text-center fg-toolbar ui-toolbar"></div>
+				</div>
+			</div>				  
+		</div>
+	</div>
+
+	<script>	
+		function change_employee(select){
+			$("#ajax-loader").show();
+				$.post('http://localhost/pos/index.php/sales/set_sold_by_employee_id', {sold_by_employee_id: $(select).val()}, function()
+				{
+					$("#register_container").load('http://localhost/pos/index.php/sales/reload');
+			});
+		}	
+		function crear_select_empleado(id_employee="" ,id_div){
+			let html='<select name="sold_by_employee_id" id="sold_by_employee_id" onchange ="change_employee(this)" class="form-control" >';
+			var employees={"":"No establecido","72":"Fredys ","1":"Fredys  Cardenas","5":"vendedor 2 Cardenas","14":"Fredys jose Cardenas","64":"Fredys jose Cardenas","67":"fatima Cardenas","70":"Fredys jose Cardenas","4":"pedro castro","71":"fredy-180 vergara"};
+			let select="";
+
+			for(id in employees){
+				select="";
+
+				if(id_employee==id){
+					select="selected";
+				}
+
+				html+='<option value="'+id+'" '+select+'>'+employees[id]+'</option>';
+			}
+			html+="</select>";
+			document.getElementById(id_div).innerHTML =  html;
+		}
+	</script>
+	<div id="register_container" class="sales clearfix">
+			</div>
+
+	<a href="http://localhost/pos/index.php/sales/sale_return_modal" id="modal-return-ticket" data-toggle="modal" style="display:none" data-target="#myModal">http://localhost/pos/index.php/sales/sale_return_modal</a>	<script type="text/javascript">
+		$(document).ready(function()
+		{
+			// Show or hide item grid
+		
+						
+		 	var current_category = null;
+
+			function load_categories()
+			{
+				$.get('http://localhost/pos/index.php/sales/categories', function(json)
+				{
+					processCategoriesResult(json);
+				}, 'json');	
+			}
+
+			$(document).on('click', ".pagination.categories a", function(event)
+			{
+				$("#category_item_selection_wrapper").plainOverlay('show');
+				event.preventDefault();
+				var offset = $(this).attr('href').substring($(this).attr('href').lastIndexOf('/') + 1);
+			
+				$.get('http://localhost/pos/index.php/sales/categories/'+offset, function(json)
+				{
+					processCategoriesResult(json);
+
+				}, "json");
+			});
+
+			$(document).on('click', ".pagination.items a", function(event)
+			{
+				$("#category_item_selection_wrapper").plainOverlay('show');
+				event.preventDefault();
+				var offset = $(this).attr('href').substring($(this).attr('href').lastIndexOf('/') + 1);
+			
+				$.post('http://localhost/pos/index.php/sales/items/'+offset, {category: current_category}, function(json)
+				{
+					processItemsResult(json);
+				}, "json");
+			});
+
+			$('#category_item_selection_wrapper').on('click','.category_item.category', function(event)
+			{
+				$("#category_item_selection_wrapper").plainOverlay('show');
+				
+				event.preventDefault();
+				current_category = $(this).text();
+				$.post('http://localhost/pos/index.php/sales/items', {category: current_category}, function(json)
+				{
+					processItemsResult(json);
+				}, "json");
+			});
+
+			$('#category_item_selection_wrapper').on('click','.category_items.item', function(event)
+			{		
+				$("#category_item_selection_wrapper").plainOverlay('show');
+				event.preventDefault();
+				$( "#item" ).val($(this).data('id'));
+				$( "input[name='no_valida_por_id']" ).val("0");
+				$('#add_item_form').ajaxSubmit({target: "#register_container", beforeSubmit: salesBeforeSubmit, success: function()
+				{ 
+					toastr.success("Se ha agregado correctamente el art\u00edculo", "\u00c9xito");					$("#category_item_selection_wrapper").plainOverlay('hide');		
+					$('.show-grid').addClass('hidden');
+					$('.hide-grid').removeClass('hidden');
+				}});
+			});
+
+			$("#category_item_selection_wrapper").on('click', '#back_to_categories', function(event)
+			{
+				$("#category_item_selection_wrapper").plainOverlay('show');
+				
+				event.preventDefault();
+				load_categories();
+			});
+
+			function processCategoriesResult(json)
+			{	
+				$("#category_item_selection_wrapper .pagination").removeClass('items').addClass('categories');
+				$("#category_item_selection_wrapper .pagination").html(json.pagination);
+			
+				$("#category_item_selection").html('');
+			
+				for(var k=0;k<json.categories.length;k++)
+				{
+					var category_item = $("<a/>").attr('class', 'btn grey-gallery category_item category col-lg-2 col-md-2 col-sm-3 col-xs-6').append('<p>'+json.categories[k]+'</p>');
+					$("#category_item_selection").append(category_item);
+				}
+				
+				$("#category_item_selection_wrapper").plainOverlay('hide');
+			}
+
+			function processItemsResult(json)
+			{
+				$("#category_item_selection_wrapper .pagination").removeClass('categories').addClass('items');
+				$("#category_item_selection_wrapper .pagination").html(json.pagination);
+
+				$("#category_item_selection").html('');
+			
+				var back_to_categories_button = $("<div/>").attr('id', 'back_to_categories').attr('class', 'category_item back-to-categories col-md-2 col-sm-3 col-xs-6 ').append('<p>&laquo; '+"Volver a categor\u00edas"+'</p>');
+				$("#category_item_selection").append(back_to_categories_button);
+
+				for(var k = 0; k < json.items.length; k++)
+				{
+					var image_src = json.items[k].image_src ? json.items[k].image_src : "http://localhost/pos/img/no-photo.jpg";
+					var prod_image = "";
+					var item_parent_class = "";
+					
+					if (image_src != '' ) {
+						var item_parent_class = "item_parent_class";
+						var prod_image = '<a class="btn grey-gallery"><img class="img-fluid img-thumbnail" style="width:90%; height:60px;" src="'+image_src+'" alt="" />';
+					}
+					
+					var item = $("<div/>").attr('class', 'category_items item space-item col-lg-2 col-md-2 col-sm-2 col-xs-4  '+item_parent_class).attr('data-id', json.items[k].id).append(prod_image+'<p class="letter-space-item">'+json.items[k].name+'</p>'+'</a>');
+					$("#category_item_selection").append(item);
+					var d_id = json.items[k].id;
+				}
+				
+				$("#category_item_selection_wrapper").plainOverlay('hide');
+			
+			}
+			load_categories();
+		});
+					var last_focused_id = null;
+			setTimeout(function(){$('#item').focus();}, 10);
+			</script>
+
+

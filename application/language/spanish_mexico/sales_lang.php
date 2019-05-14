@@ -1,4 +1,25 @@
 <?php
+// movimiento caja gastos 
+$lang['deliver_to']="Entregar a";
+$lang['option_register']="Opcion a registrar";
+$lang['move_money_category']="Traslado";
+$lang['move_money']="Trasladar dinero";
+
+$lang['Nomina']='Nomina';
+$lang['Transporte']='Transporte';
+$lang['Comida']='Comida';
+$lang['Arriendo']='Arriendo';
+$lang['Reparaciones']='Reparaciones'; 
+$lang['Publicidad']='Publicidad';
+$lang['Servicios_publicos']='Servicios publicos';
+$lang['Suministros']='Suministros';
+$lang['Mantenimiento']='Mantenimiento'; 
+$lang['Limpieza']='Limpieza';
+$lang['otros']='otros';
+$lang['Combustible']='Combustible';
+
+$lang['sales_open_money_info']='Se imprime un recibo en blanco';
+$lang['sales_open_money_drawer']='Abrir cajon monedero';
 $lang['Last_payments_made_line_credit']='Últimos pagos realizados línea de crédito';
 $lang['tipo_pago']='Pago automático';
 $lang['sales_details']='DETALLES DE LA VENTA';
@@ -157,7 +178,7 @@ $lang['sales_auth_code'] = 'Código de autorización';
 $lang['sales_store_account_payment'] = 'Abono a línea de crédito';
 $lang['sales_payment_amount'] = 'Cantidad de pago';
 $lang['sales_recent_sales'] = 'Ventas recientes de';
-$lang['sales_global_sale_discount'] = 'Descuento en toda la Venta';
+$lang['sales_global_sale_discount'] = 'Desc. toda Venta';
 $lang['sales_back_to_categories'] = 'Volver a categorías';
 $lang['sales_show_grid'] = 'Mostrar Artículos';
 $lang['sales_hide_grid'] = 'Ocultar Artículos';

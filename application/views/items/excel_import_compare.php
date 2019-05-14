@@ -81,7 +81,7 @@
 		    showPreview: false,
 		    showRemove: false,
 		    showUpload: false,
-		    allowedFileExtensions: ["xls", "xlsx", "cvs"],
+		    allowedFileExtensions: ["xls", "xlsx","csv","cvs"],
 		    elErrorContainer: "#error"
 		    // you can configure `msgErrorClass` and `msgInvalidFileExtension` as well
 		});

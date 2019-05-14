@@ -13,6 +13,7 @@ class Registers_movement extends Secure_area
 		$this->load->model('Register');
 		$this->load->model('Sale');
 		$this->load->model('Cajas_empleados');
+		$this->load->model('employee');
 
 	}
 	function receipt($id_movimiento){
@@ -53,6 +54,7 @@ class Registers_movement extends Secure_area
 		$data['register_id'] = $register_id;
 		$desde = $this->input->get("desde");
 		$hasta = $this->input->get("hasta");
+		$open_box=$this->input->get("open_box")?1:0;
 
 		$id_empleado = $this->input->get("empleado")? $this->input->get("empleado"): false;
 		$filter = $this->input->get('filter')? $this->input->get('filter') : "";
@@ -73,18 +75,19 @@ class Registers_movement extends Secure_area
 		$data["empleados"]=$empleados;
 		$data["filter"]=$filter;
 		$data["search"]=$search;
+		$data["open_box"]=$open_box;
 
 		//$data['registers_movement'] = $this->Register_movement->get_all($register_id); //Obtener todos los movimientos de la caja seleccionada
 		
 
-		$data['registers_movement'] = $this->Register_movement->get_by_date($register_id,$desde,$hasta,"",$id_empleado, $filter, $search); //obtener todos los movimiento comprendidos en un rango de fecha o si es null los ultimos 30 dias
+		$data['registers_movement'] = $this->Register_movement->get_by_date($register_id,$desde,$hasta,"",$id_empleado, $filter, $search,$open_box); //obtener todos los movimiento comprendidos en un rango de fecha o si es null los ultimos 30 dias
 		$this->load->view('registers_movement/manage',$data);
 	}
 
 	function operations($operation)
 	{	
-		if ($operation == "depositcash" || $operation == "withdrawcash") {			
-			$data['text_info'] = $operation == "depositcash" ? "Depositar dinero" : "Registrar gasto";
+		if ($operation == "depositcash" || $operation == "withdrawcash" || $operation == "move_money") {			
+			$data['text_info'] = $operation == "depositcash" ? "Depositar dinero" :($operation=="move_money"?lang('move_money'):"Registrar gasto");
 			$cajas = $this->Cajas_empleados->get_cajas_ubicacion_por_persona($this->session->userdata('person_id'),$this->Employee->get_logged_in_employee_current_location_id())->result_array();;
 			$registers=array();
 			foreach ($cajas as $caja) {
@@ -92,10 +95,14 @@ class Registers_movement extends Secure_area
 			}
 			$data['location_registers'] =$registers;// $this->Register->get_registers();
 			$data['operation'] = $operation;
-			$categorias_gastos=array("no establecido"=>"Seleccionar");
-			foreach($this->Appconfig->get_categorias_gastos() as $categoria){
-				$categorias_gastos[$categoria]=$categoria;
+			$data['info_categoria']=$operation=="move_money"? lang('deliver_to'):lang('config_categoria');
+			$categorias_gastos=$operation!="move_money"? array("no establecido"=>"Seleccionar"):'';
+			$info_categoria=$operation=="move_money"?$this->Employee->get_all()->result_object():$this->Appconfig->get_categorias_gastos();
+			foreach($info_categoria as $categoria){
+				$info=$operation=="move_money"?$categoria->first_name.' '.$categoria->first_name:$categoria;
+				$categorias_gastos[$info]=$info;
 			}
+			$categorias_gastos[lang('otros')]=lang('otros');
 			$data["categorias_gastos"]=$categorias_gastos;
 			$this->load->view("registers_movement/form",$data);
 		} else {
@@ -112,18 +119,23 @@ class Registers_movement extends Secure_area
 	function save($operation = null)
 	{
 
-		if ($operation == "depositcash" || $operation == "withdrawcash") {
+		if ($operation == "depositcash" || $operation == "withdrawcash" || $operation=="move_money") {
 
 			$register_id = $this->input->post('register_id'); 
-			$description = $this->input->post('description');
 			$cash        = abs($this->input->post('cash'));
-			$categorias_gastos        =$this->input->post('categorias_gastos');
-			$imprimir       =$this->input->post('imprimir');
+			$categorias_gastos =$this->input->post('categorias_gastos');
+			if($categorias_gastos==lang('otros') && $this->input->post('others_category')!=""){
+				$categorias_gastos=$this->input->post('others_category');
+			}
+			$description =$operation=='move_money'? ('<strong>'.$categorias_gastos.'</strong><br>'.$this->input->post('description')):$this->input->post('description');
+			$categorias_gastos  =$operation=='move_money'? lang('move_money_category'):$this->input->post('categorias_gastos');
+
+			$imprimir=$this->input->post('imprimir');
 			
-			if ($operation == "withdrawcash") {
+			if ($operation == "withdrawcash" || $operation == "move_money" ) {
 				$cash = $cash* (-1);
 			}
-			$status = $this->Register_movement->save_operation($register_id, $cash, $description,$categorias_gastos);			
+			$status = $this->Register_movement->save_operation($register_id, $cash, $description,$categorias_gastos,$operation);			
 			
 			if ($status['success']) {	
 				

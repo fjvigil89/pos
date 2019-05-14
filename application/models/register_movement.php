@@ -14,7 +14,7 @@ class Register_movement extends CI_Model
 
 	function save($cash, $description=" ", $register_id = false, 
 	$valid_greater_than_zero_cash = true, $categorias_gastos="",
-	$id_employee=false,$retorna_id=false,$date=null,$register_log_id=null)
+	$id_employee=false,$retorna_id=false,$date=null,$register_log_id=null,$operation=null)
 	{ 
         
 		if($id_employee==false){
@@ -37,8 +37,11 @@ class Register_movement extends CI_Model
 
 				$new_cash_amount = 0;
 			}
-
-			if ($cash < 0) { //Es una salida sino una entrada
+			if($operation=="move_money"){
+				$cash = abs($cash);
+				$type_movement = 2;
+			}
+			else if ($cash < 0 ) { //Es una salida sino una entrada
 
 				$cash = abs($cash);
 				$type_movement = 0;
@@ -124,7 +127,7 @@ class Register_movement extends CI_Model
 	
 	//function find by date
 	//funcion que busca por fecha
-	function get_by_date($register_id, $date_start, $date_end, $categoria="", $employee=false, $filter="", $search=""){
+	function get_by_date($register_id, $date_start, $date_end, $categoria="", $employee=false, $filter="", $search="",$open_box=0){
 		if ($date_start == null){
 			$datestring = '%Y-%m-%d';
 			$date_start1 = now();
@@ -148,10 +151,13 @@ class Register_movement extends CI_Model
 				 ->where('FROM_unixtime(UNIX_TIMESTAMP(register_date),"%Y-%m-%d") >=', $date_start)
 				 ->where('FROM_unixtime(UNIX_TIMESTAMP(register_date),"%Y-%m-%d") <=', $date_end);
 				 
+				if($open_box){
+					$this->db->where('register_log.employee_id_close', null);
+				 }
 				 if($categoria!=""){
 					$this->db->where('registers_movement.categorias_gastos', $categoria);
 				 }
-				 if($permision and $employee!=false ){
+				 if($permision and $employee!=false and $employee!="undefined" ){
 					$this->db->where('registers_movement.id_employee', 	$employee );
 				 }else if(!$permision ){
 					$this->db->where('registers_movement.id_employee', $employee_id); 
@@ -165,7 +171,7 @@ class Register_movement extends CI_Model
 
 	}
 
-	function save_operation($register_id, $cash, $description,$categorias_gastos )
+	function save_operation($register_id, $cash, $description,$categorias_gastos,$operation )
 	{
 		$register = $this->Sale->get_current_register_log($register_id);
 		$error = "";
@@ -190,7 +196,7 @@ class Register_movement extends CI_Model
 
 			}else {
 				$id_employee= $this->CI->Employee->get_logged_in_employee_info()->person_id;
-				$success = $this->save($cash, $description, $register_id,true,$categorias_gastos,$id_employee,true); //Registrar movimiento
+				$success = $this->save($cash, $description, $register_id,true,$categorias_gastos,$id_employee,true,null,null,$operation); //Registrar movimiento
 				
 			}
 		}

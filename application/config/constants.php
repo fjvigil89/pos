@@ -52,7 +52,7 @@ define("URL_COMPANY","http://facilpos.co/");
 define("URL_POS","https://accesopos.com/");
 define("NAME_COMPANY","Facil Pos");
 define("YEAR","2019");
-
+define("PATH_RECUSE","store_resource");
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

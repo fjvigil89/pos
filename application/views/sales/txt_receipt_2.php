@@ -17,109 +17,109 @@ function complete_string($string ,$canti, $p = "")
         $type_line ="-";
 
         echo $this->Location->get_info_for_key('overwrite_data')==1 ? $this->Location->get_info_for_key('name') : $this->config->item('company') ; 
-        echo"\n";
+        echo"\r\n";
         echo lang('config_company_dni').'. ' .($this->Location->get_info_for_key('overwrite_data')==1 ? $this->Location->get_info_for_key('company_dni') : $this->config->item('company_dni')); 
-        echo"\n";
+        echo"\r\n";
         echo nl2br($this->Location->get_info_for_key('overwrite_data')==1 ? $this->Location->get_info_for_key('address'): $this->config->item('address'));           
-        echo"\n";
+        echo"\r\n";
         echo $this->Location->get_info_for_key('phone'); 
-        echo"\n";
+        echo"\r\n";
 
         if(($this->Location->get_info_for_key('overwrite_data')==1 and  $this->Location->get_info_for_key('website') ) or $this->config->item('website')) 
         {
             echo $this->Location->get_info_for_key('overwrite_data')==1 ? $this->Location->get_info_for_key('website') : $this->config->item('website') ;
-            echo"\n";
+            echo"\r\n";
         } 
         if(!empty($this->Location->get_info_for_key('codigo')))
         {                 
             echo lang("locations_code").". ".  $this->Location->get_info_for_key('codigo') ;
-            echo"\n";
+            echo"\r\n";
         }           
         if(isset($mode) && $mode == 'return') 
         {
             echo lang('items_sale_mode').$sale_type." ".$sale_number;
-            echo "\n"; 
+            echo "\r\n"; 
             if($this->Location->get_info_for_key('show_serie') == 1)
             {									
-                echo"\nSerie: ".$serie_number;	
-                echo "\n"; 								
+                echo"\r\nSerie: ".$serie_number;	
+                echo "\r\n"; 								
             }		                 	
         } 
         elseif(isset($mode) && $store_account_payment == 1) 
         {
             echo lang('sales_store_account_name').' '.$sale_id;
-            echo "\n"; 
+            echo "\r\n"; 
         } 
         elseif($show_comment_ticket==1)
         {
             echo 'BOLETA '.$sale_number;
-            echo "\n"; 
+            echo "\r\n"; 
             if($this->Location->get_info_for_key('show_serie') == 1)
             {
                 echo "Serie: ".$serie_number;
-                echo "\n"; 
+                echo "\r\n"; 
             }			                 	
         } 
         else
         {
             echo $this->config->item('sale_prefix').' '.$sale_number;
-            echo "\n"; 
+            echo "\r\n"; 
             if($this->Location->get_info_for_key('show_serie')==1){
                 echo "Serie: ".$serie_number;
-                echo "\n"; 									
+                echo "\r\n"; 									
             }
         } 
         
-        echo "ID : ".$sale_id_raw."\n";
+        echo "ID : ".$sale_id_raw."\r\n";
         
         echo $transaction_time;
-        echo "\n";
+        echo "\r\n";
         
         if(isset($customer))
         { 
-            echo lang('customers_customer').": ".$customer."\n";
+            echo lang('customers_customer').": ".$customer."\r\n";
         }               
         if(!empty($customer_address_1))
         {                 
-            echo lang('common_address').": ". $customer_address_1. ' '.$customer_address_2."\n";
+            echo lang('common_address').": ". $customer_address_1. ' '.$customer_address_2."\r\n";
         }
         if (!empty($customer_city)) 
         { 
-            echo $customer_city.' '.$customer_state.', '.$customer_zip."\n";
+            echo $customer_city.' '.$customer_state.', '.$customer_zip."\r\n";
         } 
         if (!empty($customer_country)) 
         { 
-            echo $customer_country."\n";
+            echo $customer_country."\r\n";
         }            
         if(!empty($customer_phone))
         {                
-            echo lang('common_phone_number')." : ". $customer_phone."\n";                 
+            echo lang('common_phone_number')." : ". $customer_phone."\r\n";                 
         } 
         if(!empty($customer_email))
         {                
-            echo lang('common_email')." : ". $customer_email."\n"; 
+            echo lang('common_email')." : ". $customer_email."\r\n"; 
         } 
         /*if (isset($sale_type)) 
         {                 
-            echo $sale_type."\n";               
+            echo $sale_type."\r\n";               
         }*/
         if ($register_name) 
         {
-            echo lang('locations_register_name').' : '.$register_name."\n";
+            echo lang('locations_register_name').' : '.$register_name."\r\n";
         }
         if ($tier) 
         { 
-            echo lang('items_tier_name').': '.$tier."\n";                 
+            echo lang('items_tier_name').': '.$tier."\r\n";                 
         }
-        echo lang('employees_employee').": ".$employee."\n";
+        echo lang('employees_employee').": ".$employee."\r\n";
 
-        echo"\n";
+        echo"\r\n";
 
         for ($i = 0; $i < $lines ; $i++) { 
             echo $type_line;
         }      
          
-        echo"\n";
+        echo"\r\n";
         // se crea la tabla se productos
 
         echo lang('items_item').  $space2.$space2.$space2; 
@@ -149,13 +149,13 @@ function complete_string($string ,$canti, $p = "")
         echo lang('sales_total');
           
     
-        echo"\n";
+        echo"\r\n";
 
         for ($i = 0; $i < $lines ; $i++) { 
             echo $type_line;
         }      
          
-        echo"\n";
+        echo"\r\n";
 ?>
 <?php
     foreach(array_reverse($cart, true) as $line=>$item) 
@@ -268,7 +268,7 @@ function complete_string($string ,$canti, $p = "")
             {										
                 if(!$overwrite_tax)
                 {
-                    $sum_tax = array_sum($prev_tax[$item['item_id']]);
+                    $sum_tax = array_sum($prev_tax[$item['item_kit_id']]);
                     $value_tax = $item['price'] * $sum_tax;										
                     $price_with_tax = $item['price'] + $value_tax;											
                 }
@@ -322,22 +322,22 @@ function complete_string($string ,$canti, $p = "")
 
         /*if($item['description'] != "" and $this->config->item('hide_description') == 0)
         { 
-            echo "\n" . $item['description']; 
+            echo "\r\n" . $item['description']; 
         }
         if( isset($item['serialnumber']) and $item["serialnumber"]!=null )
         {
-            echo "\n" . "Serial: ".$item['serialnumber'];
+            echo "\r\n" . "Serial: ".$item['serialnumber'];
         }*/
         if($this->config->item('activar_casa_cambio') )
         {
             
-            echo "\n" . lang("sales_titular_cuenta");
-            echo "\n" .  $item["titular_cuenta"];
-            echo "\n" . lang("sales_docuemento");
-            echo "\n" . $item["numero_documento"];
-            echo "\n" . lang("sales_numero_cuenta");
-            echo "\n" . $item["numero_cuenta"];
-            echo "\nTotal : ";
+            echo "\r\n" . lang("sales_titular_cuenta");
+            echo "\r\n" .  $item["titular_cuenta"];
+            echo "\r\n" . lang("sales_docuemento");
+            echo "\r\n" . $item["numero_documento"];
+            echo "\r\n" . lang("sales_numero_cuenta");
+            echo "\r\n" . $item["numero_cuenta"];
+            echo "\r\nTotal : ";
             
             $total2 = 0;
             $Total_por_item = $item['price'] * $item['quantity'];
@@ -353,7 +353,7 @@ function complete_string($string ,$canti, $p = "")
             }	
             echo to_currency($total2,3,lang("sales_".$divisa)." ");
         }
-        echo"\n";
+        echo"\r\n";
     } 
     
 
@@ -361,10 +361,10 @@ function complete_string($string ,$canti, $p = "")
         echo $type_line;
     }      
      
-    echo"\n";
+    echo"\r\n";
     echo lang('sales_sub_total')." ";
 	echo $this->config->item('round_value')== 1 ? to_currency(round($subtotal)) : to_currency($subtotal) ;
-    echo "\n";
+    echo "\r\n";
     echo $this->config->item('activar_casa_cambio') == 0 ? lang('saleS_total_invoice') : "Total ".$this->config->item('sale_prefix'); 
     
     $subtotal_ = 0;
@@ -382,13 +382,13 @@ function complete_string($string ,$canti, $p = "")
 		$subtotal_ = to_currency($total);
 	}
 	echo " ".$subtotal_;
-    echo "\n";
+    echo "\r\n";
 
     if(isset($another_currency) and $another_currency == 1)
     { 
         echo "Total en ". get_currency_symbol($currency)." ";
         echo  to_currency_no_money($total_other_currency,4); 
-        echo "\n";
+        echo "\r\n";
     }
    
     if($this->config->item('activar_casa_cambio') == true)
@@ -401,7 +401,7 @@ function complete_string($string ,$canti, $p = "")
         echo $type_line;
     }      
      
-    echo"\n";
+    echo"\r\n";
     // fin tabla producto 
     
     foreach($payments as $payment_id=>$payment) 
@@ -426,7 +426,7 @@ function complete_string($string ,$canti, $p = "")
         }else{
             echo " ".to_currency($payment_amount);
         }
-        echo "\n";
+        echo "\r\n";
     }
 
     for ($i = 0; $i < $lines ; $i++) { 
@@ -436,14 +436,14 @@ function complete_string($string ,$canti, $p = "")
 
     if(isset($show_comment_ticket) && ($show_comment_ticket == 0 && $this->config->item('hide_invoice_taxes_details') == 0)  || ($this->config->item('hide_ticket_taxes')==0 && $show_comment_ticket == 1))
     {
-        echo"\n";
+        echo"\r\n";
         echo"      ".lang('sales_details_tax'); 
-        echo"\n";
+        echo"\r\n";
         echo lang('sales_type_tax')."     "; 
         echo lang('sales_base_tax')."     "; 
         echo lang('sales_price_tax'); 
         //echo lang('sales_value_receiving')." "; 
-        echo  "\n";
+        echo  "\r\n";
 
         if ($this->config->item('group_all_taxes_on_receipt')) 
         { 
@@ -456,7 +456,7 @@ function complete_string($string ,$canti, $p = "")
         	echo complete_string($value['base'],11)." "; 	
 		    echo complete_string(to_currency_no_money(round($value['total_tax']),1),12);
             //echo $this->config->item('round_value')==1 ? to_currency(round($total_tax)) :to_currency($total_tax) ;
-            echo "\n";
+            echo "\r\n";
         } 
         else
         {						
@@ -466,14 +466,14 @@ function complete_string($string ,$canti, $p = "")
                echo  complete_string(to_currency($value['base'] ),11,"")." ";
                echo  complete_string(to_currency(round($value['total_tax']),1),12,"");	
                //echo $this->config->item('round_value')==1 ? to_currency(round($value['total'])) :to_currency($value['total']);
-               echo "\n";    
+               echo "\r\n";    
             }
 		}
         /*echo lang('sales_total').'= ';
         echo to_currency($detailed_taxes_total['total_base_sum']); 
         echo to_currency($detailed_taxes_total['total_tax_sum']); 
         echo $this->config->item('round_value')==1 ? to_currency($detailed_taxes_total['total_sum']) :to_currency($detailed_taxes_total['total_sum']) ;
-        echo "\n";*/
+        echo "\r\n";*/
         for ($i = 0; $i < $lines ; $i++) { 
             echo $type_line;
         } 
@@ -482,13 +482,13 @@ function complete_string($string ,$canti, $p = "")
 
    if($this->config->item('ocultar_forma_pago') == 0)
    {
-        echo "\n     " .lang('sales_details_payments'); 
-        echo"\n";
+        echo "\r\n     " .lang('sales_details_payments'); 
+        echo"\r\n";
         
         echo complete_string(lang('sales_payment_date'),11); 
         echo complete_string(lang('sales_payment_type'),9); 
         echo lang('sales_payment_value')." ";
-        echo "\n";
+        echo "\r\n";
 
         foreach($payments as $payment_id=>$payment) 
         {
@@ -516,7 +516,7 @@ function complete_string($string ,$canti, $p = "")
             else
                 echo  complete_string(to_currency($payment_amount),11);            
 
-            echo"\n";   
+            echo"\r\n";   
         } 
         for ($i = 0; $i < $lines ; $i++) { 
             echo $type_line;
@@ -526,7 +526,7 @@ function complete_string($string ,$canti, $p = "")
 
 if ($amount_change >= 0) 
 {
-    echo"\n". lang('sales_change_due').((isset($another_currency) and $another_currency==1)?" ".get_currency_symbol($currency):"").": ";
+    echo"\r\n". lang('sales_change_due').((isset($another_currency) and $another_currency==1)?" ".get_currency_symbol($currency):"").": ";
     
     $amount_change_= 0;
     $amount_change_otro= (isset($another_currency) and $another_currency==1)?
@@ -547,37 +547,37 @@ if ($amount_change >= 0)
     
 }
 else 
-{ echo"\n";  
+{ echo"\r\n";  
     echo lang('sales_amount_due'); ": "; 
     echo $this->config->item('round_cash_on_sales')  && $is_sale_cash_payment ?  to_currency(round_to_nearest_05($amount_change * -1)) : to_currency($amount_change * -1) || $this->config->item('round_value')==1 ? to_currency(round($amount_change)) :to_currency($amount_change);
      
 }
 if (isset($customer_balance_for_sale) && $customer_balance_for_sale !== FALSE && !$this->config->item('hide_balance_receipt_payment')) 
 { 
-    echo"\n";  
+    echo"\r\n";  
     echo lang('sales_customer_account_balance').": ";
     echo to_currency($customer_balance_for_sale); 
     
 } 
 if (isset($points) && $this->config->item('show_point')==1 && $this->config->item('system_point')==1)
 { 
-    echo"\n"; 
+    echo"\r\n"; 
     echo lang('config_value_point_accumulated')." ";
     echo $points; 
    
 } 
 if (!$store_account_payment==1)
 { 
-    echo"\n";  
+    echo"\r\n";  
    echo nl2br( $this->Location->get_info_for_key('overwrite_data')==1 ? $this->Location->get_info_for_key('company_regimen') : $this->config->item('company_regimen') ); 
-   echo"\n";  
+   echo"\r\n";  
 
    $str = $this->config->item('resolution');
    $order   = array("<strng>", "</strng>", "<br>","</br>");        
    $str = str_replace( $order,"",$str);
 
    echo nl2br($str); 
-   echo"\n"; 
+   echo"\r\n"; 
 
     if($show_return_policy_credit ==1)
     {
@@ -585,7 +585,7 @@ if (!$store_account_payment==1)
         $order   = array("<strng>", "</strng>", "<br>","</br>");        
         $str = str_replace( $order,"",$str);
         echo nl2br($str);
-        echo"\n";
+        echo"\r\n";
     }
     else
     {
@@ -593,7 +593,7 @@ if (!$store_account_payment==1)
         $order   = array("<strng>", "</strng>", "<br>","</br>");        
         $str = str_replace( $order,"",$str);
         echo nl2br($str);
-        echo"\n";
+        echo"\r\n";
     } 
     if($this->Location->get_info_for_key('show_rango')==1)
     {        

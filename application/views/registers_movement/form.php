@@ -54,14 +54,21 @@
 							</div>	
 						<?php } ?>
 						<div class="form-group">	
-								<?php echo form_label('<a class="help_config_options tooltips"  data-placement="left"  title="Categoría a registrar">'.lang('config_categoria').'</a>'.':', 'categoria',array('class'=>'col-md-3 control-label ')); ?>
-								<div class="col-md-8">
+								<?php echo form_label('<a class="help_config_options tooltips"  data-placement="left"  title="'.lang('option_register').'">'.$info_categoria.'</a>'.':', 'categoria',array('class'=>'col-md-3 control-label ')); ?>
+								<div class="col-md-2">
 									<div class="btn-group">									
 										<?php echo form_dropdown('categorias_gastos', $categorias_gastos,'','id="categorias_gastos" class="bs-select form-control"'); ?>
 								   								
 									</div>
 								</div>
-							</div>	
+								<div class="col-md-7"  id="others_category" style="display:none;" >
+									<?php echo form_label('<a class="help_config_options  tooltips" data-placement="left" title="'.lang("sales_others_help").'">'.lang('sales_others').'</a>'.':', 'others_category',array('class'=>'col-md-3 control-label requireds')); ?>
+									<div class="col-md-6">
+										
+										<input id="input_others_category" type="text"  name="others_category" class="form-control form-inps">
+									</div>
+								</div>
+						</div>	
 						
 						<div class="form-group">	
 							<?php echo form_label('<a class="help_config_required  tooltips" data-placement="left" title="'.lang("cash_flows_cash_help").'">'.lang('cash_flows_cash').'</a>'.':', 'cash',array('class'=>'col-md-3 control-label requireds')); ?>
@@ -189,6 +196,15 @@
 
 				window.location = "<?php echo site_url('registers_movement'); ?>";
 			}
+
+			$( "#categorias_gastos" ).change(function() {
+				
+				if ($("#categorias_gastos").val()=='<?php echo lang('otros')?>'){
+					$("#others_category").show();
+				}else{
+					$("#others_category").hide();
+				}
+			});
 		});
 	</script>
 

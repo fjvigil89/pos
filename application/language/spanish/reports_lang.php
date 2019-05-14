@@ -257,6 +257,7 @@ $lang['reports_consolidated'] = 'Reporte Consolidado';
 $lang['reports_select_by_empleados']='Seleccione Empleado';
 
 //Language Graphics Home (Charts)
+$lang['reports_sales_by_store_total'] = 'Ventas totales por tienda';
 $lang['quantity_module_total'] = 'Cantidad total por módulo'; 
 $lang['best_sellers_items'] = 'Los 10 productos más vendidos del mes';
 $lang['best_seller_item'] = 'El producto más vendido es: ';
@@ -274,7 +275,7 @@ $lang['sales_payment_help'] = 'Seleccionar el tipo de pago para generar reporte'
 $lang['reports_shop_reports_help'] = 'Seleccionar  tienda para ver reporte  ';
 $lang['reports_sales_generator_show_only_matched_items_help'] = 'Seleccionar para ver solo las ventas  que cumplan con todas  las  condiciones';
 $lang['reports_sales_generator_matchType_help'] = 'La  condición (Y)   es para generar el reporte  que cumpla  todas las  condiciones al mismo tiempo y la condición (O) es para generar el reporte  que cumpla una o varias condiciones ';
-$lang['specific_input_name_help'] = 'Seleccionar  proveedor para generar reporte ';
+$lang['specific_input_name_help'] = 'Seleccionar proveedor para generar reporte ';
 $lang['specific_input_name_help1'] = 'Seleccionar el cliente para ver reporte  ';
 $lang['specific_input_name_help2'] = 'Seleccionar el empleado para ver reporte  ';
 $lang['employees_employee_type_help'] = 'Seleccionar el tipo de empleado';

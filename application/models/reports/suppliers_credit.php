@@ -22,7 +22,7 @@ class Suppliers_credit extends Report
 	
 		$this->db->select('receiving_id, receiving_date, sum(quantity_purchased) as items_purchased, CONCAT(employee.first_name," ",employee.last_name) as employee_name, CONCAT(supplier.company_name, " (",people.first_name," ",people.last_name, ")") as supplier_name, sum(total) as total, sum(profit) as profit, payment_type, comment', false);
 		$this->db->from('receivings_items_temp');
-		$this->db->where('payment_type', 'Crédito Proveedores');
+		$this->db->where('payment_type', lang('receivings_supplier_credit'));
 		
 		if( (int)$this->params['supplier_id'] > 0)
 		{
@@ -97,7 +97,7 @@ class Suppliers_credit extends Report
 			$this->db->where('quantity_purchased < 0');
 		}
 		
-		$this->db->where('payment_type', 'Crédito Proveedores');
+		$this->db->where('payment_type', lang('receivings_supplier_credit'));
 		
 		if( (int)$this->params['supplier_id'] > 0)
 		{
@@ -123,7 +123,7 @@ class Suppliers_credit extends Report
 			$this->db->where('quantity_purchased < 0');
 		}
 		
-		$this->db->where('payment_type', 'Crédito Proveedores');
+		$this->db->where('payment_type', lang('receivings_supplier_credit'));
 		
 		if( (int)$this->params['supplier_id'] > 0)
 		{

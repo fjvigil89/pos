@@ -210,13 +210,19 @@
 											?>
 										</li>
 									<?php } ?>
-
+									<?php if($this->config->item("show_viewer")):?>
+										<li>
+											<?php echo anchor("all/viewer/$logged_in_employee_id",
+													"Segunda pantalla",
+													array('class'=>'','target'=>'_blank','title'=>'Ventas realizadas hoy'));
+												?>
+										</li>
+									<?php endif; ?>
 								</ul>
 							</div>
 						</div>
 					</div>
 				</div>
-
 
 				<?php // cundo se va a realizar una venta
 				 if ($mode != 'store_account_payment')
@@ -727,7 +733,7 @@
 														}
 														else
 														{
-															echo form_input(array('name'=>'quantity','value'=>to_quantity($item['quantity']),'class'=>'form-control form-inps-sale text-center', 'id' => 'quantity_'.$line, 'tabindex'=>'2'));
+															echo form_input(array('name'=>'quantity','type'=>'number','value'=>to_quantity($item['quantity']),'class'=>'form-control form-inps-sale text-center', 'id' => 'quantity_'.$line, 'tabindex'=>'2'));
 														}?>
 													</form>
 												</td>
@@ -905,6 +911,7 @@
 					</div>
 
 					<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+						
 						<?php
 							echo '<div class="md-checkbox-inline">';
 							echo '<div class="md-checkbox">';
@@ -924,11 +931,34 @@
 							echo '</label>';
 							echo '</div>';
 							echo '</div>';
-						?>
-					</div>
 
-                    <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
-                        <?php  if( ($mode=='sale' or $mode=='return') && $this->config->Item('hide_ticket')){
+							if($this->config->Item('show_option_policy_returns_sales'))
+							{
+								echo '<div class="md-checkbox-inline">';
+								echo '<div class="md-checkbox">';
+								echo form_checkbox(array(
+									'name'=>'without_policy',
+									'id'=>'without_policy',
+									'value'=>'1',
+									'class'=>'md-check',
+									'checked'=>(boolean)$without_policy)
+								);
+
+								echo '<label id="without_policy" for="without_policy">';
+								echo '<span></span>';
+								echo '<span class="check"></span>';
+								echo '<span class="box"></span>';
+								echo lang("sales_without").' '.lang("common_return_policy"); 
+								echo '</label>';
+								echo '</div>';
+								echo '</div>';
+							}
+						?>
+
+					</div>
+					<?php   if( ($mode=='sale' or $mode=='return') && $this->config->Item('hide_ticket'))
+						{
+							echo '<div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">';			
 
 
                             echo '<div class="md-radio-inline">';
@@ -949,16 +979,17 @@
                             echo  lang('sales_ticket_on_receipt');
                             echo '</label>';
                             echo '</div>';
-                            echo '</div>';
+							echo '</div>';
+							echo "</div>";
                             }
                         ?>
 
-                    </div>
+                   
 
-                    <div class="col-lg-1 col-md-3 col-sm-12 col-xs-12">
+                    
                         <?php  if( ($mode=='sale' or $mode=='return') && $this->config->Item('hide_ticket')){
 
-
+							echo'<div class="col-lg-1 col-md-3 col-sm-12 col-xs-12">';
                             echo '<div class="md-radio-inline">';
                             echo '<div class="md-radio">';
                             echo form_radio(array(
@@ -977,11 +1008,12 @@
                             echo ucfirst(strtolower($this->config->item('sale_prefix')));
                             echo '</label>';
                             echo '</div>';
-                            echo '</div>';
+							echo '</div>';
+							echo '</div>';
                             }
                         ?>
 
-					</div>
+					
 					<div class="clearfix"></div>
 
 					
@@ -1001,12 +1033,12 @@
 						<?php if ($this->Employee->has_module_action_permission('sales', 'give_discount', $logged_in_employee_id) && $mode != 'store_account_payment'){ ?>
 							<div class="" id="global_discount">
 								<?php echo form_open("sales/discount_all", array('id' => 'discount_all_form', 'class'=>'form-horizontal', 'autocomplete'=> 'off'));
-									echo '<div class="form-group no_margin_bottom"><label class="col-md-7 col-sm-12 col-xs-12 control-label" id="discount_all_percent_label" for="discount_all_percent">';
+									echo '<div class="form-group no_margin_bottom" ><label style="text-align: left;" class="col-md-5 col-sm-12 col-xs-12 control-label" id="discount_all_percent_label" for="discount_all_percent">';
 									echo lang('sales_global_sale_discount').': ';
 									echo '</label>';
-									echo '<div class="col-md-5 col-sm-12 col-xs-12">';
+									echo '<div class="col-md-6 col-sm-12 col-xs-12">';
 									echo '<div class="input-group"><div class="input-icon right"><i class="icon-percent"></i>';
-									echo form_input(array('name'=>'discount_all_percent','value'=> '','size'=>'3', 'class' => 'form-control' , 'id' => 'discount_all_percent'));
+									echo form_input(array('name'=>'discount_all_percent','value'=> '','size'=>'3', 'type'=>'number' ,'class' => 'form-control' , 'id' => 'discount_all_percent'));
 									echo '</div><span class="input-group-btn">';
 									echo form_button(array('name'=>'submit_discount_form','type'=>'submit', 'class'=>'btn btn-success'), lang('common_submit'));
 									echo '</span></div></div></div>'
@@ -1018,18 +1050,36 @@
 					<?php if ($select_seller_during_sale) :?>
 						<div class="col-lg-6 col-md-12 col-sm-12 col-xs-12" id="div_employees"></div>
 					<?php endif; ?>
-					<?php if ($this->Employee->has_module_action_permission('sales', 'overwrite_tax', $logged_in_employee_id)) :?>
-
+					
 						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 							<br>
-							<div >
-								<?php echo form_open("sales/set_new_tax", array('id' => 'new_tax_form', 'class'=>'form-horizontal', 'autocomplete'=> 'off'));?>
+							<div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
+							<?php if ($this->Employee->has_module_action_permission('sales', 'module_allow_open_money_box', $logged_in_employee_id)) :?>
 									<div class="form-group no_margin_bottom">
-										<label class="col-md-9 col-sm-12 col-xs-12 control-label" id="new_tax" for="new_tax"><?php echo $this->config->item('name_new_tax').': ';?></label>
 										<div class="col-md-3 col-sm-12 col-xs-12">
 											<div class="input-group">
+												<span class="input-group-btn">
+													<?php echo anchor(site_url('sales/open_money_drawer'),
+													lang('sales_open_money_drawer'),
+													array('class'=>'btn btn-success','title'=>lang('sales_open_money_info')));
+													?>
+												</span>
+											</div>
+										</div>
+									</div>
+							<?php endif; ?>
+							</div>
+							
+
+							<?php if ($this->Employee->has_module_action_permission('sales', 'overwrite_tax', $logged_in_employee_id)) :?>
+							<div  class="col-lg-8 col-md-6 col-sm-6 col-xs-6">
+								<?php echo form_open("sales/set_new_tax", array('id' => 'new_tax_form', 'class'=>'form-horizontal', 'autocomplete'=> 'off'));?>
+									<div class="form-group no_margin_bottom">
+										<label class="col-md-7 col-sm-12 col-xs-12 control-label" id="new_tax" for="new_tax"><?php echo $this->config->item('name_new_tax').': ';?></label>
+										<div class="col-md-5 col-sm-12 col-xs-12">
+											<div class="input-group">
 												<div class="input-icon right"><i class="icon-percent"></i>
-													<?php echo form_input(array('name'=>'new_tax','value'=> '','min'=>0,'size'=>'3',"type"=>"number", 'class' => 'form-control' , 'id' => 'new_tax'))?>
+													<?php echo form_input(array('name'=>'new_tax','value'=> '','min'=>0,'size'=>'3',"type"=>"number", 'class' => 'form-control pull-right' , 'id' => 'new_tax'))?>
 												</div>
 												<span class="input-group-btn">
 													<?php echo form_button(array('name'=>'submit_tax_form','type'=>'submit', 'class'=>'btn btn-success'), lang('common_submit'))?>
@@ -1038,9 +1088,36 @@
 										</div>
 									</div>
 								</form>
-							</div>								
+							</div>
+							<?php endif; ?>							
 						</div>
-					<?php endif; ?>
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+							<br>
+							<div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
+
+								<?php echo '<div class="md-checkbox-inline">';
+								echo '<div class="md-checkbox">';
+								echo form_checkbox(array(
+									'name'=>'generate_txt',
+									'id'=>'generate_txt',
+									'value'=>'1',
+									'class'=>'md-check',
+									'checked'=>(boolean)$generate_txt)
+								);
+
+								echo '<label id="generate_txt" for="generate_txt">';
+								echo '<span></span>';
+								echo '<span class="check"></span>';
+								echo '<span class="box"></span>';
+								echo lang("sales_generate_txt"); 
+								echo '</label>';
+								echo '</div>';
+								echo '</div>';
+							?>
+								
+							</div>
+													
+						</div>
 				</div>
 			</div>
 
@@ -1285,7 +1362,7 @@
 						<div class="side-heading">
 							<?php echo lang('sales_total'); ?>:
 						</div>
-						<div id="total-amount" class="amount animation-count font-green-jungle" data-speed="1000" data-decimals="2">
+						<div id="total-amount" class="amount animation-count font-green-jungle" data-speed="1000" data-decimals="<?php echo $this->config->item('remove_decimals')==1?0:2; ?>">
 							<?php echo $this->config->item('round_value')==1 ? to_currency(round($total)) :to_currency($total) ; ?>
 							<br>
 						</div>
@@ -1296,7 +1373,7 @@
 						<div class="side-heading">
 							<?php echo lang('sales_amount_due'); ?>:
 						</div>
-						<div id="amount-due" class="amount animation-count <?php if($payments_cover_total) { echo 'font-green-jungle'; } else { echo 'text-danger'; }?>"  data-speed="1000" data-decimals="2">
+						<div id="amount-due" class="amount animation-count <?php if($payments_cover_total) { echo 'font-green-jungle'; } else { echo 'text-danger'; }?>"  data-speed="1000" data-decimals="<?php echo $this->config->item('remove_decimals')==1?0:2 ?>">
 							<?php echo $this->config->item('round_value')==1 ? to_currency(round($amount_due)) : to_currency($amount_due)?>
 						</div>
 					</div>
@@ -1913,6 +1990,14 @@
 			$('#show_receipt').change(function()
 			{
 				$.post('<?php echo site_url("sales/set_show_receipt");?>', {show_receipt:$('#show_receipt').is(':checked') ? '1' : '0'});
+			});
+			$('#generate_txt').change(function()
+			{
+				$.post('<?php echo site_url("sales/set_generate_txt");?>', {generate_txt:$('#generate_txt').is(':checked') ? '1' : '0'});
+			});
+			$('#without_policy').change(function()
+			{
+				$.post('<?php echo site_url("sales/set_without_policy");?>', {without_policy:$('#without_policy').is(':checked') ? '1' : '0'});
 			});
 
             $('#show_comment_ticket').change(function()

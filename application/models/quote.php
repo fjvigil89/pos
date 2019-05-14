@@ -205,8 +205,10 @@ $overwrite_tax=false,$new_tax=null)
 		$customer = $this->Customer->get_info($customer_id); 
  			if ($customer_id == -1 or $customer->taxable)
  			{
-				if (isset($item['item_id']))
+				 
+				foreach($items as $line=>$item)
 				{
+					
 					if($overwrite_tax==1){
                         $query_result = $this->db->insert('quotes_items_taxes', array(
 							'quote_id' 	=>$sale_id,

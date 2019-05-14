@@ -1047,6 +1047,8 @@ class Items extends Secure_area implements iData_controller
             $row[] = $r->product_id;
             $row[] = $r->item_id;
             $row[] = $r->name;
+            $row[] = '';
+            $row[] = $r->category;
             $rows[] = $row;
         }
         $content = array_to_spreadsheet($rows);
@@ -1547,6 +1549,7 @@ class Items extends Secure_area implements iData_controller
         $header_row[] = lang('items_item_id');
         $header_row[] = lang('items_name');
         $header_row[] = lang('items_compare');
+        $header_row[] = lang('items_category');
         return $header_row;
     }
     public function do_excel_import_compare($flag = false)

@@ -2454,7 +2454,7 @@ class Sale extends CI_Model
             $item_where = 'and ' . $this->db->dbprefix('quotes_items') . '.line = ' . $line;
         }
 
-        $query = $this->db->query('SELECT name, percent, cumulative, item_unit_price as price, quantity_purchased as quantity, discount_percent as discount ' .
+        $query = $this->db->query('SELECT name,'.$this->db->dbprefix('quotes_items_taxes').'.item_id, percent, cumulative, item_unit_price as price, quantity_purchased as quantity, discount_percent as discount ' .
             'FROM ' . $this->db->dbprefix('quotes_items_taxes') . ' JOIN ' .
             $this->db->dbprefix('quotes_items') . ' USING (quote_id, item_id, line) ' .
             'WHERE ' . $this->db->dbprefix('quotes_items_taxes') . ".quote_id = $quote_id" . ' ' . $item_where . ' ' .

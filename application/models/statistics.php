@@ -105,5 +105,54 @@ class Statistics extends CI_Model
             return $final_result;
         }                
     }
+    public function get_all_sales_by_store($start_date = false, $end_date = false){
+        $final_result = array();
+        $start_date ? $start_date : $start_date = date("Y-m-d");
+        $end_date ? date($end_date) : $end_date = date("Y-m-d",strtotime("1 day"));
+        
+        $this->db->select('locations.name, COUNT(sale_id) as total_sales');
+        $this->db->from('sales');
+        $this->db->join('locations', 'locations.location_id=sales.location_id');
+        $this->db->where('sales.sale_time BETWEEN '.$this->db->escape($start_date).' and '.$this->db->escape($end_date));
+        $this->db->group_by('sales.location_id');
+        $this->db->limit(10);
+        
+        $result=$this->db->get()->result_array();
+
+        if ($result != NULL) 
+        {
+            return $result;
+        }
+    }
+    // ventas totales por tienda en dienero
+    public function get_sales_store_money($start_date = false, $end_date = false){
+        $final_result = array();
+        $x = 0;
+        $start_date ? $start_date : $start_date = date("Y-m-d");
+        $end_date ? date($end_date) : $end_date = date("Y-m-d",strtotime("1 day"));
+        
+        $this->db->select('locations.name');
+        $this->db->select_sum('sales_payments.payment_amount','Total');
+        $this->db->from('sales');
+        $this->db->join('locations', 'locations.location_id=sales.location_id');
+        $this->db->join('sales_payments', 'sales_payments.sale_id=sales.sale_id');
+        $this->db->where('sales.sale_time BETWEEN '.$this->db->escape($start_date).' and '.$this->db->escape($end_date));
+        $this->db->group_by('sales.location_id');
+        $this->db->limit(10);
+        
+        $result=$this->db->get()->result_array();
+
+        if ($result != NULL) 
+        {
+            foreach ($result as $key => $value) 
+            {
+                $final_result[$key] = $value;
+                $final_result[$key]['color'] = '#'.substr(md5(time().$x), 0, 6);
+                $x++;            
+            }
+
+            return $final_result;
+        } 
+    }
     
 }

@@ -1,4 +1,5 @@
 <?php
+$lang['show_option_policy_returns_sales']='Show options return policies in sales module';
 $lang['config_control_access_employee']='Activate employee access control';
 $lang['show_payments_ticket'] = 'Show the last payments on the ticket';
 $lang['config_due_date_alarm'] = 'Activate the alarm for sending expired products';

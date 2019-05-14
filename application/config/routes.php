@@ -86,7 +86,7 @@ $route['reports/sales_consolidation'] = 'reports/sales_consolidation_input';
 $route['reports/detailed_sales'] = "reports/custom_input_excel_export";
 $route['reports/detailed_sales2']= "reports/custom_input_excel_export";
 $route['reports/detailed_sales_rate']= "reports/custom_input_excel_export";
-$route['reports/detailed_receivings'] = "reports/date_input_excel_export";
+$route['reports/detailed_receivings'] = "reports/detailed_receivings_input";
 $route['reports/suppliers_credit'] = "reports/suppliers_credit_specific_input";
 $route['reports/detailed_giftcards'] = "reports/detailed_giftcards_input";
 $route['reports/specific_customer'] = "reports/specific_customer_input";
@@ -112,6 +112,7 @@ $route['reports/depostos_salidas'] = "reports/depostos_salidas_input_excel_expor
 $route['reports/movement_balance'] = "reports/movement_balance_data_input_excel_export";
 $route['reports/detailed_sales_serial'] = "reports/custom_serial_input_excel_export";
 $route['reports/purchase_provider']="reports/purchase_provider_input";
+
 
 
 //$route['reports/detailed_report_table'] = "reports/tables_report";
