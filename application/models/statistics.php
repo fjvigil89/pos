@@ -66,6 +66,33 @@ class Statistics extends CI_Model
         
         return $weekly_sales;
     }
+    // productos escasos
+    public function get_items_scarce($location_id){
+        $final_result = array();
+        $x = 5;
+        $this->db->select('location_items.quantity as cantidad, items.name');
+        $this->db->from('location_items');
+        $this->db->join('items', 'items.item_id = location_items.item_id');
+        $this->db->where('location_items.reorder_level >= phppos_location_items.quantity');
+        $this->db->where('location_items.location_id',$location_id);
+        $this->db->order_by('location_items.quantity','desc');
+        $this->db->limit(10);
+        
+        $result=$this->db->get()->result_array();
+
+        if ($result != NULL) 
+        {
+            foreach ($result as $key => $value) 
+            {
+                $final_result[$key] = $value;
+                $final_result[$key]['color'] = '#'.substr(md5(time().$x), 0, 6);
+                $x++;            
+            }
+
+            return $final_result;
+        } 
+    }
+
 
     public function profit_and_loss($data)
     {
@@ -151,6 +178,50 @@ class Statistics extends CI_Model
                 $x++;            
             }
 
+            return $final_result;
+        } 
+    }
+
+    // ganancias por dias
+    public function get_sales_earnings_monsth_day($date=false){
+        $final_result = array();
+        $x = 0;
+        $day=date("d");
+        $date=$date?$date:date("Y-m-d");
+        $date=date("Y-m-d",strtotime ('-7 day',strtotime($date)));
+        $start_date=$date;
+        $end_date =date("Y-m-d",strtotime ('+8 day',strtotime($date)));
+
+        $this->db->select('DATE_FORMAT(sale_time, ("%d"))  AS fecha ');
+        $this->db->select('ROUND((item_unit_price*quantity_purchased-item_unit_price*quantity_purchased*discount_percent/100) - (item_cost_price*quantity_purchased),(0)) as profit');
+        $this->db->from('sales');
+        $this->db->join('sales_items', 'sales_items.sale_id=sales.sale_id');
+        $this->db->where('sales.sale_time >=',$start_date);
+        $this->db->where('sales.sale_time <',$end_date);
+        $this->db->order_by('DATE_FORMAT(sale_time, ("%d"))');
+        
+        $result=$this->db->get()->result_array();
+
+        if ($result != NULL) 
+        {
+            $total=0;
+            $fecha_dia=$result[0]['fecha'];
+            foreach ($result as $key => $value) 
+            {
+                $fecha_dia_new=$value['fecha'];
+                if($fecha_dia==$fecha_dia_new){
+                    $total+=$value['profit'];
+                }else{
+                    $final_result[$x]['profit'] = $total;
+                    $final_result[$x]['fecha'] = $fecha_dia;
+                    $total=$value['profit'];
+                    $fecha_dia=$fecha_dia_new;
+                    $x++;
+                   
+                }           
+            }
+            $final_result[$x]['profit'] = $total;
+            $final_result[$x]['fecha'] = $fecha_dia;
             return $final_result;
         } 
     }

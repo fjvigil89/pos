@@ -14,7 +14,7 @@ class Register_movement extends CI_Model
 
 	function save($cash, $description=" ", $register_id = false, 
 	$valid_greater_than_zero_cash = true, $categorias_gastos="",
-	$id_employee=false,$retorna_id=false,$date=null,$register_log_id=null,$operation=null)
+	$id_employee=false,$entregado_a="",$retorna_id=false,$date=null,$register_log_id=null,$operation=null)
 	{ 
         
 		if($id_employee==false){
@@ -58,7 +58,8 @@ class Register_movement extends CI_Model
 					'type_movement'   => $type_movement,
 					'mount_cash'      => $new_cash_amount,
 					"categorias_gastos"=>$categorias_gastos,
-					"id_employee"=>$id_employee
+					"id_employee"=>$id_employee,
+					"delivered_to"=>$entregado_a
 				);
 
 				if ($this->db->insert('registers_movement', $register_movement)) {
@@ -103,8 +104,19 @@ class Register_movement extends CI_Model
 		return $this->db->get();
 	}
 	function get_info($register_movement_id)
-	{		
+	{	
+		$this->db->select(
+			'registers_movement.*, 
+			 people.first_name,
+			 people.last_name,  
+			 registers.name as name_caja,
+			 locations.name as name_tienda');
 		$this->db->from('registers_movement');
+		$this->db->join('employees', 'employees.person_id=registers_movement.id_employee');
+		$this->db->join('people', 'people.person_id=employees.person_id');
+		$this->db->join('register_log', 'register_log.register_log_id=registers_movement.register_log_id');
+		$this->db->join('registers', 'registers.register_id=register_log.register_id');
+		$this->db->join('locations', 'registers.location_id=registers.location_id');
 		$this->db->where('register_movement_id ', $register_movement_id);
 		$query=$this->db->get();
 		if ($query->num_rows()==0)
@@ -171,7 +183,7 @@ class Register_movement extends CI_Model
 
 	}
 
-	function save_operation($register_id, $cash, $description,$categorias_gastos,$operation )
+	function save_operation($register_id, $cash, $description,$categorias_gastos,$entregado_a,$operation )
 	{
 		$register = $this->Sale->get_current_register_log($register_id);
 		$error = "";
@@ -196,7 +208,7 @@ class Register_movement extends CI_Model
 
 			}else {
 				$id_employee= $this->CI->Employee->get_logged_in_employee_info()->person_id;
-				$success = $this->save($cash, $description, $register_id,true,$categorias_gastos,$id_employee,true,null,null,$operation); //Registrar movimiento
+				$success = $this->save($cash, $description, $register_id,true,$categorias_gastos,$id_employee,$entregado_a,true,null,null,$operation); //Registrar movimiento
 				
 			}
 		}
@@ -320,6 +332,11 @@ class Register_movement extends CI_Model
 			$where .= ' and '.$this->db->dbprefix('registers_movement').'.categorias_gastos='.$this->db->escape($params["categoris"]);
 
 		}
+		// consulta para reporte de traslado o por cada tipo de moviento -ingresos,gastos o traslado
+		if(isset($params['type_movement']) && $params['type_movement']!="all"){
+			$where .= ' and '.$this->db->dbprefix('registers_movement').'.type_movement='.$this->db->escape($params["type_movement"]);
+
+		}
 		if(isset($params['id_empleado']) && $params['id_empleado']!="all"){
 			$where .= ' and '.$this->db->dbprefix('registers_movement').'.id_employee='.$this->db->escape($params["id_empleado"]);
 
@@ -330,11 +347,17 @@ class Register_movement extends CI_Model
 		(SELECT ".$this->db->dbprefix('registers_movement').".register_movement_id as register_movement_id,".
 		$this->db->dbprefix('registers_movement').".register_log_id as register_log_id,  register_date, 
 		".$this->db->dbprefix('registers_movement').".mount, description,detailed_description, type_movement, 
-		".$this->db->dbprefix('registers_movement').".mount_cash as mount_cash, "
-		.$this->db->dbprefix('registers_movement').".categorias_gastos as categorias_gastos, ".$this->db->dbprefix('registers_movement').".id_employee as id_employee,".$this->db->dbprefix('people').".first_name,".$this->db->dbprefix('people').".last_name
+		".$this->db->dbprefix('registers_movement').".mount_cash as mount_cash,
+		".$this->db->dbprefix('registers_movement').".delivered_to as entregado_a,
+		".$this->db->dbprefix('registers_movement').".categorias_gastos as categorias_gastos, 
+		".$this->db->dbprefix('registers_movement').".id_employee as id_employee,
+		".$this->db->dbprefix('registers').".name as name_caja,
+		".$this->db->dbprefix('locations').".name as name_tienda,
+		".$this->db->dbprefix('people').".first_name,".$this->db->dbprefix('people').".last_name
 		FROM ".$this->db->dbprefix('registers_movement')."		
 		JOIN ".$this->db->dbprefix('register_log')." ON  ".$this->db->dbprefix('register_log').'.register_log_id='.$this->db->dbprefix('registers_movement').'.register_log_id'."
 		JOIN ".$this->db->dbprefix('registers')." ON  ".$this->db->dbprefix('registers').'.register_id='.$this->db->dbprefix('register_log').'.register_id'."
+		JOIN ".$this->db->dbprefix('locations')." ON  ".$this->db->dbprefix('locations').'.location_id='.$this->db->dbprefix('registers').'.location_id'."
 		JOIN ".$this->db->dbprefix('employees')." ON  ".$this->db->dbprefix('employees').'.person_id='.$this->db->dbprefix('registers_movement').'.id_employee'."
 		JOIN ".$this->db->dbprefix('people')." ON  ".$this->db->dbprefix('people').'.person_id='.$this->db->dbprefix('employees').'.person_id'."   
 		
@@ -375,7 +398,8 @@ class Register_movement extends CI_Model
 		(SELECT ".$this->db->dbprefix('registers_movement').".register_movement_id as register_movement_id,".
 		$this->db->dbprefix('registers_movement').".register_log_id as register_log_id,  register_date, 
 		".$this->db->dbprefix('registers_movement').".mount, description,detailed_description, type_movement, 
-		".$this->db->dbprefix('registers_movement').".mount_cash as mount_cash, "
+		".$this->db->dbprefix('registers_movement').".mount_cash as mount_cash, 
+		".$this->db->dbprefix('registers_movement').".mount as mount, "
 		.$this->db->dbprefix('registers_movement').".categorias_gastos as categorias_gastos, ".$this->db->dbprefix('registers_movement').".id_employee as id_employee,".$this->db->dbprefix('people').".first_name,".$this->db->dbprefix('people').".last_name
 		FROM ".$this->db->dbprefix('registers_movement')."		
 		JOIN ".$this->db->dbprefix('register_log')." ON  ".$this->db->dbprefix('register_log').'.register_log_id='.$this->db->dbprefix('registers_movement').'.register_log_id'."

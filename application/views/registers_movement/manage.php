@@ -76,7 +76,7 @@
 											<span></span>
 											<span class="check"></span>
 											<span class="box"></span>
-											Caja Abierta 
+											Cajas Abiertas
 										</label>
 									</div>
 								</div>
@@ -90,19 +90,21 @@
 									$CI = &get_instance();
 									$permision = $CI->Employee->has_module_action_permission('registers_movement', 'add_update', $CI->Employee->get_logged_in_employee_info()->person_id);
 									if ($permision == true) {
-										echo anchor("registers_movement/operations/move_money",
-											'<i title='.lang('move_money').' class="fa fa-minus tip-bottom hidden-lg fa fa-2x"></i><span class="visible-lg">'.lang('move_money').'</span>',
-											array('class' => 'btn hidden-xs btn-primary', 'title' => lang('move_money')));
-
+										echo anchor("registers_movement/operations/depositcash",
+											'<i title="Depositar dinero" class="fa fa-plus tip-bottom hidden-lg fa fa-2x"></i><span class="visible-lg">' . lang('cash_flows_deposit_money') . '</span>',
+											array('class' => 'btn hidden-xs btn-success', 'title' => 'Depositar dinero'));
+									
+										
 
 										echo anchor("registers_movement/operations/withdrawcash",
 											'<i title="Registar gasto" class="fa fa-minus tip-bottom hidden-lg fa fa-2x"></i><span class="visible-lg">Registar gasto</span>',
 											array('class' => 'btn hidden-xs btn-danger', 'title' => 'Registar gasto'));
 
-										echo anchor("registers_movement/operations/depositcash",
-											'<i title="Depositar dinero" class="fa fa-plus tip-bottom hidden-lg fa fa-2x"></i><span class="visible-lg">' . lang('cash_flows_deposit_money') . '</span>',
-											array('class' => 'btn hidden-xs btn-success', 'title' => 'Depositar dinero'));
-									}?>
+										echo anchor("registers_movement/operations/move_money",
+											'<i title='.lang('move_money').' class="fa fa-minus tip-bottom hidden-lg fa fa-2x"></i><span class="visible-lg">'.lang('move_money').'</span>',
+											array('class' => 'btn hidden-xs btn-primary', 'title' => lang('move_money')));
+
+										}?>
 									</div>
 								</div>
 
@@ -183,8 +185,8 @@
 										<tbody>
 											<?php foreach ($registers_movement->result() as $movement) {
 
-												$amount      = number_format($movement->mount, 2, $this->config->item('decimal_separator'), $this->config->item('thousand_separator'));
-												$amount_cash = number_format($movement->mount_cash, 2, $this->config->item('decimal_separator'), $this->config->item('thousand_separator'));
+												$amount      = number_format($movement->mount, $this->config->item('remove_decimals')==1?0:2, $this->config->item('decimal_separator'), $this->config->item('thousand_separator'));
+												$amount_cash = number_format($movement->mount_cash,$this->config->item('remove_decimals')==1?0:2, $this->config->item('decimal_separator'), $this->config->item('thousand_separator'));
 
 												$amount      = $this->config->item('currency_symbol') . $amount;
 												$amount_cash = $this->config->item('currency_symbol') . $amount_cash;
@@ -217,7 +219,7 @@
 													<td align='center'><?=$movement->categorias_gastos;?></td>
 													<td><?=$movement->first_name;?> <?=$movement->last_name;?></td>
 													<?php if($this->Employee->has_module_action_permission('registers_movement','show_column_cash_flow',  $this->session->userdata('person_id'))){?>
-													<td align='center'><?=$amount_cash;?></td>
+													<td align='center' ><?=$amount_cash;?></td>
 													<?php } ?>
 												</tr>
 												<?php }?>

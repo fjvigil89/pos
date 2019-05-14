@@ -1,4 +1,5 @@
 <?php
+$lang['module_allow_graphics_arnings_monsth']='Grafica de ganancias';
 $lang['module_allow_graphics_by_store']='Graficas ventas por tienda';
 $lang['module_allow_open_money_box']='Permitir abrir monedero de caja, sin realizar ventas';
 $lang['module_action_show_column_cash_flow']='Mostrar la columna (En caja)';

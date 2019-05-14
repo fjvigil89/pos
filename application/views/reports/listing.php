@@ -816,14 +816,23 @@
 									<?php echo lang('reports_shop_reports'); ?>
 								</div>
 							</a>
+
 							<a href="<?php echo site_url('reports/specific_transfer_location');?>" class="btn icon-btn letter-space">
 								<i class="fa fa-exchange"></i>
 								<div>
 									<?php echo lang('reports_transfer_location'); ?>
 								</div>
 							</a>
+
+							<a href="<?php echo site_url('reports/report_consolidated_shop');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-bar-chart-o"></i>
+								<div>
+									<?php echo lang('reports_consolidated_shop'); ?>
+								</div>
+							</a>
 						</div>						
 					</div>
+					
 					
 					<div class="list-group movement_cash hidden">
 
@@ -848,7 +857,16 @@
 									<?php echo lang('detailed_report_all_means_of_payment');  ?>
 								</div>
 							</a>
-						</div>						
+						</div>
+						<div class="btn-group btn-group-justified">
+							<a href="<?php echo site_url('reports/detailed_of_move_money');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-calendar"></i>
+								<div>
+
+									<?php echo lang('reports_move_money');  ?>
+								</div>
+							</a>
+						</div>					
 					</div>
 					<div class="list-group view_change_house hidden">
 						<div class="btn-group btn-group-justified">

@@ -1,4 +1,6 @@
 <?php
+$lang['reports_move_money']="Reporte detallado traslado de dinero";
+$lang['reports_traslado']="Total Traslados";
 $lang['detailed']="detallado";
 $lang['reports_daily_cut']="Corte diario";
 $lang['tables_report']="Entrada Mesa: Rotación de mesas ";
@@ -258,8 +260,9 @@ $lang['reports_consolidated'] = 'Reporte Consolidado';
 $lang['reports_select_by_empleados']='Seleccione Empleado';
 
 //Language Graphics Home (Charts)
+$lang['reports_earnings_monsth'] = 'Reporte ganancias ultimos 7 dias';
 $lang['reports_sales_by_store_total'] = 'Ventas totales por tienda';
-$lang['quantity_module_total'] = 'Cantidad total por módulo';
+$lang['quantity_module_total'] = 'Productos Escasos de inventario minimo';
 $lang['best_sellers_items'] = 'Los 10 productos más vendidos del mes';
 $lang['best_seller_item'] = 'El producto más vendido es: ';
 $lang['sales_by_employees'] = 'Ventas por empleado';

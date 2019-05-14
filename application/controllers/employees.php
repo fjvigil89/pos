@@ -342,7 +342,7 @@ class Employees extends Person_controller
 			}			
 			
 			//Delete Image
-			if($this->input->post('del_image') && $employee_id != -1)
+			if($this->input->post('del_image') && $employee_id != -1 && !is_on_demo_host())
 			{
 				$employee_info = $this->Employee->get_info($employee_id);
 			    if($employee_info->image_id != null)
@@ -353,7 +353,7 @@ class Employees extends Person_controller
 			}
 
 			//Save Image File
-			if(!empty($_FILES["image_id"]) && $_FILES["image_id"]["error"] == UPLOAD_ERR_OK)
+			if(!empty($_FILES["image_id"]) && $_FILES["image_id"]["error"] == UPLOAD_ERR_OK && !$this->Employee->es_demo())
 			{			    
 
 			    $allowed_extensions = array('png', 'jpg', 'jpeg', 'gif');
