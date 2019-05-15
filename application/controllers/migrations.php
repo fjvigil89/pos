@@ -19,7 +19,7 @@ class Migrations extends Secure_area
             }
             else
             {
-                sleep(60); 
+                sleep(1); 
                 $this->Appconfig->update_config();
                 $this->db->where('key', 'database_version');
                 $this->db->update( 'app_config', array('value' => DATABASE_VERSION ) );
