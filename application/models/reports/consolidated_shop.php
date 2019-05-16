@@ -10,7 +10,7 @@ class Consolidated_shop extends Report
 	public function getDataColumns()
 	{
 		return array(
-			'summary' => array(array('data'=>lang('login_store'), 'align'=>'left'), array('data'=>'V. '.lang('sales_cash'), 'align'=>'left'), array('data'=>lang('datafonos_tarjetas'), 'align'=>'left'), array('data'=>'V. '.lang('other_media'), 'align'=>'left'), array('data'=>'V. '.lang('credito'), 'align'=>'left'), array('data'=>lang('expenses'), 'align'=>'left'), array('data'=>lang('sales_total'), 'align'=>'right'))
+			'summary' => array(array('data'=>lang('login_store'), 'align'=>'left'), array('data'=>'V. '.lang('sales_cash'), 'align'=>'left'), array('data'=>lang('datafonos_tarjetas'), 'align'=>'left'), array('data'=>'V. '.lang('other_media'), 'align'=>'left'), array('data'=>'V. '.lang('credito'), 'align'=>'left'), array('data'=>lang('expenses'), 'align'=>'left'),array('data'=>lang('move_money_category'), 'align'=>'left'), array('data'=>lang('sales_total'), 'align'=>'right'))
 		);		
 	}
 	
@@ -35,7 +35,8 @@ class Consolidated_shop extends Report
                 'datafono'=>$this->get_type_chash('datafono',$location["location_id"]),
                 'credito'=>$this->get_type_chash('credito',$location["location_id"]),
                 'otros'=>$this->get_type_chash('otros',$location["location_id"]),
-                'gastos'=>$this->get_gastos_movimientos('gastos',$location["location_id"]));
+                'gastos'=>$this->get_movimiento_caja(0,$location["location_id"]),
+                'traslado'=>$this->get_movimiento_caja(2,$location["location_id"]));
 
             $key++;
 
@@ -73,36 +74,23 @@ class Consolidated_shop extends Report
             $this->db->where('sales_payments.payment_type !=','Línea de crédito');
         }
         $this->db->where('sales_payments.payment_date BETWEEN "'.$this->params['start_date'].'" and "'.$this->params['end_date'].'"');
-            
-        $result=$this->db->get()->result_array();
-        return $result[0]['suma'];
+        $result=$this->db->get()->row_array();
+        return $result['suma'];
     }
-    public function get_gastos_movimientos($type='gastos',$location_id){
-        if($type=='gastos'){
-            $this->db->select('sum(phppos_registers_movement.mount) as suma');
-        }
-        else if($type=='caja_abierta'){
-            $this->db->select('sum(phppos_registers_movement.mount_cash) as suma');
-        }
+    
+
+    public function get_movimiento_caja($type=0,$id_location=1){
+        $data = array();
+		$this->db->select(' sum(phppos_movement_items_temp.mount) as suma');
+		$this->db->from('movement_items_temp');
+		//$this->where_categoria();
+        $this->db->where('movement_items_temp.type_movement',$type);
+        $this->db->where('location_id_tienda',$id_location);
         
-        $this->db->from('registers_movement');
-        $this->db->join('register_log', 'register_log.register_log_id = registers_movement.register_log_id');
-        $this->db->join('registers', 'registers.register_id = register_log.register_id');
-        $this->db->join('locations', 'locations.location_id = registers.location_id');
+		$this->db->order_by('register_movement_id','DESC');
+		$data=$this->db->get()->row_array();
         
-        if($type=='gastos'){
-            $this->db->where('registers_movement.type_movement',0);
-        }
-        else if($type=='caja_abierta'){
-            $this->db->where('registers_movement.type_movement',2);
-            $this->db->where('register_log.employee_id_close',null);
-        }
-        $this->db->where('locations.location_id',$location_id);
-        
-        $this->db->where('registers_movement.register_date BETWEEN "'.$this->params['start_date'].'" and "'.$this->params['end_date'].'"');
-            
-        $result=$this->db->get()->result_array();
-        return $result[0]['suma'];
+		return $data['suma'];
     }
 	
 	public function getTotalRows()
@@ -113,15 +101,35 @@ class Consolidated_shop extends Report
 
 	}
 	
-	public function getSummaryData()
+	public function getSummaryData($report_data=array())
 	{
-		$this->db->select('sum(total) as total', false);
-		$this->db->from('receivings_items_temp');
-		
-		$this->db->where('receivings_items_temp.transfer_to_location_id is  NOT NULL ');
-		
-		$this->db->where('deleted', 0);
-		return $this->db->get()->row_array();
+        $efectivo=0;
+        $datafonos=0;
+        $otros=0;
+        $credito=0;
+        $gastos=0;
+        $traslado=0;
+        $total=0;
+		foreach ($report_data['summary'] as $key => $row){
+            $efectivo+=$row['efectivo'];
+            $datafonos+=$row['datafono'];
+            $otros+=$row['otros'];
+            $credito+=$row['credito'];
+            $gastos+=$row['gastos'];
+            $traslado+=$row['traslado'];
+            $total+=$row['efectivo']+$row['datafono']+$row['credito']+$row['otros']-$row['gastos'];
+            
+        }
+        $total_data = array(array('data' => lang('sales_total'), 'align' => 'left'),
+                    array('data' => to_currency($efectivo, 10), 'align' => 'left'),
+                    array('data' => to_currency($datafonos, 10), 'align' => 'left'),
+                    array('data' => to_currency($otros, 10), 'align' => 'left'),
+                    array('data' => to_currency($credito, 10), 'align' => 'left'),
+                    array('data' => to_currency($gastos, 10), 'align' => 'left'),
+                    array('data' => to_currency($traslado, 10), 'align' => 'left'),
+                    array('data' => to_currency($total), 'align' => 'right'));
+                     
+		return $total_data;
 	}
 
  

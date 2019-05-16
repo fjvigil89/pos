@@ -87,7 +87,7 @@
 							<?php echo form_label('<a class="help_config_required  tooltips" data-placement="left" title="'.lang("cash_flows_cash_help").'">'.lang('cash_flows_cash').'</a>'.':', 'cash',array('class'=>'col-md-3 control-label requireds')); ?>
 							<div class="col-md-8">
 								
-								<input id="input-cash" type="number" min="0" name="cash" class="form-control form-inps">
+								<input id="input-cash" type="text" min="0" name="cash" class="form-control form-inps">
 							</div>
 						</div>	
 						<!--
@@ -221,6 +221,7 @@
 				}
 			});
 		});
+
 	</script>
 
 <?php $this->load->view("partial/footer"); ?>

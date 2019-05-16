@@ -85,7 +85,7 @@ class Home extends Secure_area
 		$this->Receiving->create_store_payments_temp_table(array('start_date' => $pnl_start_date, 'end_date' => $pnl_end_date));
 
         
-        $data['profit_and_loss'] = $this->Statistics->get_sales_earnings_monsth_day(); 
+        $data['earnings_monsth_day'] = $this->Statistics->get_sales_earnings_monsth_day(); 
 
         //Cantidad total por modulos
 		$data['total_items']=$this->Item->count_all();
@@ -100,6 +100,11 @@ class Home extends Secure_area
     }
     function get_sales_store($start_date,$end_date){
         $data = $this->Statistics->get_all_sales_by_store($start_date,$end_date);
+        echo json_encode ($data);  
+    }
+    // ganancias anuales por meses
+    function get_sales_earnings_monsth($start_date){
+        $data = $this->Statistics->get_sales_earnings_monsth_day($start_date);
         echo json_encode ($data);  
     }
     //ventas totales por tienda en dinero

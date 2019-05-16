@@ -535,7 +535,7 @@
 														<td class="text-center">
 															<?php
 												                echo form_open("sales/edit_item/$line", array('class' => 'line_item_form', 'autocomplete'=> 'off'));
-												                echo form_input(array('name'=>'price','value'=>to_currency_no_money($item['price'], 10),'class'=>'form-control form-inps-sale input-small text-center', 'id' => 'price_'.$line));
+												                echo form_input(array('name'=>'price','value'=>$this->config->item('remove_decimals')?round(to_currency_no_money($item['price'],10)):(to_currency_no_money($item['price'],10)),'class'=>'form-control form-inps-sale input-small text-center', 'id' => 'price_'.$line));
 												            ?>
 															</form>
 														</td>
