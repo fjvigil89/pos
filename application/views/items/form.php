@@ -525,13 +525,13 @@
 
 					<?php if ($this->Employee->has_module_action_permission('items','see_cost_price', $this->Employee->get_logged_in_employee_info()->person_id) or $item_info->name=="") { ?>
 						<div class="form-group">
-							<?php echo form_label('<a class="help_config_options  tooltips" data-placement="left" title="'.lang("items_cost_price_help").'">'.lang('items_cost_price').'</a>'.' ('.lang('items_without_tax').')'.':', 'cost_price',array('class'=>'col-md-3 control-label requireds wide')); ?>
+							<?php echo form_label('<a class="help_config_options  tooltips" data-placement="left" title="'.lang("items_cost_price_help").'">'.lang('items_cost_price').'</a>'.' ('.lang('items_without_tax').')'.':', 'cost_price',array('class'=>'col-md-3 control-label requireds wide ')); ?>
 							<div class="col-md-8">
 								<?php echo form_input(array(
 									'name'=>'cost_price',
 									'size'=>'8',
 									'id'=>'cost_price',
-									'class'=>'form-control form-inps',
+									'class'=>'form-control form-inps money',
 									'value'=>$item_info->cost_price ? to_currency_no_money($item_info->cost_price,10) : '')
 								);?>
 							</div>
@@ -1501,6 +1501,9 @@
 	<?php echo form_close(); ?>
 
 	<script type='text/javascript'>
+
+
+
 
 	function eliminar_subcategoria(elemento){
 		var padre	=$( elemento ).parent().parent();

@@ -576,6 +576,9 @@
             <?php }?>
             return true;
         }
+
+
+
         </script>
         <!-- BEGIN CONTENT -->
         <div class="page-content-wrapper">

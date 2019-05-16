@@ -59,6 +59,23 @@ if($this->Appconfig->es_franquicia()==true){
 			   	Demo.init(); // init demo features
 			 	ComponentsDropdowns.init();
 			});
+
+			//funcion en Jquery para separar numeros en milles
+			$('input.money').keyup(function(event) {
+            // skip for arrow keys
+            /*if(event.which >= 37 && event.which <= 40){
+                event.preventDefault();
+            }*/
+
+            $(this).val(function(index, value) {
+                return value
+                    .replace(/\D/g, "")
+                    //.replace(/([0-9])([0-9]{0})$/, '$1.$2')  
+                    .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",")
+                ;
+            });
+        });
+        //fin de separar numeros
 		</script>
 		<script> var csfrData={};csfrData['<?php echo $this->security->get_csrf_token_name();?>']= '<?php echo $this->security->get_csrf_hash();?>';$(function(){$.ajaxSetup({data: csfrData});});</script>		
         <script src="js/publics.js"></script>
