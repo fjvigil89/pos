@@ -104,13 +104,13 @@
     <br>
     <div style="display:none" id="container-1" class="container-fluid ">
         <div class="row">
-            <div id="input" class="col-md-offset-2 col-md-8 col-sm-offset-1 col-sm-10 col-xs-12">
+            <!--<div id="input" class="col-md-offset-2 col-md-8 col-sm-offset-1 col-sm-10 col-xs-12">
                 <?= form_open_multipart('all/get_item',array('id'=>'item_form','class'=>'form-horizontal', "autocomplete"=>"off")); ?>
                 <input style=" font-weight: bold; text-align:center;" maxlength="30"
                     placeholder="Escanee el código de barra" autocomplete="off" name="item" id="item"
                     class="form-control">
                 </form>
-            </div>
+            </div>-->
             <div id="info-item" style="display:none"
                 class="  <?=false ? 'col-md-5 col-sm-5 col-xs-6' : 'col-md-offset-2 col-md-8 col-sm-offset-1 col-sm-10 col-xs-12' ?>   ">
                 <div class="contenedor">
@@ -206,26 +206,27 @@
     $("#item").focus();
     $("#container-1").show();
 
-    $('#item_form').submit(function(e) {
+    /*$('#item_form').submit(function(e) {
 
         data_send = $('#item_form').serializeArray();
         code_input = $("#item").val();
         $("#item").val("");
         get_item_data(url, data_send);
         e.preventDefault();
-    });
+    });*/
 
-    /* $(document).ready(function() {
+     $(document).ready(function() {
 
          $(document).keypress(function(e) {
              if (e.which == 13) 
              {
-                 
+                get_item_data(url, {"item":code_bar}); 
+                code_bar = "" ;
              } else
                  code_bar = code_bar + e.key;
          });
 
-     });*/
+     });
 
     function get_item_data(url, data_send) {
         try {
@@ -269,6 +270,7 @@
     function hide_info() {
         if (time_elapsed == time_for_hide) {
             $("#info-item").hide();
+            code_bar = "";
             <?php if($show_carrousel){
                 echo '$("#contenedor-caroousel").show();';
             }else

@@ -1063,20 +1063,20 @@
 							<div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
 							</div>
 							<div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
-							<?php if ($this->Employee->has_module_action_permission('sales', 'module_allow_open_money_box', $logged_in_employee_id)) :?>
-									<div class="form-group no_margin_bottom">
-										<div class="col-md-3 col-sm-12 col-xs-12">
-											<div class="input-group">
-												<span class="input-group-btn">
-													<?php echo anchor(site_url('sales/open_money_drawer'),
-													lang('sales_open_money_drawer'),
-													array('class'=>'btn btn-success','title'=>lang('sales_open_money_info')));
-													?>
-												</span>
+								<?php if ($this->Employee->has_module_action_permission('sales', 'module_allow_open_money_box', $logged_in_employee_id)) :?>
+										<div class="form-group no_margin_bottom">
+											<div class="col-md-3 col-sm-12 col-xs-12">
+												<div class="input-group">
+													<span class="input-group-btn">
+														<?php echo anchor(site_url('sales/open_money_drawer'),
+														lang('sales_open_money_drawer'),
+														array('class'=>'btn btn-success','title'=>lang('sales_open_money_info')));
+														?>
+													</span>
+												</div>
 											</div>
 										</div>
-									</div>
-							<?php endif; ?>
+								<?php endif; ?>
 							</div>
 							
 					<?php if ($select_seller_during_sale) :?>
@@ -1085,9 +1085,28 @@
 							</div>
 						</div>
 					<?php endif; ?>
-					</div>								
-						
-						
+					</div>
+					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-6">
+						<?php echo '<div class="md-checkbox-inline">';
+							echo '<div class="md-checkbox">';
+							echo form_checkbox(array(
+									'name'=>'generate_txt',
+									'id'=>'generate_txt',
+									'value'=>'1',
+									'class'=>'md-check',
+									'checked'=>(boolean)$generate_txt)
+							);
+
+							echo '<label id="generate_txt" for="generate_txt">';
+							echo '<span></span>';
+							echo '<span class="check"></span>';
+							echo '<span class="box"></span>';
+							echo lang("sales_generate_txt"); 
+							echo '</label>';
+							echo '</div>';
+							echo '</div>';
+						?>													
+					</div>						
 				</div>
 				<?php if ($mode == 'store_account_payment') { ?>
 				<div class="col-md-12 pull-right">
@@ -1102,6 +1121,8 @@
 								</form>
 							</div>
 						</div>
+					
+				</div>
 				<?php } ?>
 			</div>
 
@@ -1974,6 +1995,10 @@
 			$('#show_receipt').change(function()
 			{
 				$.post('<?php echo site_url("sales/set_show_receipt");?>', {show_receipt:$('#show_receipt').is(':checked') ? '1' : '0'});
+			});
+			$('#generate_txt').change(function()
+			{
+				$.post('<?php echo site_url("sales/set_generate_txt");?>', {generate_txt:$('#generate_txt').is(':checked') ? '1' : '0'});
 			});
 			$('#without_policy').change(function()
 			{

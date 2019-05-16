@@ -650,7 +650,13 @@ class Sale_lib
 			return to_currency_no_money($item_kit_unit_price, 10);
 		}		
 	}	
-	
+	function set_generate_txt($generate_txt)
+	{
+		$this->CI->session->set_userdata('generate_txt',$generate_txt);
+	}
+	function get_generate_txt(){
+		return $this->CI->session->userdata('generate_txt');
+	}
 	function empty_payments()
 	{
 		$this->CI->session->unset_userdata('payments');
@@ -1615,7 +1621,10 @@ class Sale_lib
 			$this->change_price();
 		}
 	}
-
+	 function clear_generate_txt()
+	 {
+		$this->CI->session->unset_userdata('generate_txt');
+	 }
 	function clear_mode()
 	{
 		$this->CI->session->unset_userdata('sale_mode');
@@ -1668,6 +1677,7 @@ class Sale_lib
 		$this->clear_equivalencia_divisa();
 		$this->clear_new_tax();
 		$this->clear_currency();
+		$this->clear_generate_txt();
 		
 	}
 	

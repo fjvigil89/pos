@@ -188,6 +188,26 @@
 							         
 						        </div>
                             </div>
+                            <div class="col-md-12">
+                                <div class="md-checkbox-inline">
+                                    <div class="md-checkbox">
+                                        <?= form_checkbox(array(
+                                            'name'=>'generate_txt',
+                                            'id'=>'generate_txt',
+                                            'value'=>'1',
+                                            'class'=>'md-check',
+                                            'checked'=>(boolean)$generate_txt)
+                                        );?>
+
+                                        <label id="generate_txt" for="generate_txt">
+                                        <span></span>
+                                        <span class="check"></span>
+                                        <span class="box"></span>
+                                        <?= lang("sales_generate_txt"); ?>
+                                        </label>
+                                        </div>
+                                    </div>                                
+                            </div>
                             <div class=" col-xs-12 col-xs-offset-4 col-md-4 col-md-offset-5 margin-top-10 ">
                                     <div id="contenedor_boton">
                                         <button id="submit-button" name="submit" class="btn green">Enviar</button>
@@ -200,6 +220,7 @@
             </div>
         </div>
     </div>
+    
     <div class="col-md-4 col-lg-4" id="resumen-venta">        
        <?php $this->load->view('changes_house/resumen_venta');?>   
     
@@ -232,6 +253,10 @@
         
     $(document).ready(function()
 	{
+        $('#generate_txt').change(function()
+		{
+			$.post('<?php echo site_url("sales/set_generate_txt");?>', {generate_txt:$('#generate_txt').is(':checked') ? '1' : '0'});
+		});
         $( function() { 
             $( "#customer1" ).autocomplete({
             minLength: 0,
@@ -265,7 +290,9 @@
 			    submitHandler:function(form)
 			    {
                    if(es_valida_select()){
-                        $("#contenedor_boton").hide();
+                        //$("#contenedor_boton").hide();
+                        $("#submit-button").attr("disabled", true);
+                        $("#submit-button").html("Enviando...");
                         var url =$(form).attr('action');                            
 			            var datos = $(form).serialize(); 
 			            $.ajax({
@@ -351,7 +378,9 @@
 			});
 
       $("#cantidad_divisa").change(function(){
-          $("#contenedor_boton").hide();
+          //$("#contenedor_boton").hide();
+          $("#submit-button").attr("disabled", true);
+          $("#submit-button").html("Enviando...");
           $("#mensaje-erro").html("");
            $.post('<?php echo site_url("changes_house/get_total_peso");?>', 
            {
@@ -363,7 +392,9 @@
                 if(respuesta.respuesta==true){
                     $("#cantidad_peso").val(respuesta.data);
                 }
-                $("#contenedor_boton").show();
+                //$("#contenedor_boton").show();
+                $("#submit-button").removeAttr("disabled");
+                $("#submit-button").html("Enviar");
 
             }
            );
@@ -371,7 +402,9 @@
         });
 
         $("#cantidad_peso").change(function(){
-          $("#contenedor_boton").hide();
+          //$("#contenedor_boton").hide();
+          $("#submit-button").attr("disabled", true);
+          $("#submit-button").html("Enviando...");
           $("#mensaje-erro").html("");
            $.post('<?php echo site_url("changes_house/get_total_divisa");?>', 
            {
@@ -384,7 +417,9 @@
                 if(respuesta.respuesta==true){
                     $("#cantidad_divisa").val(respuesta.data);
                 }
-                $("#contenedor_boton").show();
+                //$("#contenedor_boton").show();
+                $("#submit-button").removeAttr("disabled");
+                $("#submit-button").html("Enviar");
 
             }
            );

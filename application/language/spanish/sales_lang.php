@@ -326,5 +326,5 @@ $lang["sales_ranks"]="Rangos";
 $lang["sales_payments"]="Pagos";
 $lang["sales_opening_date"]="Fecha de apertura";
 $lang["sales_date_closing"]="Fecha de cierre";
-
+$lang["sales_generate_txt"]="Generar TXT";
 ?>
