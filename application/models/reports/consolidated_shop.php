@@ -61,17 +61,17 @@ class Consolidated_shop extends Report
         $this->db->join('sales_payments', 'sales_payments.sale_id = sales.sale_id');
         $this->db->where('locations.location_id',$location_id);
         if($type=='Efectivo'){
-            $this->db->where('sales_payments.payment_type','Efectivo');
+            $this->db->where('sales_payments.payment_type',lang('sales_cash'));
         }
         else if($type=='datafono'){
-            $this->db->where('(phppos_sales_payments.payment_type="Tarjeta de Crédito" OR phppos_sales_payments.payment_type="Tarjeta de Débito")');
+            $this->db->where('(phppos_sales_payments.payment_type="'.lang('sales_credit').'" OR phppos_sales_payments.payment_type="'.lang('sales_debit').'")');
         }else if($type=="credito"){
-            $this->db->where('sales_payments.payment_type','Línea de crédito');
+            $this->db->where('sales_payments.payment_type',lang('sales_store_account'));
         }else{
-            $this->db->where('sales_payments.payment_type !=','Efectivo');
-            $this->db->where('sales_payments.payment_type !=','Tarjeta de Crédito');
-            $this->db->where('sales_payments.payment_type !=','Tarjeta de Débito');
-            $this->db->where('sales_payments.payment_type !=','Línea de crédito');
+            $this->db->where('sales_payments.payment_type !=',lang('sales_cash'));
+            $this->db->where('sales_payments.payment_type !=',lang('sales_credit'));
+            $this->db->where('sales_payments.payment_type !=', lang('sales_debit'));
+            $this->db->where('sales_payments.payment_type !=',lang('sales_store_account'));
         }
         $this->db->where('sales_payments.payment_date BETWEEN "'.$this->params['start_date'].'" and "'.$this->params['end_date'].'"');
         $result=$this->db->get()->row_array();
