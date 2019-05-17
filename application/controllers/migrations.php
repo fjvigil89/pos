@@ -3,23 +3,22 @@
 require_once ("secure_area.php");
 class Migrations extends Secure_area 
 {
-    
-    function index()
+    function update()
     {
         $this->load->library('migration');
         
         if(isset($_POST) and !empty($_POST))
         {
-            if(!$this->migration->current())
+            if(!$this->migration->version(DATABASE_VERSION))
             {
                 echo json_encode(array(
                     'success' => false,
-                    'message' => show_error( $this->migration->error_string() )
+                    'message' => $this->migration->error_string() , //show_error( $this->migration->error_string() )
                 ));
             }
             else
             {
-                sleep(1); 
+                sleep(10); 
                 $this->Appconfig->update_config();
                 $this->db->where('key', 'database_version');
                 $this->db->update( 'app_config', array('value' => DATABASE_VERSION ) );
@@ -28,11 +27,11 @@ class Migrations extends Secure_area
                     'message'=>"exito"
                 ));
             }
-        }
-        else
-        {
-            $this->load->view("migrations");
-        }
+        }      
+    }
+    function index()
+    {              
+        $this->load->view("migrations");
     }
     
 }
