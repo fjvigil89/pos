@@ -243,7 +243,8 @@ $lang['reports_costo_proveedor'] ="Cost of provider";
 $lang['reports_precio_factura']="Invoice price";
 $lang['best_sellers_items'] = 'The 10 best-selling products of the month.';
 
-$lang['reports_earnings_monsth'] = 'Reporte ganancias ultimos 7 dias';
+$lang['reports_earnings_monsth'] = 'Report earnings of the year by months';
+$lang['earnings_monsth_filter_year'] = 'Select the year of the months you want to display: ';
 $lang['quantity_module_total'] = 'Total amount by module'; 
 $lang['best_seller_item'] = 'The best-selling product is: ';
 $lang['sales_by_employees'] = 'Sales by employee';

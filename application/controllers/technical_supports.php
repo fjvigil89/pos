@@ -89,7 +89,7 @@ class technical_supports extends Secure_area
 		$data["result"] = $this->Customer->get_info($this->input->get('hc'));
 		$data["Cliente"] = $this->technical_support->hCliente($this->input->get('hc'));
 		$this->load->view("technical_supports/cliente/index", $data);
-	}*/
+	}
 
 	
 

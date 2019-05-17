@@ -183,22 +183,19 @@ class Statistics extends CI_Model
     }
 
     // ganancias por dias
-    public function get_sales_earnings_monsth_day($date=false){
+    public function get_sales_earnings_monsth_day($date='2019'){
         $final_result = array();
         $x = 0;
-        $day=date("d");
-        $date=$date?$date:date("Y-m-d");
-        $date=date("Y-m-d",strtotime ('-7 day',strtotime($date)));
-        $start_date=$date;
-        $end_date =date("Y-m-d",strtotime ('+8 day',strtotime($date)));
+        $start_date=$date.'-01-01';
+        $end_date =$date.'-12-31';
 
-        $this->db->select('DATE_FORMAT(sale_time, ("%d"))  AS fecha ');
+        $this->db->select('DATE_FORMAT(sale_time, ("%m"))  AS fecha ');
         $this->db->select('ROUND((item_unit_price*quantity_purchased-item_unit_price*quantity_purchased*discount_percent/100) - (item_cost_price*quantity_purchased),(0)) as profit');
         $this->db->from('sales');
         $this->db->join('sales_items', 'sales_items.sale_id=sales.sale_id');
         $this->db->where('sales.sale_time >=',$start_date);
         $this->db->where('sales.sale_time <',$end_date);
-        $this->db->order_by('DATE_FORMAT(sale_time, ("%d"))');
+        $this->db->order_by('DATE_FORMAT(sale_time, ("%m"))');
         
         $result=$this->db->get()->result_array();
 
@@ -213,7 +210,7 @@ class Statistics extends CI_Model
                     $total+=$value['profit'];
                 }else{
                     $final_result[$x]['profit'] = $total;
-                    $final_result[$x]['fecha'] = $fecha_dia;
+                    $final_result[$x]['fecha'] = $this->get_mes_year($fecha_dia);
                     $total=$value['profit'];
                     $fecha_dia=$fecha_dia_new;
                     $x++;
@@ -221,9 +218,26 @@ class Statistics extends CI_Model
                 }           
             }
             $final_result[$x]['profit'] = $total;
-            $final_result[$x]['fecha'] = $fecha_dia;
+            $final_result[$x]['fecha'] = $this->get_mes_year($fecha_dia);
             return $final_result;
         } 
+    }
+    public function get_mes_year($mes){
+        switch($mes){
+            case 1: $mes="Ene"; break;
+            case 2: $mes="Feb"; break;
+            case 3: $mes="Mar"; break;
+            case 4: $mes="Abr"; break;
+            case 5: $mes="May"; break;
+            case 6: $mes="Jun"; break;
+            case 7: $mes="Jul"; break;
+            case 8: $mes="Ago"; break;
+            case 9: $mes="Sep"; break;
+            case 10: $mes="Oct"; break;
+            case 11: $mes="Nov"; break;
+            case 12: $mes="Dic"; break;
+         }
+         return $mes;
     }
     
 }

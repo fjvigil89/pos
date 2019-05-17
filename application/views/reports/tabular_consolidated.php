@@ -134,16 +134,14 @@
                             </tbody>
                             
                             <tfoot>
-									<tr align="left">
-                                    <th align="left"><?php echo lang('sales_total') ?></th>
-                                    
-                                        <th align="left"><?php echo $total_data['efectivo'] ?></th>
-                                        <th align="left"><?php echo $total_data['datafonos'] ?></th>
-                                        <th align="left"><?php echo $total_data['otros']?></th>
-                                        <th align="left"><?php echo $total_data['credito']; ?></th>
-                                        <th align="left"><?php echo $total_data['gastos']; ?></th>
-                                        <th align="left"><?php echo $total_data['total'] ?></th>
-									</tr>
+							<tr align="center">
+									
+                                    <?php foreach ($total_data as $key=>$row) { ?>
+											<td align="<?php echo $row['align']; ?>"><strong><?php echo $row['data']; ?></strong></td>
+										
+									<?php } ?>
+									
+							</tr>
 							</tfoot>
                         </table>
                         <!-- totales-->

@@ -1,4 +1,8 @@
 <?php
+$lang['expenses']="Gastos";
+$lang['credito']="Creditos";
+$lang['other_media']="Otros medios";
+$lang['datafonos_tarjetas']="Datafonos (Tarjetas)";
 // movimiento caja gastos 
 $lang['Nomina']='Nomina';
 $lang['Transporte']='Transporte';

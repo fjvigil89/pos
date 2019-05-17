@@ -1,22 +1,16 @@
 <script type="text/javascript">
+set_sales_earnings_monsth(<?php echo $earnings_monsth_day!=null?json_encode($earnings_monsth_day):'[]'?>);
+function set_sales_earnings_monsth(earnings_monsth_day){
     var chart = AmCharts.makeChart("chartdiv_get_earnings_monsth", {
         type: "serial",
         theme: "light",
         fontFamily: "Open Sans",
         color: "#888888",
         pathToImages: '<?php echo 'img/amcharts/images/'; ?>',
-        dataProvider: <?php if($profit_and_loss!=null)
-						{?> 
-							<?php echo json_encode($profit_and_loss); ?>,
-						<?php }
-						else
-					{?>
-						[],
-					<?php }?>
-        balloon: {
-            cornerRadius: 6
-        },
+        dataProvider:earnings_monsth_day,
         graphs: [{
+            labelText:'[[value]]',
+            labelPosition:"top",
             bullet: "square",
             bulletBorderAlpha: 1,
             bulletBorderThickness: 1,
@@ -27,11 +21,11 @@
             title: "profit",
             valueField: "profit"
         }],
-        chartScrollbar: {},
         chartCursor: {
             categoryBalloonDateFormat: "YYYY MMM DD",
             cursorAlpha: 0,
-            zoomable: !1
+            zoomable: false,
+            valueZoomable:false
         },
         categoryField: "fecha",
     });
@@ -63,5 +57,5 @@
     }
 
     AmCharts.checkEmptyData(chart);
-
+}
 </script>

@@ -255,6 +255,7 @@ class Register_movement extends CI_Model
 		$payments_types = array(lang('sales_cash'), lang('sales_check'), lang('sales_debit'),lang('sales_credit'), lang('sales_giftcard'),lang("sales_store_account"));
 		$entrada= $this->entrada_salida($start_date,$end_date,$register_log_id,1);
 		$salida= $this->entrada_salida($start_date,$end_date,$register_log_id,0);
+		$traslado= $this->entrada_salida($start_date,$end_date,$register_log_id,2);
 
 		foreach($this->Appconfig->get_additional_payment_types() as $additional_payment_type)
 		{
@@ -285,6 +286,7 @@ class Register_movement extends CI_Model
 						'payments_petty_cash',
 						"entrada",
 						"salida",
+						"traslado",
 						"difference"
 
 					);
@@ -353,6 +355,7 @@ class Register_movement extends CI_Model
 		".$this->db->dbprefix('registers_movement').".id_employee as id_employee,
 		".$this->db->dbprefix('registers').".name as name_caja,
 		".$this->db->dbprefix('locations').".name as name_tienda,
+		".$this->db->dbprefix('locations').".location_id as location_id_tienda,
 		".$this->db->dbprefix('people').".first_name,".$this->db->dbprefix('people').".last_name
 		FROM ".$this->db->dbprefix('registers_movement')."		
 		JOIN ".$this->db->dbprefix('register_log')." ON  ".$this->db->dbprefix('register_log').'.register_log_id='.$this->db->dbprefix('registers_movement').'.register_log_id'."

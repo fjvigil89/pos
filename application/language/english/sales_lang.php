@@ -1,4 +1,9 @@
 <?php
+
+$lang['expenses']="Expenses";
+$lang['credito']="Credits";
+$lang['other_media']="Others means";
+$lang['datafonos_tarjetas']="Datafonos (Cards)";
 // movimiento caja gastos 
 $lang['deliver_to']="Deliver to";
 $lang['option_register']="Option to register";

@@ -1,5 +1,4 @@
 <?php
-$lang['expenses']="Cajas abiertas";
 $lang['expenses']="Gastos";
 $lang['credito']="Creditos";
 $lang['other_media']="Otros medios";
