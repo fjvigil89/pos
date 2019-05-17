@@ -1577,6 +1577,7 @@
 		//validation and submit handling
 		$(document).ready(function()
 		{
+			
 			$('form').on('keyup keypress', function(e) {
   var keyCode = e.keyCode || e.which;
   if (keyCode === 13) { 
@@ -1596,6 +1597,7 @@
 			//
 			$(".asign_price").click(function()
 			{
+				
 				var val = $(this).attr('rel');
 				var price = $('#price_suppliers'+val).val();
 
@@ -2012,8 +2014,8 @@
 					<?php } ?>
 
 					name:{
-                        required: <?php echo json_encode(lang('items_name_required')); ?>
-                    },
+							required: <?php echo json_encode(lang('items_name_required')); ?>
+					},
 					category:<?php echo json_encode(lang('items_category_required')); ?>,
 					cost_price:
 					{

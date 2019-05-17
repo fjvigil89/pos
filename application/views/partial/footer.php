@@ -60,18 +60,18 @@ if($this->Appconfig->es_franquicia()==true){
 			 	ComponentsDropdowns.init();
 			});
 
-			//funcion en Jquery para separar numeros en milles
+		//funcion en Jquery para separar numeros en milles
 			$('input.money').keyup(function(event) {
             // skip for arrow keys
-            /*if(event.which >= 37 && event.which <= 40){
+            if(event.which >= 37 && event.which <= 40){
                 event.preventDefault();
-            }*/
+            }
 
             $(this).val(function(index, value) {
                 return value
                     .replace(/\D/g, "")
-                    //.replace(/([0-9])([0-9]{0})$/, '$1.$2')  
-                    .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",")
+                    .replace(/([0-9])([0-9]{2})$/, '$1.$2')  
+                    .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, "")
                 ;
             });
         });

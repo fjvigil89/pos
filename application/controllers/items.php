@@ -548,14 +548,15 @@ class Items extends Secure_area implements iData_controller
         $error_datos_custom=false;
         $redirect = $this->input->post('redirect');
         $sale_or_receiving = $this->input->post('sale_or_receiving');
-        //valida entrada se debe pasar para un archivo heper
+       
+        //valida entrada se debe pasar para un archivo heper       
         if($this->config->item('subcategory_of_items')==1&&$this->input->post('subcategory') ){
             if ($this->input->post('locations')) {
                 foreach ($this->input->post('locations') as $location_id => $item_location_data) {
                          $subcategory_data_custom1=$item_location_data['subcategory_data_custom1'];
                          $subcategory_data_custom2=$item_location_data['subcategory_data_custom2'];
                          $subcategory_data_quantity=$item_location_data['subcategory_data_quantity'];
-                   
+                    
                         if(count($subcategory_data_custom1)<0|| count($subcategory_data_custom2)<0 || count($subcategory_data_quantity)<0 )
                             $error_datos_custom =true;
                         foreach($subcategory_data_custom1 as $custom){
