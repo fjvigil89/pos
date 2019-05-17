@@ -286,10 +286,12 @@
 								<?php echo nl2br($this->config->item('resolution')); ?>
 								<br />   
 							</div>
-							<div id="sale_return_policy">
-								<?php echo nl2br($this->config->item('return_policy')); ?>
-								<br />   
-							</div>
+                            <?php if($this->config->item('no_print_return_policy')){?>
+                                <div id="sale_return_policy">
+                                    <?php echo nl2br($this->config->item('return_policy')); ?>
+                                    <br />   
+                                </div>
+                            <?php } ?>
 							<div id='barcode'>
 								<svg id="barcode_img"></svg>
 							</div>							

@@ -69,6 +69,7 @@ if($this->Appconfig->es_franquicia()==true){
 
 		    <script src="<?php echo base_url();?>js/offline/sale.js" type="text/javascript"></script>
 
+			<script src="<?php echo base_url();?>js/offline/customer.js" type="text/javascript"></script>
 			<iframe style="display:none" src="<?php echo site_url("sincronizar/get_data_cache")?>"> 
 			</iframe>
 		<?php endif; ?>

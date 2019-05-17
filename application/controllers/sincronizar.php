@@ -177,7 +177,17 @@ class Sincronizar extends Secure_area
         }
         return $respustas;
     }      
-        
+    function synchronize_customers()
+    {
+        $data = $this->input->post('data');
+        $data =  json_decode(stripslashes($data),true);
+        $result = $this->Customer->save_multiple_offline($data);
+
+        if(!$result)        
+            echo json_encode(array("succes"=>false));
+        else
+            echo json_encode(array("succes"=>true,"data"=>$result));
+    }
     public function synchronize_sales(){        
         $data =$this->input->post('data');
         $data =  json_decode(stripslashes($data),true);        
@@ -191,7 +201,7 @@ class Sincronizar extends Secure_area
             echo json_encode($respustas);
         }
     }
-    // descargarmos los kits y subcategorias de productos y unueros
+    // descargarmos los kits y subcategorias de productos y numeros
     public function backup_kits_and_mumber_serial($date="0000-00-00 00:00:00")
     {
         $date= rawurldecode($date);
@@ -204,6 +214,7 @@ class Sincronizar extends Secure_area
         $data["location_item_kits"] = $location_item_kits;
         $data["items_subcategory"] = $items_subcategory;
         $data["additional_item_numbers"]=  $this->Additional_item_numbers->get_all($date)->result_array();
+        $data["additional_item_seriales"]=  $this->Additional_item_seriales->get_all()->result_array();
         echo json_encode($data);
     }
   /*  public function backup_additional_item_numbers()

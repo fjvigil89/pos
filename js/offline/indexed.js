@@ -125,7 +125,7 @@ async function descargar(url_api){
         throw Error(e);
     }
 }
-async function agregar_datos_a_db(obj,data,add_all=true){
+async function agregar_datos_a_db(obj, data, add_all = true){
     console.log(obj+" descargado, agrgando a la db");
     try {      
         if(add_all){
@@ -186,7 +186,8 @@ async function descargar_kits_add_db() {
         await agregar_datos_a_db(name_obj_Item_kits_items, data["item_kits_item"],add_all);
         await agregar_datos_a_db(name_obj_location_item_kits, data["location_item_kits"],add_all);
         await agregar_datos_a_db(name_obj_Items_subcategory, data["items_subcategory"],add_all);
-        await agregar_datos_a_db(name_additional_item_numbers, data["additional_item_numbers"],add_all);     
+        await agregar_datos_a_db(name_additional_item_numbers, data["additional_item_numbers"],add_all);
+        await agregar_datos_a_db(name_obj_additional_item_seriales, data["additional_item_seriales"],true);     
 
         return true;
     } catch (e) {
@@ -371,27 +372,44 @@ async function descargar_employee_and_customer() {
 }*/
 
  async function sincronizar_ventas(mostrar_dialogo=true, primero_cierra_caja_offline=false, ir_offline=false){
-    let objSale= new Sale();
-    if(mostrar_dialogo==true && primero_cierra_caja_offline==true){
+    const objSale= new Sale(),
+        objCustomer = new Customer();
+
+    if(mostrar_dialogo == true && primero_cierra_caja_offline == true)
+    {
         
         let register_open=  await objSale.get_register_log_open_offline();
-        if(register_open.length>0){            
+
+        if(register_open.length>0)
+        {            
                 location.href= SITE_URL +"/sales/closing_all";        
                 return 0;
             
         }
     }
+    const result1 = await  sincroniza_clientes();
+    
+    if(!result1)
+    {
+        dialogo("Error!","Ocurrió un error al sincronizar los nuevos clientes.","red","btn-red",function(){location.reload();});
+        return 0;
+    }
+
    var url_api=SITE_URL +"/sincronizar/synchronize_sales";   
    let sales= await objSale.get_sales_no_synchronized();
    let register_log_data=await objSale.get_register_log_no_synchronized();   
-   if(sales.length==0 && register_log_data.length==0) {       
-       if(ir_offline){
+
+   if(sales.length == 0 && register_log_data.length == 0)
+   {       
+       if(ir_offline)       
         location.href= SITE_URL +"/sales"; 
-       }
+       
        return 0;
    }
    sales = elimina_datos_no_necesarios(sales);
+
    let data={sales:sales, register:register_log_data};
+
    $.ajax({
 	type: "POST",
     url:url_api,
@@ -421,6 +439,72 @@ async function descargar_employee_and_customer() {
     }
 }); 
 
+}
+async function  sincroniza_clientes()
+{
+
+    const objCustomer = new Customer(),
+        url_api=SITE_URL +"/sincronizar/synchronize_customers",
+        customers = await objCustomer.lits_new();
+        
+    if(customers.length == 0)
+        return true;
+
+    return new Promise(function(resolve, reject) {
+        $.ajax({
+            type: "POST",
+            url:url_api,
+            data: {data:JSON.stringify(customers)},
+            cache: false,
+            async:false,
+            success: function(new_data_customers) {
+                try{
+                    new_data_customers = JSON.parse(new_data_customers);
+
+                    if(new_data_customers.succes == true)
+                    {
+                        new_data_customers = new_data_customers.data;
+
+                        db1.transaction('rw', db1.sales_offline, db1.customers, async ()=>{
+
+                            await db1.customers.where({is_new:"1"}).delete();
+                            await db1.customers.bulkPut(new_data_customers);
+                        
+                            for (const key in customers)
+                            {
+                                const new_info =  get_data_cutomer_online(new_data_customers,customers[key].account_number);
+                                await db1.sales_offline.where({ customer_id: customers[key].person_id }).modify({customer_id : new_info.person_id});
+                            }
+
+                        }).then(() => { 
+                            resolve(true);                         
+                        }).catch(err => { 
+                            //console.error(err.stack);
+                            resolve(false); 
+                        });
+                    }
+                    else
+                        resolve(false); 
+                    
+                }catch(e){
+                    resolve(false); 
+                }
+            },
+            error: function() {
+                resolve(false); 
+            }
+        });       
+    });   
+}
+function get_data_cutomer_online(customers, account_number)
+{    
+    for (const key in customers)
+    {
+        if(customers[key].account_number == account_number)
+            return customers[key];
+    }
+
+    return false;
 }
 async function cambiar_estado_register_sincronizada(resultado,mostrar_dialogo){
     let objSale= new Sale();

@@ -26,6 +26,7 @@ var objPoints= new Points();
 var objRegister_movement= new Register_movement();
 var objCajas_empleados= new Cajas_empleados();
 var array_inicial=null;
+var objAdditional_item_seriales = new Additional_item_seriales();
 
 
 async function iniciar_register(){
@@ -641,9 +642,9 @@ async function add_customer(data){
             html +='<div class="customer-search">';
             html +='<div class="input-group">';
             html +='<span class="input-group-btn">';
-            html +='<a href="javascrit:void(0)" class="btn btn-success tooltips" data-original-title="Cliente">';
+            html +='<a href="javascrit:void(0)" onclick="show_modal(\'customers/new_modal\',-1)"  class="btn btn-success tooltips" data-original-title="Cliente">';
             html +='<i class="icon-user-follow hidden-lg"></i>';
-            html +='<span class="visible-lg">Cliente </span> </a> </span>';
+            html +='<span class="visible-lg">'+lang('sales_new_customer')+'</span> </a> </span>';
             html +='<form action="#" autocomplete="off" method="post" accept-charset="utf-8" id="select_customer_form"  >';
             html +='<input type="text" name="customer" ';
             html +='id="customer" class="form-control form-inps-sale ui-autocomplete-input"';

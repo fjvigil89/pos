@@ -294,5 +294,6 @@ $lang["config_name_new_tax"]="Nombre de nuevo impuesto";
 $lang['config_currency_divisa']='Moneda'; 
 $lang['config_equivale']='Equivale a';
 $lang["config_segunda_moneda"]="Activar pago con una segunda moneda";
+$lang["config_no_print_return_policy"] ="No imprimir políticas de devolución en ventas offline";
 
 ?>

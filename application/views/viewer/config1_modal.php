@@ -37,13 +37,11 @@
                                                                 "1000"=>"1sg",
                                                                 "2000"=>"2sg",
                                                                 "3000"=>"3sg",
-                                                                "4000"=>"4sg",
                                                                 "5000"=>"5sg",
-                                                                "6000"=>"6sg",
-                                                                "7000"=>"7sg",
-                                                                "8000"=>"8sg",
-                                                                "9000"=>"9sg",
-                                                                "10000"=>"10sg"
+                                                                "6000"=>"15sg",
+                                                                "7000"=>"20sg",
+                                                                "8000"=>"30sg",
+                                                                "9000"=>"60sg",
                                                             ),
                                                             $this->config->item('interval_img_carousel') ?  $this->config->item('interval_img_carousel'): 3, 
                                                             'class="bs-select form-control"')

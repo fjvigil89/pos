@@ -1,5 +1,5 @@
 <?php $this->load->view("partial/header"); ?>
-	<?php
+<?php
 		$is_integrated_credit_sale = is_sale_integrated_cc_processing();
 		if (isset($error_message))
 		{
@@ -8,78 +8,84 @@
 		} 
 	?>
 
-	<div class="portlet light no-padding-general hidden-print">
-		<div class="portlet-body">
-			<div class="row margin-top-15 hidden-print">
-				<div class="col-lg-2 col-md-2 col-sm-6">
-					<button type="button" class="btn btn-warning btn-block hidden-print" id="print_button" onclick="print_receipt()" > 
-						<?php echo lang('sales_print'); ?> 
-					</button>
-				</div>				
-				
-				<div class="col-lg-2 col-md-2 col-sm-6">
-					<button class="btn btn-success btn-block hidden-print" id="new_sale_button_1" onclick="window.location='<?php echo site_url('sales'); ?>'" >
-						<?php echo lang('sales_sale'); ?> 
-					</button>
-				</div>
-			</div>
-		</div>
-	</div>
+<div class="portlet light no-padding-general hidden-print">
+    <div class="portlet-body">
+        <div class="row margin-top-15 hidden-print">
+            <div class="col-lg-2 col-md-2 col-sm-6">
+                <button type="button" class="btn btn-warning btn-block hidden-print" id="print_button"
+                    onclick="print_receipt()">
+                    <?php echo lang('sales_print'); ?>
+                </button>
+            </div>
+
+            <div class="col-lg-2 col-md-2 col-sm-6">
+                <button class="btn btn-success btn-block hidden-print" id="new_sale_button_1"
+                    onclick="window.location='<?php echo site_url('sales'); ?>'">
+                    <?php echo lang('sales_sale'); ?>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- cajon monedero abrir-->
-	<div class="portlet light no-padding-general">
-		<div class="portlet-body"> 
-			<div id="receipt_wrapper"  style="padding:<?php echo $this->config->item('padding_ticket')?>px !important;"	class="receipt_<?php echo $this->config->item('receipt_text_size')?>";>
-				<div id="receipt_header">
-						<div id="codigo">
-						<p>l</p>
-						</div>
-					</div>
-				
-				
-			</div>
-
-			
-		</div>
-	</div>
-
-		<script type="text/javascript">
-			$(window).bind("load", function() {
-				print_receipt();
-				window.location = '<?php echo site_url("sales"); ?>';
-			});
-		</script>
-	
-
-	<script type="text/javascript">
+<div class="portlet light no-padding-general">
+    <div class="portlet-body">
+        <div id="receipt_wrapper" style="padding:<?php echo $this->config->item('padding_ticket')?>px !important;"
+            class="receipt_<?php echo $this->config->item('receipt_text_size')?>" ;>
+            <div id="receipt_header">
+                <div id="codigo">
+                    <p>l</p>
+                </div>
+            </div>
 
 
-        function print_receipt()
- 		{
-            <?php if ($this->config->item('receipt_copies') > 1): ?>
-                var receipt_amount = <?php echo $this->config->item('receipt_copies');?> - 2;
-                var receipt = $('#receipt_wrapper').clone();
-            $('#duplicate_receipt_holder').html(receipt);
-                $("#duplicate_receipt_holder").addClass('active');
-                
-                for ( i = 0; i < receipt_amount; i++ )
-                {
-                    $('<div id="duplicate_receipt_holder_'+i+'"></div>').insertAfter( "#receipt_wrapper" );
-                    $('#duplicate_receipt_holder_'+i).html(receipt.html());
-                    $("#duplicate_receipt_holder_"+i).addClass('active');
-                }
-                
-                window.print();
-            <?php else: ?>
-                window.print();
-            <?php endif; ?>
-		}
-	</script>
-	
+        </div>
 
 
-	<!-- This is used for mobile apps to print receipt-->
-	<script type="text/print" id="print_output">
-		<?php echo $this->config->item('company'); ?>
+    </div>
+</div>
+
+<script type="text/javascript">
+Tawk_API.onLoad = function() { //ocultamos el chat
+    Tawk_API.hideWidget();
+};
+$(window).bind("load", function() {
+    print_receipt();
+    <?php 
+					if($offline)					
+						echo "window.location = '".site_url("sales/offline"). "'";
+					else
+						echo "window.location = '".site_url("sales"). "'";					
+				?>
+});
+</script>
+
+<script type="text/javascript">
+function print_receipt() {
+    <?php if ($this->config->item('receipt_copies') > 1): ?>
+    var receipt_amount = <?php echo $this->config->item('receipt_copies');?> - 2;
+    var receipt = $('#receipt_wrapper').clone();
+    $('#duplicate_receipt_holder').html(receipt);
+    $("#duplicate_receipt_holder").addClass('active');
+
+    for (i = 0; i < receipt_amount; i++) {
+        $('<div id="duplicate_receipt_holder_' + i + '"></div>').insertAfter("#receipt_wrapper");
+        $('#duplicate_receipt_holder_' + i).html(receipt.html());
+        $("#duplicate_receipt_holder_" + i).addClass('active');
+    }
+
+    window.print();
+    <?php else: ?>
+    window.print();
+    <?php endif; ?>
+}
+</script>
+
+
+
+<!-- This is used for mobile apps to print receipt-->
+<script type="text/print" id="print_output">
+    <?php echo $this->config->item('company'); ?>
 
 		<?php echo $this->Location->get_info_for_key('address'); ?>
 
@@ -188,6 +194,11 @@
 			<?php }?>
 		<?php } ?>
 	</script>
-	
 
-<?php $this->load->view("partial/footer"); ?>
+
+<?php 
+	if($offline)
+		$this->load->view("partial/footer_Offline");
+	else
+		$this->load->view("partial/footer"); 
+?>

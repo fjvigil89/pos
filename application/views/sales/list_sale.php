@@ -28,7 +28,8 @@
     <script src="<?php echo base_url();?>js/confirm/jquery-confirm.js"></script>
     <script src="<?php echo base_url();?>js/offline/helper_moneda.js" type="text/javascript"></script>
     <script src="<?php echo base_url();?>js/offline/helper_character.js" type="text/javascript"></script>
-
+    <script src="<?php echo base_url();?>js/offline/additional_item_seriales.js" type="text/javascript"></script>
+    <script src="<?php echo base_url();?>js/offline/register_movement.js" type="text/javascript"></script>
     <script src="<?php echo base_url();?>js/offline/language.js" type="text/javascript"></script>
     <script src="<?php echo base_url();?>js/offline/sale.js" type="text/javascript"></script>
     <script src="<?php echo base_url();?>js/offline/location.js" type="text/javascript"></script>
@@ -63,6 +64,8 @@
             var objCustomer = new Customer();
             var objSale = new Sale();
             var objRegister = new Register();
+            var objAdditional_item_seriales = new Additional_item_seriales();
+            var objRegister_movement = new Register_movement();
 
 	  </script> 
 
@@ -186,6 +189,12 @@
                         <a href="<?php echo site_url("sales/list_sales") ?>">
                             <i class="fa fa-list"></i>
                             <span class="title">Listar Ventas</span>
+                        </a>
+                    </li>
+                    <li class="">
+                        <a href="<?php echo site_url("customers/customers_list") ?>">
+                            <i class="fa fa-group"></i>
+                            <span class="title">Clietes</span>
                         </a>
                     </li>
                     <li>

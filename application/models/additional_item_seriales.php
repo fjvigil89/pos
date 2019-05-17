@@ -60,6 +60,15 @@ class Additional_item_seriales extends CI_Model
 		}		
 		return FALSE;
 	}
+	function get_all()
+	{
+		$table_serial = $this->db->dbprefix('additional_item_seriales');
+		$this->db->select($table_serial.".*");
+		$this->db->from('items');
+		$this->db->join('additional_item_seriales', 'additional_item_seriales.item_id = items.item_id ');
+		$this->db->where('deleted',0);
+		return  $this->db->get();
+	}
 	
 }
 ?>

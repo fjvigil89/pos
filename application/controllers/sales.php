@@ -102,6 +102,9 @@ class Sales extends Secure_area
 	function sale_seriales_modal(){
 		$this->load->view("sales/sale_seriales_modal");
 	}
+	function sale_seriales_offline_modal(){
+		echo $this->load->view("sales/sale_seriales_offline_modal",array(),true);
+	}
 	function sale_return_modal(){
 		$this->load->view("sales/sale_return_modal");
 	}
@@ -687,7 +690,7 @@ class Sales extends Secure_area
 		$item_serial = $this->input->post("item_serial");
 		$item_id = $this->input->post("item_id") ? $this->input->post("item_id"): false;
 		$items =$item_id == FALSE ?  $this->Item->get_items_by_serial($item_serial) : array();
-		if(!$item_id and sizeof($items)>1){
+		if(!$item_id and sizeof($items) > 1){
 			$data_2=array(
 				"resultado"=>true,
 				"data"=>$items
@@ -1407,7 +1410,10 @@ class Sales extends Secure_area
 	}
 
 	function open_money_drawer(){
-		$this->load->view("sales/receipt_clear_open_money_drawer");
+		$this->load->view("sales/receipt_clear_open_money_drawer",array("offline"=>false));
+	}
+	function open_money_drawer_offline(){
+		$this->load->view("sales/receipt_clear_open_money_drawer",array("offline"=>true));
 	}
 
 	function email_receipt($sale_id)

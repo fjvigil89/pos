@@ -272,7 +272,8 @@ class Config extends Secure_area
             'st_correo_of_items'=>$this->input->post('st_correo_of_items') ? $this->input->post('st_correo_of_items') : 0,
 			"categoria_gastos"=>$this->input->post('categoria_gastos')?$this->input->post('categoria_gastos'):"",
 			"monitor_product_rank"=>(int)$this->input->post('monitor_product_rank'),
-			"name_new_tax"=>$this->input->post('name_new_tax')
+			"name_new_tax"=>$this->input->post('name_new_tax'),
+			"no_print_return_policy" =>(int) $this->input->post('no_print_return_policy'),
 
  
 

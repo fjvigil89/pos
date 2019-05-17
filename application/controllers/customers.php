@@ -6,6 +6,12 @@ class Customers extends Person_controller
 	{
 		parent::__construct('customers');
 	}
+
+	function customers_list()
+	{
+		$this->load->view("partial/cache_control"); 
+		$this->load->view("customers/list");
+	}
 	
 	
 	function index($offset=0)
@@ -40,7 +46,25 @@ class Customers extends Person_controller
 		$data['total_rows'] = $config['total_rows'];
 		$this->load->view('people/manage',$data);
 	}
+	function new_modal()
+	{
+		$tiers = array();
+		$tiers_result = $this->Tier->get_all()->result_array();
+		
+		if (count($tiers_result) > 0)
+		{
+			$tiers[0] = lang('items_none');
+			foreach($tiers_result as $tier)
+			{
+				$tiers[$tier['id']]=$tier['name'];
+			}	
+		}
+		
+		$data['controller_name']=strtolower(get_class());
+		$data['tiers']=$tiers;
 
+		echo $this->load->view('customers/new_modal',$data,true);
+	}
 	function sorting()
 	{
 		$this->check_action_permission('search');
@@ -232,7 +256,7 @@ class Customers extends Person_controller
 			$success_message = '';
 			
 			//New customer
-			if($customer_id==-1)
+			if($customer_id ==- 1)
 			{
 				$success_message = lang('customers_successful_adding').' '.$person_data['first_name'].' '.$person_data['last_name'];
 				echo json_encode(array('success'=>true,'message'=> $success_message,'person_id'=>$customer_data['person_id'],'redirect_code'=>$redirect_code));

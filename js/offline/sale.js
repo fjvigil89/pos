@@ -95,7 +95,8 @@ class Sale {
         let cur_item_info=null;
         let cur_item_location_info=null;
         let item =null;
-        for(let i in items){
+        for(let i in items)
+        {
             item = items[i];
             cur_item_info = await objItem.get_info(item['item_id']);
             cur_item_location_info = await objItem_location.get_info(item['item_id']);
@@ -114,15 +115,15 @@ class Sale {
                         return false;
                     }
                 }
+
                 if (cur_item_info['is_serialized'] == 1) {
 
-                    /*if (!await objAdditional_item_seriales -> add(item['item_id'], item["serialnumber"])) {
-                        
-                        return -1;
-                    }*/
-
+                    if (!await objAdditional_item_seriales.save_one(item['item_id'], item["serialnumber"])) {
+                        return false;
+                    }
                 }
             }
+            
         }
         
         let items_kit_sale= data_sale.sales_item_kits;
@@ -426,10 +427,10 @@ class Sale {
 
                         if (item['is_serialized'] == 1) {
 
-                            /*if (!await objAdditional_item_seriales -> delete_serial(item['item_id'], item["serialnumber"])) {
+                            if (!await objAdditional_item_seriales.delete_serial(item['item_id'], item["serialnumber"])) {
                                 
                                 return -1;
-                            }*/
+                            }
 
                         }
                     }
