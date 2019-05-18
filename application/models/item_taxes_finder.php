@@ -41,6 +41,7 @@ class Item_taxes_finder extends CI_Model
 	function get_info($item_id)
 	{
 		$item_location_info = $this->Item_location->get_info($item_id);
+
 		if($item_location_info->override_default_tax)
 		{
 			return $this->Item_location_taxes->get_info($item_id);
@@ -56,7 +57,8 @@ class Item_taxes_finder extends CI_Model
 		$return = array(); 
 		
 		//Location Config
-		if(self::$definido1==null){
+		if(self::$definido1 == null)
+		{
 			self::$definido1=true;
 			self::$default_tax_1_rate1 = $this->Location->get_info_for_key('default_tax_1_rate');
 
@@ -110,7 +112,6 @@ class Item_taxes_finder extends CI_Model
 			);
 		}
 
-
 		if (self::$default_tax_4_rate1)
 		{
 			$return[] = array(
@@ -121,7 +122,6 @@ class Item_taxes_finder extends CI_Model
 				'cumulative' => 0
 			);
 		}
-
 
 		if (self::$default_tax_5_rate1)
 		{
@@ -140,7 +140,8 @@ class Item_taxes_finder extends CI_Model
 		}
 		
 		//Global Store Config
-		if(self::$definido2==null){
+		if(self::$definido2 == null)
+		{
 			self::$definido2=true;
 			self::$default_tax_1_rate2 = $this->config->item('default_tax_1_rate');
 			self::$default_tax_1_name2 = $this->config->item('default_tax_1_name');
@@ -213,8 +214,7 @@ class Item_taxes_finder extends CI_Model
 				'percent' => self::$default_tax_5_rate2,
 				'cumulative' => 0
 			);
-		}
-		
+		}	
 				
 		return $return;
 	}
