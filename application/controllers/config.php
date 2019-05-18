@@ -296,6 +296,20 @@ class Config extends Secure_area
 			$batch_save_data['company_logo'] = 0;
 			$batch_save_data['company'] = 'POS Ingeniando Web, Inc';
 		}
+		//configuracion api/
+		$msg = $_SESSION['db_name']; 
+		$encrypted_string = base64_encode($msg);
+		if ($this->input->post('renovar')==1)
+		{
+			$batch_save_data['token_api'] = $encrypted_string;
+		}
+		elseif($this->config->item('token_api'))
+		{
+		    $batch_save_data['token_api'] = $this->config->item('token_api');	
+		}
+		//fin configuracion api/
+
+		$batch_save_data['dominioapi'] = $this->input->post('dominioapi');
 		$nombres_tasa=$this->input->post("nombre_tasa");
 		$tasas_venta=$this->input->post("tasa_venta");
 		$tasas_compras=$this->input->post("tasa_compra");

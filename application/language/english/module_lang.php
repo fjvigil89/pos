@@ -1,4 +1,8 @@
 <?php
+$lang['module_orders']='Orders';
+$lang['module_orders_desc']='Add, Update, Delete and Search for clients';
+$lang['module_action_search_orders'] = 'Search Orders';
+
 $lang['module_allow_graphics_arnings_monsth']='Profit graph';
 $lang['module_allow_graphics_by_store']='Sales graphs per store';
 $lang['module_allow_open_money_box']='Allow to open cashier box, without making sales';

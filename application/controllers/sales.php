@@ -1271,7 +1271,14 @@ class Sales extends Secure_area
 				$data['customer_balance_for_sale'] = $cust_info->balance;
 			}
 		}
-
+		//pedido---------------------------------------------------------------------------------
+		if($this->sale_lib->get_order() != NULL)
+		{
+			$this->load->model('Order');
+			$order_id=$this->sale_lib->get_order();
+			$this->Order->save_sale_order($order_id,$data['sale_id_raw']);
+		}
+//---------------------------------------------------------------------------------------
 		//If we don't have any taxes, run a check for items so we don't show the price including tax on receipt
 		if (empty($data['taxes']))
 		{

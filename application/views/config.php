@@ -3258,6 +3258,79 @@
 				</div>
 			</div> 
 
+			<!-- API -->
+			<div class="col-md-12">
+				<div class="portlet light">
+					<div class="portlet-title">
+						<div class="caption">
+							<i class="icon-speech"></i>
+							<span class="caption-subject bold uppercase tooltips"  data-placement="right"  title="<?php  echo lang('config_tax_currency_info_help') ?>">
+								<a class="help_config"><?php echo "API"; ?></a>
+							</span>
+							<span class="caption-helper"><a class="option_api_info"><?php echo lang("config_more_options") ?></a></span>
+						</div>
+						<div class="tools">
+							<a id="icon_api_info" href="" class="expand" data-original-title="" title=""></a>							
+							<a href="javascript:;" class="fullscreen" data-original-title="" title=""></a>								
+						</div>
+					</div>
+					<div id="api_info" class="portlet-body form">
+
+
+								<div class="form-group">	
+									<?php echo form_label("Dominio Api Tienda Online".':', 'dominioapi',array('class'=>'col-md-3 control-label')); ?>						
+									<div class="col-md-9">
+										<?php echo form_input(array(
+											'class'=>'form-control',
+											'name'=>'dominioapi',
+											'id'=>'dominioapi',
+											'value'=>$this->config->item('dominioapi')));
+										?>								
+									</div>
+								</div>							
+
+								<div class="form-group">	
+									<?php echo form_label("Token Api".':', 'token',array('class'=>'col-md-3 control-label')); ?>						
+									<div class="col-md-9">
+										<?php echo form_input(array(
+											'class'=>'form-control',
+											'name'=>'token_api',
+											'id'=>'token_api',
+											'value'=>$this->config->item('token_api')));
+										?>								
+									</div>
+								</div>	
+
+								<div class="form-group">
+									<?php echo form_label("Renovar Token".':', 'renovar',array('class'=>'col-md-3 control-label')); ?>							
+									<div class="col-md-9">
+										<div class="md-checkbox-inline">
+											<div class="md-checkbox">		
+												<?php echo form_checkbox(array('name'=>'renovar', 'id'=>'checkbox40', 'value'=>'1', 'class'=>'md-check'));?>																		
+												<label for="checkbox40">
+												<span></span>
+												<span class="check"></span>
+												<span class="box"></span>
+												</label>
+											</div>									
+										</div>
+									</div>
+								</div>	
+								
+						<div class="form-actions right">
+							<?php echo form_button(array(
+								'name'=>'submitf',
+								'id'=>'submitf',
+								'type' => 'submit',	
+								'class'=>'btn btn-primary pull-right'),
+								lang('common_submit')); 
+							?>							   
+						</div>	
+
+					</div>
+				</div>
+			</div>
+			<!-- End API -->
 
 
 
@@ -3483,7 +3556,7 @@
 			</div>                                                
 
                         <?php ///////////////////////FIN Panel de config de Servicio Tecnico ?>
-
+					
 
 
 

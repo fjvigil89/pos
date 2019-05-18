@@ -64,7 +64,7 @@ $autoload['libraries'] = array('database','form_validation','session','user_agen
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('form','url','table','text','currency', 'html', 'download', 'base64', 'mailchimp', 'language', 'file', 'assets', 'sale','items','item_kits','breadcrumb','demo', 'spreadsheet');
+$autoload['helper'] = array('form','url','table','text','currency', 'html', 'download', 'base64', 'mailchimp', 'language', 'file', 'assets', 'sale','items','item_kits','breadcrumb','demo', 'spreadsheet','postcurl');
 
 /*
 | -------------------------------------------------------------------
