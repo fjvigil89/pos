@@ -20,7 +20,7 @@
 	<div class="clear"></div>
 
 
-	<?php echo form_open_multipart('items/save/'.(!isset($is_clone) ? $item_info->item_id : ''),array('id'=>'item_form','class'=>'form-horizontal ')); ?>
+	<?php echo form_open_multipart('items/save/'.(!isset($is_clone) ? $item_info->item_id : ''),array('id'=>'item_form','class'=>'form-horizontal')); ?>
 		<div id="form">
 			<div class="portlet box green">
 				<div class="portlet-title">
@@ -1603,6 +1603,8 @@
 
 				$("#cost_price").val(price).focus();
 
+				
+
 			});
 			$(".items_discount").click(function()
 			{
@@ -2038,8 +2040,22 @@
 
 		var submitting = false;
 
+//este metodo se ejecuta antes del Submit del form
+//en este metodo se validan todos los campos y se devuelve si es correocto o no
 		function doItemSubmit(form)
 		{
+			//esta funcion es para capturar el valor del input de costo
+			//le quita las comas de la semparacion de miles
+			//y le pasa el valor como numerico para que se pueda guardar/actualizar
+			var array = $('.money').val().split(",");			
+			var value_input_cost='';
+			$.each(array,function(i){
+				 value_input_cost+=array[i];
+			});
+			$('.money').val(value_input_cost);
+			//fin de la funcion de quitar las comas
+			
+
 			if (submitting) return;
 			submitting = true;
 			$("#form").plainOverlay('show');

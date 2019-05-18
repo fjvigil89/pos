@@ -71,11 +71,12 @@ if($this->Appconfig->es_franquicia()==true){
                 return value
                     .replace(/\D/g, "")
                     .replace(/([0-9])([0-9]{2})$/, '$1.$2')  
-                    .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, "")
+                    .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",")
                 ;
             });
         });
         //fin de separar numeros
+		
 		</script>
 		<script> var csfrData={};csfrData['<?php echo $this->security->get_csrf_token_name();?>']= '<?php echo $this->security->get_csrf_hash();?>';$(function(){$.ajaxSetup({data: csfrData});});</script>		
         <script src="js/publics.js"></script>
