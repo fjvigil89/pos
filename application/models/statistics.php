@@ -238,16 +238,29 @@ class Statistics extends CI_Model
                 $next_mes=$mes+1;
                 $start_date=$year.'-'.$mes.'-01';
                 $end_date = $next_mes>=12?(($year+1).'-01-01'):($year.'-'.$next_mes.'-01');
-                $this->db->select('ROUND(SUM(payment_amount)) as data');
+                $this->db->select('SUM(payment_amount) as data');
                 $this->db->from('sales_payments');
                 $this->db->join('sales', 'sales.sale_id=sales_payments.sale_id');
                 $this->db->join('locations', 'locations.location_id=sales.location_id');
                 $this->db->where('locations.location_id',$location["location_id"]);
-                $this->db->where('payment_date >=',$start_date);
-                $this->db->where('payment_date <',$end_date);
+                $this->db->where('sale_time >=',$start_date);
+                $this->db->where('sale_time <',$end_date);
                 
                 $result=$this->db->get()->row();
-                $total[$mes-1]=$result->data!=null?floatval($result->data):null;
+
+                $this->db->select('SUM((quantity_purchased*item_unit_price)+(quantity_purchased*item_unit_price*percent)/100) as data');
+                $this->db->from('sales');
+                $this->db->join('sales_items', 'sales_items.sale_id=sales.sale_id');
+                $this->db->join('phppos_sales_items_taxes', 'phppos_sales_items_taxes.sale_id=sales.sale_id');
+                $this->db->join('locations', 'locations.location_id=sales.location_id');
+                $this->db->where('locations.location_id',$location["location_id"]);
+                $this->db->where('sales_items.quantity_purchased <',0);
+                $this->db->where('sale_time >=',$start_date);
+                $this->db->where('sale_time <',$end_date);
+
+                $result_devolucion=$this->db->get()->row();
+
+                $total[$mes-1]=$result->data!=null?floatval(($result->data) + (($result_devolucion->data)*2)):null;
             }
             $final_result[]=array('name'=>$location["name"], 'data'=>$total);
             $total=array();
