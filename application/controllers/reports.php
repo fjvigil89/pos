@@ -4132,7 +4132,7 @@ class Reports extends Secure_area {
 	}
 	
 	function summary_store_payments($export_excel = 0, $export_pdf = 0, $offset = 0) {
-        $this->check_action_permission('view_store_payment');
+        $this->check_action_permission('view_payments');
         $this->load->model('reports/Summary_store_payments');
         $model = $this->Summary_store_payments;
         $model->setParams(array('export_excel' => $export_excel, 'export_pdf' => $export_pdf, 'offset' => $offset));
