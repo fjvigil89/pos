@@ -182,10 +182,11 @@ class Statistics extends CI_Model
         } 
     }
 
-    // ganancias por dias
-    public function get_sales_earnings_monsth_day($date='2019'){
+    // ganancias por meses
+    public function get_sales_earnings_monsth_day($date=''){
         $final_result = array();
         $x = 0;
+        $date=$date!=''?$date:date('Y');
         $start_date=$date.'-01-01';
         $end_date =$date.'-12-31';
 
@@ -222,20 +223,54 @@ class Statistics extends CI_Model
             return $final_result;
         } 
     }
+
+    // ventas por meses
+    public function get_sales_monsth($year=''){
+        $final_result = array();
+        $total=array();
+        $x = 0;
+        $year=$year!=''?$year:date('Y');
+        $start_date=$year.'-01-01';
+        $end_date =$year!=date('Y')?($year.'-12-31'):date("Y-m-d",strtotime("1 month"));
+        $locations= $this->Location->get_all_and_deleted()->result_array();
+        foreach($locations as $location){
+            for ($mes=1; $mes <= 12; $mes++) { 
+                $next_mes=$mes+1;
+                $start_date=$year.'-'.$mes.'-01';
+                $end_date = $next_mes>=12?(($year+1).'-01-01'):($year.'-'.$next_mes.'-01');
+                $this->db->select('ROUND(SUM(payment_amount)) as data');
+                $this->db->from('sales_payments');
+                $this->db->join('sales', 'sales.sale_id=sales_payments.sale_id');
+                $this->db->join('locations', 'locations.location_id=sales.location_id');
+                $this->db->where('locations.location_id',$location["location_id"]);
+                $this->db->where('payment_date >=',$start_date);
+                $this->db->where('payment_date <',$end_date);
+                
+                $result=$this->db->get()->row();
+                $total[$mes-1]=$result->data!=null?floatval($result->data):null;
+            }
+            $final_result[]=array('name'=>$location["name"], 'data'=>$total);
+            $total=array();
+        }
+
+        return $final_result;
+         
+    }
+
     public function get_mes_year($mes){
         switch($mes){
-            case 1: $mes="Ene"; break;
+            case 1: $mes="Jan"; break;
             case 2: $mes="Feb"; break;
             case 3: $mes="Mar"; break;
-            case 4: $mes="Abr"; break;
+            case 4: $mes="Apr"; break;
             case 5: $mes="May"; break;
             case 6: $mes="Jun"; break;
             case 7: $mes="Jul"; break;
-            case 8: $mes="Ago"; break;
+            case 8: $mes="Aug"; break;
             case 9: $mes="Sep"; break;
             case 10: $mes="Oct"; break;
             case 11: $mes="Nov"; break;
-            case 12: $mes="Dic"; break;
+            case 12: $mes="Dec"; break;
          }
          return $mes;
     }

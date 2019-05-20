@@ -260,7 +260,8 @@ $lang['reports_consolidated'] = 'Reporte Consolidado';
 $lang['reports_select_by_empleados']='Seleccione Empleado';
 
 //Language Graphics Home (Charts)
-$lang['reports_earnings_monsth'] = 'Reporte ganancias del año por meses';
+$lang['reports_earnings_monsth'] = 'Ganancias del año por meses'; 
+$lang['reports_sales_monsth'] = 'Ventas del año por meses';
 $lang['earnings_monsth_filter_year'] = 'Seleccione el año de los meses que desea visualizar: ';
 $lang['reports_sales_by_store_total'] = 'Ventas totales por tienda';
 $lang['quantity_module_total'] = 'Productos Escasos de inventario minimo';
