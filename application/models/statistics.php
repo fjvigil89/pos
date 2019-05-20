@@ -190,7 +190,7 @@ class Statistics extends CI_Model
         $start_date=$date.'-01-01';
         $end_date =$date.'-12-31';
 
-        $this->db->select('DATE_FORMAT(sale_time, ("%m"))  AS fecha ');
+        $this->db->select('DATE_FORMAT(sale_time, ("%m"))  AS fecha');
         $this->db->select('ROUND((item_unit_price*quantity_purchased-item_unit_price*quantity_purchased*discount_percent/100) - (item_cost_price*quantity_purchased),(0)) as profit');
         $this->db->from('sales');
         $this->db->join('sales_items', 'sales_items.sale_id=sales.sale_id');
@@ -225,50 +225,45 @@ class Statistics extends CI_Model
     }
 
     // ventas por meses
-    public function get_sales_monsth($year=''){
+    public function get_sales_monsth()
+	{		
         $final_result = array();
-        $total=array();
         $x = 0;
-        $year=$year!=''?$year:date('Y');
-        $start_date=$year.'-01-01';
-        $end_date =$year!=date('Y')?($year.'-12-31'):date("Y-m-d",strtotime("1 month"));
-        $locations= $this->Location->get_all_and_deleted()->result_array();
-        foreach($locations as $location){
-            for ($mes=1; $mes <= 12; $mes++) { 
-                $next_mes=$mes+1;
-                $start_date=$year.'-'.$mes.'-01';
-                $end_date = $next_mes>=12?(($year+1).'-01-01'):($year.'-'.$next_mes.'-01');
-                $this->db->select('SUM(payment_amount) as data');
-                $this->db->from('sales_payments');
-                $this->db->join('sales', 'sales.sale_id=sales_payments.sale_id');
-                $this->db->join('locations', 'locations.location_id=sales.location_id');
-                $this->db->where('locations.location_id',$location["location_id"]);
-                $this->db->where('sale_time >=',$start_date);
-                $this->db->where('sale_time <',$end_date);
-                
-                $result=$this->db->get()->row();
-
-                $this->db->select('SUM((quantity_purchased*item_unit_price)+(quantity_purchased*item_unit_price*percent)/100) as data');
-                $this->db->from('sales');
-                $this->db->join('sales_items', 'sales_items.sale_id=sales.sale_id');
-                $this->db->join('phppos_sales_items_taxes', 'phppos_sales_items_taxes.sale_id=sales.sale_id');
-                $this->db->join('locations', 'locations.location_id=sales.location_id');
-                $this->db->where('locations.location_id',$location["location_id"]);
-                $this->db->where('sales_items.quantity_purchased <',0);
-                $this->db->where('sale_time >=',$start_date);
-                $this->db->where('sale_time <',$end_date);
-
-                $result_devolucion=$this->db->get()->row();
-
-                $total[$mes-1]=$result->data!=null?floatval(($result->data) + (($result_devolucion->data)*2)):null;
+		$this->db->select('DATE_FORMAT(sale_date, ("%m"))  AS fecha, ROUND(sum(total)) as profit', false);
+		$this->db->from('sales_items_temp');
+		
+		$this->db->where('deleted', 0);
+		$this->db->group_by('sale_date');
+		$this->db->order_by('sale_time');
+						
+        $result= $this->db->get()->result_array();
+        if ($result != NULL) 
+        {
+            $total=0;
+            $fecha_dia=$result[0]['fecha'];
+            foreach ($result as $key => $value) 
+            {
+                $fecha_dia_new=$value['fecha'];
+                if($fecha_dia==$fecha_dia_new){
+                    $total+=$value['profit'];
+                }else{
+                    $final_result[$x]['lineColor'] = "#fbd51a";
+                    $final_result[$x]['profit'] = $total;
+                    $final_result[$x]['fecha'] = $this->get_mes_year($fecha_dia);
+                    $total=$value['profit'];
+                    $fecha_dia=$fecha_dia_new;
+                    $x++;
+                   
+                }           
             }
-            $final_result[]=array('name'=>$location["name"], 'data'=>$total);
-            $total=array();
-        }
-
-        return $final_result;
-         
-    }
+            $final_result[$x]['lineColor'] = "#fbd51a";
+            $final_result[$x]['profit'] = $total;
+            $final_result[$x]['fecha'] = $this->get_mes_year($fecha_dia);
+            return $final_result;
+        } 
+	}
+	 
+    
 
     public function get_mes_year($mes){
         switch($mes){

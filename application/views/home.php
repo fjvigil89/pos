@@ -1,6 +1,5 @@
 <?php $this->load->view("partial/header"); ?>
 	<?php $this->load->view("partial/page_toolbar"); ?>
-	<script src="<?php echo base_url();?>js/highcharts/js/highcharts.js" type="text/javascript"></script>
 		<!-- BEGIN PAGE TITLE -->
 		<div class="page-title">
 

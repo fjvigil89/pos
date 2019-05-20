@@ -13,7 +13,11 @@ class Home extends Secure_area
 	{
         
         $profit_and_loss = $this->Summary_profit_and_loss;
-        
+        $date=date('Y');
+        $start_date=$date.'-01-01';
+        $end_date =$date.'-12-31';
+        $this->Sale->create_sales_items_temp_table(array('start_date'=>$start_date, 'end_date'=>$end_date));
+        $data['sales_monsth'] = $this->Statistics->get_sales_monsth(); 
 		//check the current day
 		if ($start_date == false) 
 		{
@@ -86,7 +90,6 @@ class Home extends Secure_area
 
         
         $data['earnings_monsth_day'] = $this->Statistics->get_sales_earnings_monsth_day(); 
-        $data['sales_monsth'] = $this->Statistics->get_sales_monsth(); 
 
         //Cantidad total por modulos
 		$data['total_items']=$this->Item->count_all();
@@ -109,7 +112,12 @@ class Home extends Secure_area
         echo json_encode ($data);  
     }
     // ventas anuales por meses
-    function get_sales_monsth($start_date){
+    function get_sales_monsth($year){
+        $year=$year!=''?$year:date('Y');
+        $start_date=$year.'-01-01';
+        $end_date =$year!=date('Y')?($year.'-12-31'):date("Y-m-d",strtotime("1 month"));
+       
+        $this->Sale->create_sales_items_temp_table(array('start_date'=>$start_date, 'end_date'=>$end_date));
         $data = $this->Statistics->get_sales_monsth($start_date);
         echo json_encode ($data);  
     }
