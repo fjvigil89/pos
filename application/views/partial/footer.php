@@ -58,8 +58,26 @@ if($this->Appconfig->es_franquicia()==true){
 			   	Layout.init(); // init layout
 			   	Demo.init(); // init demo features
 			 	ComponentsDropdowns.init();
+
+
+			//metodo para hacer que los edit carguen los valores monetarios separados
+			//por miles
+				$('input.money').val(function(index, value) {
+					return value
+						.replace(/\D/g, "")
+						.replace(/([0-9])([0-9]{2})$/, '$1.$2')  
+						.replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",")
+					;
+				});
+			//fin
+			
 			});
 
+
+
+
+
+		
 		//funcion en Jquery para separar numeros en milles
 			$('input.money').keyup(function(event) {
             // skip for arrow keys
