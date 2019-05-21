@@ -127,11 +127,11 @@
 									?>
 									
 									<?php if ($this->Employee->has_module_action_permission($controller_name, 'delete', $this->Employee->get_logged_in_employee_info()->person_id)) {?>													
-										<?php echo anchor("$controller_name/delete",
+										<?php /* echo anchor("$controller_name/delete",
 											'<i title="'.lang('common_delete').'" class="fa fa-trash-o tip-bottom hidden-lg fa fa-2x"></i><span class="visible-lg">'.lang('common_delete').'</span>',
 												array('id'=>'delete', 
 												'class'=>'btn btn-danger tip-bottom disabled','title'=>lang("common_delete"))); 
-										?>
+										*/?>
 									<?php } ?>
 								</div>
 							</div>
