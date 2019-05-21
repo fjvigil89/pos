@@ -81,7 +81,7 @@ function get_price_for_item_excluding_taxes($item_id_or_line, $item_price_includ
 		
 		foreach($tax_info as $tax)
 		{
-			$total_tax_percent+=$tax['percent'];
+			$total_tax_percent += $tax['percent'];
 		}
 		
 		$return = $item_price_including_tax/(1+($total_tax_percent /100));

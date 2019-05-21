@@ -20,6 +20,7 @@ CACHE:
 <?=base_url() ?>index.php/customers/customers_list
 <?=base_url() ?>index.php/sales/open_money_drawer_offline
 <?=base_url() ?>index.php/sales/sale_seriales_offline_modal
+
 #---web------------
 https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all
 https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css

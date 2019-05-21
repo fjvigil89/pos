@@ -836,6 +836,11 @@ class Sales extends Secure_area
 		$numero_documento=$this->input->post("numero_documento");
 		$titular_cuenta=$this->input->post("titular_cuenta");
 		$tipo_documento=$this->input->post("tipo_documento");
+		$quantity_unit = $this->input->post("quantity_unit");
+		$price_presentation = $this->input->post("price_presentation");
+		
+		if($quantity_unit === "" || $price_presentation === "" )
+			$data['error']=lang('sales_error_editing_item');
 		
 		$discount = $this->input->post("discount");
                 $promo_quantity = isset($item_id) && !empty($item_id) ? $this->Sale->get_promo_quantity($item_id) : 0;
@@ -861,8 +866,8 @@ class Sales extends Secure_area
 		{
 			
 			$this->sale_lib->edit_item($line,$description,$serialnumber,$quantity,$discount,$price,$custom1_subcategory,$custom2_subcategory,
-			$numero_cuenta,$numero_documento,$titular_cuenta,$tipo_documento);
-			//$this->sale_lib->set_sale_id($this->input->post('id_credito_2'));
+			$numero_cuenta,$numero_documento,$titular_cuenta,$tipo_documento,FALSE,FALSE,FALSE,$quantity_unit,$price_presentation);
+			
 			
 		}
 		else
@@ -1285,7 +1290,9 @@ class Sales extends Secure_area
 					$item_info = $this->Item->get_info($data['cart'][$key]['item_id']);
 					if($item_info->tax_included)
 					{
-						$price_to_use = get_price_for_item_excluding_taxes($data['cart'][$key]['item_id'], $data['cart'][$key]['price']);
+						$_price = $data['cart'][$key]["has_selected_unit"] == 0 ? $data['cart'][$key]['price'] : $data['cart'][$key]['price_presentation'];
+
+						$price_to_use = get_price_for_item_excluding_taxes($data['cart'][$key]['item_id'], $_price);
 						$data['cart'][$key]['price'] = $price_to_use;
 					}
 				}
@@ -2157,6 +2164,25 @@ class Sales extends Secure_area
 		$this->sale_lib->change_price_item($line,$tier_id);
 		$this->_reload($data);
 	}
+	function view_unit_modal($line,$item_id)
+	{
+		$this->load->model("Item_unit_sell");
+		$data = array();
+
+		$data['item_info'] = $this->Item->get_info($item_id);
+		$data["unit_item"] = $this->Item_unit_sell->get_all_by_item($item_id)->result();
+		$items = $this->sale_lib->get_cart();
+		$data["name_unit"] = $items[$line]["name_unit"];
+		$data["line"] = $line;
+		$this->load->view("sales/items_modal_unit",$data);
+		
+	}
+	function edit_unit($line,$item_id, $unit_id, $type = 1)
+	{
+		// $type: quitar 0, seleccionar 1
+		$this->sale_lib-> edit_unit($line,$item_id,$unit_id, $type );
+
+	}
     function cancel_sale()
     {
 		if ($this->Location->get_info_for_key('enable_credit_card_processing'))
@@ -2488,14 +2514,13 @@ class Sales extends Secure_area
 		$this->sale_lib->copy_entire_sale($sale_id);
 		$this->sale_lib->set_change_sale_id($sale_id);
 
-		if ($this->Location->get_info_for_key('enable_credit_card_processing'))
-		{
+		if ($this->Location->get_info_for_key('enable_credit_card_processing'))		
 			$this->sale_lib->change_credit_card_payments_to_partial();
-		}
+		
 		//para casa de cambio// se guarda el saldo  se la venta antes de editar 
-		if($this->config->item('activar_casa_cambio')==true){
+		if($this->config->item('activar_casa_cambio') == true)
 			$this->sale_lib->set_total_price_transaction_previous($this->sale_lib->get_total_price_transaction());
-		}
+		
     	$this->_reload(array(), false);
 	}
 

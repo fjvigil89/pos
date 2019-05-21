@@ -153,7 +153,7 @@ $lang['items_item_id']='Item Id';
 $lang['items_model'] ='Model';	
 $lang['items_colour'] ='Color';	
 $lang['items_brand'] ='Brand';
-
+$lang["items_unit_quantity"]="Quantity of units that this product contains";
 $lang['items_expiration_date']='Expiration date';
 $lang['items_expiration_day']='Day expiration alarm';
 $lang['items_images'] = 'Image of the article';
@@ -167,5 +167,8 @@ $lang['items_reorder_level_help']='Put minimum quantity of products so that the 
 $lang['items_is_service_help']='Select if you offer a service and not a product';
 $lang['items_override_default_tax_help']='If the product has another type of tax, select and enter the corresponding tax';
 $lang["items_activate_range"]="Monitor sale range";
-
+$lang["items_price_unit_without_tax"] ="Price per unit without tax";
+$lang["items_has_sales_units"] ="This product has different output presentation";
+$lang["items_has_sales_units_help"]="If the product can be sold in different units, activate this field";
+$lang["items_presentations"]="Sales presentations";
 ?>

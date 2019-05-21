@@ -190,12 +190,16 @@
 						<th class="gift_receipt_element right_align" style="width:5%;" colspan="3"><?php echo lang('sales_total'); ?></th>
 					</tr>
 					<?php
-					foreach(array_reverse($cart, true) as $line=>$item) {?>
+					foreach(array_reverse($cart, true) as $line=>$item) {
+						$_price = $item['price'];
+						?>
 					
 						<tr <?php echo $this->config->item('activar_casa_cambio')==1 ? 'style="border-top: 1px dashed #000000;"':"";?> >
 							<td class="left_text_align" colspan="<?php echo $discount_exists ? 3 : 1 ?>;">								
 								<?php echo character_limiter(H($item['name']), $this->config->item('show_fullname_item') ? 200 : 25); ?>
-								
+								<?php if ($item['has_selected_unit'] == 1){ ?><br> 
+									<span class=""><?="> ".$item['name_unit']; ?></span>
+								<?php } ?>
 								<?php if (isset($item['size'])){ ?> 
 									<span class="hidden-print"><?php echo $item['size']; ?></span>
 								<?php } ?>
@@ -241,42 +245,47 @@
 								{
 									$tax_info = $this->Item_taxes_finder->get_info($item['item_id']);
 									$i=0;
+									$_price = ($item["has_selected_unit"] == 0 || $item["tax_included"] == 1) ? $item['price'] : $item['price_presentation'];
 									$prev_tax=array();
+									
 									foreach($tax_info as $key=>$tax)
 									{
-										$prev_tax[$item['item_id']][$i]=$tax['percent']/100;
+										$prev_tax[$item['item_id']][$i] = $tax['percent'] / 100;
 										$i++;
 									}						
 
 									if (isset($prev_tax[$item['item_id']]) && $item['name']!=lang('sales_giftcard')) 
 									{									
-										if(!$overwrite_tax){
-											$sum_tax=array_sum($prev_tax[$item['item_id']]);
-											$value_tax=$item['price']*$sum_tax;										
-											$price_with_tax=$item['price']+$value_tax;
+										if(!$overwrite_tax)
+										{
+											$sum_tax = array_sum($prev_tax[$item['item_id']]);
+											$value_tax = $_price * $sum_tax;										
+											$price_with_tax = $_price + $value_tax;
 																						
-										}else{
-											$value_tax=get_nuevo_iva($new_tax,$item['price']);
-											$price_with_tax =get_precio_con_nuevo_iva($new_tax,$item['price']);
+										}else
+										{
+											$value_tax = get_nuevo_iva($new_tax,$_price);
+											$price_with_tax = get_precio_con_nuevo_iva($new_tax, $_price);
 										}	
 									}	
-									elseif (!isset($prev_tax[$item['item_id']]) && $item['name']!=lang('sales_giftcard'))
+									elseif (!isset($prev_tax[$item['item_id']]) && $item['name'] != lang('sales_giftcard'))
 									{									
 										if(!$overwrite_tax){
 											
 											$sum_tax=0;
-											$value_tax=$item['price']*$sum_tax;										
-											$price_with_tax=$item['price']+$value_tax;
+											$value_tax = $_price * $sum_tax;										
+											$price_with_tax = $_price + $value_tax;
 											
 										}else{
-											$value_tax=get_nuevo_iva($new_tax,$item['price']);
-											$price_with_tax =get_precio_con_nuevo_iva($new_tax,$item['price']);
+											$value_tax= get_nuevo_iva($new_tax,$_price);
+											$price_with_tax = get_precio_con_nuevo_iva($new_tax,$_price);
 										}	
 									}	
 								}
 
 								if (isset($item['item_kit_id']) && $item['name']!=lang('sales_giftcard')) 
 								{
+									$_price = $item['price']; 
 									$tax_kit_info = $this->Item_kit_taxes_finder->get_info($item['item_kit_id']);
 									$i=0;									
 									foreach($tax_kit_info as $key=>$tax)
@@ -286,10 +295,11 @@
 									}
 									if (isset($prev_tax[$item['item_kit_id']]) && $item['name']!=lang('sales_giftcard')) 
 									{										
-										if(!$overwrite_tax){
-											$sum_tax=array_sum($prev_tax[$item['item_kit_id']]);
-											$value_tax=$item['price']*$sum_tax;										
-											$price_with_tax=$item['price']+$value_tax;
+										if(!$overwrite_tax)
+										{
+											$sum_tax = array_sum($prev_tax[$item['item_kit_id']]);
+											$value_tax = $item['price']*$sum_tax;										
+											$price_with_tax = $item['price']+$value_tax;
 											
 										}else{
 											$value_tax=get_nuevo_iva($new_tax,$item['price']);
@@ -298,29 +308,32 @@
 									}
 									elseif (!isset($prev_tax[$item['item_kit_id']]) && $item['name']!=lang('sales_giftcard')) 
 									{										
-										if(!$overwrite_tax){
-											$sum_tax=0;
-											$value_tax=$item['price']*$sum_tax;										
-											$price_with_tax=$item['price']+$value_tax;
+										if(!$overwrite_tax)
+										{
+											$sum_tax = 0;
+											$value_tax = $item['price'] * $sum_tax;										
+											$price_with_tax = $item['price'] + $value_tax;
 											
 										}else{
-											$value_tax=get_nuevo_iva($new_tax,$item['price']);
-											$price_with_tax =get_precio_con_nuevo_iva($new_tax,$item['price']);
+											$value_tax = get_nuevo_iva($new_tax,$item['price']);
+											$price_with_tax = get_precio_con_nuevo_iva($new_tax,$item['price']);
 										}
 									}
 								}																											
 							?>
 
 							<td class="gift_receipt_element left_text_align">
-								<?php
-									echo $this->config->item('round_value')==1 ? to_currency(round($item['price'])) :to_currency($item['price']);
-										
+								<?php								 	
+									echo $this->config->item('round_value')==1 ? to_currency(round($_price)) :to_currency($item['price']);
 								?>
 							</td>
 							
 							
 							<td class="text-center" colspan="<?php echo $discount_exists ? 1 : 2 ?>;">
-								<?php echo to_quantity($item['quantity']); ?>
+								<?php 
+									$_quantity =  $item["has_selected_unit"] == 0 ? $item['quantity'] : $item['unit_quantity'];
+
+									echo to_quantity($_quantity); ?>
 								<?php
 									if (isset($item['model'])){ 
 								 		echo ($item['unit']);} ?>
@@ -334,7 +347,10 @@
 							}	
 						 	else
 						 	{
-							    $Total=$price_with_tax*$item['quantity'];
+								//$_price = $item["has_selected_unit"] == 0 ? $item['price'] : $item['price_presentation'];
+								$_quantity =  $item["has_selected_unit"] == 0 ? $item['quantity'] : $item['unit_quantity'];
+							
+							    $Total = $price_with_tax * $_quantity;
 							} ?>
 							<td class="gift_receipt_element right_text_align" colspan="2">
 								<?php

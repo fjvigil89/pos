@@ -6,6 +6,8 @@ class Items extends Secure_area implements iData_controller
     public function __construct()
     {
         parent::__construct('items');
+        $this->load->model("Item_unit_sell");
+        
     }
 
 //change text to check line endings
@@ -217,6 +219,7 @@ class Items extends Secure_area implements iData_controller
             $data['next_item_id'] = $this->Item->get_next_id($item_id);
             $data['prev_item_id'] = $this->Item->get_prev_id($item_id);
         }
+        $data["unit_sale"]= $this->Item_unit_sell->get_all_by_item($item_id);
 
         foreach ($this->Location->get_all()->result() as $location) {
             if ($this->Employee->is_location_authenticated($location->location_id)) {
@@ -473,9 +476,23 @@ class Items extends Secure_area implements iData_controller
             'override_default_tax' => $this->input->post('override_default_tax') ? $this->input->post('override_default_tax') : 0,
             'costo_tax' => 0,
             'subcategory' => $this->input->post('subcategory') ? $this->input->post('subcategory') : 0,
-            'activate_range'=>(int) $this->input->post('activate_range')
+            'activate_range'=>(int) $this->input->post('activate_range'),
+            "has_sales_units"=>(int) $this->input->post('has_sales_units'),
+            "quantity_unit_sale" => (double) $this->input->post('quantity_unit_sale') ?  $this->input->post('quantity_unit_sale'): 1,
 
         );
+        $unit_sale =$this->input->post('unit_sale');
+
+        if($this->input->post('has_sales_units') == 1)
+        {       
+
+            if(!is_array($unit_sale) or count($unit_sale) < 1)
+            {
+                echo json_encode(array('success' => false, 'message' => "Debe creaar una unidad de salida"));
+                exit();
+            }
+        }
+        
 
         if ($this->input->post('override_default_commission')) {
             if ($this->input->post('commission_type') == 'fixed') {
@@ -612,12 +629,39 @@ class Items extends Secure_area implements iData_controller
                 if (!$this->Employee->has_module_action_permission('items','delete_serial', $this->Employee->get_logged_in_employee_info()->person_id) ) {
                     $seriales_old=$this->Additional_item_seriales->get_item_serales_unsold($item_id)->result_array();;
                     foreach ($seriales_old as $value) {
-                        $additional_item_seriales[]= $value["item_serial"];
+                        $additional_item_seriales[] = $value["item_serial"];
                     }                   
                 }
                 $this->Additional_item_seriales->save($item_id, $additional_item_seriales);
             } else {
                 $this->Additional_item_seriales->delete($item_id);
+            }
+
+            $data_unit_sale_item = array();
+            $location_id = $this->Employee->get_logged_in_employee_current_location_id();
+            if($this->input->post('has_sales_units') == 1)
+            {  
+                $canti_select = 0;
+                for ($i= 0; $i < count( $unit_sale) ; $i = $i + 5) 
+                { 
+                    $data_unit_sale_item[] =array(
+                        "id" =>$unit_sale[$i] < 1 ? null : $unit_sale[$i] ,
+                        "item_id" => $item_id,
+                        "name" =>empty($unit_sale[$i + 1]) ? "NOT DEFINED" : $unit_sale[$i + 1],                    
+                        "quatity" =>is_numeric($unit_sale[$i + 2]) ? $unit_sale[$i + 2] :1,
+                        "price" =>is_numeric($unit_sale[$i + 3] ) ? $unit_sale[$i + 3] :0,
+                        "default_select" =>$unit_sale[$i + 4],
+                        "location_id" => $location_id,
+                        "deleted" => 0
+                    );
+                    $canti_select = $canti_select + $unit_sale[$i + 4];
+                }
+                /*if($canti_select == 0)
+                    $data_unit_sale_item[0]["default_select"] = 1;*/
+
+                $this->Item_unit_sell->save( $data_unit_sale_item,$item_id);
+            
+                
             }
             if ($this->input->post('locations')) {
                 foreach ($this->input->post('locations') as $location_id => $item_location_data) {

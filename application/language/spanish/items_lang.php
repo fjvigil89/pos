@@ -212,4 +212,9 @@ $lang['items_more_name']='Nombre del campo';
 $lang['items_more_field']='Personalizar Campo';
 $lang['config_add_items']='Añadir Campo';
 $lang["items_activate_range"]="Monitorear rango de venta";
+$lang["items_has_sales_units"] ="Este producto tiene diferentes presentación de salida";
+$lang["items_has_sales_units_help"]="Si el producto puede ser vendido en diferentes unidades, active este campo";
+$lang["items_unit_quantity"]="Cantidad de unidades que contiene este producto";
+$lang["items_price_unit_without_tax"] ="Precio por unidad sin impuesto";
+$lang["items_presentations"]="Presentaciones de ventas";
 ?>
