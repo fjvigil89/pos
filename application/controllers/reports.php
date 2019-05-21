@@ -1924,7 +1924,7 @@ class Reports extends Secure_area {
     }
 
 	 function specific_supplier_store_payment($start_date, $end_date, $supplier_id, $receiving_type, $export_excel = 0,$export_pdf = 0, $offset = 0) {
-        $this->check_action_permission('view_payment');
+        $this->check_action_permission('view_payments');
         $start_date = rawurldecode($start_date);
         $end_date = rawurldecode($end_date);
 
