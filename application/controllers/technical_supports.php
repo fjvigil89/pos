@@ -66,53 +66,7 @@ class technical_supports extends Secure_area
 		$this->load->view("technical_supports/cliente/nuevo_cliente", $data);
 	}
 
-	/*public function editar_servicio()
-	{
-		$id_support = $this->input->get('id_support');
-
-		$data = [
-			'id_employee_receive' => $this->input->get('empleado'),
-			'id_employee_register' => $this->input->get('tecnico'),
-			'model' => $this->input->get('model'),
-			'custom1_support_name' => $this->input->get('custom1'),
-			'custom2_support_name' => $this->input->get('custom2'),
-			'do_have_accessory' => $this->input->get('do_have_accessory'),
-			'accessory' => $this->input->get('accessory'),
-			'damage_failure' => $this->input->get('falla'),
-			'state' => $this->input->get('state'),
-			'color' => $this->input->get('color'),
-			'type_team' => $this->input->get('equipo'),
-			'repair_cost' => $this->input->get('costo'),
-			'marca' => $this->input->get('marca'),
-			'ubi_equipo' => $this->input->get('ubi_equipo')
-		];
-
-		$result = $this->technical_support->actualizarServicioCliente($id_support, $data);
-
-		$data['controller_name'] = strtolower(get_class());
-
-		$data['servicios'] = $this->technical_support->lista_servicios($this->input->get('statusVer'));
-
-		$data["options"] = [
-
-			lang("technical_supports_recibido") => lang("technical_supports_recibido"),
-			lang("technical_supports_diagnosticado") => lang("technical_supports_diagnosticado"),
-			lang("technical_supports_aprobado") => lang("technical_supports_aprobado"),
-			lang("technical_supports_rechazado") => lang("technical_supports_rechazado"),
-			lang("technical_supports_reparado") => lang("technical_supports_reparado"),
-			lang("technical_supports_retirado") => lang("technical_supports_retirado")
-		];
-
-		$table_data = $this->technical_support->get_all();
-
-		$data['manage_table'] = get_support_manage_table($table_data, $this);
-
-		$data['mensaje_editar_servicio'] = "Actualizacion exitosa";
-
-		$this->load->View('technical_supports/manage_tabla', $data);
-
-	}
-*/
+	
 	public function mostrarResumen($id_equipo)
 	{
 		$result = $this->technical_support->get_info_equipo($id_equipo)->row();
@@ -120,52 +74,6 @@ class technical_supports extends Secure_area
 		$this->load->view("technical_supports/tecnico/index", compact("result", "abono"));
 	}
 
-	/*public function viewEditarServicios()
-	{
-		$data["id_support"] = $this->input->get('id_support');
-
-		$data['cliente_equipo'] = $this->technical_support->getClienteEquipo($data["id_support"]);
-
-		$empleados = $this->Employee->get_multiple_info_all()->result();
-		foreach ($empleados as $empleados) {
-			$emp["$empleados->person_id"] = $empleados->first_name . " " . $empleados->last_name;
-		}
-		$data['empleados'] = $emp;
-
-		$data["states"] = [
-			lang("technical_supports_recibido") => lang("technical_supports_recibido"),
-			lang("technical_supports_diagnosticado") => lang("technical_supports_diagnosticado"),
-			lang("technical_supports_aprobado") => lang("technical_supports_aprobado"),
-			lang("technical_supports_rechazado") => lang("technical_supports_rechazado"),
-			lang("technical_supports_reparado") => lang("technical_supports_reparado"),
-			lang("technical_supports_retirado") => lang("technical_supports_retirado")
-		];
-		$eServ = $data["cliente_equipo"]->type_team;
-		$serv["$eServ"] = $eServ;
-		$servicios = $this->Appconfig->get_tipo_servicios()->result();
-		foreach ($servicios as $servicios) {
-			$serv["$servicios->tservicios"] = $servicios->tservicios;
-		}
-		$data['servicios'] = $serv;
-		$efall = $data["cliente_equipo"]->damage_failure;
-		$fall["$efall"] = $efall;
-		$fallas = $this->Appconfig->get_tipo_fallas()->result();
-		foreach ($fallas as $fallas) {
-			$fall["$fallas->tfallas"] = $fallas->tfallas;
-		}
-		$data['fallas'] = $fall;
-//            $eUbica=$data["cliente_equipo"]->ubi_equipo; 
-//            $ubi["$eUbica"] = $eUbica;
-		$data['ubic'] = $this->Appconfig->get_ubica_equipos()->result();
-//            foreach ($ubicacion as $ubicacion) {
-//                    $ub["$ubicacion->ubicacion"] = $ubicacion->ubicacion;
-//            }
-//            $data['ubic'] = $ub;
-
-		$data["payment"] = $this->support_payment->get_sum_payment($data["id_support"]);
-
-		$this->load->View('technical_supports/editar/index', $data);
-	}*/
 
 	public function suggest()
 	{
@@ -175,110 +83,15 @@ class technical_supports extends Secure_area
 		echo json_encode($suggestions);
 	}
 
-	/*function view($id_support = -1)
-	{
-		$this->check_action_permission('add_update');
-		$this->load->View('technical_supports/form.php');
-	}
-	
 
 	public function getClientsInfo()
 	{
 		$data["result"] = $this->Customer->get_info($this->input->get('hc'));
 		$data["Cliente"] = $this->technical_support->hCliente($this->input->get('hc'));
 		$this->load->view("technical_supports/cliente/index", $data);
-	}*/
+	}
 
-	/*public function getClientsInfo2()
-	{
-		$this->check_action_permission('add_update');
-		$clientID = $this->input->get('hc');
-		$id_support = $this->input->get('idSupport');
-		$array_employees = array();
-		$employees = $this->Employee->get_multiple_info_all()->result();
-		foreach ($employees as $employee) {
-			$array_employees["$employee->person_id"] = $employee->person_id . " - " . $employee->first_name . " " . $employee->last_name;
-		}
-		$data["employees"] = $array_employees;
-
-
-		$data["fallas_comunes"] = array(
-			null => "Seleccione",
-			"Display partido" => "Display partido",
-			"Táctil" => "Táctil",
-			"Apagado" => "Apagado",
-			"Software" => "Software",
-			"Puerto de Carga" => "Puerto de Carga",
-			"Baño Químico" => "Baño Químico",
-			"Cambio de Táctil" => "Cambio de Táctil",
-			"Cambio de Pantalla" => "Cambio de Pantalla",
-			"Cambio de Batería" => "Cambio de Batería",
-			"Cambio de Audio" => "Cambio de Audio",
-			"Otro" => "Otro");
-
-		$data["id_customers_type"] = array(null => "Seleccione", "Pasaporte" => "Pasaporte", "Cedula" => "Cedula", "DNI" => "DNI");
-
-		$data["teams"] = array(null => "SELECCIONAR", "CELULAR" => "CELULAR", "TABLET" => "TABLET", "Ps3" => "Ps3", "Ps4" => "Ps4", "OTRO" => "OTRO");
-		$data["Id_support"] = $id_support;
-		$data["states"] = array(lang("technical_supports_recibido") => lang("technical_supports_recibido"), lang("technical_supports_diagnosticado") => lang("technical_supports_diagnosticado"),
-			lang("technical_supports_aprobado") => lang("technical_supports_aprobado"), lang("technical_supports_rechazado") => lang("technical_supports_rechazado"),
-			lang("technical_supports_reparado") => lang("technical_supports_reparado"), lang("technical_supports_retirado") => lang("technical_supports_retirado"));
-		$data["id_employee_login"] = $this->Employee->get_logged_in_employee_info()->person_id;
-
-		$data["payment"] = $this->support_payment->get_sum_payment($id_support);
-		$data["support"] = $this->technical_support->get_info_by_id($id_support, false);
-
-		//$data["customer"]=$this->Customer-> get_info($data["support"]->id_customer);
-
-		$data["customer"] = $this->Customer->get_info($clientID);
-		$data['ubiequipos'] = $this->Appconfig->get_ubica_equipos();
-		$data['tservice'] = $this->Appconfig->get_tipo_servicios();
-		$data['tfallas'] = $this->Appconfig->get_tipo_fallas();
-
-		$this->load->view("technical_supports/cliente/servicios", $data);
-
-	}*/
-
-
-	/*function view($id_support=-1){
-		$this->check_action_permission('add_update');
-		$array_employees=array();
-		$employees=$this->Employee->get_multiple_info_all()->result();
-		foreach($employees as $employee){
-			$array_employees["$employee->person_id"]=$employee->person_id." - ".$employee->first_name." ". $employee->last_name;;
-		}
-		$data["employees"]=$array_employees;
-		
 	
-		$data["fallas_comunes"]=array(
-			null=>"Seleccione",
-			"Display partido"=>"Display partido",
-			"Táctil"=>"Táctil",
-			"Apagado"=>"Apagado",
-			"Software"=>"Software",
-			"Puerto de Carga"=>"Puerto de Carga",
-			"Baño Químico"=>"Baño Químico",
-			"Cambio de Táctil"=>"Cambio de Táctil",
-			"Cambio de Pantalla"=>"Cambio de Pantalla",
-			"Cambio de Batería"=>"Cambio de Batería",
-			"Cambio de Audio"=>"Cambio de Audio",
-			"Otro"=>"Otro");
-		
-		$data["id_customers_type"]=array(null=>"Seleccione","Pasaporte"=>"Pasaporte","Cedula"=>"Cedula","DNI"=>"DNI");
-		
-		$data["teams"]=array(null=>"SELECCIONAR","CELULAR"=>"CELULAR", "TABLET"=>"TABLET","Ps3"=>"Ps3","Ps4"=>"Ps4","OTRO"=>"OTRO");
-		$data["Id_support"]=$id_support;
-		$data["states"]=array(lang("technical_supports_recibido")=>lang("technical_supports_recibido"),lang("technical_supports_diagnosticado")=>lang("technical_supports_diagnosticado"),
-		lang("technical_supports_aprobado")=>lang("technical_supports_aprobado"),lang("technical_supports_rechazado")=>lang("technical_supports_rechazado"),
-		lang("technical_supports_reparado")=>lang("technical_supports_reparado"),lang("technical_supports_retirado")=>lang("technical_supports_retirado"));
-
-		$data["payment"]=$this->support_payment->get_sum_payment($id_support);
-		$data["support"]=$this->technical_support->get_info_by_id($id_support,false);
-		
-		$data["customer"]=$this->Customer-> get_info($data["support"]->id_customer);
-		$this->load->View('technical_supports/form.php',$data);
-
-	}*/
 
 	function get_info_customer()
 	{
@@ -344,12 +157,6 @@ class technical_supports extends Secure_area
 			$data_support["spare_parts_new"] = $respuestos;
 			//$data_suppor["abonado"] = $this->support_payment->get_sum_payment($id_support);
 			$data_support["precio_total"]=$this->carrito_lib->getPrecioTotal();
-			//$data['subtotal_total']=  $this->carrito_lib->getPrecioSubtotal();
-			//$data['articulos_total']=  $this->carrito_lib->getArticulosTotal();
-			//$data['articulos_iva']= $this->carrito_lib->getIvaProductos();
-			//$data["saldo_restante"]=$data['precio_total']-$data['abonado'];	
-			//$diferencia= $precio_total-$abonado;
-			//$data['payments']= $this->carrito_lib->getPagos();
 			if ($this->input->get("ventana") == 1) {
 				$this->load->View('technical_supports/cliente/imprit_orden', $data_support);
 			} else {
@@ -379,9 +186,6 @@ class technical_supports extends Secure_area
 		}
 		$this->carrito_lib->cargar_cart($id_support);
 		$data['controller_name'] = strtolower(get_class());
-//		$data["options"]=array(null=>"",lang("technical_supports_recibido")=>lang("technical_supports_recibido"),lang("technical_supports_diagnosticado")=>lang("technical_supports_diagnosticado"),
-//			lang("technical_supports_aprobado")=>lang("technical_supports_aprobado"),lang("technical_supports_rechazado")=>lang("technical_supports_rechazado"),
-//			lang("technical_supports_reparado")=>lang("technical_supports_reparado"),lang("technical_supports_retirado")=>lang("technical_supports_retirado"));
 		$data["options"] = array(null => "", lang("technical_supports_recibido") => lang("technical_supports_recibido"), lang("technical_supports_diagnosticado") => lang("technical_supports_diagnosticado"));
 		$support = $this->technical_support->get_info_by_id($id_support, false);
 		$data["support"] = $support;
@@ -392,16 +196,10 @@ class technical_supports extends Secure_area
 		$data["result"] = $this->technical_support->get_info_equipo($id_support)->row();
 		$data["abono"] = $this->technical_support->get_info_abono_orden($id_support);
 		$data["support_id"]=$id_support;	
-		//$this->load->view('technical_supports/tecnico/reparar_inicial', $data);
-
+		
 		$this->reload_reparar($data,false,false);
 
-		//$this->load->view('technical_supports/tecnico/buscar_servicio', $data);
-	
-		//$this->_reload($data, $is_ajax);
-
-		//$this->load->View('technical_supports/repair',$data);
-
+		
 	}
 
 	function add_spare_part()
@@ -427,25 +225,7 @@ class technical_supports extends Secure_area
 		}
 		redirect("technical_supports/repair/" . $id_support . "/1");
 	}
-/*
-	function delete_spare($id)
-	{
-		$this->check_action_permission('delete');
-		if ($this->input->is_ajax_request()) {
-			echo $this->technical_support->delete_spare_part_by_id($id);
-		} else { 
-			echo false;
-		}
-	}*/
 
-	/*function _reload($data = array(), $is_ajax = 1)
-	{
-		if ($is_ajax == 1) {
-			$this->load->view("technical_supports/repair", $data);
-		} else {
-			$this->load->View('technical_supports/repair_initial', $data);
-		}
-	}*/
 
 	function rechazar($id_support)
 	{
@@ -667,132 +447,7 @@ class technical_supports extends Secure_area
 		$this->load->View('technical_supports/tecnico/buscar_servicio_asig_diag', compact("dataAcc", "idSupport", "dataSupport", "dataDiagnostico", "tiene", "dataRespServ", "inst", "elm"));
 	}
 
-	#==================CARRITO MODIFICACION DE METODO asignar_detalles_falla_tec============================
-
-	/*function asignar_detalles_falla_tec()
-	{
-		$current_location = $this->Employee->get_logged_in_employee_current_location_id();
-
-		$idSupport = $this->input->get('supprt');
-
-		$cliente_equipo = $this->technical_support->getClienteEquipo("$idSupport");
-
-		$this->carrito_lib->updateCarrito("$idSupport");
-
-		$this->carrito_lib->updateCarrito("$idSupport");
-
-		$data['precio_total'] =  $this->carrito_lib->getPrecioTotal();
-		$data['precio_subtotal'] =  $this->carrito_lib->getPrecioSubtotal();
-		$data['articulos_total'] =  $this->carrito_lib->getArticulosTotal();
-		$data['articulos_iva'] = $this->carrito_lib->getIvaProductos();
-		$data['carrito'] = $this->carrito_lib->getContenidoCarrito();
-
-		//$this->check_action_permission('add_update');
-
-		$status = "";
-		$tiene = "";
-		$dataST = "";
-		$dataRespr = "";
-		$data['instrp'] = "";
-		$data['elmrp'] = "";
-		$data['dataCond'] = "";
-		$data['t_resp'] = "";
-
-
-		if ($this->input->get('eld') != '') {
-			$this->technical_support->delete_spare_part_by_id($this->input->get('eld'), $idSupport);
-			$data['elmrp'] = "1";
-		}
-
-		if ($this->input->get('codigo') != '' and $this->input->get('respuesto') != '' and $this->input->get('cant') != '') {
-			$dataRespr = $this->input->get('respuesto');
-			$data_spare_part = array(
-				"serie" => $this->input->get('codigo'),
-				"name" => $this->input->get('respuesto'),
-				"quantity" => $this->input->get('cant'),
-				"id_support" => $idSupport
-			);
-			$this->technical_support->add_spare_part($data_spare_part);
-			$data['instrp'] = "1";
-		}
-
-		if ($this->input->get('acept') == '2') {
-			$data['dataCond'] = "REPARADO";
-			$dataST['fecha_garantia'] = $this->input->get('fecha_garantia');
-			if ($dataST['fecha_garantia'] != '') {
-				$dataST['garantia'] = 1;
-			} else {
-				$dataST['garantia'] = 0;
-			}
-			$dataST['comentarios'] = $this->input->get('comentarios');
-			$dataST['costo'] = $this->input->get('costo');
-
-
-			foreach ($this->carrito_lib->getContenidoCarrito() as $row) {
-
-				$data_carrito = [
-					'repuesto_support' => $idSupport,
-					'repuesto_item' => $row['id'],
-					'repuesto_precio' => $row['precio'],
-					'respuesto_cantidad' => $row['cantidad'],
-					'repuesto_iva_uno' => $row['iva_uno'], 
-					'repuesto_iva_dos' => $row['iva_dos'],
-					'repuesto_iva_tres' => $row['iva_tres'],
-					'repuesto_iva_cuatro' => $row['iva_cuatro'],
-					'repuesto_iva_cinco' => $row['iva_cinco'],
-					'repuesto_subtotal' => $row['subtotal'],
-					'repuesto_total' =>  $row['total'],
-					'repuesto_location' => $current_location,
-					'repuesto_persona' => $cliente_equipo->id_customer,
-					'repuesto_fecha' => 'CURRENT_DATE',
-					'created_at' => 'CURRENT_DATE',
-				];
-
-				$this->CarritoModel->guardarCarrito($data_carrito);
-
-				$this->carrito_lib->destroy("$idSupport");
-			}
-
-		}
-
-		$dataRespuesto = $this->technical_support->det_spare_part_all_by_id_order($idSupport);
-
-		if ($this->input->get('rechaz') == '2') {
-			$data['dataCond'] = "RECHAZADO";
-			$dataST['garantia'] = 0;
-			$dataST['fecha_garantia'] = '';
-			$dataST['comentarios'] = "";
-			$dataST['costo'] = "0";
-			if ($dataRespuesto->num_rows() > 0) {
-				$tiene = 1;
-			}
-		}
-		if (($this->input->get('acept') == '2' or ($this->input->get('rechaz') == '2' and $tiene == '')) and $dataRespr == '') {
-			$data['eDatos'] = $this->technical_support->get_sev_tec_cliente($idSupport, "1");
-			$this->technical_support->updat_status_serv_tecnico($idSupport, $data['dataCond'], $dataST);
-			if ($this->config->item("st_correo_of_items") == '1') {
-				$this->load->library('Email_send');
-				$para = $data['eDatos']->email;
-				$subject = "Servicio esta {$data['dataCond']}";
-				$name = "";
-				$company = $this->config->item('company');
-				$from = $this->Location->get_info_for_key('email') ? $this->Location->get_info_for_key('email') : 'no-reply@FacilPos.com';
-				$this->email_send->send_($para, $subject, $name,
-					$this->load->view("technical_supports/correo/env_correo", $data, true), $from, $company);
-			}
-		}
-		if ($this->input->get('rechaz') == '2' and $tiene == '1') {
-			$data['t_resp'] = 1;
-			$data['dataCond'] = "";
-		}
-		$data['idSupport'] = $idSupport;
-		$data['dataSupport'] = $this->technical_support->get_datos_support($idSupport);
-		$this->load->view('technical_supports/carrito/index', $data);
-		//$this->load->View('technical_supports/tecnico/ingfallatecnica', compact("dataAcc","idSupport","dataSupport","dataRespuesto","instrp","elmrp","dataCond","t_resp"));
-
-	}
-	*/
-
+	
 	function detalles_serv_tecnico()
 	{
 		$this->check_action_permission('add_update');
@@ -810,13 +465,8 @@ class technical_supports extends Secure_area
 		$respuestos=$this->carrito_lib->get_cart();
 
 		$precio_total= $this->carrito_lib->getPrecioTotal();
-		//$data['subtotal_total']=  $this->carrito_lib->getPrecioSubtotal();
-		//$data['articulos_total']=  $this->carrito_lib->getArticulosTotal();
-		//$data['articulos_iva']= $this->carrito_lib->getIvaProductos();
-		//$data["saldo_restante"]=$data['precio_total']-$data['abonado'];	
 		$diferencia= $precio_total-$abonado;
-		//$data['payments']= $this->carrito_lib->getPagos();	
-
+		
 		$this->load->View('technical_supports/cliente/orden_entrega', 
 		compact("dataServTecCliente", 
 		"dataDiagnostico", 
@@ -1092,60 +742,9 @@ class technical_supports extends Secure_area
 		$data=array("support_id"=>$support_id);
 		$this->reload_cart($data,true);
 
-		}
-
-	/*public function updateCantidadSupport()
-	{
-		$item = $this->input->get('id');
-		$cantidad = $this->input->get('cantidad');
-		$support_id = $this->input->get('idSupport');
-		$location = $this->Employee->get_logged_in_employee_current_location_id();
-
-		$this->carrito_lib->updateCantidad("$item", "$cantidad", "$location", "$support_id");
-
-		
-		$data['support_id']= $idSupport;
-		$this->reload_cart($data,true);
-	}*/
-/*
-	public function eliminarArticuloSupport()
-	{
-		$item = $this->input->get('id');
-		$uni = $this->input->get('uni');
-
-		$idSupport = $this->input->get('idSupport');
-
-		if ($this->CarritoModel->getResp("$uni")) {
-			
-			$excepcion = true;
-			$this->carrito_lib->updateCarrito($idSupport);
-			$this->carrito_lib->updatePrecioCantidad($idSupport);
-
-		} else {
-
-			$excepcion = false;
-			$data['resultado'] = $this->carrito_lib->deleteItemCarrito($item, $idSupport);
-
-		}
-
-		$data = [
-			'dataServTecCliente' => $this->technical_support->get_sev_tec_cliente($idSupport, "1"),
-			'dataRespuesto' => $this->technical_support->det_spare_part_all_by_id_order($idSupport),
-			'dataRespuestomas' => $this->technical_support->det_spare_part_all_by_id_order_respuesto($idSupport),
-			'dataServTecAbono' => $this->technical_support->get_abonos_serv_tecnico($idSupport),
-			'precio_total' =>  $this->carrito_lib->getPrecioTotal(),
-			'subtotal_total' =>  $this->carrito_lib->getPrecioSubtotal(),
-			'articulos_total' =>  $this->carrito_lib->getArticulosTotal(),
-			'articulos_iva' => $this->carrito_lib->getIvaProductos(),
-			'carrito' => $this->carrito_lib->getContenidoCarrito(),
-			'excepcion' => $excepcion,
-			'idSupport' => $idSupport,
-			'payments' => $this->carrito_lib->getPagos(),
-		];
-
-		$this->load->view("technical_supports/carrito/refrescar_carro_support", $data);
 	}
-*/
+
+	
 function _payments_cover_total($support_id)
 	{
 		$total_payments = 0;
@@ -1189,42 +788,9 @@ function _payments_cover_total($support_id)
 			$this->reload_cart($data,false);
  			return;
 		}
-		/*if ($this->input->post('payment_type') == lang('sales_store_account') && $this->sale_lib->get_customer() == -1){
-				$data['error']=lang('sales_customer_required_store_account');
-				$this->reload_cart($data,false);
-				return;
-		}	*/
-
-
-		/*if ( $payment_type == lang('sales_giftcard') )
-		{
-			if(!$this->Giftcard->exists($this->Giftcard->get_giftcard_id($this->input->post('amount_tendered'))))
-			{
-				$data['error']=lang('sales_giftcard_does_not_exist');
-				$this->reload_cart($data,false);
-				return;
-			}
-
-			$payment_type=$this->input->post('payment_type').':'.$this->input->post('amount_tendered');
-			$current_payments_with_giftcard = $this->sale_lib->get_payment_amount($payment_type);
-			$cur_giftcard_value = $this->Giftcard->get_giftcard_value( $this->input->post('amount_tendered') ) - $current_payments_with_giftcard;
-			if ( $cur_giftcard_value <= 0 && $this->sale_lib->get_total() > 0)
-			{
-				$data['error']=lang('sales_giftcard_balance_is').' '.to_currency( $this->Giftcard->get_giftcard_value( $this->input->post('amount_tendered') ) ).' !';
-				$this->reload_cart($data,false);
-				return;
-			}
-			elseif ( ( $this->Giftcard->get_giftcard_value( $this->input->post('amount_tendered') ) - $this->sale_lib->get_total() ) > 0 )
-			{
-				$data['warning']=lang('sales_giftcard_balance_is').' '.to_currency( $this->Giftcard->get_giftcard_value( $this->input->post('amount_tendered') ) - $this->sale_lib->get_total() ).' !';
-			}
-			$payment_amount=min( $this->sale_lib->get_amount_due(), $this->Giftcard->get_giftcard_value( $this->input->post('amount_tendered') ) );
-		}*/
-		//else
-		//{
-			$payment_amount=$this->input->post('amount_tendered');
-		//}
-
+		
+		$payment_amount=$this->input->post('amount_tendered');
+		
 		if( !is_numeric($payment_amount) ||  !$this->carrito_lib->add_pago( $payment_type, $payment_amount))
 		{
 			$data['error']=lang('sales_unable_to_add_payment');
@@ -1402,7 +968,7 @@ function _payments_cover_total($support_id)
 	
 		if($this->config->item('system_point') && $data['mode'] == 'sale')
 		{
-			//$this->load->library('sale_lib');
+			
 			$total=$data['total'];
 			$point_pucharse = $this->carrito_lib->get_point($this->config->item('value_point'),$total);
 			$detail = 'Id venta #';
@@ -1483,9 +1049,6 @@ function _payments_cover_total($support_id)
 			$this->load->View('technical_supports/error', array("error"=>"Error al procesar la venta"));
 		}
 	}
-	
-
-#==================FIN CARRITO======================
 
 	function ver_estadisticas_entregados()
 	{
@@ -1559,10 +1122,7 @@ function _payments_cover_total($support_id)
 		$data['comentarios'] = "";
 		$data['costo'] = "0";			
 		$resultado= $this->technical_support->updat_status_serv_tecnico($id_support, $state, $data);
-		/*$support = $this->technical_support->get_info_by_id($id_support, false);
-		$data_supporte["support"] = $support;
-		 $this->load->view("technical_supports/tecnico/entrega_garantia",$data_supporte);
-		*/
+		
 		if($resultado){
 			$this->enviar_correo($id_support);
 			$respuesta=array("respuesta"=>true,"mensaje"=>lang("technical_supports_asig_estado").$state);
@@ -1610,8 +1170,6 @@ function _payments_cover_total($support_id)
 	{
 		$data= array("support_id"=>$support_id);
 		
-	//	$this->form_validation->set_rules('discount', 'lang:reports_discount', 'integer');
-
 		$description = $this->input->post("description");
 		$serialnumber = $this->input->post("serialnumber");
 		$price = $this->input->post("price");
@@ -1623,20 +1181,8 @@ function _payments_cover_total($support_id)
 			$error=true;
 		}
 		
-		/*$discount = $this->input->post("discount");
-                $promo_quantity = isset($item_id) && !empty($item_id) ? $this->Sale->get_promo_quantity($item_id) : 0;
-                $is_item_promo = isset($item_id) && !empty($item_id) ? $this->Sale->is_item_promo($item_id) : 0;
+		$discount = 0;
 
-       */         //check if theres enough promo items for a sale.
-        /*if( ( $promo_quantity  <  $this->input->post("quantity") ) && $is_item_promo ){
-                    $data['error']=lang('sales_promo_quantity_less_than_zero');
-                }
-		*/
-		/*if ($discount !== FALSE && $this->input->post("discount") == '')
-		{*/
-			$discount = 0;
-	/*}
-		*/
 		if(!$error){			
 			$this->carrito_lib->edit_item($line,$description,$serialnumber,$quantity,$discount,$price,$custom1_subcategory,$custom2_subcategory);
 		}
@@ -1706,17 +1252,7 @@ function _payments_cover_total($support_id)
 			$array_employees["$employee->person_id"] = $employee->person_id . " - " . $employee->first_name . " " . $employee->last_name;
 		}
 		$data["employees"] = $array_employees;
-		/*
 		
-		
-		
-
-
-		$data["Id_support"] = $id_support;
-		
-		
-
-		 */
 		$data["payment"] = $this->support_payment->get_sum_payment($support_id);
 
 		$data["states"] = array(lang("technical_supports_recibido") => lang("technical_supports_recibido"), lang("technical_supports_diagnosticado") => lang("technical_supports_diagnosticado"),
@@ -1759,10 +1295,7 @@ function _payments_cover_total($support_id)
 	function set_retira(){
 		$retirado_por= $this->input->post('retirado_por');	
 		$this->carrito_lib->set_retira($retirado_por);
-	}
-	
-		
+	}	
 }
-
 
 ?>

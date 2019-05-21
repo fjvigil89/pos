@@ -2154,6 +2154,13 @@ class Reports extends Secure_area {
        
         $this->load->view("reports/specific_product_transfer", $data);
     }
+    function consolidated_shop_location_date(){
+        $data = $this->_get_common_report_data(TRUE);
+        $data['specific_input_name'] = "Consolidado";
+
+       
+        $this->load->view("reports/consolidated_shop_location_date", $data);
+    }
     function specific_transfer_location($start_date, $end_date,$store_id, $export_excel = 0, $export_pdf = 0, $offset = 0){
         $this->check_action_permission('view_transfer_location');
         $start_date = rawurldecode($start_date);
@@ -2211,6 +2218,61 @@ class Reports extends Secure_area {
         );
 
         $this->load->view("reports/tabular_details", $data);
+    }
+
+    function report_consolidated_shop($start_date, $end_date,$store_id){
+     
+        
+        $start_date = rawurldecode($start_date);
+        $end_date = rawurldecode($end_date);
+
+        $this->load->model('reports/Consolidated_shop');
+        $model = $this->Consolidated_shop;
+        $model->setParams(array('start_date' => $start_date, 'end_date' => $end_date, 'store_id' => $store_id));
+        $this->Location->get_all()->result();
+        $this->Register_movement->create_movement_items_temp_table(array('start_date' => $start_date, 'end_date' => $end_date));
+        //$this->Receiving->create_receivings_items_temp_table(array('start_date' => $start_date, 'end_date' => $end_date, 'store_id' => $store_id));
+        $config = array();
+        $config['base_url'] = site_url("reports/report_consolidated_shop/" . rawurlencode($start_date) . '/' . rawurlencode($end_date) . "/$store_id");
+        $config['total_rows'] = $model->getTotalRows();
+        $config['uri_segment'] = 8;
+        $this->pagination->initialize($config);
+
+
+        $headers = $model->getDataColumns();
+        $report_data = $model->getData();
+      
+        $summary_data = array();
+        foreach ($report_data['summary'] as $key => $row) {
+                $summary_data[$key] = array(array('data' => $row['name'], 'align' => 'left'),
+                    array('data' => to_currency($row['efectivo'], 10), 'align' => 'left'),
+                    array('data' => to_currency($row['datafono'], 10), 'align' => 'left'),
+                    array('data' => to_currency($row['otros'], 10), 'align' => 'left'),
+                    array('data' => to_currency($row['credito'], 10), 'align' => 'left'),
+                    array('data' => to_currency($row['gastos'], 10), 'align' => 'left'),
+                    array('data' => to_currency($row['traslado'], 10), 'align' => 'left'),
+                    array('data' => to_currency($row['efectivo']+$row['datafono']+$row['credito']+$row['otros']-$row['gastos']), 'align' => 'right'),
+                                
+                ); 
+        }
+        
+            
+
+
+
+        $data = array(
+            "title" => "Consolidado",
+            "subtitle" => date(get_date_format(), strtotime($start_date)) . '-' . date(get_date_format(), strtotime($end_date)),
+            "headers" => $model->getDataColumns(),
+            "summary_data" => $summary_data,
+            "total_data" => $model->getSummaryData($report_data),
+           // "overall_summary_data" => $model->getSummaryData(),
+            "export_excel" => 0,
+            "export_pdf" => 0,
+            "pagination" => $this->pagination->create_links(),
+        );
+
+        $this->load->view("reports/tabular_consolidated", $data);
     }
     function movement_balance_data_input_excel_export() {
         $data = $this->_get_common_report_data(TRUE);
@@ -2390,6 +2452,12 @@ class Reports extends Secure_area {
         $this->load->view("reports/movement_input_excel_export", $data);
     }
     
+    function specific_movement_cash_input_move_money() {
+        $data = $this->_get_common_report_data(TRUE);
+
+        $this->load->view("reports/movement_input_excel_export_move_money", $data);
+    }
+    
     function only_cash($start_date, $end_date,$register_id, $export_excel = 0, $export_pdf = 0, $offset = 0)
     {
        
@@ -2459,6 +2527,65 @@ class Reports extends Secure_area {
         
        
         $this->load->view("reports/tabular", $data);
+    }
+    function detailed_of_move_money($start_date, $end_date, $export_excel = 0, $export_pdf = 0, $offset = 0){
+        $start_date = rawurldecode($start_date);
+        $end_date = rawurldecode($end_date);
+        $this->check_action_permission('view_movement_cash');
+
+        $this->load->model('reports/specific_movement');
+        $model = $this->specific_movement;
+        $params=array('type_movement'=>2,'start_date' => $start_date, 'end_date' => $end_date, 'export_excel' => $export_excel, 'export_pdf' => $export_pdf, 'offset' => $offset);
+
+        $model->setParams(array('type_movement'=>2,'start_date' => $start_date, 'end_date' => $end_date, 'export_excel' => $export_excel, 'export_pdf' => $export_pdf, 'offset' => $offset));
+
+        $this->Register_movement->create_movement_items_temp_table(array('type_movement'=>2,'start_date' => $start_date, 'end_date' => $end_date,));
+
+        $config = array();
+        $config['base_url'] = site_url("reports/specific_movement_cash/" . rawurlencode($start_date) . '/' . rawurlencode($end_date) . "/$export_excel/$export_pdf");
+        $config['total_rows'] = $model->getTotalRows();
+        $config['per_page'] = $this->config->item('number_of_items_per_page') ? (int) $this->config->item('number_of_items_per_page') : 20;
+        $config['uri_segment'] = 8;
+
+        $this->pagination->initialize($config);
+        
+        $tabular_data = array();
+        $report_data = $model->getData();
+       
+        foreach ($report_data["details"] as $row) {
+            $data_row = array();
+            $data_row[] = array('data' => anchor('registers_movement/receipt/' . $row['register_movement_id'], '<i class="fa fa-print fa fa-2x vertical-align"></i>', array('target' => '_blank', 'class' => 'hidden-print')) ,'align' => 'left' );
+            
+             $data_row[] = array('data' => $row['register_movement_id'], 'align' => 'right');
+
+            $data_row[] = array('data' => date(get_date_format() . ' ' . get_time_format(), strtotime($row['register_date'])), 'align' => 'right');
+
+            $data_row[] = array('data' => $row['description'], 'align' => 'right');
+
+            $data_row[] = array('data' =>$row['first_name']." ".$row['last_name'], 'align' => 'right');
+            $data_row[] = array('data' => $row['entregado_a'], 'align' => 'right');
+            $data_row[] = array('data' => $row['name_caja'], 'align' => 'right');
+            $data_row[] = array('data' => $row['name_tienda'], 'align' => 'right');
+            $data_row[] = array('data' => to_currency($row['mount']), 'align' => 'right');
+            
+            $tabular_data[] = $data_row;
+        }
+        $d=$model->getSummaryData_move_money();
+        $data = array(
+            "title" => "Movimiento de traslados",
+            "subtitle" => date(get_date_format(), strtotime($start_date)) . '-' . date(get_date_format(), strtotime($end_date)),
+            "headers" => $model->getDataColumns_move_money(),
+            "data" => $tabular_data,
+            "summary_data" => $model->getSummaryData_move_money(),
+            "export_excel" => $export_excel,
+            "export_pdf" => $export_pdf,
+            "pagination" => $this->pagination->create_links(),
+        );
+
+        
+       
+        $this->load->view("reports/tabular", $data);
+        
     }
     
     function specific_movement_cash($start_date, $end_date,$register_id, $export_excel = 0, $export_pdf = 0, $offset = 0)
@@ -2567,7 +2694,7 @@ class Reports extends Secure_area {
 
         $model->setParams(array('start_date' => $start_date, 'end_date' => $end_date,"register_id"=>$register_id, 'export_excel' => $export_excel, 'export_pdf' => $export_pdf, 'offset' => $offset));
 
-        $this->Register_movement->create_movement_all_temp_table(array('start_date' => $start_date, 'end_date' => $end_date, "register_id"=>$register_id, "empleado_id" => $empleado_id));
+        $this->Register_movement->create_movement_items_temp_table(array('start_date' => $start_date, 'end_date' => $end_date, "register_id"=>$register_id, "empleado_id" => $empleado_id));
 
         $config = array();
         $config['base_url'] = site_url("reports/specific_movement_cash/" . rawurlencode($start_date) . '/' . rawurlencode($end_date) . "/$register_id/$export_excel/$export_pdf");
@@ -4005,7 +4132,7 @@ class Reports extends Secure_area {
 	}
 	
 	function summary_store_payments($export_excel = 0, $export_pdf = 0, $offset = 0) {
-        $this->check_action_permission('view_store_payment');
+        $this->check_action_permission('view_payments');
         $this->load->model('reports/Summary_store_payments');
         $model = $this->Summary_store_payments;
         $model->setParams(array('export_excel' => $export_excel, 'export_pdf' => $export_pdf, 'offset' => $offset));

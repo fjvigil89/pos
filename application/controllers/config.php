@@ -81,7 +81,7 @@ class Config extends Secure_area
 		
 	function save()
 	{
-		if(!empty($_FILES["company_logo"]) && $_FILES["company_logo"]["error"] == UPLOAD_ERR_OK && !is_on_demo_host())
+		if(!empty($_FILES["company_logo"]) && $_FILES["company_logo"]["error"] == UPLOAD_ERR_OK && !is_on_demo_host() && !$this->Employee->es_demo())
 		{
 			$allowed_extensions = array('png', 'jpg', 'jpeg', 'gif');
 			$extension = strtolower(pathinfo($_FILES["company_logo"]["name"], PATHINFO_EXTENSION));
@@ -272,7 +272,8 @@ class Config extends Secure_area
             'st_correo_of_items'=>$this->input->post('st_correo_of_items') ? $this->input->post('st_correo_of_items') : 0,
 			"categoria_gastos"=>$this->input->post('categoria_gastos')?$this->input->post('categoria_gastos'):"",
 			"monitor_product_rank"=>(int)$this->input->post('monitor_product_rank'),
-			"name_new_tax"=>$this->input->post('name_new_tax')
+			"name_new_tax"=>$this->input->post('name_new_tax'),
+			"no_print_return_policy" =>(int) $this->input->post('no_print_return_policy'),
 
  
 

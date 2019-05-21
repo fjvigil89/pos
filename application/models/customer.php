@@ -46,6 +46,85 @@ class Customer extends Person
 		return ($query->num_rows()==1);
 	}
 
+	function save_multiple_offline($curtomers)
+	{
+		
+		$this->db->query("SET autocommit=0");
+
+		$save = true;
+		$new_customer = array();
+
+		foreach ($curtomers as $customer)
+		{
+			$account_number = $customer["account_number"];
+
+			if( $this->account_number_exists($account_number))
+			{
+				$info = $this->get_info_by_account_number($account_number,true);  
+
+				$new_customer[] = $info;
+			}
+			else
+			{
+				$person_data = array(
+					'first_name'=>$customer['first_name'],
+					'last_name'=>$customer['last_name'],
+					'email'=>$customer['email'],
+					'phone_number'=>$customer['phone_number'],
+					'address_1'=>$customer['address_1'],
+					'address_2'=>"",
+					'city'=>$customer['city'],
+					'state'=>$customer['state'],
+					'zip'=>"",
+					'country'=>$customer['country'],
+					'comments'=>"",					
+				);
+
+				$customer_data=array(
+					'credit_limit'=> NULL,
+					'balance' => 0,
+					'cc_token' => NULL,
+					'cc_preview' => NULL,
+					'card_issuer' => NULL,
+					'company_name' => "",
+					'tier_id' => $customer['tier_id'] ? $customer['tier_id'] : NULL,
+					'account_number'=>$customer['account_number']=='' ? null : $customer['account_number'],
+					'taxable'=>$customer['taxable']=='' ? 0 : 1,
+				);
+				if($customer['account_number'] == ""){
+					$save= false;
+					break;
+				}	
+					
+				$result = $this->save($person_data,$customer_data,-1);
+
+				if($result)
+				{
+					$info = $this->get_info_by_account_number($account_number,true);
+					$new_customer[] = $info;					
+				}
+				else
+				{
+					$save= false;
+					break;
+				}						
+			}		
+		}
+
+		if(!$save)
+		{		
+			$this->db->query("ROLLBACK");
+			$this->db->query("SET autocommit=1");
+
+			return false;
+		}
+
+		$this->db->query("COMMIT");
+		$this->db->query("SET autocommit=1");
+
+		return $new_customer;
+	}
+
 	function account_number_exists($account_number)
 	{
 		$this->db->from('customers');	
@@ -124,7 +203,7 @@ class Customer extends Person
 			return $person_obj;
 		}
 	}
-	function get_info_by_account_number($account_number)
+	function get_info_by_account_number($account_number, $to_array = FALSE)
 	{
 		$this->db->from('customers');	
 		$this->db->join('people', 'people.person_id = customers.person_id');
@@ -133,7 +212,7 @@ class Customer extends Person
 		
 		if($query->num_rows()==1)
 		{
-			return $query->row();
+			return $to_array == FALSE ? $query->row() :  $query->row_array();
 		}
 		else
 		{
@@ -186,9 +265,9 @@ class Customer extends Person
 	/*
 	Inserts or updates a customer
 	*/
-	function save(&$person_data, &$customer_data,$customer_id=false)
+	function save(&$person_data, &$customer_data, $customer_id = false)
 	{
-		$success=false;
+		$success = false;
 		//Run these queries as a transaction, we want to make sure we do all or nothing
 		
 		if(parent::save($person_data,$customer_id))

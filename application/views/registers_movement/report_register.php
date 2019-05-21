@@ -170,7 +170,14 @@
 								<?= $currency_symbol.number_format($salida, 2, $decimal_separator, $thousand_separator); ?>
 							</td>
 						</tr>
-
+						<tr>
+							<td  width="50%">
+								<?= lang("move_money_category") ?>
+							</td> 
+							<td>
+								<?= $currency_symbol.number_format($traslado, 2, $decimal_separator, $thousand_separator); ?>
+							</td>
+						</tr>
 					</table>
 
 				</div>

@@ -104,14 +104,17 @@ $route['reports/detailed_commissions'] = "reports/specific_employee_input";
 
 $route['reports/specific_movement_cash'] = "reports/specific_movement_cash_input";
 $route['reports/only_cash'] = "reports/specific_movement_cash_input";
+$route['reports/detailed_of_move_money'] = "reports/specific_movement_cash_input_move_money";
 $route['reports/detailed_of_payment'] = "reports/detailed_of_payment_input";
 
 $route['reports/summary_movement_cash'] = "reports/movement_cash_date_input_excel_export";
+$route['reports/report_consolidated_shop'] = "reports/consolidated_shop_location_date";
 $route['reports/specific_transfer_location'] = "reports/specific_transfer_location_date_input_excel_export";
 $route['reports/depostos_salidas'] = "reports/depostos_salidas_input_excel_export";
 $route['reports/movement_balance'] = "reports/movement_balance_data_input_excel_export";
 $route['reports/detailed_sales_serial'] = "reports/custom_serial_input_excel_export";
 $route['reports/purchase_provider']="reports/purchase_provider_input";
+
 
 
 //$route['reports/detailed_report_table'] = "reports/tables_report";

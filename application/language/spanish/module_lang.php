@@ -1,4 +1,5 @@
 <?php
+$lang['module_allow_graphics_arnings_monsth']='Grafica de ganancias';
 $lang['module_allow_graphics_by_store']='Graficas ventas por tienda';
 $lang['module_allow_open_money_box']='Permitir abrir monedero de caja, sin realizar ventas';
 $lang['module_action_show_column_cash_flow']='Mostrar la columna (En caja)';
@@ -14,6 +15,9 @@ $lang['module_suppliers_desc']='Agregar, Actualizar, Borrar y Buscar proveedores
 
 $lang['module_employees']='Empleados';
 $lang['module_employees_desc']='Agregar, Actualizar, Borrar y Buscar empleados';
+
+$lang['module_viewers']='Visor';
+$lang['module_viewers_desc']='Actualizar visor';
 
 $lang['module_sales']='Ventas';
 $lang['module_sales_desc']='Procesar ventas y reintegros';
@@ -104,4 +108,6 @@ $lang["module_action_delete_serial"]="Permitir eliminar seriales";
 $lang["module_action_agregar_o_sustraer"]="Dar de baja artículos agregar o sustraer";
 $lang["module_action_mostrar_valor_cierre_caja"]="Mostrar valor de cierre de caja";
 $lang["module_action_return_item_with_invoice"]="Devolución con factura";
+$lang["module_action_add_update_img"]="Agregar, editar y eliminar imagenes";
+$lang["module_action_config_viewer"]="Configurar visor";
 ?>

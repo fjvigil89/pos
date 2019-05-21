@@ -47,6 +47,7 @@
 							<?php echo $this->config->item('website'); ?>
 						</div>
 					<?php } ?>
+					
 					<div id="sale_receipt">
 						<strong>
 						<?php      	echo 'Comprobante:  '.$movimiento_info->register_movement_id;
@@ -55,11 +56,33 @@
 			 		</div>
 					<div id="sale_time">
 						<strong>Fecha: </strong>	<?php echo date(get_date_format().' '.get_time_format(), strtotime($movimiento_info->register_date)) ?>
-					</div><br>
+					</div> 
+
+					<div id="sale_tienda">
+						<strong>
+						<?php echo $movimiento_info->name_tienda;
+				 		?>
+				 		</strong>
+			 		</div>
+					<div id="sale_employee">
+						<strong>Empleado: </strong>
+						<?php echo $movimiento_info->first_name.' '.$movimiento_info->last_name;
+				 		?>
+				 		
+			 		</div>
+					<div id="sale_caja">
+						<strong>Caja: </strong><?php echo $movimiento_info->name_caja;
+				 		?>
+					 </div><br>
+					 <?php if($movimiento_info->delivered_to){ ?>
+					 <div id="sale_entregado">
+						<strong>Entregue el dinero a: </strong><?php echo $movimiento_info->delivered_to;
+				 		?>
+					</div>
+					 <?php } ?>
 					<div id="sale_time">
 						<strong>Valor: </strong>	<?php echo $movimiento_info->type_movement==0? to_currency($movimiento_info->mount*-1) :to_currency($movimiento_info->mount)?>
-					</div>	
-					<br>
+					</div>
 					<div id="sale_time">
 					<strong>Descripción: </strong><?php echo $movimiento_info->description	?>
 					</div>	
@@ -70,7 +93,7 @@
   				</div>
 				  <br><br><br>
 				<div id="sale_company_regimen">
-					<p class="firma1" style="border-top-style: solid; border-top-color: black; margin: 2px; border-top-width: 1px">C.C/NIT.</p>
+					<p class="firma1" style="border-top-style: solid; border-top-color: black; margin: 2px; border-top-width: 1px">No de Documento.</p>
   				</div>
 			
 			</div>

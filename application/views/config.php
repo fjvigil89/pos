@@ -2965,6 +2965,31 @@
 								?>
 							</div>
 						</div>
+
+						<div class="form-group">	
+							<?php echo form_label('<a class="help_config_options  tooltips " data-placement="left" title="'.lang("config_no_print_return_policy").'">'.lang('config_no_print_return_policy').'</a>'.':', 'no_print_return_policy', array('class'=>'col-md-3 control-label')); ?> 						
+						
+							<div class="col-md-1">
+								<div class="md-checkbox-inline">
+									<div class="md-checkbox">
+										<?php echo form_checkbox(array(
+											'name'=>'no_print_return_policy',
+											'id'=>'no_print_return_policy',
+											'value'=>'1',
+											'class'=>'md-check',
+											'checked'=>$this->config->item('no_print_return_policy')));
+										?>
+										<label for="no_print_return_policy">
+										<span></span>
+										<span class="check"></span>
+										<span class="box"></span>
+										</label>
+									</div>
+								</div>
+							</div>
+							
+					    </div>
+
 						<div class="form-group">	
 							<?php echo form_label('<a class="help_config_options  tooltips " data-placement="left" title="'.lang("show_return_policy_credit_help").'">'.lang('show_return_policy_credit').'</a>'.':', 'show_return_policy_credit', array('class'=>'col-md-3 control-label')); ?> 						
 						
@@ -2989,7 +3014,7 @@
 							
 					    </div>
 						<div class="form-group">	
-							<?php echo form_label(lang('common_return_policy').':', 'return_policy',array('class'=>'col-md-3 control-label required')); ?>
+							<?php echo form_label(lang('common_return_policy')." ".lang("sales_store_account").':', 'return_policy',array('class'=>'col-md-3 control-label required')); ?>
 							<div class="col-md-9">
 								<?php echo form_textarea(array(
 									'name'=>'return_policy_credit',

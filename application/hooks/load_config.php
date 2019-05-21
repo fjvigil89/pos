@@ -16,7 +16,7 @@ function load_config()
 	if($CI->Employee->is_logged_in() /*and $CI->Employee->get_logged_in_employee_info()->language*/)
 	{
 		//	$CI->lang->switch_to($CI->Employee->get_logged_in_employee_info()->language);
-		//if($CI->config->item('language')!="english")
+		if($CI->config->item('language') != "spanish")
 			$CI->lang->switch_to($CI->config->item('language'));
 	}
 	else if ($CI->config->item('language'))
@@ -35,7 +35,9 @@ function load_config()
     
     if( $CI->Employee->is_logged_in()  )
 	{
-        if(DATABASE_VERSION > $CI->config->item('version') and $CI->router->class !== 'migrations')
+		$version_db = $CI->config->item('database_version');
+
+        if(DATABASE_VERSION != $version_db and $CI->router->class !== 'migrations')
         {
             redirect('migrations'); 
         }

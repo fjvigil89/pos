@@ -1,4 +1,9 @@
 <?php
+
+$lang['expenses']="Expenses";
+$lang['credito']="Credits";
+$lang['other_media']="Others means";
+$lang['datafonos_tarjetas']="Datafonos (Cards)";
 // movimiento caja gastos 
 $lang['deliver_to']="Deliver to";
 $lang['option_register']="Option to register";
@@ -17,7 +22,7 @@ $lang['Mantenimiento']='Maintenance';
 $lang['Limpieza']='Clean';
 $lang['otros']='Others';
 $lang['Combustible']='Fuel';
-
+$lang["sales_generate_txt"]="Generate TXT";
 $lang['sales_open_money_info']='A blank receipt is printed';
 $lang['sales_open_money_drawer']='open cashiers box ';
 $lang['error_subcategory_item']="You must select the category of all products before completing the sale";

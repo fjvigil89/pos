@@ -82,6 +82,19 @@ class Item {
         }
 
     }
+    async get_items_by_serial(serial)
+    {
+        const seriales = await  objAdditional_item_seriales.get_serailes(serial);
+        var items =[];
+        for (const key in seriales) 
+        {
+            const _serial =  seriales[key];
+            var item = await this.get_info(_serial.item_id);
+            item["item_serial"] = _serial.item_serial;
+            items.push(item);
+        }		
+		return items;		
+    }
     async get_item_id(item_number) {
         let item = await db1.items.where({item_number: item_number}).first();
 

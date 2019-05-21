@@ -338,6 +338,8 @@
 		});
 
 $("#contenedor_boton").show();
+$("#submit-button").removeAttr("disabled");
+$("#submit-button").html("Enviar");
 $('.delete_payment, .delete_tax , .delete_item').unbind( "click" ).click(function(event){
 	event.preventDefault();
 	$("#resumen-venta").load($(this).attr('href'));
@@ -356,7 +358,8 @@ function salesBeforeSubmit1(formData, jqForm, options)
 	//ajax-loader
 	//$("#ajax-loader").show();
 	$("#add_payment_button").hide();
-	$("#contenedor_boton").hide();
+	//$("#contenedor_boton").hide();
+	$("#submit-button").attr("disabled", true);
 	$("#finish_sale_button").hide();
 }
 $('#add_payment_form').ajaxForm({target: "#resumen-venta", beforeSubmit: salesBeforeSubmit1});
@@ -463,7 +466,9 @@ $('#add_payment_form').ajaxForm({target: "#resumen-venta", beforeSubmit: salesBe
 							});
 						});
 						 $("#tasa_edit").change(function(){
-								$("#contenedor_boton").hide();
+								//$("#contenedor_boton").hide();
+								$("#submit-button").attr("disabled", true);
+
 								$("#mensaje-erro").html("");
 								$.post('<?php echo site_url("changes_house/set_rate_all");?>', 
 								{
@@ -480,8 +485,9 @@ $('#add_payment_form').ajaxForm({target: "#resumen-venta", beforeSubmit: salesBe
 										}else{
 											$("#mensaje-erro").html(respuesta.message)
 										}
-										$("#contenedor_boton").show();
-
+										//$("#contenedor_boton").show();
+										$("#submit-button").removeAttr("disabled");
+										$("#submit-button").html("Enviar");
 									}
 								);
 

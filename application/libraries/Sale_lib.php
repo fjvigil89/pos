@@ -650,7 +650,13 @@ class Sale_lib
 			return to_currency_no_money($item_kit_unit_price, 10);
 		}		
 	}	
-	
+	function set_generate_txt($generate_txt)
+	{
+		$this->CI->session->set_userdata('generate_txt',$generate_txt);
+	}
+	function get_generate_txt(){
+		return $this->CI->session->userdata('generate_txt');
+	}
 	function empty_payments()
 	{
 		$this->CI->session->unset_userdata('payments');
@@ -981,7 +987,8 @@ class Sale_lib
 				"fecha_estado"=>$fecha_estado,
 				"tipo_cuenta"=>$tipo_cuenta,
 				"observaciones"=>$observaciones,
-				"celular"=>$celular
+				"celular"=>$celular,
+				"tax_included"=>$item_info->tax_included,
 				)
 			);
 		//Item already exists and is not serialized, add to quantity
@@ -1087,7 +1094,8 @@ class Sale_lib
 					'discount'=>$discount,
 					'price'=>$price!=null ? $price: $price_to_use,
 					"id_tier"=>$id_tier,
-					"has_subcategory"=>0
+					"has_subcategory"=>0,
+					"tax_included"=>$item_kit_info->tax_included,
 					)
 				);
 
@@ -1613,7 +1621,10 @@ class Sale_lib
 			$this->change_price();
 		}
 	}
-
+	 function clear_generate_txt()
+	 {
+		$this->CI->session->unset_userdata('generate_txt');
+	 }
 	function clear_mode()
 	{
 		$this->CI->session->unset_userdata('sale_mode');
@@ -1666,6 +1677,7 @@ class Sale_lib
 		$this->clear_equivalencia_divisa();
 		$this->clear_new_tax();
 		$this->clear_currency();
+		$this->clear_generate_txt();
 		
 	}
 	
@@ -2102,7 +2114,7 @@ class Sale_lib
 		$items_in_cart = 0;
 		foreach($this->get_cart() as $item)
 		{
-			$items_in_cart+=$item['quantity'];
+			$items_in_cart += $item['quantity'];
 		}
 		
 		return $items_in_cart;
@@ -2177,7 +2189,7 @@ class Sale_lib
 		foreach($this->get_cart() as $item)
 		{
 			$price_to_use = $this->_get_price_for_item_in_cart($item, $sale_id);
-			$total+=($price_to_use*$item['quantity']-$price_to_use*$item['quantity']*$item['discount']/100);
+			$total += ($price_to_use * $item['quantity'] - $price_to_use * $item['quantity']*$item['discount']/100);
 		}
 
 		foreach($this->get_taxes($sale_id) as $tax)
@@ -2194,7 +2206,7 @@ class Sale_lib
 		foreach($this->get_cart() as $item)
 		{
 			$price_to_use = $this->_get_price_for_item_in_cart($item, $sale_id);
-			$total+=($price_to_use*$item['quantity']-$price_to_use*$item['quantity']*$item['discount']/100);
+			$total += ($price_to_use * $item['quantity'] - $price_to_use * $item['quantity']*$item['discount']/100);
 		}
 
 		foreach($this->get_taxes_quotes($sale_id) as $tax)
@@ -2208,38 +2220,37 @@ class Sale_lib
 	function get_total_divisa()
 	{
 		$total = 0;
-		$opcion_sale=$this->get_opcion_sale();		
+		$opcion_sale = $this->get_opcion_sale();		
 		foreach($this->get_cart() as $item)
 		{		
-			$Total_por_item=$item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100;
-			$tasa=(($item["tasa"]!=0|| $item["tasa"]!=null)?$item["tasa"]:1);
-			if($opcion_sale=="venta"){
-				$total+=$Total_por_item/$tasa;
-			}else{
-				$total+=$Total_por_item*$tasa;
-			}			
-					
+			$Total_por_item = $item['price'] * $item['quantity'] - $item['price'] * $item['quantity'] * $item['discount'] / 100;
+			$tasa=( ($item["tasa"] != 0 || $item["tasa"] != null) ? $item["tasa"] : 1);
 			
+			if($opcion_sale=="venta")
+				$total += $Total_por_item / $tasa;
+			else
+				$total += $Total_por_item * $tasa;			
 		}
 
-		
 		$total = $this->CI->config->item('round_cash_on_sales') && $this->is_sale_cash_payment() ?  round_to_nearest_05($total) : $total;
 		return to_currency_no_money($total,4);
 	}
-	function get_utilidad(){
-		$total=0;
-		$total_divisa=$this->get_total_divisa();
-		$total_divisa_transaccion=$this->get_total_price_transaction_divisa();
-		$total = $total_divisa_transaccion-$total_divisa;
-		$opcion_sale=$this->get_opcion_sale();
-		$tasa=$this->get_rate_price();
+	function get_utilidad()
+	{
+		$total = 0;
+		$total_divisa = $this->get_total_divisa();
+		$total_divisa_transaccion = $this->get_total_price_transaction_divisa();
+		$total = $total_divisa_transaccion - $total_divisa;
+		$opcion_sale = $this->get_opcion_sale();
+		$tasa = $this->get_rate_price();
 		
-		if($opcion_sale=="venta"){
-			$total=$total*$tasa;
-		}else{
-			$total=$total/$tasa;
-		}		
+		if($opcion_sale == "venta")
+			$total=$total * $tasa;
+		else
+			$total = $total / $tasa;
+			
 		$total = $this->CI->config->item('round_cash_on_sales') && $this->is_sale_cash_payment() ?  round_to_nearest_05($total) : $total;
+		
 		return to_currency_no_money($total,4);
 
 	}
@@ -2252,11 +2263,11 @@ class Sale_lib
 		{		
 			$Total_por_item=$item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100;
 			//$tasa=(($item["tasa"]!=0|| $item["tasa"]!=null)?$item["tasa"]:1);
-			if($opcion_sale=="venta"){
+			if($opcion_sale=="venta")
 				$total+=$Total_por_item/$tasa;
-			}else{
+			else
 				$total+=$Total_por_item*$tasa;
-			}					
+								
 			
 		}	
 		$total = $this->CI->config->item('round_cash_on_sales') && $this->is_sale_cash_payment() ?  round_to_nearest_05($total) : $total;

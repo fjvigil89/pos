@@ -13,7 +13,11 @@ class Home extends Secure_area
 	{
         
         $profit_and_loss = $this->Summary_profit_and_loss;
-        
+        $date=date('Y');
+        $start_date=$date.'-01-01';
+        $end_date =$date.'-12-31';
+        $this->Sale->create_sales_items_temp_table(array('start_date'=>$start_date, 'end_date'=>$end_date));
+        $data['sales_monsth'] = $this->Statistics->get_sales_monsth(); 
 		//check the current day
 		if ($start_date == false) 
 		{
@@ -58,7 +62,8 @@ class Home extends Secure_area
     	//Obtener solo el producto y cantidad mas vendido
     	$data['best_seller_item_name'] = $data['best_sellers_items'][0]['name'];
     	$data['best_seller_item_quantity'] = $data['best_sellers_items'][0]['quantity_purchased'];
-        
+       
+        $data['items_scarce']=$this->Statistics->get_items_scarce($this->Employee->get_logged_in_employee_current_location_id());
 
     	//Variable que me trae los dias en los que se hicieron ventas
     	if($start_date!=false && $end_date!=false)
@@ -72,8 +77,9 @@ class Home extends Secure_area
     	$data['sales_by_employees'] = $this->Statistics->get_all_sale_payments_by_employeer();
     	
         //Profit and loss statistic
-        $pnl_start_date = date("Y-m-d H:i:s",strtotime("-1 month"));
+        $pnl_start_date = date("Y-m-d H:i:s",strtotime("-1 day"));
         $pnl_end_date   = date("Y-m-d H:i:s");
+        
 
         $profit_and_loss->setParams(array('start_date'=>$pnl_start_date, 'end_date'=>$pnl_end_date));
         $this->Sale->create_sales_items_temp_table(array('start_date'=>$pnl_start_date, 'end_date'=>$pnl_end_date));
@@ -82,9 +88,8 @@ class Home extends Secure_area
 
 		$this->Receiving->create_store_payments_temp_table(array('start_date' => $pnl_start_date, 'end_date' => $pnl_end_date));
 
-    
-
-        $data['profit_and_loss'] = $this->Statistics->profit_and_loss($profit_and_loss->getData()); 
+        
+        $data['earnings_monsth_day'] = $this->Statistics->get_sales_earnings_monsth_day(); 
 
         //Cantidad total por modulos
 		$data['total_items']=$this->Item->count_all();
@@ -101,6 +106,21 @@ class Home extends Secure_area
         $data = $this->Statistics->get_all_sales_by_store($start_date,$end_date);
         echo json_encode ($data);  
     }
+    // ganancias anuales por meses
+    function get_sales_earnings_monsth($start_date){
+        $data = $this->Statistics->get_sales_earnings_monsth_day($start_date);
+        echo json_encode ($data);  
+    }
+    // ventas anuales por meses
+    function get_sales_monsth($year){
+        $year=$year!=''?$year:date('Y');
+        $start_date=$year.'-01-01';
+        $end_date =$year!=date('Y')?($year.'-12-31'):date("Y-m-d",strtotime("1 month"));
+       
+        $this->Sale->create_sales_items_temp_table(array('start_date'=>$start_date, 'end_date'=>$end_date));
+        $data = $this->Statistics->get_sales_monsth($start_date);
+        echo json_encode ($data);  
+    }
     //ventas totales por tienda en dinero
     function get_sales_store_money($start_date,$end_date){
         $data = $this->Statistics->get_sales_store_money($start_date,$end_date);
@@ -109,6 +129,10 @@ class Home extends Secure_area
 
 	function logout()
 	{
+        
+		$this->load->library('viewer_lib');
+		$this->load->model('Viewer');
+		$this->viewer_lib->update_viewer_cart($this->Employee->person_id_logged_in(),array(),10,array(),0,array());
 		$this->Employee->logout();
 	}
     

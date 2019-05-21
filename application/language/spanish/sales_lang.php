@@ -1,4 +1,8 @@
 <?php
+$lang['expenses']="Gastos";
+$lang['credito']="Creditos";
+$lang['other_media']="Otros medios";
+$lang['datafonos_tarjetas']="Datafonos (Tarjetas)";
 // movimiento caja 
 $lang['deliver_to']="Entregar a";
 $lang['option_register']="Opcion a registrar";
@@ -322,5 +326,5 @@ $lang["sales_ranks"]="Rangos";
 $lang["sales_payments"]="Pagos";
 $lang["sales_opening_date"]="Fecha de apertura";
 $lang["sales_date_closing"]="Fecha de cierre";
-
+$lang["sales_generate_txt"]="Generar TXT";
 ?>

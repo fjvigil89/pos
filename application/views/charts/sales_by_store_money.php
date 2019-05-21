@@ -9,20 +9,30 @@ function set_sales_by_store_total_money(sales_total_by_store_money){
         "startDuration": 2,
         "dataProvider":sales_total_by_store_money,
         "graphs": [{
-            "balloonText": "[[category]]: <b>[[value]]</b>",
+            "balloonText": "[[name]]: <br><b>[[value]]</b>",
+            "labelText":'[[value]]',
+            "labelPosition":"bottom",
             "fillColorsField": "color",
             "fillAlphas": 1,
             "lineAlpha": 0.1,
             "type": "column",
-            "valueField": "Total"
+            "valueField": "Total",
+            
         }],
+        "numberFormatter": 
+        {
+            "precision": 1,
+            "decimalSeparator": ".",
+            "thousandsSeparator": ","
+        },
         "valueAxes": [{
-            "title": "Ventas realizadas"
+            "title": "Ventas realizadas",
+            "labelsEnabled":true
         }],
         "depth3D": 20,
         "angle": 30,
         "chartCursor": {
-            "categoryBalloonEnabled": false,
+            "categoryBalloonEnabled": true,
             "cursorAlpha": 0,
             "zoomable": false
         },    
@@ -32,17 +42,21 @@ function set_sales_by_store_total_money(sales_total_by_store_money){
             "labelRotation": 0
         },
         "export": {
-            "enabled": true
+            "enabled": false
+        },"legend": {
+            "showEntries": false
         }
     });
 
     AmCharts.checkEmptyData = function (chart) 
     {
+        //chart.labelText = '[[Total]]';
         if ( 0 == chart.dataProvider.length ) 
         {
             // set min/max on the value axis
             chart.valueAxes[0].minimum = 0;
             chart.valueAxes[0].maximum = 100;
+            
             
             // add dummy data point
             var dataPoint = {
