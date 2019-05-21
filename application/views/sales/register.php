@@ -1120,9 +1120,9 @@
 									</div>
 								</form>
 							</div>
-						</div>
-					
 				</div>
+					
+				
 				<?php } ?>
 			</div>
 
