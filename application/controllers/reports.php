@@ -2025,7 +2025,7 @@ class Reports extends Secure_area {
     }
 	
 	 function store_payment_statements($supplier_id = -1, $start_date, $end_date, $hide_items = 0, $pull_payments_by = 'payment_date', $offset = 0) {
-        $this->check_action_permission('view_store_payment');
+        $this->check_action_permission('view_payments');
         $this->load->model('reports/Store_payment_statements');
         $model = $this->Store_payment_statements;
         $model->setParams(array('supplier_id' => $supplier_id, 'offset' => $offset, 'start_date' => $start_date, 'end_date' => $end_date, 'pull_payments_by' => $pull_payments_by));
