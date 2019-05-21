@@ -1033,7 +1033,14 @@ class Sale extends CI_Model
                     "comentarios"=>$item["comentarios"],
                     "tipo_cuenta"=>$item["tipo_cuenta"],
                     "observaciones"=>$item["observaciones"],
-                    "celular"=>$item["celular"]
+                    "celular"=>$item["celular"],
+                    "has_sales_units" => $item["has_sales_units"],
+				    "name_unit"=> $item["name_unit"],
+				    "has_selected_unit" => $item["has_selected_unit"],
+				    "unit_quantity_presentation" => $item["unit_quantity_presentation"],
+				    "unit_quantity_item" => $item["unit_quantity_item"],
+				    "unit_quantity"	=> $item["unit_quantity"],	
+				    "price_presentation" => $item["price_presentation"]
 
                 );
 

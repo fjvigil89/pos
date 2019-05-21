@@ -333,8 +333,14 @@
 												</td>
 												<td  class="text text-success">
 													<a href="<?php echo isset($item['item_id']) ? site_url('home/view_item_modal/'.$item['item_id']) : site_url('home/view_item_kit_modal/'.$item['item_kit_id']) ; ?>" data-toggle="modal" data-target="#myModal" >
-														<?php echo H($item['name']); ?>
+														<?php echo H($item['name'])?> <span class="badge"><?= H($item['name_unit'])?></span>
 													</a>
+													<?php if($item['has_sales_units'] == 1):?>
+													<br><br>
+														<a href="<?php echo isset($item['item_id']) ? site_url('sales/view_unit_modal/'.$line."/".$item['item_id']) : site_url('home/view_item_kit_modal/'.$item['item_kit_id']) ; ?>" data-toggle="modal" data-target="#myModal" >
+															<i class="fa fa-plus btn btn-xs  default" > <?=lang("common_more")?></i>
+														</a>
+													<?php endif;?>
 												</td>
 
 												<?php if ($subcategory_of_items==true): 
@@ -413,22 +419,25 @@
 													{
 														$tax_info = isset($item['item_id']) ? $this->Item_taxes_finder->get_info($item['item_id']) : $this->Item_kit_taxes_finder->get_info($item['item_kit_id']);
 														$i=0;
+														$_price = $item["has_selected_unit"] == 0 ? $item['price']: $item["price_presentation"];
 
 														foreach($tax_info as $key=>$tax)
 														{
 														   	$prev_tax[$item['item_id']][$i]=$tax['percent']/100;
 															$i++;
 														}
-														if (isset($prev_tax[$item['item_id']]) && $item['name']!=lang('sales_giftcard'))
+														if (isset($prev_tax[$item['item_id']]) && $item['name'] != lang('sales_giftcard'))
 														{
 															
-															if(!$overwrite_tax){
-																$sum_tax=array_sum($prev_tax[$item['item_id']]);
-																$price_without_tax=$item['price']/(1+$sum_tax);
+															if(!$overwrite_tax)
+															{
+																$sum_tax = array_sum($prev_tax[$item['item_id']]);
+																$price_without_tax = $_price / (1+$sum_tax);
 																$value_tax=$price_without_tax*$sum_tax;
-															}else{
-																$value_tax=get_nuevo_iva($new_tax,$item['price']);
-																$price_with_tax =get_precio_con_nuevo_iva($new_tax,$item['price']);
+															}else
+															{
+																$value_tax = get_nuevo_iva($new_tax,$_price);
+																$price_with_tax = get_precio_con_nuevo_iva($new_tax,$_price);
 															}
 
 															if($show_sales_price_without_tax){ ?>
@@ -445,12 +454,12 @@
 														elseif (!isset($prev_tax[$item['item_id']]) && $item['name']!=lang('sales_giftcard'))
 														{
 															if(!$overwrite_tax){
-																$sum_tax=0;
-																$price_without_tax=$item['price']/(1+$sum_tax);
-																$value_tax=$price_without_tax*$sum_tax;
+																$sum_tax = 0;
+																$price_without_tax = $_price / (1+$sum_tax);
+																$value_tax = $price_without_tax * $sum_tax;
 															}else{
-																$value_tax=get_nuevo_iva($new_tax,$item['price']);
-																$price_with_tax =get_precio_con_nuevo_iva($new_tax,$item['price']);
+																$value_tax = get_nuevo_iva($new_tax,$_price);
+																$price_with_tax = get_precio_con_nuevo_iva($new_tax,$_price);
 															}
 															if($show_sales_price_without_tax){ ?>
 																<td class="text-center">
@@ -482,12 +491,12 @@
 														{
 															
 															if(!$overwrite_tax){
-																$sum_tax=array_sum($prev_tax[$item['item_kit_id']]);
-																$price_without_tax=$item['price']/(1+$sum_tax);
-																$value_tax=$price_without_tax*$sum_tax;
+																$sum_tax = array_sum($prev_tax[$item['item_kit_id']]);
+																$price_without_tax = $item['price']/(1+$sum_tax);
+																$value_tax = $price_without_tax*$sum_tax;
 															}else{
-																$value_tax=get_nuevo_iva($new_tax,$item['price']);
-																$price_with_tax =get_precio_con_nuevo_iva($new_tax,$item['price']);
+																$value_tax = get_nuevo_iva($new_tax,$item['price']);
+																$price_with_tax = get_precio_con_nuevo_iva($new_tax,$item['price']);
 															}
 
 															if($show_sales_price_without_tax){ ?>
@@ -534,8 +543,11 @@
 													{ ?>
 														<td class="text-center">
 															<?php
-												                echo form_open("sales/edit_item/$line", array('class' => 'line_item_form', 'autocomplete'=> 'off'));
-												                echo form_input(array('name'=>'price','value'=>$this->config->item('remove_decimals')?round(to_currency_no_money($item['price'],10)):(to_currency_no_money($item['price'],10)),'class'=>'form-control form-inps-sale input-small text-center', 'id' => 'price_'.$line));
+																echo form_open("sales/edit_item/$line", array('class' => 'line_item_form', 'autocomplete'=> 'off'));
+																if($item["has_selected_unit"] == 0)																
+																	echo form_input(array('name'=>'price','value'=>$this->config->item('remove_decimals')?round(to_currency_no_money($item['price'],10)):(to_currency_no_money($item['price'],10)),'class'=>'form-control form-inps-sale input-small text-center', 'id' => 'price_'.$line));
+																else // cuando el prdoducto se vende en diferentes presentaciones
+																	echo form_input(array('name'=>'price_presentation','value'=>to_currency_no_money($item['price_presentation'], 10),'class'=>'form-control form-inps-sale input-small text-center', 'id' => 'price_'.$line));
 												            ?>
 															</form>
 														</td>
@@ -543,8 +555,13 @@
 													else{ ?>
 														<td class="text-center">
 															<?php echo form_open("sales/edit_item/$line", array('class' => 'line_item_form', 'autocomplete'=> 'off'));
-																echo $item['price'];
-																echo form_hidden('price',$item['price']); ?>
+																if($item["has_selected_unit"] == 0)																	
+																	echo $item['price'];
+																else																		 
+																	echo $item['price_presentation'];
+
+																echo form_hidden('price',$item['price']); 
+																?>
 															</form>
 														</td>
 													<?php }
@@ -552,22 +569,33 @@
 												else
 												{
 													if($show_sales_price_without_tax)
-													{
+													{													
 														if ($this->Employee->has_module_action_permission('sales', 'edit_sale_price', $logged_in_employee_id))
 														{ ?>
 															<td class="text-center">
-																<?php
-													                echo form_open("sales/edit_item/$line", array('class' => 'line_item_form', 'autocomplete'=> 'off'));
-													                echo form_input(array('name'=>'price','value'=>to_currency_no_money($item['price'], 10),'class'=>'form-control form-inps-sale input-small text-center', 'id' => 'price_'.$line));
-													            ?>
+																<?php																	
+																	echo form_open("sales/edit_item/$line", array('class' => 'line_item_form', 'autocomplete'=> 'off'));
+																	
+																	if($item["has_selected_unit"] == 0)
+																		echo form_input(array('name'=>'price','value'=>to_currency_no_money($item['price'], 10),'class'=>'form-control form-inps-sale input-small text-center', 'id' => 'price_'.$line));
+																	
+																	else // cuando el prdoducto se vende en diferentes presentaciones
+																		echo form_input(array('name'=>'price_presentation','value'=>to_currency_no_money($item['price_presentation'], 10),'class'=>'form-control form-inps-sale input-small text-center', 'id' => 'price_'.$line));
+																    ?>
 																</form>
 															</td>
 														<?php }
 														else{ ?>
 															<td class="text-center">
 																<?php echo form_open("sales/edit_item/$line", array('class' => 'line_item_form', 'autocomplete'=> 'off'));
-																	echo $item['price'];
-																	echo form_hidden('price',$item['price']); ?>
+																	if($item["has_selected_unit"] == 0)																	
+																		echo $item['price'];
+																	else																		 
+																		echo $item['price_presentation'];
+
+																	echo form_hidden('price',$item['price']);
+																	?>
+																	
 																</form>
 															</td>
 														<?php }
@@ -576,7 +604,7 @@
 													{
 														$tax_info = isset($item['item_id']) ? $this->Item_taxes_finder->get_info($item['item_id']) : $this->Item_kit_taxes_finder->get_info($item['item_kit_id']);
 														$i=0;
-
+														$_price = $item["has_selected_unit"] == 0 ? $item['price']: $item["price_presentation"];
 														foreach($tax_info as $key=>$tax)
 														{
 														   	$prev_tax[$item['item_id']][$i]=$tax['percent']/100;
@@ -584,13 +612,15 @@
 														}
 														if (isset($prev_tax[$item['item_id']]) && $item['name']!=lang('sales_giftcard'))
 														{
-															if(!$overwrite_tax){
-																$sum_tax=array_sum($prev_tax[$item['item_id']]);
-																$value_tax=$item['price']*$sum_tax;
-																$price_with_tax=$item['price']+$value_tax;
-															}else{
-																$value_tax=get_nuevo_iva($new_tax,$item['price']);
-																$price_with_tax =get_precio_con_nuevo_iva($new_tax,$item['price']);
+															if(!$overwrite_tax)
+															{
+																$sum_tax = array_sum($prev_tax[$item['item_id']]);
+																$value_tax = $_price * $sum_tax;
+																$price_with_tax = $_price + $value_tax;
+															}else
+															{
+																$value_tax = get_nuevo_iva($new_tax,$_price);
+																$price_with_tax = get_precio_con_nuevo_iva($new_tax,$_price);
 															}
 
 															if($show_sales_price_iva){ ?>
@@ -599,19 +629,19 @@
 														    	</td>
 														    <?php } ?>
 													    	<td class="text-center">
-														    	<?php echo to_currency($price_with_tax, 2) ?>
+														    	<?php echo to_currency($price_with_tax, 2) ?>  
 														    </td>
 															<?php
 														}
 														elseif (!isset($prev_tax[$item['item_id']]) && $item['name']!=lang('sales_giftcard'))
 														{
 															if(!$overwrite_tax){
-																$sum_tax=0; 
-																$value_tax=$item['price']*$sum_tax;
-																$price_with_tax=$item['price']+$value_tax;
+																$sum_tax = 0; 
+																$value_tax = $item['price'] * $sum_tax;
+																$price_with_tax = $item['price'] + $value_tax;
 															}else{
-																$value_tax=get_nuevo_iva($new_tax,$item['price']);
-																$price_with_tax =get_precio_con_nuevo_iva($new_tax,$item['price']);
+																$value_tax = get_nuevo_iva($new_tax,$item['price']);
+																$price_with_tax = get_precio_con_nuevo_iva($new_tax,$item['price']);
 															}
 															
 
@@ -637,7 +667,7 @@
 													if (isset($item['item_kit_id']))
 													{
 														$tax_kit_info = isset($item['item_kit_id']) ? $this->Item_kit_taxes_finder->get_info($item['item_kit_id']) : $this->Item_kit_taxes_finder->get_info($item['item_id']);
-														$i=0;
+														$i = 0;
 
 														foreach($tax_kit_info as $key=>$tax)
 														{
@@ -646,15 +676,16 @@
 														}
 
 														if (isset($prev_tax[$item['item_kit_id']]) && $item['name']!=lang('sales_giftcard'))
-														{															
-
-															if(!$overwrite_tax){
-																$sum_tax=array_sum($prev_tax[$item['item_kit_id']]);
-																$value_tax=$item['price']*$sum_tax;
-																$price_with_tax=$item['price']+$value_tax;
-															}else{
-																$value_tax=get_nuevo_iva($new_tax,$item['price']);
-																$price_with_tax =get_precio_con_nuevo_iva($new_tax,$item['price']);
+														{
+															if(!$overwrite_tax)
+															{
+																$sum_tax = array_sum($prev_tax[$item['item_kit_id']]);
+																$value_tax = $item['price'] * $sum_tax;
+																$price_with_tax = $item['price']+$value_tax;
+															}else
+															{
+																$value_tax = get_nuevo_iva($new_tax,$item['price']);
+																$price_with_tax = get_precio_con_nuevo_iva($new_tax,$item['price']);
 															}
 
 															if($show_sales_price_iva){ ?>
@@ -676,15 +707,16 @@
 														}
 
 														elseif (!isset($prev_tax[$item['item_kit_id']]) && $item['name']!=lang('sales_giftcard'))
-														{
-															
-															if(!$overwrite_tax){
-																$sum_tax=0;
-																$value_tax=$item['price']*$sum_tax;
-																$price_with_tax=$item['price']+$value_tax;
-															}else{
-																$value_tax=get_nuevo_iva($new_tax,$item['price']);
-																$price_with_tax =get_precio_con_nuevo_iva($new_tax,$item['price']);
+														{															
+															if(!$overwrite_tax)
+															{
+																$sum_tax = 0;
+																$value_tax = $item['price']*$sum_tax;
+																$price_with_tax = $item['price']+$value_tax;
+															}else
+															{
+																$value_tax = get_nuevo_iva($new_tax,$item['price']);
+																$price_with_tax = get_precio_con_nuevo_iva($new_tax,$item['price']);
 															}															
 
 															if($show_sales_price_iva){ ?>
@@ -732,8 +764,16 @@
 															echo form_hidden('quantity',to_quantity($item['quantity']));
 														}
 														else
-														{
-															echo form_input(array('name'=>'quantity','type'=>'number','value'=>to_quantity($item['quantity']),'class'=>'form-control form-inps-sale text-center', 'id' => 'quantity_'.$line, 'tabindex'=>'2'));
+														{ 
+															if($item['has_selected_unit'] == 0)
+															{
+																echo form_input(array('name'=>'quantity','type'=>'number','value'=>to_quantity($item['quantity']),'class'=>'form-control form-inps-sale text-center', 'id' => 'quantity_'.$line, 'tabindex'=>'2'));
+															}
+															else{
+																
+																echo form_input(array('name'=>'quantity_unit','type'=>'number','value'=>to_quantity($item['unit_quantity']),'class'=>'form-control form-inps-sale text-center', 'id' => 'quantity_unit_'.$line, 'tabindex'=>'2'));
+																echo '<i class="btn btn-xs btn-block " style="font-size:9px">'.to_quantity($item['quantity']).'</i>';
+															}
 														}?>
 													</form>
 												</td>
@@ -759,15 +799,17 @@
 
 												<?php if ($item_info->tax_included)
 												{
-		                                       		$Total=$item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100;
+													$_quantity = $item['quantity'];
+		                                       		$Total = $item['price'] * $_quantity - $item['price'] * $_quantity * $item['discount']/100;
 		                                       	}
 		                                       	else if ($item_info->category == lang('giftcards_giftcard'))
 		                                       	{
-		                                       		$Total=$item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100;
+		                                       		$Total = $item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100;
 		                                       	}
 		                                       	else
 		                                       	{
-		                                       		$Total=$price_with_tax*$item['quantity']-$price_with_tax*$item['quantity']*$item['discount']/100;
+													$_quantity = $item["has_selected_unit"] == 0 ? $item['quantity']: $item["unit_quantity"];
+		                                       		$Total=$price_with_tax * $_quantity - $price_with_tax * $_quantity * $item['discount']/100;
 		                                       	}
 		                                       	?>
 												

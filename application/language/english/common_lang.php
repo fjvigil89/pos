@@ -1,7 +1,12 @@
 <?php
 $lang['common_common']='common';
-$lang['common_submit']='Submit';
+$lang['common_submit']='Submit'; 
 $lang['common_or']='OR';
+$lang['common_more']='More';
+$lang["common_units"]="Units";
+$lang["common_select"]="select";
+$lang["common_remove"]="Remove";
+$lang["common_default"]="Default";
 $lang['common_powered_by']='Powered By';
 $lang['common_welcome']='Welcome';
 $lang['common_logout']='Logout';

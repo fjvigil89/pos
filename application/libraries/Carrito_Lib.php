@@ -160,7 +160,15 @@ class Carrito_lib
 				"observaciones"=>null,
 				"celular"=>null,
 				'ivas' =>$ivas,
-				"precio_e_iva"=>0,				
+				"precio_e_iva"=>0,	
+				//datos de unidades de ventas
+				"has_sales_units" => $item_info->has_sales_units,
+				"name_unit"=>null,
+				"has_selected_unit" => 0,
+				"unit_quantity_presentation" => null,// cantidad de unidad de la presentacion del producto
+				"unit_quantity_item" => null,//$unit_quantity_item != null ? $unit_quantity_item : $item_info->quantity_unit_sale,// canidad maxima de unidad  que tien el producto, esto solo se modifica por inventario
+				"unit_quantity"	=>null,	//cantidad a vender de la presentacion	
+				"price_presentation" => null
 				)
 			);
 		//Item already exists and is not serialized, add to quantity

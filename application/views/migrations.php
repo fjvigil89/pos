@@ -21,6 +21,9 @@
 
 <div class="row">
     <div class="col-md-12">
+    <?php echo form_open_multipart('migrations/update',array('id'=>'migration','class'=>'form-horizontal ')); ?>
+        <input type="hidden" name="sent" value="1">
+    </form>
 
         <script>
         function go_home() {
@@ -60,10 +63,6 @@
             });
             setTimeout(countDown, 1000);
 
-            var form_data = {
-                sent: 1,
-                '<?php echo $this->security->get_csrf_token_name();?>': '<?php echo $this->security->get_csrf_hash();?>'
-            };
 
             $('.page-container').plainOverlay('show', {
                 duration: 1000
@@ -81,11 +80,12 @@
             $.ajax({
                 method: "post",
                 url: '<?php echo site_url("migrations/update");?>',
-                data: form_data,
+                data: $("#migration").serializeArray(),
                 success: function(data) {
+                    console.log(data);
                     data = JSON.parse(data);
 
-                    if (data.success == true) {
+                    if (data.success == 1) {
                         udated = true;
                         $('.page-container').plainOverlay('hide');
                         $(".update_version").text('');
@@ -94,7 +94,7 @@
                             );
                         go_home();
 
-                    } else {
+                    } else if(data.success == 0) {
                         error = true;
                         console.log(data.message);
 
