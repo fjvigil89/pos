@@ -875,6 +875,102 @@
 						<div class="clear"></div>
 					</div>
 					<!--END TAXES CONTAINER-->
+
+					<br>
+					<div class="form-group ">
+						<?php echo form_label('<a class="help_config_options  tooltips"  title="'.lang("items_has_sales_units_help").'">'.lang('items_has_sales_units').'</a>'.':', '',array('class'=>'col-md-3 control-label wide')); ?>
+						<div class="col-md-8">
+							<div class="md-checkbox-inline">
+								<div class="md-checkbox">
+									<?php echo form_checkbox(array(
+										'name'=>'has_sales_units',
+										'id'=>'has_sales_units',
+										'class' => ' delete-checkbox md-check',
+										'value'=>1,
+										'checked'=>(boolean)$item_info->has_sales_units));
+									?>
+									<label for="has_sales_units">
+									<span></span>
+									<span class="check"></span>
+									<span class="box"></span>
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class=" <?php echo $item_info->has_sales_units==1 ? "" :"hidden"?>" id="panel_has_sales_units">
+							<div class="form-group ">
+								<?php echo form_label(lang("items_unit_quantity").":", 'quantity_unit_sale',array('class'=>'col-md-3 control-label text-info wide')); ?>
+								<div class="col-md-2">
+									<div class="input-group date"   >
+										<span class="input-group-addon">
+											<i class="fa fa-calculator"></i>
+										</span>
+										<?php echo form_input(array(
+											'name'=>'quantity_unit_sale',
+											'type'=>'number',
+											'min'=>'0',
+											'id'=>'quantity_unit_sale',
+											'class'=>'form-control',
+											'value'=>(double) ($item_info->quantity_unit_sale ? $item_info->quantity_unit_sale : 1))
+										);?>
+									</div>
+								</div>
+								
+								<div class="col-md-4" id="price_unit_sale_item">								
+								</div>
+
+							</div>
+
+							<div class="form-group">
+								<?php echo form_label(lang("common_units").':', 'unit_sale',array('class'=>'col-md-3 control-label ')); ?>
+								<div class="col-md-8 ">
+									<div  class="col-md-12 ">
+									
+									</div>
+									<div  class="col-md-12 table-responsive">
+										<table id="table_has_sales_units" class="table">
+											<thead>
+												<tr>
+													<th><?=lang("items_name");?></th> 
+													<th><?=lang("items_quantity");?></th>
+													<th><?=lang("items_unit_price")." (".lang('items_without_tax').")"?></th>
+													<th><?=lang("common_default")?></th>
+													<th><?php echo lang('common_delete'); ?></th>
+												</tr>
+											</thead>
+
+											<tbody>
+												<?php if (isset($unit_sale) and $unit_sale) {  ?>
+													<?php foreach($unit_sale->result() as $unit) { ?>
+														<tr>															
+															<td>
+																<input type="hidden" name="unit_sale[]" value="<?=$unit->id?>" />
+																<input type="text" required class="form-control form-inps" size="30" name="unit_sale[]" value="<?php echo H($unit->name); ?>" />
+															</td>
+															<td><input type="number" min="1" class="quantity_unit_sale_1 form-control form-inps" size="10" name="unit_sale[]" value="<?php echo (double) $unit->quatity; ?>" /></td>
+															<td><input type="number" min="0" class="form-control form-inps" size="15" name="unit_sale[]" value="<?php echo (double) $unit->price; ?>" /></td>
+															<td>
+																<input type="radio" name="default_select" onclick="select_radio(this)" <?=($unit->default_select == 1 ? "checked" :"")?>  value="1" />
+																<input type="hidden" class="default_select" name="unit_sale[]" value="<?=$unit->default_select?>" />
+															</td>
+															<td><a class="btn "  onclick="delete_unit_sale_item(this)" href="javascript:void(0);"><?php echo lang('common_delete'); ?></a></td>
+														</tr>
+													<?php  } ?>
+												<?php } ?>
+											</tbody>
+										</table>
+									</div>
+									<a href="javascript:void(0);" id="add_unit_sale" 
+									class="btn btn-circle default btn-xs">Añadir unidad</a>
+									<br/><br/>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					
 				</div>
 			</div>
 
@@ -1536,6 +1632,9 @@
 			toastr.error("Solo se permite un máximo de "+cantidad+" subcategoría por producto ", <?php echo json_encode(lang('common_error')); ?>);
 		}
 	}
+	
+								
+	
 		$( '#override_default_tax' ).change(function() {
 		  var $input = $( this );
 		  $( '.prueba' ).html(
@@ -1574,20 +1673,21 @@
 		//validation and submit handling
 		$(document).ready(function()
 		{
-			$('form').on('keyup keypress', function(e) {
-  var keyCode = e.keyCode || e.which;
-  if (keyCode === 13) { 
-    e.preventDefault();
-    return false;
-  }
-});
+			calcule_price_unit();
+					$('form').on('keyup keypress', function(e) {
+			var keyCode = e.keyCode || e.which;
+			if (keyCode === 13) { 
+				e.preventDefault();
+				return false;
+			}
+		});
 				// subcategoria_ocultar"
 				$('#subcategory').click(function() {
 				if (!$(this).is(':checked')) {
-					$('.subcategory_hide').hide();
+					$('.subcategory_hide').hide(600);
 
 				}else{
-					$(".subcategory_hide").show();
+					$(".subcategory_hide").show(600);
 				}
 			});
 			//
@@ -1669,6 +1769,8 @@
 			{
 				$(this).parent().parent().remove();
 			});
+			
+			
 			$("#add_addtional_item_number").click(function()
 			{
 				$("#additional_item_numbers tbody").append('<tr><td><input type="text" class="form-control form-inps" size="40" name="additional_item_numbers[]" value="" /></td><td>&nbsp;</td></tr>');
@@ -1676,6 +1778,35 @@
 			$("#add_addtional_item_serial").click(function()
 			{
 				$("#additional_item_seriales tbody").append('<tr><td><input type="text" class="form-control form-inps" size="40" name="additional_item_seriales[]" value="" /></td><td>&nbsp;</td></tr>');
+			});
+			$("#add_unit_sale").click(function()
+			{
+				$("#table_has_sales_units tbody").append(`
+				<tr>
+					<td>
+						<input type="hidden" name="unit_sale[]" value="-1" />
+						<input type="text" required class="form-control form-inps" size="30" name="unit_sale[]" value="" />
+					</td>
+					<td>
+						<input type="number" min="0" class="form-control form-inps quantity_unit_sale_1" size="40" name="unit_sale[]" value="1" />
+					</td>
+					<td>
+						<input type="number" min="0" class="form-control form-inps" size="40" name="unit_sale[]" value="0" />
+					</td>
+					<td>
+						<input type="radio" name="default_select" onclick="select_radio(this)" value="1" />
+						<input type="hidden" class="default_select" name="unit_sale[]" value="0" />					
+					</td>
+					<td><a class="btn " onclick="delete_unit_sale_item(this)" href="javascript:void(0);"><?php echo lang('common_delete'); ?></a></td>
+				</tr>`);
+				calcule_price_unit();		
+			});
+			
+			$('#quantity_unit_sale' ).change(function() {			
+				calcule_price_unit();	
+			});
+			$('#unit_price' ).change(function() {			
+				calcule_price_unit();				
 			});
 
 			$("#add_addtional_suppliers").click(function()
@@ -1745,11 +1876,19 @@
 			{
 				
 				if($("#is_serialized").is(':checked')){
-					$("#panel_seriales").show();
+					$("#panel_seriales").show(600);
 				}else{
-					$("#panel_seriales").hide();
+					$("#panel_seriales").hide(600);
 				}
 				//$(this).parent().parent().parent().parent().next().toggleClass('hidden')
+			});
+
+			$("#has_sales_units").change(function()
+			{				
+				if($("#has_sales_units").is(':checked'))
+					$("#panel_has_sales_units").removeClass('hidden');
+				else
+					$("#panel_has_sales_units").addClass('hidden');
 			});
 
 			$("#is_service").change(function()
@@ -2122,6 +2261,34 @@
 				<?php } ?>
 			}
 		}
+		function delete_unit_sale_item(element)
+			{
+				$(element).parent().parent().remove();
+			}
+		function calcule_price_unit(){
+				 
+				if($.isNumeric($("#unit_price").val()) && $.isNumeric($("#quantity_unit_sale").val()))
+					{
+						const price_unit = $("#unit_price").val() / $("#quantity_unit_sale").val(),
+								  elements = document.getElementsByClassName("quantity_unit_sale_1");
+						
+						$("#price_unit_sale_item").html("<?=lang("items_price_unit_without_tax")?>: " + Number(price_unit));
+									
+						for (const key in elements) 
+							elements[key].max = ""+$("#quantity_unit_sale").val();
+						
+					}
+			}
+			function select_radio(element)
+			{				
+				elements = document.getElementsByClassName("default_select");
+				for (const key in elements) 
+							elements[key].value = "0";
+						
+					var her = $(element).siblings();
+					
+					$(her[0]).val(Number( $(element).prop('checked')));
+			}
 		function mayuscula(e) {
    			 e.value = e.value.toUpperCase();
 		}

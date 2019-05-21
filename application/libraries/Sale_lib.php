@@ -817,15 +817,23 @@ class Sale_lib
 	{
 		$items = $this->get_cart();
 		if(isset($items[$line]))
-		{ $item=$items[$line];
+		{ 
+			$item = $items[$line];
 			if (isset($item['item_id']))
 			{			
-				$item_id=$item['item_id'];			
+				$item_id = $item['item_id'];
+
 				if ($id_tier)
 				{
-					$items[$line]['price'] = $this->get_price_for_item($item_id, $id_tier);
-				} else{
-					$items[$line]['price']= $this->get_price_for_item($item_id);
+					$items[$line]['price'] = $this->get_price_for_item($item_id, $id_tier);	
+								
+					$items[$line]["has_selected_unit"] = 0;
+					//$items[$line]["quantity"] = 1;	
+					
+					
+				} else
+				{	
+						$items[$line]['price']= $this->get_price_for_item($item_id);
 				}
 				
 			}
@@ -875,9 +883,10 @@ class Sale_lib
 		}
 		
 	}
-	function add_item($item_id,$quantity=1,$discount=0,$price=null,$description=null,$serialnumber=null, $force_add = FALSE, $line = FALSE,$custom1_subcategory=null,$custom2_subcategory=null,$no_valida_por_id=false,
-	$numero_cuenta=null,$numero_documento=null,$titular_cuenta=null,$tasa=null,$tipo_documento=null,$id_tier=0,$transaction_status=null,$comentarios=null,
-	$fecha_estado=null,$tipo_cuenta=null,$observaciones=null,$celular=null)
+	function add_item($item_id,$quantity=1,$discount=0,$price = null,$description = null,$serialnumber = null, $force_add = FALSE, $line = FALSE,$custom1_subcategory = null,$custom2_subcategory = null, $no_valida_por_id = false,
+	$numero_cuenta = null, $numero_documento = null, $titular_cuenta = null,$tasa = null, $tipo_documento = null,$id_tier = 0, $transaction_status = null, $comentarios = null,
+	$fecha_estado = null, $tipo_cuenta = null, $observaciones = null, $celular = null, $name_unit = null, $has_selected_unit = 0,$unit_quantity_item = null ,$unit_quantity = null, $unit_quantity_presentation = null,
+	$price_presentation = null)
 	{
 		$store_account_item_id = $this->CI->Item->get_store_account_item_id();
 		
@@ -953,6 +962,25 @@ class Sale_lib
 		$today =  strtotime(date('Y-m-d'));
 		$price_to_use= $this->get_price_for_item($item_id);		
 		
+		if($item_info->has_sales_units == 1)
+		{
+			if($price == null )
+			{
+				$data_unit_sale = $this->get_price_unit_sale($item_info);
+
+				if($data_unit_sale != null)
+				{
+					$price_to_use = $data_unit_sale["price_to_use"];
+					$quantity = $data_unit_sale["quantity_item"];
+					$name_unit =  $data_unit_sale["name_unit"];
+					$has_selected_unit = 1;
+					$unit_quantity = 1;
+					$unit_quantity_presentation = $data_unit_sale["unit_quantity_presentation"];
+					$price_presentation =  $data_unit_sale["price_presentation"];
+				}
+			}
+		}
+		
 		//array/cart records are identified by $insertkey and item_id is just another field.
 		$item = array(($line === FALSE ? $insertkey : $line)=>
 			array(
@@ -974,7 +1002,7 @@ class Sale_lib
 				'discount'=>$discount,
 				'custom1_subcategory'=>$custom1_subcategory,
 				'custom2_subcategory'=>$custom2_subcategory,
-				'price'=>$price!=null ? $price:$price_to_use,
+				'price'=>$price!=null ? $price: $price_to_use,
 				'has_subcategory'=>$item_info->subcategory,
 				"id_tier"=>$id_tier,
 				"numero_cuenta"=>$numero_cuenta,
@@ -989,17 +1017,36 @@ class Sale_lib
 				"observaciones"=>$observaciones,
 				"celular"=>$celular,
 				"tax_included"=>$item_info->tax_included,
+				//datos de unidades de ventas
+				"has_sales_units" => $item_info->has_sales_units,
+				"name_unit"=> $name_unit,
+				"has_selected_unit" => $has_selected_unit,
+				"unit_quantity_presentation" => $unit_quantity_presentation,// cantidad de unidad de la presentacion del producto
+				"unit_quantity_item" => $unit_quantity_item != null ? $unit_quantity_item : $item_info->quantity_unit_sale,// canidad maxima de unidad  que tien el producto, esto solo se modifica por inventario
+				"unit_quantity"	=> $unit_quantity,	//cantidad a vender de la presentacion	
+				"price_presentation" => $price_presentation
 				)
 			);
 		//Item already exists and is not serialized, add to quantity
 		if($itemalreadyinsale && ($item_info->is_serialized ==0) && $this->CI->config->item('activar_casa_cambio')==0)
 		{
-			$items[$line === FALSE ? $updatekey : $line]['quantity']+=$quantity;
+			$_line = $line === FALSE ? $updatekey : $line;
+
+			if($items[$_line]['has_selected_unit'] == 0)
+				$items[$_line]['quantity'] += $quantity;
+			else
+			{
+				$items[$_line]['unit_quantity'] += 1;
+				$data_unit_sale = $this->get_price_unit_sale($item_info, null,false,$items[$_line]['unit_quantity']);
+				$items[$_line]['quantity'] = $data_unit_sale["quantity_item"];
+			}
+			
+			
 		}
 		else
 		{
 			//add to existing array
-			$items+=$item;
+			$items += $item;
 		}
 		
 		if( $this->CI->config->item('sales_stock_inventory') and $this->out_of_stock($item_id) )
@@ -1010,8 +1057,72 @@ class Sale_lib
 		return true;
 
 	}
+	function edit_unit($line,$item_id, $unit_id, $type = 1)
+	{
+		$item_info = $this->CI->Item->get_info($item_id);
+		$items=$this->get_cart();
+
+		if($type == 1)
+		{
+			$new_data = $this->get_price_unit_sale($item_info,null,$unit_id);
+
+			$items[$line]["name_unit"] = $new_data["name_unit"];
+			$items[$line]["has_selected_unit"] = 1;
+			$items[$line]["unit_quantity_presentation"] = $new_data["unit_quantity_presentation"];		
+			$items[$line]["unit_quantity"]	= 1;
+			$items[$line]["price_presentation"] = $new_data["price_presentation"];
+			$items[$line]["price"] = $new_data["price_to_use"];
+			$items[$line]["quantity"] =$new_data["quantity_item"];
+		}
+		else
+		{
+			$items[$line]["name_unit"] = null;
+			$items[$line]["has_selected_unit"] = 0;
+			$items[$line]["unit_quantity_presentation"] = null;		
+			$items[$line]["unit_quantity"]	= null;
+			$items[$line]["price_presentation"] = null;
+			$items[$line]["price"] = $this->get_price_for_item($item_id);
+			$items[$line]["quantity"] = 1;
+		}
+		$this->set_cart($items);
+		return true;
+	}
 	
-	function add_item_kit($external_item_kit_id_or_item_number,$quantity=1,$discount=0,$price=null,$description=null, $line=FALSE,$id_tier=0)
+	function get_price_unit_sale($item, $price_presentation = null, $unit_id = false,$unit_quantity_presentation = NULL)
+	{
+		$this->CI->load->model("Item_unit_sell");
+		
+		$data_unit_sale = null;		
+		
+		$unit =  $unit_id == false ? $this->CI->Item_unit_sell->get_select_by_item($item->item_id) :
+		$this->CI->Item_unit_sell->get_info($unit_id)	;
+		if(!empty($unit ))
+		{
+			$price_to_use = $this->get_price_for_item($item->item_id);	
+
+			$quantity_unit_sale = $item->quantity_unit_sale;			
+			$price_unit = $price_to_use / $quantity_unit_sale;
+			$unit_quantity_presentation = $unit_quantity_presentation == NULL ? $unit->quatity : $unit_quantity_presentation;
+			$price_sale = $price_presentation == null ? $unit->price:  $price_presentation ;
+			$new_prece_unit = $price_sale / $unit_quantity_presentation;
+			$new_price_to_use = $new_prece_unit * $quantity_unit_sale;
+			$quantity_item = $unit_quantity_presentation / $quantity_unit_sale;
+
+			$data_unit_sale = array(
+				"price_to_use" =>$new_price_to_use,
+				"quantity_item"=>$quantity_item,
+				"unit_id" => $unit->id,
+				"name_unit"=>$unit->name,
+				"unit_quantity_presentation"=>$unit_quantity_presentation,
+				"price_presentation" =>$price_sale
+			);
+
+
+		}
+		return $data_unit_sale;
+	}
+
+	function add_item_kit($external_item_kit_id_or_item_number, $quantity = 1, $discount = 0, $price = null, $description = null, $line=FALSE,$id_tier=0)
 	{
 		if (strpos(strtolower($external_item_kit_id_or_item_number), 'kit') !== FALSE)
 		{
@@ -1096,6 +1207,9 @@ class Sale_lib
 					"id_tier"=>$id_tier,
 					"has_subcategory"=>0,
 					"tax_included"=>$item_kit_info->tax_included,
+					"has_sales_units" => 0,
+					"name_unit"=>null,
+					"has_selected_unit"=>0
 					)
 				);
 
@@ -1286,8 +1400,8 @@ class Sale_lib
 		return -1;
 	}
 
-	function edit_item($line,$description = FALSE,$serialnumber = FALSE,$quantity = FALSE,$discount = FALSE,$price = FALSE, $custom1_subcategory=false,$custom2_subcategory=false,$numero_cuenta=false,
-	$numero_documento=FAlSE,$titular_cuenta=FALSE,$tipo_documento=FALSE,$tipo_cuenta=FALSE,$observaciones=FALSE,$celular=FALSE)
+	function edit_item($line,$description = FALSE,$serialnumber = FALSE,$quantity = FALSE,$discount = FALSE,$price = FALSE, $custom1_subcategory = FALSE,$custom2_subcategory = FALSE ,$numero_cuenta = FALSE,
+	$numero_documento = FAlSE,$titular_cuenta = FALSE,$tipo_documento = FALSE,$tipo_cuenta = FALSE,$observaciones = FALSE,$celular = FALSE, $quantity_unit= FALSE, $price_presentation = FALSE)
 	{
 		$items = $this->get_cart();
 		if(isset($items[$line]))
@@ -1335,6 +1449,20 @@ class Sale_lib
 			if($celular!==FALSE){
 				$items[$line]['celular'] = $celular;
 			}
+			if($quantity_unit !== FALSE)
+			{
+				$quantity_item = $this->get_quantity_item_by_unit($line,$quantity_unit,$items);
+				$items[$line]['unit_quantity'] = $quantity_unit;
+				$items[$line]['quantity'] = $quantity_item;
+			}
+			if($price_presentation !== FALSE)
+			{
+				$item_id = $items[$line]["item_id"];
+				$item_info = $this->CI->Item->get_info($item_id );
+				$new_data = $this->get_price_unit_sale($item_info, $price_presentation);
+				$items[$line]['price'] = $new_data["price_to_use"];
+				$items[$line]['price_presentation'] = $price_presentation;				
+			}
 			
 			$this->set_cart($items);
 			
@@ -1343,7 +1471,15 @@ class Sale_lib
 
 		return false;
 	}
+	function get_quantity_item_by_unit($line,$quantity_unit,$items)
+	{
+		$unit_quantity_presentation = $items[$line]["unit_quantity_presentation"];
+		$unit_quantity_presentation = $unit_quantity_presentation * $quantity_unit;
+		$quantity_unit_sale = $items[$line]["unit_quantity_item"];
+		$quantity_item = $unit_quantity_presentation / $quantity_unit_sale;
 
+		return $quantity_item;		
+	}
 	function is_valid_receipt($receipt_sale_id)
 	{		
 		//Valid receipt syntax
@@ -1456,8 +1592,9 @@ class Sale_lib
 			}
 			$this->add_item($row->item_id,$row->quantity_purchased,$row->discount_percent,$price_to_use,$row->description,$row->serialnumber, TRUE, $row->line,
 			$row->custom1_subcategory,$row->custom2_subcategory,false,$row->numero_cuenta,$row->numero_documento,$row->titular_cuenta,$row->tasa,
-			$row->tipo_documento, $row->id_tier,$row->transaction_status,$row->comentarios,$row->fecha_estado,$row->tipo_cuenta,$row->observaciones,$row->celular
-			);
+			$row->tipo_documento, $row->id_tier,$row->transaction_status,$row->comentarios,$row->fecha_estado,$row->tipo_cuenta,$row->observaciones,$row->celular,
+			$row->name_unit, $row->has_selected_unit ,$row->unit_quantity_item  ,$row->unit_quantity , $row->unit_quantity_presentation ,
+			$row->price_presentation);
 			
 		}
 		
