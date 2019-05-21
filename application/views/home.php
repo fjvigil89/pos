@@ -483,6 +483,40 @@
 			</div>
 		</div>
 		<?php }?>
+		<?php if ($this->Employee->has_module_action_permission('reports', 'allow_graphics_arnings_monsth', $this->Employee->get_logged_in_employee_info()->person_id)) { ?>
+		<div class="col-md-12">
+			<div class="portlet light">
+				<div class="portlet-title">
+					<div class="caption">
+						<i class="icon-bar-chart font-green-haze"></i>
+						<span class="caption-subject bold uppercase font-green-haze"><?php echo lang('reports_sales_monsth')?></span>
+					</div>
+					<div class="actions">
+						<a href="javascript:;" class="btn btn-circle btn-default btn-icon-only fullscreen" data-original-title="" title=""><span class="md-click-circle md-click-animate" style="height: 28px; width: 28px; top: -0.986113px; left: -8.24658px;"></span></a>
+					</div>
+				</div>
+				<div class="portlet-body">
+				<div class="form-body">
+						<div class="form-group">
+							<label class="control-label col-md-6"><?php echo lang('sales_monsth_filter_year')?></label>
+							<div class="col-md-4 pull-right">
+					            <div class="form-group">
+								<div class="input-group date" data-date="10/11/2012" data-date-format="mm/dd/yyyy" id='sales_monsth_year'>
+									<input type="text" class="form-control" name="sales_monsth" id="sales_monsth" >
+									<span class="input-group-addon" onclick="cargar_data_sales_monsth()"> Buscar </span>
+								</div>
+								</div>
+								
+						    </div>
+						</div>
+					</div>
+					<div id="chartdiv_get_sales_monsth" class="chart_custom">
+						<?php $this->load->view("charts/sales_monsth"); ?>
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php }?>
 	</div>
 	<!-- END CHARTS -->
 
@@ -491,6 +525,12 @@
 		{
 
 		$('#earnings_monsth').datetimepicker({
+			    locale: 'es',
+			    format: 'YYYY',
+			    defaultDate: new Date()
+			});
+
+		$('#sales_monsth').datetimepicker({
 			    locale: 'es',
 			    format: 'YYYY',
 			    defaultDate: new Date()
@@ -627,6 +667,26 @@
 							set_sales_earnings_monsth(JSON.parse(data));
 						}else{
 							set_sales_earnings_monsth([]);
+						}
+						
+					},
+		        });
+		}
+		// ventas por anuales por meses
+		function cargar_data_sales_monsth(){
+				date_start = $("#sales_monsth").val();
+			    strdateto= date_start.replace("/", "-");
+				tstrdateto= strdateto.replace("/", "-");
+			    $.ajax({
+		            method: "POST",
+		            url: '<?=site_url();?>/home/get_sales_monsth/'+tstrdateto,
+		            data: { start_date:date_start, end_date:date_end },
+		            success: function(data)
+		            {
+						if(JSON.parse(data)!=null){
+							set_sales_monsth(JSON.parse(data));
+						}else{
+							set_sales_monsth([]);
 						}
 						
 					},

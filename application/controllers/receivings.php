@@ -822,12 +822,23 @@ class Receivings extends Secure_area
 		$data['subtotal']=$this->receiving_lib->get_subtotal();
 		$data['total_cost_transport']=$this->receiving_lib->get_total_cost_transport();
 		$data['cart']=$this->receiving_lib->get_cart();
-		$data['modes']=array('receive'=>lang('receivings_receiving'),'return'=>lang('receivings_return'),'store_account_payment'=>lang('receivings_store_account_payment'));
+		$data['modes']=array();
 		$data['comment'] = $this->receiving_lib->get_comment();
 
+		// acciones modulo de compra, recibir, regresar, transferir
+		if($this->Employee->has_module_action_permission('receivings', 'receivings_receiving', $person_info->person_id)){
+			$data['modes']['receive']= lang('receivings_receiving');
+		}
+		if($this->Employee->has_module_action_permission('receivings', 'receivings_return', $person_info->person_id)){
+			$data['modes']['return']= lang('receivings_return');
+		}
+		$data['modes']['store_account_payment']= lang('receivings_store_account_payment');
+		
 		if ($this->Location->count_all() > 1)
 		{
-			$data['modes']['transfer']= lang('receivings_transfer');
+			if($this->Employee->has_module_action_permission('receivings', 'receivings_transfer', $person_info->person_id)){
+				$data['modes']['transfer']= lang('receivings_transfer');
+			}
 		}
 		$data['mode']=$this->receiving_lib->get_mode();
 			

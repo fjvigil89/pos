@@ -1,4 +1,6 @@
 <?php
+$lang['sell_lower_cost_price']="Vender a menor precio del costo";
+$lang['suspend_notes']="Notas";
 $lang['expenses']="Gastos";
 $lang['credito']="Creditos";
 $lang['other_media']="Otros medios";

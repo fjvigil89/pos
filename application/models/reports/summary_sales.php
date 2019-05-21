@@ -92,7 +92,8 @@ class Summary_sales extends Report
 		{
 			$this->db->where('store_account_payment', 0);
 		}
-		
+		$this->db->where('sale_time >=','2019-05-01');
+        $this->db->where('sale_time <','2019-06-01');
 		$this->db->group_by('sale_id');
 		
 		$return = array(

@@ -1419,7 +1419,15 @@ class Sale_lib
 				$items[$line]['discount'] = $discount;
 			}
 			if ($price !== FALSE ) {
-				$items[$line]['price'] = $price;
+				if($price < $this->CI->Item->get_id($items[$line]['item_id'])->row()->unit_price){
+					if($this->CI->Employee->has_module_action_permission('sales', 'sell_lower_cost_price', $this->CI->Employee->get_logged_in_employee_info()->person_id)){
+						$items[$line]['price'] = $price;
+					}
+				}else{
+					$items[$line]['price'] = $price;
+				}
+					
+				
 			}
 			if ($custom1_subcategory !== FALSE ) {
 				$items[$line]['custom1_subcategory'] = $custom1_subcategory;
