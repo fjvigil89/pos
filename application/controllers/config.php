@@ -33,14 +33,20 @@ class Config extends Secure_area
 			'extra_large' => lang('config_extra_large')."(80mm)"
 			
 		);
-		
-		$expense_category=$this->Appconfig->get_expense_category();
+
 		foreach($this->Appconfig->get_additional_payment_types() as $additional_payment_type)
 		{
 			$data['payment_options'][$additional_payment_type] = $additional_payment_type;
 		}
+		
+		$expense_category = $this->Appconfig->get_expense_category();
+		$data["expense_category"] = $expense_category;
+	
 		//$data['array']=$this->lang->load('common', 'spanish');
-		$data["expense_category"]=$expense_category;
+		
+		$units = $this->Appconfig->get_units();
+		$data["units"] = $units;
+
 		$data['tiers'] = $this->Tier->get_all();
 
 		$data['currency'] = $this->Denomination_currency->get_all();
@@ -142,12 +148,9 @@ class Config extends Secure_area
 			'auto_focus_on_item_after_sale_and_receiving' => $this->input->post('auto_focus_on_item_after_sale_and_receiving') ? 1 : 0,
 			'barcode_price_include_tax'=>$this->input->post('barcode_price_include_tax') ? 1 : 0,
 			'hide_signature'=>$this->input->post('hide_signature') ? 1 : 0,
-			'hide_ticket'=>$this->input->post('hide_ticket') ? 1 : 0,
-			
+			'hide_ticket'=>$this->input->post('hide_ticket') ? 1 : 0,			
 			'hide_ticket_taxes'=>$this->input->post('hide_ticket_taxes') ? 1 : 0,
-
-			'hide_invoice_taxes_details'=>$this->input->post('hide_invoice_taxes_details') ? 1 : 0,
-			
+			'hide_invoice_taxes_details'=>$this->input->post('hide_invoice_taxes_details') ? 1 : 0,			
 			'hide_customer_recent_sales'=>$this->input->post('hide_customer_recent_sales') ? 1 : 0,
 			'hide_support_chat'=>$this->input->post('hide_support_chat') ? 1 : 0,
 			'active_keyboard'=>$this->input->post('active_keyboard') ? 1 : 0,
@@ -274,10 +277,7 @@ class Config extends Secure_area
 			"monitor_product_rank"=>(int)$this->input->post('monitor_product_rank'),
 			"name_new_tax"=>$this->input->post('name_new_tax'),
 			"no_print_return_policy" =>(int) $this->input->post('no_print_return_policy'),
-
- 
-
-			
+			"units_measurement" =>  $this->input->post('units_measurement')		
 		);
 		
 	//	language
@@ -301,7 +301,7 @@ class Config extends Secure_area
 		$tasas_venta=$this->input->post("tasa_venta");
 		$tasas_compras=$this->input->post("tasa_compra");
 		$guardado=true;
-		for($i=0;$i<3; $i++){
+		for($i=0; $i< 3; $i++){
 			$data=array(
 				"name"=>$nombres_tasa[$i],
 				"sale_rate"=>(is_numeric($tasas_venta[$i])==true && $tasas_venta[$i]!=0)?$tasas_venta[$i]:1,

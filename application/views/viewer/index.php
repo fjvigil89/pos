@@ -50,10 +50,12 @@
             <div class="portlet-body">
                 <ul class="nav nav-tabs">
                     <li class="active">
-                        <a href="#tab_1" data-toggle="tab" aria-expanded="true"> <?php echo lang('module_viewers')." ".lang("viewer_and")." " .lang("viewer_carousel")?></a>
+                        <a href="#tab_1" data-toggle="tab" aria-expanded="true">
+                            <?php echo lang('module_viewers')." ".lang("viewer_and")." " .lang("viewer_carousel")?></a>
                     </li>
                     <li class="">
-                        <a href="#tab_2" data-toggle="tab" aria-expanded="false"><?=lang("viewer_price_consultant")?></a>
+                        <a href="#tab_2" data-toggle="tab"
+                            aria-expanded="false"><?=lang("viewer_price_consultant")?></a>
                     </li>
 
                 </ul>
@@ -81,11 +83,42 @@
                                                     'data-toggle'=>'modal',
                                                     'data-target'=>'#myModal'));
                                         }
-                                        echo anchor("all/viewer/$employee_id",
-											'<i class="fa fa-eye   hidden-lg fa fa-eye tip-bottom" data-original-title="'.lang('module_viewers').'"></i><span class="visible-lg">'.lang('module_viewers').'</span>',
-											array('class'=>'btn btn-medium red-haze',
-												'title'=>lang('module_viewers'),
-                                                'target'=>'_blank'));
+                                        ?>
+
+                                        <div class="btn-group">
+                                            <button type="button" class="btn red-haze btn-md dropdown-toggle"
+                                                data-toggle="dropdown" data-hover="dropdown" data-close-others="true"
+                                                aria-expanded="false">
+                                                <span class="hidden-sm hidden-xs">
+                                                    <font style="vertical-align: inherit;">
+                                                        <font style="vertical-align: inherit;"><?=lang('module_viewers')?>
+                                                        </font>
+                                                    </font>
+                                                </span>
+                                                <i class="fa fa-angle-down"></i>
+                                            </button>
+                                            <ul class="dropdown-menu" role="menu">
+                                                <li>
+                                                    <a href="<?=site_url('all/viewer/'.$employee_id)?>">
+                                                    
+                                                        <font style="vertical-align: inherit;">
+                                                            <font style="vertical-align: inherit;"><?=lang("viewer_open_tab")?>
+                                                            </font>
+                                                        </font>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="<?=site_url('all/viewer/'.$employee_id)?>" target="_blank">                                                      
+                                                        <font style="vertical-align: inherit;">
+                                                            <font style="vertical-align: inherit;"> <?=lang("viewer_open_another_tab")?>
+                                                            </font>
+                                                        </font>
+                                                    </a>
+                                                </li>                                                
+                                            </ul>
+                                        </div>
+                                        <?php
+                                       
                                         if ($this->Employee->has_module_action_permission($controller_name, 'add_update_img', $in_employee_info->person_id)) {
                                             echo anchor("$controller_name/delete",
                                                     '<i class="fa fa-trash-o hidden-lg fa fa-2x tip-bottom" data-original-title="'.lang('common_delete').'"></i><span class="visible-lg">'.lang("common_delete").'</span>',
@@ -99,24 +132,26 @@
                         </div>
                         <!-- aqui body-->
                         <div class="row">
-                        <?php if ($this->Employee->has_module_action_permission($controller_name, 'config_viewer', $in_employee_info->person_id)) {?>	
+                            <?php if ($this->Employee->has_module_action_permission($controller_name, 'config_viewer', $in_employee_info->person_id)) {?>
                             <div class="col-md-12">
                                 <?php echo form_open_multipart('viewers/save_viewer',array('id'=>'viewers_form','class'=>'form-horizontal ')); ?>
                                 <div class="icheck-inline">
                                     <label>
                                         <input value="1" name="show_carrousel"
                                             <?=$this->config->item("show_carrousel") ? "checked":""?>
-                                            onclick="checkbox(this)" type="checkbox"> <?=lang("viewer_activate")." ".lang("viewer_carousel")?></label>
+                                            onclick="checkbox(this)" type="checkbox">
+                                        <?=lang("viewer_activate")." ".lang("viewer_carousel")?></label>
                                     <label>
                                         <label>
                                             <input value="1" name="show_viewer"
                                                 <?=$this->config->item("show_viewer") ? "checked":""?>
-                                                onclick="checkbox(this)" type="checkbox"> <?=lang("viewer_activate")." ".lang("module_viewers")?></label>
+                                                onclick="checkbox(this)" type="checkbox">
+                                            <?=lang("viewer_activate")." ".lang("module_viewers")?></label>
                                         <label>
                                 </div>
                                 </form>
                             </div>
-                        <?php }?>	
+                            <?php }?>
                             <div class="col-md-12">
                                 <div class="table-responsive" id="manage_table">
                                     <?=$manage_table; ?>
@@ -128,7 +163,8 @@
                     <!--fin visir and carousel-->
 
                     <div class="tab-pane fade" id="tab_2">
-                    <a href="<?=site_url("all/checker")?>" class="btn btn-lg btn-block default" title="Abrir" >Abrir Verificador</a>
+                        <a href="<?=site_url("all/checker")?>" class="btn btn-lg btn-block default" title="Abrir">Abrir
+                            Verificador</a>
                     </div>
                 </div>
             </div>

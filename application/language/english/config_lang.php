@@ -48,7 +48,7 @@ $lang['select_sql_file'] = 'select .sql file';
 $lang['Generate_simplified_order'] = 'Generate automatic order orders';
 $lang['Generate_simplified_order_help'] = 'If you activate this option, a purchase order will automatically be generated in the warehouse module';
 
-
+$lang["config_units_measurement"]="Units of measurements for the entire system";
 $lang['restore_heading'] = 'This allows you to restore your database';
 
 $lang['type_file'] = 'select .sql file from your computer';

@@ -8,7 +8,7 @@ class Migration_Item_unit extends CI_Migration
 
 		$this->db->query("ALTER TABLE `phppos_items` ADD `has_sales_units` TINYINT NOT NULL DEFAULT '0' AFTER `deleted`");
 		$this->db->query("ALTER TABLE `phppos_items` ADD `quantity_unit_sale` DECIMAL(23,10)  NULl AFTER `deleted`");
-
+		
 		$this->db->query("ALTER TABLE `phppos_sales_items` ADD `has_sales_units` TINYINT NOT NULL DEFAULT '0' AFTER `commission`");
 		$this->db->query("ALTER TABLE `phppos_sales_items` ADD `name_unit` VARCHAR(60) NULL DEFAULT NULL AFTER `commission`");
 
@@ -18,19 +18,19 @@ class Migration_Item_unit extends CI_Migration
 
 		$this->db->query("ALTER TABLE `phppos_sales_items` ADD `unit_quantity` DECIMAL(23,10) NULL DEFAULT NULL AFTER `commission`");
 		$this->db->query("ALTER TABLE `phppos_sales_items` ADD `price_presentation` DECIMAL NULL DEFAULT NULL AFTER `commission`");
+		$this->db->query("ALTER TABLE `phppos_sales_items` ADD `unit_measurement` varchar(100)  NULl AFTER `commission`");
 
-		
 		$this->db->query("CREATE TABLE `phppos_item_unit_sell` (
 			`id` int(11) UNSIGNED NOT  NULL,
 			`item_id` int(11) NOT NULL,
 			`name` varchar(100) NOT NULL,
+			`unit_measurement` varchar(100) NOT NULL,
 			`price` DECIMAL(23,10) NOT NULL ,
 			`quatity`  DECIMAL(23,10) NOT NULL DEFAULT '1',
 			`default_select` tinyint(1) NOT NULL DEFAULT '0',
 			`location_id` int(11) DEFAULT NULL,
 			`deleted` tinyint(1) NOT NULL DEFAULT '0'
 		  )");
-
 
 		$this->db->query("ALTER TABLE `phppos_item_unit_sell`
 			ADD PRIMARY KEY (`id`),
@@ -44,7 +44,28 @@ class Migration_Item_unit extends CI_Migration
 			ADD CONSTRAINT `phppos_item_unit_sell_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `phppos_items` (`item_id`),
 			ADD CONSTRAINT `phppos_item_unit_sell_ibfk_2` FOREIGN KEY (`location_id`) REFERENCES `phppos_locations` (`location_id`)");
 	
+
+
 	
+		//permisos
+
+		$this->db->query("INSERT INTO `phppos_modules_actions` (`action_id`, `module_id`, `action_name_key`, `sort`) 
+					VALUES  ('receivings_receiving', 'receivings', 'receivings_receiving', '230'),
+							('receivings_return', 'receivings', 'receivings_return', '230'), 
+							('receivings_transfer', 'receivings', 'receivings_transfer', '230')");
+		$this->db->query("INSERT INTO `phppos_permissions_actions` (`module_id`, `person_id`, `action_id`) 
+					VALUES ('receivings', '1', 'receivings_receiving'), 
+					('receivings', '1','receivings_return'), 
+					('receivings', '1', 'receivings_transfer')");
+
+		// No dejar vender a menor precio de costo 
+		$this->db->query("INSERT INTO `phppos_modules_actions` (`action_id`, `module_id`, `action_name_key`, `sort`) 
+					VALUES ('sell_lower_cost_price', 'sales', 'sell_lower_cost_price', '432')");
+		$this->db->query("INSERT INTO `phppos_permissions_actions` (`module_id`, `person_id`, `action_id`) 
+					VALUES ('sales', '1', 'sell_lower_cost_price')");
+		
+		// fin permiso
+
 		//ejemplos de migraciones 
 		
         /*$this->dbforge->add_field(array(
@@ -87,7 +108,7 @@ class Migration_Item_unit extends CI_Migration
 
 		$this->db->query("ALTER TABLE phppos_items DROP has_sales_units");
 		$this->db->query("ALTER TABLE phppos_items DROP quantity_unit_sale");
-
+		$this->db->query("ALTER TABLE phppos_items DROP unit_measurement");		
 		$this->db->query("ALTER TABLE phppos_sales_items DROP has_sales_units");
 		$this->db->query("ALTER TABLE phppos_sales_items DROP name_unit");
 		$this->db->query("ALTER TABLE phppos_sales_items DROP has_selected_unit");

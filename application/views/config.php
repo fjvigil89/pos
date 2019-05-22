@@ -2630,25 +2630,47 @@
 							</div>												
 								
 							<div class="form-group">	
-							<?php echo form_label('<a class="help_config_options tooltips"  data-placement="left"  title="'.lang("config_categoria_gastos_help"). '">'.lang('config_categoria_gastos').'</a>'.':', 'categoria_gastos',array('class'=>'col-md-3 control-label ')); ?>
-								<div class='col-md-9'>
-									<?php echo form_input(array(
-										'name'=>'categoria_gastos',
-										'id'=>'categoria_gastos',
-										'class'=>'form-control',
-										"placeholder"=>"Ingrese las categorías separadas por coma",
-										'size'=>'categoria_gastos',
-										'value'=>$this->config->item('categoria_gastos')));
-									 
-										$categorys="";
-										foreach($expense_category as $category){
-											$categorys .=$category.", ";
-										}
-										$categorys.="Ventas, Devolución, Abono a línea de crédito, Apertura de caja, Cierre de caja";
-										echo $categorys;
-									?>
+								<?php echo form_label('<a class="help_config_options tooltips"  data-placement="left"  title="'.lang("config_categoria_gastos_help"). '">'.lang('config_categoria_gastos').'</a>'.':', 'categoria_gastos',array('class'=>'col-md-3 control-label ')); ?>
+									<div class='col-md-9'>
+										<?php echo form_input(array(
+											'name'=>'categoria_gastos',
+											'id'=>'categoria_gastos',
+											'class'=>'form-control',
+											"placeholder"=>"Ingrese las categorías separadas por coma",
+											'size'=>'categoria_gastos',
+											'value'=>$this->config->item('categoria_gastos')));
+										
+											$categorys="";
+											foreach($expense_category as $category){
+												$categorys .=$category.", ";
+											}
+											$categorys.="Ventas, Devolución, Abono a línea de crédito, Apertura de caja, Cierre de caja";
+											echo $categorys;
+										?>
 								</div>
 							</div>
+
+							<div class="form-group">	
+								<?php echo form_label('<a class="help_config_options tooltips"  data-placement="left"  title="'.lang("config_units_measurement_help"). '">'.lang('config_units_measurement').'</a>'.':', 'units_measurement',array('class'=>'col-md-3 control-label ')); ?>
+									<div class='col-md-9'>
+										<?php echo form_input(array(
+											'name'=>'units_measurement',
+											'id'=>'units_measurement',
+											'class'=>'form-control',
+											"placeholder"=>"Ingrese las unidades de medidas  separadas por coma",
+											'value'=>$this->config->item('units_measurement')));
+										
+											$_units="";
+
+											foreach($units as $unit){
+												$_units .=$unit.", ";
+											}											
+											//$_units.=lang('items_unity').", ".lang('items_kg').", ".lang('items_pounds').", ".lang('items_milliliters').", ". lang('items_ounces').", ".lang("items_meters").", ".lang("items_centimeter");
+											echo $_units;
+										?>
+								</div>
+							</div>
+							
 							<div class="form-group">	
 								<?php echo form_label(lang('config_percent_point'), 'percent_point',array('class'=>'col-md-3 control-label ')); ?>							
 								<div class='col-md-9'>

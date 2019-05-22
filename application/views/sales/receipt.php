@@ -335,8 +335,11 @@
 
 									echo to_quantity($_quantity); ?>
 								<?php
-									if (isset($item['model'])){ 
-								 		echo ($item['unit']);} ?>
+									if( $item["has_selected_unit"] == 1 and isset($item['unit_measurement']))
+										echo character_limiter($item['unit_measurement'],4,"..");
+									else if (isset($item['model'])){ 
+										 echo ($item['unit']);
+									} ?>
 							</td>
 							
 
@@ -607,28 +610,28 @@
 					
 							<?php if ($is_integrated_credit_sale || sale_has_partial_credit_card_payment()) { ?>
 								<td class="right_text_align" colspan="0">
-									<?php $splitpayment=explode(':',$payment['payment_type']); echo $splitpayment[0]; ?>: <?php echo $payment['card_issuer']. ' '.$payment['truncated_card']; ?>
+									<?php $splitpayment = explode(':',$payment['payment_type']); echo $splitpayment[0]; ?>: <?php echo $payment['card_issuer']. ' '.$payment['truncated_card']; ?>
 								</td>
 							<?php } 
 							else { ?>
 								<td class="right_text_align" colspan="3">
-									<?php $splitpayment=explode(':',$payment['payment_type']); echo $splitpayment[0]; ?> 
+									<?php $splitpayment = explode(':',$payment['payment_type']); echo $splitpayment[0]; ?> 
 								</td>
 								<td class="right_text_align" colspan="2">
 								<?php 
 								$payment_amount= 0;
 								$payment_amount_otro= (isset($another_currency) and $another_currency==1)?
-										($payment['payment_amount']/$value_other_currency):$payment['payment_amount'];
+										($payment['payment_amount'] / $value_other_currency):$payment['payment_amount'];
 								if( $this->config->item('round_cash_on_sales')==1 && $payment['payment_type'] == lang('sales_cash') ){
-									$payment_amount=(round_to_nearest_05($payment_amount_otro));
+									$payment_amount = (round_to_nearest_05($payment_amount_otro));
 								} 
-								else if($this->config->item('round_value')==1  ){
-									$payment_amount= (round($payment_amount_otro));
+								else if($this->config->item('round_value') == 1){
+									$payment_amount = (round($payment_amount_otro));
 								}else{
-									$payment_amount= ($payment_amount_otro);
+									$payment_amount = ($payment_amount_otro);
 								}
-								if(isset($mode) && $mode=='return') {
-									$payment_amount=$payment_amount*(-1);
+								if(isset($mode) && $mode == 'return') {
+									$payment_amount = $payment_amount*(-1);
 								}
 								if(isset($another_currency) and $another_currency==1){
 									echo  to_currency_no_money($payment_amount,4);

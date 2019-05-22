@@ -167,8 +167,15 @@ $lang['items_reorder_level_help']='Put minimum quantity of products so that the 
 $lang['items_is_service_help']='Select if you offer a service and not a product';
 $lang['items_override_default_tax_help']='If the product has another type of tax, select and enter the corresponding tax';
 $lang["items_activate_range"]="Monitor sale range";
-$lang["items_price_unit_without_tax"] ="Price per unit without tax";
+$lang["items_price_unit_without_tax"] ="Price per unit of cost";
 $lang["items_has_sales_units"] ="This product has different output presentation";
 $lang["items_has_sales_units_help"]="If the product can be sold in different units, activate this field";
 $lang["items_presentations"]="Sales presentations";
+$lang['items_unity'] ='unit(s)';	
+$lang['items_kg'] ='kilograms';
+$lang['items_pounds'] ='pounds';
+$lang['items_milliliters'] ='milliliters';
+$lang['items_ounces'] ='ounces';
+$lang['items_centimeter'] ='Centimeters';
+$lang['items_meters'] ='meters'
 ?>

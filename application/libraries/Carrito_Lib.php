@@ -168,7 +168,8 @@ class Carrito_lib
 				"unit_quantity_presentation" => null,// cantidad de unidad de la presentacion del producto
 				"unit_quantity_item" => null,//$unit_quantity_item != null ? $unit_quantity_item : $item_info->quantity_unit_sale,// canidad maxima de unidad  que tien el producto, esto solo se modifica por inventario
 				"unit_quantity"	=>null,	//cantidad a vender de la presentacion	
-				"price_presentation" => null
+				"price_presentation" => null,
+				"unit_measurement" => null
 				)
 			);
 		//Item already exists and is not serialized, add to quantity
