@@ -1073,7 +1073,7 @@
 												'name'=>'locations['.$location->location_id.'][cost_price]',
 												'size'=>'8',
 												'class'=>'form-control form-inps',
-												'value'=> $location_items[$location->location_id]->item_id !== '' && $location_items[$location->location_id]->cost_price ? to_currency_no_money($location_items[$location->location_id]->cost_price, 10): ''
+												'value'=>$location_items[$location->location_id]->item_id !== '' && $location_items[$location->location_id]->cost_price ? to_currency_no_money($location_items[$location->location_id]->cost_price, 10): ''
 											));?>
 										</div>
 									</div>
@@ -1606,13 +1606,22 @@
 				
 
 			});
+			//Funcion para calcular el % de ganancia para el precio de venta
 			$(".items_discount").click(function()
 			{
-				var items_discount = ($('#items_discount').val()/100);
+				//capturamos el % a calcular
+				var items_discount = ($('#items_discount').val()/100);				
+				//capturamos el valor del precio del producto
 				var cost_price = $('#cost_price').val();
+				//le quitamos las comas que lo separan por miles
+				cost_price = cost_price.replace(/,/g, "");
+				//alert(cost_price);
 				var cost_price_with_tax=parseFloat(cost_price)	* parseFloat(items_discount);
 				var new_price = parseFloat(cost_price_with_tax) + parseFloat(cost_price);
 				$("#unit_price").val(new_price);
+				
+				Split_by_miles($('#unit_price'));
+				
 
 			});
 			$(".items_discounts").click(function()
@@ -2053,7 +2062,10 @@
 				 value_input_cost+=array[i];
 			});
 			$('.money').val(value_input_cost);
-			//fin de la funcion de quitar las comas
+
+
+				
+		//fin de la funcion de quitar las comas
 			
 
 			if (submitting) return;
