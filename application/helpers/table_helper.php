@@ -316,7 +316,7 @@ function get_orders_data_row($supplier,$controller)
 {
 	$CI =& get_instance();
 	$controller_name=strtolower(get_class($CI));
-	$avatar_url=$supplier->image_id ?  site_url('app_files/view/'.$supplier->image_id) : (base_url().'img/no-image.png');
+	$avatar_url=isset($supplier->image_id) ?  site_url('app_files/view/'.$supplier->image_id) : (base_url().'img/no-image.png');
 
 
     if ($supplier->processed == 0) {
