@@ -1160,9 +1160,9 @@
 									</div>
 								</form>
 							</div>
-						</div>
-					
 				</div>
+					
+				
 				<?php } ?>
 			</div>
 
@@ -1851,7 +1851,8 @@
 			if (mycode == 115)
 			{
 				event.preventDefault();
-				$("input[name='quantity']").focus();
+				$("input[name='quantity']")[0].focus();
+				$("input[name='quantity']")[0].select();
 				event.originalEvent.keyCode = 0;
 			}
 			//F1
