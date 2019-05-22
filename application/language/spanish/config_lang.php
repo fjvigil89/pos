@@ -143,8 +143,7 @@ $lang['config_require_customer_for_sale'] = 'Requerir al cliente para la venta';
 $lang['config_commission_default_rate'] = 'Porcentaje de Comision para Empleado';
 $lang['config_hide_store_account_payments_from_report_totals'] = 'Ocultar pagos de la cuenta de la tienda totales del informe';
 $lang['config_disable_sale_notifications'] = 'Desactivar las notificaciones de venta';
-
-
+$lang["config_units_measurement"]="Unidades de medidas para todo el sistema";
 $lang['config_company_dni'] = 'NIT/RUT';
 $lang['config_company_regimen'] = 'Régimen';
 $lang['config_hide_balance_receipt_payment']='Ocultar Balance en el Recibo de Pago';

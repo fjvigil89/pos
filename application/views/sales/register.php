@@ -333,12 +333,12 @@
 												</td>
 												<td  class="text text-success">
 													<a href="<?php echo isset($item['item_id']) ? site_url('home/view_item_modal/'.$item['item_id']) : site_url('home/view_item_kit_modal/'.$item['item_kit_id']) ; ?>" data-toggle="modal" data-target="#myModal" >
-														<?php echo H($item['name'])?> <span class="badge"><?= H($item['name_unit'])?></span>
+														<?php echo H($item['name'])?> 
 													</a>
 													<?php if($item['has_sales_units'] == 1):?>
-													<br><br>
+													<br>													
 														<a href="<?php echo isset($item['item_id']) ? site_url('sales/view_unit_modal/'.$line."/".$item['item_id']) : site_url('home/view_item_kit_modal/'.$item['item_kit_id']) ; ?>" data-toggle="modal" data-target="#myModal" >
-															<i class="fa fa-plus btn btn-xs  default" > <?=lang("common_more")?></i>
+															 <span class="badge"><?= character_limiter(H($item['name_unit'] ? $item['name_unit'] : " -- ")  ,12)." / ".character_limiter(H($item["unit_measurement"] ? $item["unit_measurement"]: " --"),4)?></span>
 														</a>
 													<?php endif;?>
 												</td>
@@ -769,10 +769,8 @@
 															{
 																echo form_input(array('name'=>'quantity','type'=>'number','value'=>to_quantity($item['quantity']),'class'=>'form-control form-inps-sale text-center', 'id' => 'quantity_'.$line, 'tabindex'=>'2'));
 															}
-															else{
-																
+															else{																
 																echo form_input(array('name'=>'quantity_unit','type'=>'number','value'=>to_quantity($item['unit_quantity']),'class'=>'form-control form-inps-sale text-center', 'id' => 'quantity_unit_'.$line, 'tabindex'=>'2'));
-																echo '<i class="btn btn-xs btn-block " style="font-size:9px">'.to_quantity($item['quantity']).'</i>';
 															}
 														}?>
 													</form>

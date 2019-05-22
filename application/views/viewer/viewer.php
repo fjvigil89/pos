@@ -197,15 +197,22 @@
                                 <span><?=$rate?></span>
                             </h1>
                         </div>
+                        
                         <div class="col-md-12">
-                            <hr>
+                            <h1 style="color:red; font-weight: bold; font-size:26px" class=" text-center">CALCULE SU ENVÍO</h1>
                         </div>
+                        <!--<div class="col-md-12">
+                            <hr>
+                        </div>-->
+
                         <div class="col-xs-6">
                             <div class="panel-input form-group">
                                 <label for="email" class="title-2">Cantidad en pesos:</label>
-                                <input style=" font-weight: bold; font-size:19px; text-align: center"
-                                    placeholder="Ingrese cantidad $" type="number" class="form-control" readonly
+                                <input   type="hidden" class="form-control" readonly
                                     id="catidad">
+                                    <input style=" font-weight: bold; font-size:19px; text-align: center"
+                                    placeholder="Ingrese cantidad $" class="form-control" readonly
+                                    id="catidad2">
                             </div>
                         </div>
                         <div class="col-xs-6">
@@ -413,7 +420,7 @@
             $("#catidad").val(cant + value)
 
         else if (value == "C") {
-            $("#catidad").val("");
+            $("#catidad").val("0");
             $("#convertido").val(0);
         } else if (cant.length > 0) {
             $("#catidad").val(cant.substr(0, cant.length - 1));
@@ -427,6 +434,13 @@
             total = accounting.formatMoney(total, "BS ", 0);
             $("#convertido").val(total);
         }
+        if ($.isNumeric( $("#catidad").val()))
+            $("#catidad2").val(accounting.formatNumber( $("#catidad").val())); 
+        else{
+            $("#convertido").val("BS 0");
+            $("#catidad2").val("");
+        }         
+        
 
     });
 

@@ -53,20 +53,48 @@ class Appconfig extends CI_Model
 		
 	}
 	function get_expense_category(){		
-		$expense_category=array(
-		lang('Nomina')=>lang('Nomina'), 
-		lang('Transporte')=>lang('Transporte'),
-		lang('Comida')=>lang('Comida'), 
-		lang('Arriendo')=>lang('Arriendo'), 
-		lang('Reparaciones')=>lang('Reparaciones'), 
-		lang('Publicidad')=>lang('Publicidad'),
-		lang('Servicios_publicos')=>lang('Servicios_publicos'),
-		lang('Suministros')=>lang('Suministros'),
-		lang('Mantenimiento')=>lang('Mantenimiento'), 
-		lang('Limpieza')=>lang('Limpieza'),
-		lang('Combustible')=>lang('Combustible'),
-		lang('otros')=>lang('otros'));
-		return $expense_category;
+		return array(
+			lang('Nomina')=>lang('Nomina'), 
+			lang('Transporte')=>lang('Transporte'),
+			lang('Comida')=>lang('Comida'), 
+			lang('Arriendo')=>lang('Arriendo'), 
+			lang('Reparaciones')=>lang('Reparaciones'), 
+			lang('Publicidad')=>lang('Publicidad'),
+			lang('Servicios_publicos')=>lang('Servicios_publicos'),
+			lang('Suministros')=>lang('Suministros'),
+			lang('Mantenimiento')=>lang('Mantenimiento'), 
+			lang('Limpieza')=>lang('Limpieza'),
+			lang('Combustible')=>lang('Combustible'),
+			lang('otros')=>lang('otros')
+		);
+	}
+	function get_units()
+	{
+		return array(
+			lang('items_unity') => lang('items_unity'),
+			lang('items_kg') => lang('items_kg'),
+			lang('items_pounds') => lang('items_pounds'),
+			lang('items_milliliters') => lang('items_milliliters'),
+			lang('items_ounces') => lang('items_ounces'),
+			lang("items_meters") => lang("items_meters"),
+			lang("items_centimeter") => lang("items_centimeter")
+		);
+	}
+	function get_all_units()
+	{
+		$return = $this->get_units();
+		$units_measurement = $this->get('units_measurement');	
+		
+		if ($units_measurement)		
+			$units_measurement = array_map('trim', explode(',',$units_measurement));	
+		else 
+			$units_measurement = array();	
+
+		foreach($units_measurement as  $unit)
+			$return[$unit]= $unit ;
+		
+		$return= array_unique($return);
+		return $return;
 	}
 	function get_all()
 	{

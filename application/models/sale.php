@@ -1040,7 +1040,8 @@ class Sale extends CI_Model
 				    "unit_quantity_presentation" => $item["unit_quantity_presentation"],
 				    "unit_quantity_item" => $item["unit_quantity_item"],
 				    "unit_quantity"	=> $item["unit_quantity"],	
-				    "price_presentation" => $item["price_presentation"]
+                    "price_presentation" => $item["price_presentation"],
+                    "unit_measurement" => $item["unit_measurement"]
 
                 );
 

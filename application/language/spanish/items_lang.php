@@ -159,6 +159,8 @@ $lang['items_kg'] ='kilogramos';
 $lang['items_pounds'] ='libras';
 $lang['items_milliliters'] ='mililitros';
 $lang['items_ounces'] ='onzas';
+$lang['items_centimeter'] ='Centimetro(s)';
+$lang['items_meters'] ='Metros';
 $lang['costo_tax'] ='Porcentaje agregar/sustraer';
 $lang['items_images'] = 'Imagen del artículo';
 $lang['items_mass_import_from_excel_compare'] = 'Importación para comparacion de inventario del software real con el archivo fisico';
@@ -215,6 +217,6 @@ $lang["items_activate_range"]="Monitorear rango de venta";
 $lang["items_has_sales_units"] ="Este producto tiene diferentes presentación de salida";
 $lang["items_has_sales_units_help"]="Si el producto puede ser vendido en diferentes unidades, active este campo";
 $lang["items_unit_quantity"]="Cantidad de unidades que contiene este producto";
-$lang["items_price_unit_without_tax"] ="Precio por unidad sin impuesto";
+$lang["items_price_unit_without_tax"] ="Precio por unidad de costo";
 $lang["items_presentations"]="Presentaciones de ventas";
 ?>

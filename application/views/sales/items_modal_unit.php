@@ -51,7 +51,7 @@
                                             <td style="text-align: center;">
                                                 <?php 
 														if($name_unit ==  $unit->name)
-															echo '<span class="badge">'.H($unit->name).'</span>';
+															echo '<span class="badge">'.H($unit->name)." / ".H($unit->unit_measurement).'</span>';
 														
 														else
 														 echo  $unit->name
@@ -60,10 +60,10 @@
                                             <td style="text-align: center;"><?= to_currency($unit->price) ?></td>
                                             <td style="text-align: center;">
                                                 <?php if($name_unit ==  $unit->name){ ?>
-                                                <a class="edit_unit btn btn-xs opcion   btn-danger"
+                                                <!--<a class="edit_unit btn btn-xs opcion   btn-danger"
                                                     href="<?=site_url('sales/edit_unit/'.$line."/".$unit->item_id."/".$unit->id."/0")  ?>">
                                                     <?=lang("common_remove")?>
-                                                </a>
+                                                </a>-->
                                                 <?php } else {?>
                                                 <a class=" edit_unit btn btn-xs opcion btn-success"
                                                     href="<?=site_url('sales/edit_unit/'.$line."/".$unit->item_id."/".$unit->id."/1")  ?>">

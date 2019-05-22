@@ -206,7 +206,8 @@ class Items extends Secure_area implements iData_controller
         $this->load->helper('report');
         $data = array();
         $data['controller_name'] = strtolower(get_class());
-
+        $data["units"] = $this->Appconfig->get_all_units();
+        $data["units"][""] = lang("common_select");        
         $data['item_info'] = $this->Item->get_info($item_id);
         $data['item_tax_info'] = $this->Item_taxes->get_info($item_id);
         $data['tiers'] = $this->Tier->get_all()->result();
@@ -642,22 +643,23 @@ class Items extends Secure_area implements iData_controller
             if($this->input->post('has_sales_units') == 1)
             {  
                 $canti_select = 0;
-                for ($i= 0; $i < count( $unit_sale) ; $i = $i + 5) 
+                for ($i= 0; $i < count( $unit_sale) ; $i = $i + 6) 
                 { 
                     $data_unit_sale_item[] =array(
                         "id" =>$unit_sale[$i] < 1 ? null : $unit_sale[$i] ,
                         "item_id" => $item_id,
-                        "name" =>empty($unit_sale[$i + 1]) ? "NOT DEFINED" : $unit_sale[$i + 1],                    
-                        "quatity" =>is_numeric($unit_sale[$i + 2]) ? $unit_sale[$i + 2] :1,
-                        "price" =>is_numeric($unit_sale[$i + 3] ) ? $unit_sale[$i + 3] :0,
-                        "default_select" =>$unit_sale[$i + 4],
+                        "unit_measurement" => empty($unit_sale[$i + 1]) ? "NOT DEFINED" : $unit_sale[$i + 1],
+                        "name" =>empty($unit_sale[$i + 2]) ? "NOT DEFINED" : $unit_sale[$i + 2],                    
+                        "quatity" =>is_numeric($unit_sale[$i + 3]) ? $unit_sale[$i + 3] :1,
+                        "price" =>is_numeric($unit_sale[$i + 4] ) ? $unit_sale[$i + 4] :0,
+                        "default_select" =>$unit_sale[$i + 5],
                         "location_id" => $location_id,
                         "deleted" => 0
                     );
-                    $canti_select = $canti_select + $unit_sale[$i + 4];
+                    $canti_select = $canti_select + $unit_sale[$i + 5];
                 }
-                /*if($canti_select == 0)
-                    $data_unit_sale_item[0]["default_select"] = 1;*/
+                if($canti_select == 0)
+                    $data_unit_sale_item[0]["default_select"] = 1;
 
                 $this->Item_unit_sell->save( $data_unit_sale_item,$item_id);
             

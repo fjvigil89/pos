@@ -825,14 +825,11 @@ class Sale_lib
 
 				if ($id_tier)
 				{
+					$this->edit_unit($line,-1,-1,0,$items);
 					$items[$line]['price'] = $this->get_price_for_item($item_id, $id_tier);	
 								
-					$items[$line]["has_selected_unit"] = 0;
-					//$items[$line]["quantity"] = 1;	
-					
-					
 				} else
-				{	
+				{		$this->edit_unit($line,-1,-1,0,$items);
 						$items[$line]['price']= $this->get_price_for_item($item_id);
 				}
 				
@@ -886,7 +883,7 @@ class Sale_lib
 	function add_item($item_id,$quantity=1,$discount=0,$price = null,$description = null,$serialnumber = null, $force_add = FALSE, $line = FALSE,$custom1_subcategory = null,$custom2_subcategory = null, $no_valida_por_id = false,
 	$numero_cuenta = null, $numero_documento = null, $titular_cuenta = null,$tasa = null, $tipo_documento = null,$id_tier = 0, $transaction_status = null, $comentarios = null,
 	$fecha_estado = null, $tipo_cuenta = null, $observaciones = null, $celular = null, $name_unit = null, $has_selected_unit = 0,$unit_quantity_item = null ,$unit_quantity = null, $unit_quantity_presentation = null,
-	$price_presentation = null)
+	$price_presentation = null,$unit_measurement = null)
 	{
 		$store_account_item_id = $this->CI->Item->get_store_account_item_id();
 		
@@ -977,6 +974,7 @@ class Sale_lib
 					$unit_quantity = 1;
 					$unit_quantity_presentation = $data_unit_sale["unit_quantity_presentation"];
 					$price_presentation =  $data_unit_sale["price_presentation"];
+					$unit_measurement = $data_unit_sale["unit_measurement"];
 				}
 			}
 		}
@@ -1024,7 +1022,8 @@ class Sale_lib
 				"unit_quantity_presentation" => $unit_quantity_presentation,// cantidad de unidad de la presentacion del producto
 				"unit_quantity_item" => $unit_quantity_item != null ? $unit_quantity_item : $item_info->quantity_unit_sale,// canidad maxima de unidad  que tien el producto, esto solo se modifica por inventario
 				"unit_quantity"	=> $unit_quantity,	//cantidad a vender de la presentacion	
-				"price_presentation" => $price_presentation
+				"price_presentation" => $price_presentation,
+				"unit_measurement" => $unit_measurement 
 				)
 			);
 		//Item already exists and is not serialized, add to quantity
@@ -1040,8 +1039,6 @@ class Sale_lib
 				$data_unit_sale = $this->get_price_unit_sale($item_info, null,false,$items[$_line]['unit_quantity']);
 				$items[$_line]['quantity'] = $data_unit_sale["quantity_item"];
 			}
-			
-			
 		}
 		else
 		{
@@ -1057,10 +1054,10 @@ class Sale_lib
 		return true;
 
 	}
-	function edit_unit($line,$item_id, $unit_id, $type = 1)
+	function edit_unit($line,$item_id, $unit_id, $type = 1, &$items = null)
 	{
 		$item_info = $this->CI->Item->get_info($item_id);
-		$items=$this->get_cart();
+		$items = $items == null ? $this->get_cart() : $items;
 
 		if($type == 1)
 		{
@@ -1072,7 +1069,8 @@ class Sale_lib
 			$items[$line]["unit_quantity"]	= 1;
 			$items[$line]["price_presentation"] = $new_data["price_presentation"];
 			$items[$line]["price"] = $new_data["price_to_use"];
-			$items[$line]["quantity"] =$new_data["quantity_item"];
+			$items[$line]["quantity"] = $new_data["quantity_item"];
+			$items[$line]["unit_measurement"] =  $new_data["unit_measurement"];
 		}
 		else
 		{
@@ -1081,8 +1079,12 @@ class Sale_lib
 			$items[$line]["unit_quantity_presentation"] = null;		
 			$items[$line]["unit_quantity"]	= null;
 			$items[$line]["price_presentation"] = null;
-			$items[$line]["price"] = $this->get_price_for_item($item_id);
+			
+			if($item_id >1)
+				$items[$line]["price"] = $this->get_price_for_item($item_id);
+
 			$items[$line]["quantity"] = 1;
+			$items[$line]["unit_measurement"] = null;
 		}
 		$this->set_cart($items);
 		return true;
@@ -1114,7 +1116,8 @@ class Sale_lib
 				"unit_id" => $unit->id,
 				"name_unit"=>$unit->name,
 				"unit_quantity_presentation"=>$unit_quantity_presentation,
-				"price_presentation" =>$price_sale
+				"price_presentation" =>$price_sale,
+				"unit_measurement" =>$unit->unit_measurement,
 			);
 
 
@@ -1594,7 +1597,7 @@ class Sale_lib
 			$row->custom1_subcategory,$row->custom2_subcategory,false,$row->numero_cuenta,$row->numero_documento,$row->titular_cuenta,$row->tasa,
 			$row->tipo_documento, $row->id_tier,$row->transaction_status,$row->comentarios,$row->fecha_estado,$row->tipo_cuenta,$row->observaciones,$row->celular,
 			$row->name_unit, $row->has_selected_unit ,$row->unit_quantity_item  ,$row->unit_quantity , $row->unit_quantity_presentation ,
-			$row->price_presentation);
+			$row->price_presentation,$row->unit_measurement);
 			
 		}
 		
