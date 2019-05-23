@@ -207,7 +207,6 @@ class Items extends Secure_area implements iData_controller
         $data = array();
         $data['controller_name'] = strtolower(get_class());
         $data["units"] = $this->Appconfig->get_all_units();
-        $data["units"][""] = lang("common_select");        
         $data['item_info'] = $this->Item->get_info($item_id);
         $data['item_tax_info'] = $this->Item_taxes->get_info($item_id);
         $data['tiers'] = $this->Tier->get_all()->result();

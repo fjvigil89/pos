@@ -338,7 +338,7 @@
 													<?php if($item['has_sales_units'] == 1):?>
 													<br>													
 														<a href="<?php echo isset($item['item_id']) ? site_url('sales/view_unit_modal/'.$line."/".$item['item_id']) : site_url('home/view_item_kit_modal/'.$item['item_kit_id']) ; ?>" data-toggle="modal" data-target="#myModal" >
-															 <span class="badge"><?= character_limiter(H($item['name_unit'] ? $item['name_unit'] : " -- ")  ,12)." / ".character_limiter(H($item["unit_measurement"] ? $item["unit_measurement"]: " --"),4)?></span>
+															 <span class="badge"><?= character_limiter(H($item['name_unit'] ? $item['name_unit'] : " -- ")  ,15)?></span>
 														</a>
 													<?php endif;?>
 												</td>

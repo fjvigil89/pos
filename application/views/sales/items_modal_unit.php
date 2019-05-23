@@ -51,7 +51,7 @@
                                             <td style="text-align: center;">
                                                 <?php 
 														if($name_unit ==  $unit->name)
-															echo '<span class="badge">'.H($unit->name)." / ".H($unit->unit_measurement).'</span>';
+															echo '<span class="badge">'.H($unit->name).'</span>';
 														
 														else
 														 echo  $unit->name

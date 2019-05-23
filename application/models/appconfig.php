@@ -77,7 +77,9 @@ class Appconfig extends CI_Model
 			lang('items_milliliters') => lang('items_milliliters'),
 			lang('items_ounces') => lang('items_ounces'),
 			lang("items_meters") => lang("items_meters"),
-			lang("items_centimeter") => lang("items_centimeter")
+			lang("items_centimeter") => lang("items_centimeter"),
+			lang("items_liter") => lang("items_liter"),
+			lang("items_gram") => lang("items_gram"),
 		);
 	}
 	function get_all_units()
@@ -91,9 +93,14 @@ class Appconfig extends CI_Model
 			$units_measurement = array();	
 
 		foreach($units_measurement as  $unit)
-			$return[$unit]= $unit ;
+			$return[ucwords($unit)]= ucwords($unit);
 		
-		$return= array_unique($return);
+		$return = array_unique($return);
+
+		ksort($return);
+
+		$return = array('' => lang("common_select")) + $return;
+
 		return $return;
 	}
 	function get_all()

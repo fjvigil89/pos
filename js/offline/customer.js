@@ -192,11 +192,35 @@ class Customer{
     }
     async get_customer_search_suggestions(search,limit=25)
 	{
-		let suggestions = Array();
+        let suggestions = Array();
+        let temp_suggestions = Array();
+
+        if(search == " " || search == "")
+        {
+            
+            let all= await  db1.customers.offset(0).limit(limit).toArray();
+            
+          
+            
+            all.forEach(function (row) {
+                temp_suggestions[row.person_id] = row.last_name+', '+row.first_name;
+            });
+            
+            for(i in temp_suggestions)
+            {
+                let arr=Array();
+                arr["value"] = i;
+                arr["label"] = temp_suggestions[i];
+                suggestions.push(arr);
+            }
+        }
+        search = search.trim();
+        
         let by_name= await  db1.customers.where("first_name").startsWithIgnoreCase(search).or("last_name").
         startsWithIgnoreCase(search).offset(0).limit(limit).toArray();
         
-        let temp_suggestions = Array();
+        
+        temp_suggestions = Array();
 		
 		by_name.forEach(function (row) {
 			temp_suggestions[row.person_id] = row.last_name+', '+row.first_name;

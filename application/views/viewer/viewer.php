@@ -435,7 +435,7 @@
             $("#convertido").val(total);
         }
         if ($.isNumeric( $("#catidad").val()))
-            $("#catidad2").val(accounting.formatNumber( $("#catidad").val())); 
+            $("#catidad2").val(accounting.formatMoney( $("#catidad").val(),"$ ",0)); 
         else{
             $("#convertido").val("BS 0");
             $("#catidad2").val("");
