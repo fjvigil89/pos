@@ -1,5 +1,6 @@
 {
     "require": {
-        "ko/json-cache": "^0.0.6"
+        "ko/json-cache": "^0.0.6",
+        "google/apiclient": "^2.0"
     }
 }
