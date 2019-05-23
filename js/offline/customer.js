@@ -55,6 +55,11 @@ class Customer{
 			return person_obj;
 		}
     }
+    async get_all()
+    {
+        const query = await db1.customers.where({deleted: "0"}).toArray();
+        return query;
+    }
     async save(person_id = -1, data_customer)
     {
         var save = true,
