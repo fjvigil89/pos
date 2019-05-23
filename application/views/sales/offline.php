@@ -152,7 +152,7 @@
                     <li class="">
                         <a href="<?php echo site_url("customers/customers_list") ?>">
                             <i class="fa fa-group"></i>
-                            <span class="title">Clietes</span>
+                            <span class="title">Clientes</span>
                         </a>
                     </li>
                     <li>
@@ -298,21 +298,15 @@
                                                             </a>
                                                         </li>
                                                         <li>
-                                                        <a href="javascrit:void(0)"  onclick="show_modal('sales/sale_seriales_offline_modal','Búsqueda por serial')" ><?=lang("sale_search_by_serial")?>
-                                                        </a>
-
-                                                    </li>
+                                                            <a href="javascrit:void(0)"  onclick="show_modal('sales/sale_seriales_offline_modal','Búsqueda por serial')" ><?=lang("sale_search_by_serial")?>
+                                                            </a>
+                                                        </li>
                                                         <li>
                                                             <a href="<?php echo site_url("sales/list_sales") ?>"
                                                                 class=""><?=lang('sale_sales_day')?>
                                                             </a>
                                                         </li>                                                        
-
-                                                        <li>
-                                                            <a href="<?php echo site_url("sales/open_money_drawer_offline") ?>"
-                                                                class=""><?=lang('sales_open_money_drawer')?></a>
-                                                        </li>
-
+                                                        
                                                     </ul>
                                                 </div>
                                             </div>
@@ -442,6 +436,32 @@
                                                     </div>
                                                 </form>
                                             </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="row col-md-4 pull-right">
+                                                <div class="sale-buttons ">
+                                                    <!-- Cancel and suspend buttons -->
+                                                    <form action="" method="post" accept-charset="utf-8"
+                                                        id="cancel_sale_form" autocomplete="off">
+
+                                                        <div
+                                                            class="btn-group btn-group-sm btn-group-solid btn-group-justified ">
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <?php if ($this->Employee->has_module_action_permission('sales', 'module_allow_open_money_box', $this->Employee->get_logged_in_employee_info()->person_id)) :?>
+                                                <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+                                                    <div class="form-group no_margin_bottom">
+                                                        <div class="col-md-3 col-sm-12 col-xs-12">
+                                                            <div class="input-group">
+                                                                <span class="input-group-btn">
+                                                                    <a href="<?=site_url("sales/open_money_drawer_offline") ?>" class="btn btn-success" title="Se imprime un recibo en blanco"><?=lang('sales_open_money_drawer')?></a>													</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>

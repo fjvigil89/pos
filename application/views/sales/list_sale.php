@@ -194,7 +194,7 @@
                     <li class="">
                         <a href="<?php echo site_url("customers/customers_list") ?>">
                             <i class="fa fa-group"></i>
-                            <span class="title">Clietes</span>
+                            <span class="title">Clientes</span>
                         </a>
                     </li>
                     <li>

@@ -272,12 +272,12 @@
 									{									
 										if(!$overwrite_tax){
 											
-											$sum_tax=0;
+											$sum_tax = 0;
 											$value_tax = $_price * $sum_tax;										
 											$price_with_tax = $_price + $value_tax;
 											
 										}else{
-											$value_tax= get_nuevo_iva($new_tax,$_price);
+											$value_tax = get_nuevo_iva($new_tax,$_price);
 											$price_with_tax = get_precio_con_nuevo_iva($new_tax,$_price);
 										}	
 									}	
@@ -288,7 +288,7 @@
 									$_price = $item['price']; 
 									$tax_kit_info = $this->Item_kit_taxes_finder->get_info($item['item_kit_id']);
 									$i=0;									
-									foreach($tax_kit_info as $key=>$tax)
+									foreach($tax_kit_info as $key => $tax)
 									{
 									   	$prev_tax[$item['item_kit_id']][$i]=$tax['percent']/100;
 										$i++;
@@ -302,8 +302,8 @@
 											$price_with_tax = $item['price']+$value_tax;
 											
 										}else{
-											$value_tax=get_nuevo_iva($new_tax,$item['price']);
-											$price_with_tax =get_precio_con_nuevo_iva($new_tax,$item['price']);
+											$value_tax = get_nuevo_iva($new_tax,$item['price']);
+											$price_with_tax = get_precio_con_nuevo_iva($new_tax,$item['price']);
 										}
 									}
 									elseif (!isset($prev_tax[$item['item_kit_id']]) && $item['name']!=lang('sales_giftcard')) 
@@ -324,7 +324,7 @@
 
 							<td class="gift_receipt_element left_text_align">
 								<?php								 	
-									echo $this->config->item('round_value')==1 ? to_currency(round($_price)) :to_currency($item['price']);
+									echo $this->config->item('round_value')==1 ? to_currency(round($_price)) :to_currency($_price);
 								?>
 							</td>
 							
