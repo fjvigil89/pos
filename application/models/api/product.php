@@ -81,7 +81,18 @@ class Product extends CI_Model {
             
         }
 
-
+    function getfile($file_id)
+    {
+        $db_api = $this->load->database('shop_api', TRUE);
+        $query = $db_api->get_where('app_files', array('file_id' => $file_id), 1);
+        
+        if($query->num_rows()==1)
+        {
+            return $query->row();
+        }
+        
+        return "";  
+    }
 
 
     function get_info_tax()

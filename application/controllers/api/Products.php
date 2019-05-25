@@ -66,7 +66,28 @@ class Products extends CI_Controller {
 
 	function imagen($file_id)
 	{ 
-		$file = $this->Appfile->get($file_id);
+
+        $encrypted_string=!empty($this->input->get('key'))?$this->input->get('key'):null;
+
+		$secreto=base64_decode($encrypted_string);
+		$this->session->set_userdata('db_name_api', $secreto);
+
+
+		/*//renovarmos los config de la tienda------------------------------------------*/
+
+		foreach($this->Product->get_all_confi()->result() as $app_config)
+		{
+			$this->config->set_item($app_config->key,$app_config->value);
+		}
+
+		/*//----------------------------------------------------------------------//*/
+
+		if ($encrypted_string != $this->config->item('token_api')) {
+			$data['error']="Tiene problema con su token de autenticacion";
+			echo json_encode($data); die();
+		}
+
+		$file = $this->Product->getfile($file_id);
 		header("Content-type: ".get_mime_by_extension($file->file_name));
 		echo $file->file_data;
 	}

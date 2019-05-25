@@ -53,7 +53,7 @@ class OrdersApi extends CI_Controller {
 
 
 
-    public function save()
+ function save()
 	{
 
         $encrypted_string=!empty($this->input->get('key'))?$this->input->get('key'):null;
@@ -63,6 +63,7 @@ class OrdersApi extends CI_Controller {
 
 		$this->session->set_userdata('db_name_api', $secreto);
 
+
 		/*//renovarmos los config de la tienda------------------------------------------*/
 
 		foreach($this->Product->get_all_confi()->result() as $app_config)
@@ -71,40 +72,71 @@ class OrdersApi extends CI_Controller {
 		}
 
 		/*//----------------------------------------------------------------------//*/
-$save=false;
 
-if (!empty($this->input->post('order_id'))) {
+		if ($encrypted_string != $this->config->item('token_api')) {
+			$data['error']="Tiene problema con su token de autenticacion";
+			echo json_encode($data); die();
+		}
 
-		$datos=array(
-                    'order_id' => $this->input->post('order_id'),
-                    'products' => $this->input->post('products'),
-                    'date' => $this->input->post('date'),
-                    'referrer' => $this->input->post('referrer'),
-                    'clean_referrer' => $this->input->post('clean_referrer'),
-                    'payment_type' =>  $this->input->post('payment_type'),
-                    'paypal_status' => $this->input->post('paypal_status'),
-                    'discount_code' => $this->input->post('discountCode'),
-                    'user_id' => $this->input->post('user_id'),
-                    'for_id' => $this->input->post('for_id'),
-                    'first_name' => $this->input->post('first_name'),
-                    'last_name' => $this->input->post('last_name'),
-                    'email' => $this->input->post('email'),
-                    'phone' => $this->input->post('phone'),
-                    'address' => $this->input->post('address'),
-                    'city' => $this->input->post('city'),
-                    'post_code' => $this->input->post('post_code'),
-                    'notes' => $this->input->post('notes')
-                 );
+        $errors = [];
+        $id_order=false;
 
+        if (!isset($_POST['order_id']) || empty($_POST['order_id'])) {
+            $errors[] = 'No order_id array or empty';
+        }
+        if (!isset($_POST['products']) || empty($_POST['products'])) {
+            $errors[] = 'No products array or empty';
+        }
+        if (!isset($_POST['date']) || empty($_POST['date'])) {
+            $errors[] = 'No date array or empty';
+        }
+        if (!isset($_POST['referrer']) || empty($_POST['referrer'])) {
+            $errors[] = 'No referrer array or empty';
+        }
+        if (!isset($_POST['clean_referrer']) || empty($_POST['clean_referrer'])) {
+            $errors[] = 'No clean_referrer array or empty';
+        }
+        if (!isset($_POST['payment_type']) || empty($_POST['payment_type'])) {
+            $errors[] = 'No payment_type array or empty';
+        }
+        if (!isset($_POST['for_id']) || empty($_POST['for_id'])) {
+            $errors[] = 'No for_id array or empty';
+        }
+        if (!isset($_POST['first_name']) || empty($_POST['first_name'])) {
+            $errors[] = 'No first_name array or empty';
+        } 
+        if (!isset($_POST['last_name']) || empty($_POST['last_name'])) {
+            $errors[] = 'No last_name array or empty';
+        } 
+        if (!isset($_POST['phone']) || empty($_POST['phone'])) {
+            $errors[] = 'No phone array or empty';
+        }
+        if (!isset($_POST['address']) || empty($_POST['address'])) {
+            $errors[] = 'No address array or empty';
+        } 
+        if (!isset($_POST['city']) || empty($_POST['city'])) {
+            $errors[] = 'No city array or empty';
+		} 
+		
+		var_dump($_POST);
+                           
+        if (!empty($errors)) {
+            $error = implode(", ", $errors);
+            $message = [
+                'message' => $error
+            ];
+        } else {
 
+          
 
-		$save = $this->Order_api->set_orden($datos);
+            $id_order=$this->Order_api->set_orden($_POST);
+            $message = [
+                'message' => 'Registro exitoso',
+                'id_order' => $id_order
+            ];
+        }
 
-
-
-}
-	
-		echo json_encode($save); 
+		echo json_encode($message); 
 
 	}
 
