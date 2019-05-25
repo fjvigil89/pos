@@ -2230,7 +2230,7 @@ class Reports extends Secure_area {
         $model = $this->Consolidated_shop;
         $model->setParams(array('start_date' => $start_date, 'end_date' => $end_date, 'store_id' => $store_id));
         $this->Location->get_all()->result();
-        $this->Register_movement->create_movement_items_temp_table(array('start_date' => $start_date, 'end_date' => $end_date));
+        $this->Register_movement->create_movement_items_temp_table(array('start_date' => $start_date, 'end_date' => $end_date,'all_location'=>1));
         //$this->Receiving->create_receivings_items_temp_table(array('start_date' => $start_date, 'end_date' => $end_date, 'store_id' => $store_id));
         $config = array();
         $config['base_url'] = site_url("reports/report_consolidated_shop/" . rawurlencode($start_date) . '/' . rawurlencode($end_date) . "/$store_id");
