@@ -206,6 +206,7 @@
 										{
 											echo lang('common_total').": <strong>". $total_giftcards."</strong>";
 										}
+																				
 									}
 								?>
 							</div>
