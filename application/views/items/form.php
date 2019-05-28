@@ -986,7 +986,7 @@
                                             <input type="text" onkeyup="mayuscula(this)" required class="form-control form-inps" size="25"
                                                 name="unit_sale[]" value="<?php echo H($unit->name); ?>" />
                                         </td>
-                                        <td><input type="number" min="1"
+                                        <td><input type="number" min="1" onchange="validate_quantity()"
                                                 class="quantity_unit_sale_1 form-control form-inps" size="10"
                                                 name="unit_sale[]" value="<?php echo (double) $unit->quatity; ?>" />
                                         </td>
@@ -1846,7 +1846,7 @@ $(document).ready(function() {
 						<input type="text" onkeyup="mayuscula(this)" required class="form-control form-inps" size="30" name="unit_sale[]" value="" />
 					</td>
 					<td>
-						<input type="number" min="0" class="form-control form-inps quantity_unit_sale_1" size="40" name="unit_sale[]" value="1" />
+						<input type="number" min="0" onchange="validate_quantity()" class="form-control form-inps quantity_unit_sale_1" size="40" name="unit_sale[]" value="1" />
 					</td>
 					<td>
 						<input type="number" min="0" class="form-control form-inps" size="40" name="unit_sale[]" value="0" />
@@ -2286,6 +2286,10 @@ function calcule_price_unit() {
         for (const key in elements)
             elements[key].max = "" + $("#quantity_unit_sale").val();
     }
+    else if(!$.isNumeric($("#cost_price").val()))
+    {
+        alert("Debe ingresar el <?=lang('items_cost_price').' ('.lang('items_without_tax').')'?>");
+    }
 }
 
 function select_radio(element) 
@@ -2304,7 +2308,13 @@ function mayuscula(e)
 {
     e.value = e.value.toUpperCase();
 }
-
+function validate_quantity()
+{
+    if (!$.isNumeric($("#cost_price").val()) ||  $("#quantity_unit_sale").val()< 1)
+    {
+        		alert("Debe ingresar la <?=lang("items_unit_quantity")?>");
+    }
+}
 function stock_valido(location) {
 
     var elemento_input_id_Stock_store = "locations[" + location + "][quantity]";

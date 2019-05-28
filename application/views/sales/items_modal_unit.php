@@ -46,7 +46,9 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php foreach ($unit_item as $unit) :?>
+                                        <?php foreach ($unit_item as $unit) :
+                                            $main = true;
+                                            ?>
                                         <tr>
                                             <td style="text-align: center;">
                                                 <?php 
@@ -59,20 +61,33 @@
                                             <td style="text-align: center;"><?= (double) $unit->quatity?></td>
                                             <td style="text-align: center;"><?= to_currency($unit->price) ?></td>
                                             <td style="text-align: center;">
-                                                <?php if($name_unit ==  $unit->name){ ?>
-                                                <!--<a class="edit_unit btn btn-xs opcion   btn-danger"
-                                                    href="<?=site_url('sales/edit_unit/'.$line."/".$unit->item_id."/".$unit->id."/0")  ?>">
-                                                    <?=lang("common_remove")?>
-                                                </a>-->
-                                                <?php } else {?>
+                                                <?php if($name_unit ==  $unit->name){ $main = false; }?>
                                                 <a class=" edit_unit btn btn-xs opcion btn-success"
                                                     href="<?=site_url('sales/edit_unit/'.$line."/".$unit->item_id."/".$unit->id."/1")  ?>">
                                                     <?=lang("common_select")?>
                                                 </a>
-												<?php }?>
                                             </td>
                                         </tr>
                                         <?php endforeach;?>
+
+                                        <tr>
+                                            <td style="text-align: center;">
+                                            <?php 
+                                            if($main)
+                                                echo'<span class="badge">Unidad Principal</span>';
+                                            else echo 'Unidad Principal';
+                                            ?>
+                                               
+													
+                                            <td style="text-align: center;"><?=(double) $item_info->quantity_unit_sale?></td>
+                                            <td style="text-align: center;"></td>
+                                            <td style="text-align: center;">                                              
+                                                <a class="edit_unit btn btn-xs opcion btn-success"
+                                                    href="<?=site_url('sales/edit_unit/'.$line."/".$item_info->item_id."/0/0")  ?>">
+                                                    <?=lang("common_select")?>
+                                                </a>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>

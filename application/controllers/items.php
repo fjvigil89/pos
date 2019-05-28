@@ -641,7 +641,7 @@ class Items extends Secure_area implements iData_controller
             $location_id = $this->Employee->get_logged_in_employee_current_location_id();
             if($this->input->post('has_sales_units') == 1)
             {  
-                $canti_select = 0;
+                //$canti_select = 0;
                 for ($i= 0; $i < count( $unit_sale) ; $i = $i + 6) 
                 { 
                     $data_unit_sale_item[] =array(
@@ -655,10 +655,10 @@ class Items extends Secure_area implements iData_controller
                         "location_id" => $location_id,
                         "deleted" => 0
                     );
-                    $canti_select = $canti_select + $unit_sale[$i + 5];
+                    //$canti_select = $canti_select + $unit_sale[$i + 5];
                 }
-                if($canti_select == 0)
-                    $data_unit_sale_item[0]["default_select"] = 1;
+                //if($canti_select == 0)
+                 //   $data_unit_sale_item[0]["default_select"] = 1;
 
                 $this->Item_unit_sell->save( $data_unit_sale_item,$item_id);
             
