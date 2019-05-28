@@ -110,4 +110,5 @@ $lang["module_action_mostrar_valor_cierre_caja"]="Mostrar valor de cierre de caj
 $lang["module_action_return_item_with_invoice"]="Devolución con factura";
 $lang["module_action_add_update_img"]="Agregar, editar y eliminar imagenes";
 $lang["module_action_config_viewer"]="Configurar visor";
+$lang["module_notifications"]="Notificaciones";
 ?>

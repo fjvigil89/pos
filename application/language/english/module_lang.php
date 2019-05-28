@@ -88,4 +88,5 @@ $lang["module_overwrite_tax"]="Overwrite the tax during the sale";
 
 $lang["module_action_add_update_img"]="Add, edit and delete images";
 $lang["module_action_config_viewer"]="Configure viewer";
+$lang["module_notifications"]="Notifications";
 ?>
