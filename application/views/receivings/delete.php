@@ -10,7 +10,7 @@
 						</h3>
 					</strong>
 				</div>
-			<?php if ($error_access){?>
+			<?php if (isset($error_access) && $error_access){?>
 				<div class="panel-body">
 					<h1 class="text-danger"> <i class="fa fa-check"></i> <?php echo lang('error_no_permission_action'); ?></h1>
 				</div>

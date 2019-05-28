@@ -722,6 +722,8 @@ class Receivings extends Secure_area
 		
 		if ($this->Receiving->delete($receiving_id, false, $receiving_info['suspended'] == 0))
 		{
+			$this->Register_movement->save($receiving_info['mount'], "Compra retornada",false,true,"Compra retornada",false);
+		
 			$data['success'] = true;
 		}
 		else
@@ -763,9 +765,10 @@ class Receivings extends Secure_area
 	function undelete($receiving_id)
 	{
 		$data = array();
-		
+		$receiving_info = $this->Receiving->get_info($receiving_id)->row_array();
 		if ($this->Receiving->undelete($receiving_id))
 		{
+			$this->Register_movement->save($receiving_info['mount'] * (-1), "Compra realizada",false,true,"Compra realizada",false);
 			$data['success'] = true;
 		}
 		else
