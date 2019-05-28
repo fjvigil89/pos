@@ -51,7 +51,7 @@
 			<div class="portlet-body">
 				<div class="row">
 					<div class="col-md-6">
-						<?php if (count($location_registers) > 1) {?>
+						<?php if (count($location_registers) >= 1) {?>
 							<div class="pull-left">							
 								<label style="padding:3px;"><?=lang('sales_register');?>: </label>
 									<!-- Dropdown Locations -->

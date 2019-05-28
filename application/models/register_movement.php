@@ -323,8 +323,12 @@ class Register_movement extends CI_Model
 		
 		if (isset($params['start_date']) && isset($params['end_date']))
 		{
-			$where = 'WHERE register_date BETWEEN "'.$params['start_date'].'" and "'.$params['end_date'].'"'.
-			' and '.$this->db->dbprefix('registers').'.location_id='.$this->db->escape($location_id);
+			if(isset($params['all_location'])){
+				$where = 'WHERE register_date BETWEEN "'.$params['start_date'].'" and "'.$params['end_date'].'"';
+			}else{
+				$where = 'WHERE register_date BETWEEN "'.$params['start_date'].'" and "'.$params['end_date'].'"'.
+				' and '.$this->db->dbprefix('registers').'.location_id='.$this->db->escape($location_id);
+			}
 		}
 		if (isset($params['register_id']) && $params['register_id']!="all")
 		{
