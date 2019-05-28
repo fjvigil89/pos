@@ -281,10 +281,10 @@
                         {
                             $("#tableBody-list").html("");
 
-                            var listn = await objCustomer.lits_new(),
+                            var list = await objCustomer.get_all(),
                                 html = "";
 
-                            listn.forEach(customer => {
+                            list.forEach(customer => {
                                 html = '<tr>';
 
                                 html += '<td style="width: 2%">' + customer.person_id + '</td>';
@@ -293,14 +293,21 @@
                                 html += '<td style="width: 14%">' + customer.first_name + '</td>';
                                 html += '<td style="width: 10%">' + customer.email + '</td>';
                                 html += '<td style="width: 10%">' + customer.phone_number + '</td>';
-                                html += '<td style="width: 2%">';
-                                html +='<a ref="javascrit:void(0)" onclick="show_modal_customer(\'customers/new_modal\','+customer.person_id+')"  class="btn btn-xs btn-block default btn-editable update-person" title="Actualizar Cliente"><i class="fa fa-pencil"></i>Editar</a></td>';
-
+                               
+                                if(customer.is_new == 1)
+                                {
+                                    html += '<td style="width: 2%">';
+                                    html += '<a ref="javascrit:void(0)" onclick="show_modal_customer(\'customers/new_modal\','+customer.person_id+')"  class="btn btn-xs btn-block default btn-editable update-person" title="Actualizar Cliente"><i class="fa fa-pencil"></i>Editar</a></td>';
+                                }
+                                else                                
+                                    html +='<td <td style="width: 2%"></td>';
+                                
                                 html += '</tr>';
 
                                 $("#tableBody-list").append(html);
 
                             });
+                            $('#tableBody').DataTable();
                         }
                        
                         function show_modal_customer(url,person_id = -1) 
