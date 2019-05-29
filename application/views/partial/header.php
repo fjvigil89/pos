@@ -3,6 +3,12 @@
 <html>
 
 <head>
+
+    <!--CSS para calendar-->
+    <link href=<?php echo base_url()."assets/global/plugins/fullcalendar/fullcalendar.min.css" ?> rel="stylesheet" type="text/css" />
+    <link href=<?php echo base_url()."assets/global/plugins/fullcalendar/plugins.min.css" ?> rel="stylesheet" type="text/css" />
+    <link href=<?php echo base_url()."assets/global/plugins/fullcalendar/components.min.css" ?> rel="stylesheet" type="text/css" />
+    
     <?php
 	if($this->Appconfig->es_franquicia()==true){
 		$data_commpany = $this->Appconfig->get_data_commpany($this->config->item('resellers_id'));

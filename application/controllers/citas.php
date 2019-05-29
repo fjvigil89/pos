@@ -12,11 +12,8 @@ class citas extends Secure_area
         
     }
     function index(){   
-        $config = array(
-            'show_next_prev' => TRUE,
-            'next_prev_url'  => site_url('citas/index')
-        );     
-        $this->load->library('calendar', $config);
+        
+        $this->load->library('calendar');
 
         /*
         // Get the API client and construct the service object.

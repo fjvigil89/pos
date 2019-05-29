@@ -25,6 +25,8 @@
 <link href="css/fancybox.min.css" rel="stylesheet" type="text/css" />
 <link href="css/checkbox_style.css" rel="stylesheet" type="text/css" />
 
+
+
 <?php  /*
 //estos css deberian llamarse solo donde sean necesarios
 <link href="css/pricing.min.css" rel="stylesheet" type="text/css" />
