@@ -27,9 +27,23 @@
 				);?>
 				</div>
 			</div>
+			<!-- compo otros utilizado en clientes -->
+			<?php if(isset($input_otros)){?>
+			<div class="form-group">
+				<?php echo form_label(lang('otros').':', 'otros',array('class'=>'col-md-3 control-label')); ?>
+				<div class="col-md-8">
+				<?php echo form_input(array(
+					'class'=>'form-control form-inps',
+					'name'=>'otros',
+					'id'=>'otros',
+					'value'=>'')
+				);?>
+				</div>
+			</div>
+			<?php }?>
 
 			<div class="form-group">
-				<?php echo form_label('<a class="help_config_required  tooltips " data-placement="left" title="'.lang("common_email_help").'">'.lang('common_email').'</a>'.':', 'email',array('class'=>'col-md-3 control-label '.($controller_name == 'employees' ? 'requireds' : 'not_required'))); ?>
+				<?php echo form_label(($controller_name == 'customers' ? 'Email' :'<a class="help_config_required  tooltips " data-placement="left" title="'.lang("common_email_help").'">'.lang('common_email').'</a>').':', 'email',array('class'=>'col-md-3 control-label '.($controller_name == 'employees' ? 'requireds' : 'not_required'))); ?>
 				<div class="col-md-8">
 				<?php echo form_input(array(
 					'class'=>'form-control form-inps',

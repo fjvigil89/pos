@@ -154,6 +154,7 @@ class Customers extends Person_controller
 		
 		$data['controller_name']=strtolower(get_class());
 		$data['tiers']=$tiers;
+		$data['input_otros']=true;
 		$data['person_info']=$this->Customer->get_info($customer_id);
 		$data['person_info_point']=$this->Customer->get_info_points($customer_id);
 		$data['redirect_code']=$redirect_code;
