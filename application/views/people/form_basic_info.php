@@ -30,13 +30,13 @@
 			<!-- compo otros utilizado en clientes -->
 			<?php if(isset($input_otros)){?>
 			<div class="form-group">
-				<?php echo form_label(lang('otros').':', 'otros',array('class'=>'col-md-3 control-label')); ?>
+				<?php echo form_label('<a class="help_config  tooltips " data-placement="left" title="'.lang("customers_input_others_help").'">'.lang('otros').'</a>'.':', 'others',array('class'=>'col-md-3 control-label')); ?>
 				<div class="col-md-8">
 				<?php echo form_input(array(
 					'class'=>'form-control form-inps',
-					'name'=>'otros',
-					'id'=>'otros',
-					'value'=>'')
+					'name'=>'others',
+					'id'=>'others',
+					'value'=>$person_info->other)
 				);?>
 				</div>
 			</div>

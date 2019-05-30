@@ -215,6 +215,7 @@ class Customers extends Person_controller
 			'tier_id' => $this->input->post('tier_id') ? $this->input->post('tier_id') : NULL,
 			'account_number'=>$this->input->post('account_number')=='' ? null:$this->input->post('account_number'),
 			'taxable'=>$this->input->post('taxable')=='' ? 0:1,
+			'other'=>$this->input->post('others')=='' ? null:$this->input->post('others'),
 		);
 	
 	
