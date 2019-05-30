@@ -717,12 +717,17 @@ class Receivings extends Secure_area
 	function delete($receiving_id)
 	{
 		$receiving_info = $this->Receiving->get_info($receiving_id)->row_array();
-		
+		$resul=$this->Receiving->get_es_devolucion($receiving_info['receiving_id'],0);
 		$data = array();
-		
 		if ($this->Receiving->delete($receiving_id, false, $receiving_info['suspended'] == 0))
 		{
-			$this->Register_movement->save($receiving_info['mount'], "Compra retornada",false,true,"Compra retornada",false);
+			
+			if(intval($resul['items_purchased'])>0){
+				$this->Register_movement->save($receiving_info['mount'], "Compra retornada",false,true,"Compra retornada",false);
+			}else if($resul['items_purchased']!=null){
+				$this->Register_movement->save($receiving_info['mount'] * (-1), "Compra realizada",false,true,"Compra realizada",false);
+			}
+			
 		
 			$data['success'] = true;
 		}
@@ -766,9 +771,14 @@ class Receivings extends Secure_area
 	{
 		$data = array();
 		$receiving_info = $this->Receiving->get_info($receiving_id)->row_array();
+		$resul=$this->Receiving->get_es_devolucion($receiving_info['receiving_id'],1);
 		if ($this->Receiving->undelete($receiving_id))
 		{
-			$this->Register_movement->save($receiving_info['mount'] * (-1), "Compra realizada",false,true,"Compra realizada",false);
+			if(intval($resul['items_purchased'])>0){
+				$this->Register_movement->save($receiving_info['mount'] * (-1), "Compra realizada",false,true,"Compra realizada",false);
+			}else if($resul['items_purchased']!=null){
+				$this->Register_movement->save($receiving_info['mount'], "Compra retornada",false,true,"Compra retornada",false);
+			}
 			$data['success'] = true;
 		}
 		else
