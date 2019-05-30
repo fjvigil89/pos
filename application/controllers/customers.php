@@ -511,7 +511,13 @@ class Customers extends Person_controller
 						$company_name = '';
 					}
 					
-					$person_id = $sheet->getCellByColumnAndRow(14, $k)->getValue();
+					$saldo = $sheet->getCellByColumnAndRow(14, $k)->getValue();
+					if (!$saldo)
+					{
+						$saldo = '';
+					}
+					
+					$person_id = $sheet->getCellByColumnAndRow(15, $k)->getValue();
 					
 					
 					$person_data = array(
@@ -530,6 +536,7 @@ class Customers extends Person_controller
 					
 					$customer_data=array(
 					'account_number'=>$account_number,
+					'balance'=>$saldo,
 					'taxable'=> $taxable == 'n' || $taxable == 'no' ? 0 : 1,
 					'company_name' => $company_name,
 					);
