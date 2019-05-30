@@ -205,11 +205,14 @@
 
 									<?php if ($this->Employee->has_module_action_permission($controller_name, 'delete', $this->Employee->get_logged_in_employee_info()->person_id)) {?>				
 
-										<?php echo 
+										<?php 
+											if(!$this->Employee->es_demo()){
+											echo 
 											anchor("$controller_name/delete",
 											'<i class="fa fa-trash-o hidden-lg fa fa-2x tip-bottom" data-original-title="'.lang('common_delete').'"></i><span class="visible-lg">'.lang("common_delete").'</span>',
 											array('id'=>'delete', 
 												'class'=>'btn btn-danger disabled','title'=>lang("common_delete"))); 
+											}
 										?>
 										<?php echo 
 											anchor("$controller_name/cleanup",
