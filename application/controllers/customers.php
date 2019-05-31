@@ -6,6 +6,12 @@ class Customers extends Person_controller
 	{
 		parent::__construct('customers');
 	}
+
+	function customers_list()
+	{
+		$this->load->view("partial/cache_control"); 
+		$this->load->view("customers/list");
+	}
 	
 	
 	function index($offset=0)
@@ -40,7 +46,25 @@ class Customers extends Person_controller
 		$data['total_rows'] = $config['total_rows'];
 		$this->load->view('people/manage',$data);
 	}
+	function new_modal()
+	{
+		$tiers = array();
+		$tiers_result = $this->Tier->get_all()->result_array();
+		
+		if (count($tiers_result) > 0)
+		{
+			$tiers[0] = lang('items_none');
+			foreach($tiers_result as $tier)
+			{
+				$tiers[$tier['id']]=$tier['name'];
+			}	
+		}
+		
+		$data['controller_name']=strtolower(get_class());
+		$data['tiers']=$tiers;
 
+		echo $this->load->view('customers/new_modal',$data,true);
+	}
 	function sorting()
 	{
 		$this->check_action_permission('search');
@@ -130,6 +154,7 @@ class Customers extends Person_controller
 		
 		$data['controller_name']=strtolower(get_class());
 		$data['tiers']=$tiers;
+		$data['input_otros']=true;
 		$data['person_info']=$this->Customer->get_info($customer_id);
 		$data['person_info_point']=$this->Customer->get_info_points($customer_id);
 		$data['redirect_code']=$redirect_code;
@@ -190,6 +215,7 @@ class Customers extends Person_controller
 			'tier_id' => $this->input->post('tier_id') ? $this->input->post('tier_id') : NULL,
 			'account_number'=>$this->input->post('account_number')=='' ? null:$this->input->post('account_number'),
 			'taxable'=>$this->input->post('taxable')=='' ? 0:1,
+			'other'=>$this->input->post('others')=='' ? null:$this->input->post('others'),
 		);
 	
 	
@@ -232,7 +258,7 @@ class Customers extends Person_controller
 			$success_message = '';
 			
 			//New customer
-			if($customer_id==-1)
+			if($customer_id ==- 1)
 			{
 				$success_message = lang('customers_successful_adding').' '.$person_data['first_name'].' '.$person_data['last_name'];
 				echo json_encode(array('success'=>true,'message'=> $success_message,'person_id'=>$customer_data['person_id'],'redirect_code'=>$redirect_code));
@@ -485,7 +511,13 @@ class Customers extends Person_controller
 						$company_name = '';
 					}
 					
-					$person_id = $sheet->getCellByColumnAndRow(14, $k)->getValue();
+					$saldo = $sheet->getCellByColumnAndRow(14, $k)->getValue();
+					if (!$saldo)
+					{
+						$saldo = '';
+					}
+					
+					$person_id = $sheet->getCellByColumnAndRow(15, $k)->getValue();
 					
 					
 					$person_data = array(
@@ -504,6 +536,7 @@ class Customers extends Person_controller
 					
 					$customer_data=array(
 					'account_number'=>$account_number,
+					'balance'=>$saldo,
 					'taxable'=> $taxable == 'n' || $taxable == 'no' ? 0 : 1,
 					'company_name' => $company_name,
 					);
