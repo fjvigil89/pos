@@ -13,49 +13,21 @@ class Order extends Person
 		
 		return ($query->num_rows()==1);
 	}
+	
 
-	function account_number_exists($account_number)
-	{
-		$this->db->from('customers');	
-		$this->db->where('account_number',$account_number);
-		$query = $this->db->get();
-		
-		return ($query->num_rows()==1);
-	}
-	
-	function customer_id_from_account_number($account_number)
-	{
-		$this->db->from('customers');	
-		$this->db->where('account_number',$account_number);
-		$query = $this->db->get();
-		
-		if ($query->num_rows()==1)
-		{
-			return $query->row()->person_id;
-		}
-		
-		return false;
-	}
-	
 	/*
 	Returns all the customers
 	*/
-	function get_all($limit=10000, $offset=0,$col='last_name',$order='asc')
+	function get_all($limit=10000, $offset=0,$col='order_id',$order='asc')
 	{
-		/*$people=$this->db->dbprefix('people');
-		$customers=$this->db->dbprefix('customers');
-		$data=$this->db->query("SELECT * 
-						FROM ".$people."
-						STRAIGHT_JOIN ".$customers." ON 										                       
-						".$people.".person_id = ".$customers.".person_id
-						WHERE deleted =0 ORDER BY ".$col." ". $order." 
-						LIMIT  ".$offset.",".$limit);*/
-
 
 		$this->db->select('*');	
 		$this->db->from('orders');	
 		$this->db->join('orders_clients', 'orders_clients.for_id = orders.id');
 		$this->db->where('orders.deleted',0);
+		$this->db->order_by($col, $order);
+		$this->db->limit($limit);
+		$this->db->offset($offset);
 		$data = $this->db->get();
 
 
@@ -65,7 +37,8 @@ class Order extends Person
 	
 	function count_all()
 	{
-		$this->db->from('customers');
+		$this->db->from('orders');
+		$this->db->join('orders_clients', 'orders_clients.for_id = orders.id');
 		$this->db->where('deleted',0);
 		return $this->db->count_all_results();
 	}
@@ -102,23 +75,7 @@ class Order extends Person
 			return $person_obj;
 		}
 	}
-	function get_info_points($customer_id)
-	{
 
-		$this->db->from('points');	
-		$this->db->where('points.customer_id',$customer_id);
-		$query = $this->db->get();
-		if($query->num_rows()==1)
-		{
-
-			return $query->row()->points;
-		}
-		else
-		{
-			//Get empty base parent object, as $customer_id is NOT an customer
-			return 0;
-		}
-	}
 	
 	
 	/*
@@ -126,9 +83,9 @@ class Order extends Person
 	*/
 	function get_multiple_info($customer_ids)
 	{
-		$this->db->from('customers');
-		$this->db->join('people', 'people.person_id = customers.person_id');		
-		$this->db->where_in('customers.person_id',$customer_ids);
+		$this->db->from('orders');
+		$this->db->join('orders_clients', 'orders_clients.for_id = orders.id');		
+		$this->db->where_in('orders.id',$customer_ids);
 		$this->db->order_by("last_name", "asc");
 		return $this->db->get();		
 	}
@@ -136,49 +93,7 @@ class Order extends Person
 	/*
 	Inserts or updates a customer
 	*/
-	function save(&$person_data, &$customer_data,$customer_id=false)
-	{
-		$success=false;
-		//Run these queries as a transaction, we want to make sure we do all or nothing
-		
-		if(parent::save($person_data,$customer_id))
-		{
-			if ($customer_id && $this->exists($customer_id))
-			{
-				$cust_info = $this->get_info($customer_id);
-				
-				$current_balance = $cust_info->balance;
-				
-				//Insert store balance transaction when manually editing
-				if (isset($customer_data['balance']) && $customer_data['balance'] != $current_balance)
-				{
-		 			$store_account_transaction = array(
-		   		'customer_id'=>$customer_id,
-		   		'sale_id'=>NULL,
-					'comment'=>lang('customers_manual_edit_of_balance'),
-		      	'transaction_amount'=>$customer_data['balance'] - $current_balance,
-					'balance'=>$customer_data['balance'],
-					'date' => date('Y-m-d H:i:s')
-					);
-					
-					$this->db->insert('store_accounts',$store_account_transaction);
-				}
-			}
-						
-			if (!$customer_id or !$this->exists($customer_id))
-			{
-				$customer_data['person_id'] = $person_data['person_id'];
-				$success = $this->db->insert('customers',$customer_data);				
-			}
-			else
-			{
-				$this->db->where('person_id', $customer_id);
-				$success = $this->db->update('customers',$customer_data);
-			}			
-		}
-		
-		return $success;
-	}
+
 
 	function save_sale_order($order_id,$sale_id)
 	{
@@ -188,58 +103,6 @@ class Order extends Person
 	}
 
 
-	
-	/*
-	Deletes one customer
-	*/
-	function delete($customer_id)
-	{
-		$customer_info = $this->Customer->get_info($customer_id);
-	
-		if ($customer_info->image_id !== NULL)
-		{
-			$this->Person->update_image(NULL,$customer_id);
-			$this->Appfile->delete($customer_info->image_id);			
-		}			
-		
-		$this->db->where('person_id', $customer_id);
-		return $this->db->update('customers', array('deleted' => 1));
-	}
-	
-	/*
-	Deletes a list of customers
-	*/
-	function delete_list($customer_ids)
-	{
-		foreach($customer_ids as $customer_id)
-		{
-			$customer_info = $this->Customer->get_info($customer_id);
-		
-			if ($customer_info->image_id !== NULL)
-			{
-				$this->Person->update_image(NULL,$customer_id);
-				$this->Appfile->delete($customer_info->image_id);			
-			}			
-		}
-		
-		$this->db->where_in('person_id',$customer_ids);
-		return $this->db->update('customers', array('deleted' => 1));
- 	}
-	
-	function check_duplicate($term)
-	{
-		$this->db->from('customers');
-		$this->db->join('people','customers.person_id=people.person_id');	
-		$this->db->where('deleted',0);		
-		$query = $this->db->where("CONCAT(first_name,' ',last_name) = ".$this->db->escape($term));
-		$query=$this->db->get();
-		if($query->num_rows()>0)
-		{
-			return true;
-		}
-		
-		return false;
-	}
  	/*
 	Get search suggestions to find customers
 	*/
@@ -262,7 +125,7 @@ class Order extends Person
 		$temp_suggestions = array();
 		foreach($by_name->result() as $row)
 		{
-			$temp_suggestions[] = $row->order_id.', '.$row->last_name.', '.$row->first_name;
+			$temp_suggestions[] = $row->order_id;
 		}
 		
 		sort($temp_suggestions);
@@ -310,11 +173,6 @@ class Order extends Person
 		{
 			$suggestions[]=array('label'=> $temp_suggestion);		
 		}
-		
-		
-
-				
-	
 		
 		//only return $limit suggestions
 		if(count($suggestions > $limit))
@@ -500,13 +358,6 @@ class Order extends Person
 			return $result->num_rows();
 	}
 		
-	function cleanup()
-	{
-		$customer_data = array('account_number' => null);
-		$this->db->where('deleted', 1);
-		return $this->db->update('customers',$customer_data);
-	}
-
 
     function get_invoices_orders($orders_id)
     {
