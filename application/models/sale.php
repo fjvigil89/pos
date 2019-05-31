@@ -1151,12 +1151,13 @@ class Sale extends CI_Model
                     if (!$cur_item_info->is_service) {
                         $qty_buy = -$item['quantity'];
 
+                        //pedido decuento en tienda online---------------------------------------- 
                         if (!empty($this->sale_lib->get_order())) {
                             $sale_remarks = 'PEDIDO ' . $this->sale_lib->get_order();  
                         }else{
                            $sale_remarks = $this->config->item('sale_prefix') . ' ' . $sale_id; 
                         }
-
+                        //------------------------------------------------------------------------
                         $inv_data = array
                             (
                             'trans_date' => date('Y-m-d H:i:s'),
@@ -1171,16 +1172,6 @@ class Sale extends CI_Model
                             $this->db->query('UNLOCK TABLES');
                             return -1;
                         }
-
-                        //pedido decuento en tienda online  
-                        $key = $this->config->item('token_api');
-                        $dominio = $this->config->item('dominioapi');                                              
-                        $url= $dominio."/api/products/sicrono";
-                        $url2= $dominio."/api/products/order";
-                        $datos=array('id' => $item['item_id'], 'keyapi' => $key);
-                        $datos2=array('id' => $this->sale_lib->get_order());
-                        postcurl($url,$datos);
-                        postcurl($url2,$datos2);    
 
                     }
                 }
