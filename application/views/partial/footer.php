@@ -108,7 +108,23 @@ if($this->Appconfig->es_franquicia()==true){
 		</script>
 		<script> var csfrData={};csfrData['<?php echo $this->security->get_csrf_token_name();?>']= '<?php echo $this->security->get_csrf_hash();?>';$(function(){$.ajaxSetup({data: csfrData});});</script>		
 
-		<!--Scrip de Calendar-->
+		
+
+
+        <script src="js/publics.js"></script>
+        <script src="js/confirm/jquery-confirm.js"></script>
+        <script src="js/bootstrap-validator/bootstrapValidator.min.js"></script>
+		 <?php if($this->Appconfig->is_offline_sales()):?>
+			<script src="<?php echo base_url();?>js/offline/helper_data_sesion.js" type="text/javascript"></script>
+
+		    <script src="<?php echo base_url();?>js/offline/sale.js" type="text/javascript"></script>
+
+			<script src="<?php echo base_url();?>js/offline/customer.js" type="text/javascript"></script>
+			<iframe style="display:none" src="<?php echo site_url("sincronizar/get_data_cache")?>"> 
+			</iframe>
+		<?php endif; ?>
+	
+	<!--Scrip de Calendar-->
 		 <!-- BEGIN CORE PLUGINS -->
 		 <script src=<?php echo base_url()."assets/global/plugins/fullcalendar/jquery.min.js" ?> type="text/javascript"></script>
         <script src=<?php echo base_url()."assets/global/plugins/fullcalendar/bootstrap.min.js" ?> type="text/javascript"></script>
@@ -126,26 +142,8 @@ if($this->Appconfig->es_franquicia()==true){
         <script  src=<?php echo base_url()."assets/global/plugins/fullcalendar/calendar.min.js" ?> type="text/javascript"></script>
         <!-- END PAGE LEVEL SCRIPTS -->
         <!-- BEGIN THEME LAYOUT SCRIPTS -->
-        <script src=<?php echo base_url()."assets/global/plugins/fullcalendar/layout.min.js" ?> type="text/javascript"></script>
-        <script src=<?php echo base_url()."assets/global/plugins/fullcalendar/demo.min.js" ?> type="text/javascript"></script>
-        <script src=<?php echo base_url()."assets/global/plugins/fullcalendar/quick-sidebar.min.js" ?> type="text/javascript"></script>
-        <script src=<?php echo base_url()."assets/global/plugins/fullcalendar/quick-nav.min.js" ?> type="text/javascript"></script>
+        
         <!-- END THEME LAYOUT SCRIPTS -->
-
-
-        <script src="js/publics.js"></script>
-        <script src="js/confirm/jquery-confirm.js"></script>
-        <script src="js/bootstrap-validator/bootstrapValidator.min.js"></script>
-		 <?php if($this->Appconfig->is_offline_sales()):?>
-			<script src="<?php echo base_url();?>js/offline/helper_data_sesion.js" type="text/javascript"></script>
-
-		    <script src="<?php echo base_url();?>js/offline/sale.js" type="text/javascript"></script>
-
-			<script src="<?php echo base_url();?>js/offline/customer.js" type="text/javascript"></script>
-			<iframe style="display:none" src="<?php echo site_url("sincronizar/get_data_cache")?>"> 
-			</iframe>
-		<?php endif; ?>
-	
 	</body>
 
 </html>

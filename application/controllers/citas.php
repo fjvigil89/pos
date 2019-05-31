@@ -8,13 +8,15 @@ class citas extends Secure_area
     function __construct()
 	{
         parent::__construct();
-
+        $this->load->model('Schedule');
         
     }
     function index(){   
         
         $this->load->library('calendar');
-
+        $data['schedule'] = $this->getSchedule();
+        //return $this->load->view('calendar/schedule', $data);
+        
         /*
         // Get the API client and construct the service object.
         $client = $this->getClient();
@@ -46,6 +48,30 @@ class citas extends Secure_area
 
 
        return $this->load->view('calendar/calendar');
+    }
+
+    /**
+     * Metodo para cargar todos los schedules y llenar por ajax el calendario
+     * A este metodo le hace la petiocion ajax desde el script calendar.min.js
+     * assets/global/plugins/fullcalendar/calendar.min.js
+     */
+    function getApiSchedule()
+    {
+        $data['schedule'] = $this->Schedule->get_all()->result();
+        //header('Content-Type: application/json');        
+        //json_encode($data, true);
+        $this->output->set_status_header(200)->set_content_type('application/json')->set_output(json_encode($data));
+    }
+
+    /**
+     * Metodo para cargar todos los schedules y llenar por ajax el calendario
+     * A este metodo le hace la petiocion ajax desde el script calendar.min.js
+     * assets/global/plugins/fullcalendar/calendar.min.js
+     */
+    function getSchedule()
+    {
+        $data['schedule'] = $this->Schedule->get_all()->result();
+        return $data['schedule'];
     }
 
     /**
