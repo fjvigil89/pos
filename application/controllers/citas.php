@@ -14,7 +14,7 @@ class citas extends Secure_area
     function index(){   
         
         $this->load->library('calendar');
-        $data['schedule'] = $this->getSchedule();
+        $data['vistas'] = 'calendar';
         //return $this->load->view('calendar/schedule', $data);
         
         /*
@@ -47,7 +47,7 @@ class citas extends Secure_area
         }*/
 
 
-       return $this->load->view('calendar/calendar');
+       return $this->load->view('calendar/index', $data);
     }
 
     /**
