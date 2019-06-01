@@ -32,7 +32,7 @@
 				<div class="panel-body">					
 					<?php echo form_open_multipart('items/do_excel_import/',array('id'=>'item_form','class'=>'form-horizontal')); ?>
 						<h2><?php echo lang('common_step_1'); ?>: </h2>
-						<p><?php echo lang('items_step_1_desc'); ?></p>
+						<p><?php echo lang('items_step_1_desc'); ?> <span class="text-danger"><i><?php echo lang('common_fields_required_message'); ?></i></span></p> 
 						<div class="row">
 							<div class="col-md-12 col-lg-6 margin-bottom-05">
 								<a class="btn btn-primary btn-block" href="<?php echo site_url('items/excel'); ?>">

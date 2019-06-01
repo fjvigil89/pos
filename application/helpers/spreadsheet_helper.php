@@ -15,6 +15,15 @@ function array_to_spreadsheet($arr)
 		for($j = 0;$j < count($arr[$k]); $j++)
 		{
 			$objPHPExcel->getActiveSheet()->setCellValueExplicitByColumnAndRow($j, $k+1, $arr[$k][$j]);
+			if($arr[$k][$j]==lang('items_name') || $arr[$k][$j]==lang('items_category') || $arr[$k][$j]==lang('items_unit_price') || $arr[$k][$j]==lang('items_cost_price')){
+				//apply the style 
+				$style = array('font' => array('color' => array('rgb' => 'E60026')));
+				$objPHPExcel->getActiveSheet()->getStyleByColumnAndRow($j,$k+1)->applyFromArray($style);
+				
+			}else{
+				$style = array('font' => array('color' => array('rgb' => '000000')));
+				$objPHPExcel->getActiveSheet()->getStyleByColumnAndRow($j,$k+1)->applyFromArray($style);
+			}
 		}
 	}
 	

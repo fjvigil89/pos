@@ -41,10 +41,11 @@
 								<tr>
 						
 									<th><?php echo lang('reports_invoice_type'); ?></th>
-									<th><?php echo lang('reports_invoice_number'); ?></th>
+									<th><?php echo lang('sales_invoice'); ?></th>
 									<th><?php echo lang('sales_date'); ?></th>
 									<th><?php echo lang('reports_type'); ?></th>
 									<th><?php echo lang('sales_customer'); ?></th>
+									<th><?php echo lang('sales_comments'); ?></th>
 									<th><?php echo lang('reports_items'); ?></th>
 
 									<?php
@@ -52,8 +53,7 @@
 											?>
 												<th> <?php echo lang('ntable') ?></th>
 									<?php } ?>
-
-									<th><?php echo lang('sales_comments'); ?></th>
+									
 									<th><?php echo lang('sales_unsuspend'); ?></th>
 									<th><?php echo lang('sales_receipt'); ?></th>
 									<th><?php echo lang('sales_email_receipt'); ?></th>
@@ -94,6 +94,7 @@
 											?>
 										</td>
 										
+										<td><?php echo $suspended_sale['comment'];?></td>
 										<td><?php echo character_limiter(H($suspended_sale['items']),80);?></td>
 
 										<?php
@@ -102,7 +103,6 @@
 												<td> <?php echo $suspended_sale['ntable']; ?></td>
 									<?php } ?>
 
-										<td><?php echo $suspended_sale['comment'];?></td>
 										<td align="center">
 											<?php echo form_open('sales/unsuspend');
 												echo form_hidden('suspended_sale_id', $suspended_sale['sale_id']); ?>
