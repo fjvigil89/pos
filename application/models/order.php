@@ -113,11 +113,11 @@ class Order extends Person
 		$this->db->from('orders');	
 		$this->db->join('orders_clients', 'orders_clients.for_id = orders.id');
 		
-		$this->db->where("(".$this->db->dbprefix('orders').".order_id LIKE '%".$this->db->escape_like_str($search)."%' or 
-		first_name LIKE '%".$this->db->escape_like_str($search)."%' or 
-		last_name LIKE '%".$this->db->escape_like_str($search)."%' or 
-		CONCAT(`first_name`,' ',`last_name`) LIKE '%".$this->db->escape_like_str($search)."%' or 
-		CONCAT(`last_name`,', ',`first_name`) LIKE '%".$this->db->escape_like_str($search)."%') and deleted=0");
+		$this->db->where("(".$this->db->dbprefix('orders').".order_id LIKE '%".($search)."%' or 
+		first_name LIKE '%".($search)."%' or 
+		last_name LIKE '%".($search)."%' or 
+		CONCAT(`first_name`,' ',`last_name`) LIKE '%".($search)."%' or 
+		CONCAT(`last_name`,', ',`first_name`) LIKE '%".($search)."%') and deleted=0");
 		
 		$this->db->limit($limit);	
 		$by_name = $this->db->get();
@@ -193,10 +193,10 @@ class Order extends Person
 		$this->db->from('customers');
 		$this->db->join('people','customers.person_id=people.person_id');	
 		
-		$this->db->where("(first_name LIKE '%".$this->db->escape_like_str($search)."%' or 
-		last_name LIKE '%".$this->db->escape_like_str($search)."%' or 
-		CONCAT(`first_name`,' ',`last_name`) LIKE '%".$this->db->escape_like_str($search)."%' or
-		CONCAT(`last_name`,', ',`first_name`) LIKE '%".$this->db->escape_like_str($search)."%') and deleted=0");			
+		$this->db->where("(first_name LIKE '%".($search)."%' or 
+		last_name LIKE '%".($search)."%' or 
+		CONCAT(`first_name`,' ',`last_name`) LIKE '%".($search)."%' or
+		CONCAT(`last_name`,', ',`first_name`) LIKE '%".($search)."%') and deleted=0");			
 		
 		$this->db->limit($limit);	
 		$by_name = $this->db->get();
@@ -328,13 +328,13 @@ class Order extends Person
 			$this->db->from('orders');	
 			$this->db->join('orders_clients', 'orders_clients.for_id = orders.id');
 			$this->db->where("(
-			order_id LIKE '%".$this->db->escape_like_str($search)."%' or 
-			first_name LIKE '%".$this->db->escape_like_str($search)."%' or 
-			last_name LIKE '%".$this->db->escape_like_str($search)."%' or 
-			email LIKE '%".$this->db->escape_like_str($search)."%' or 
-			phone LIKE '%".$this->db->escape_like_str($search)."%' or 
-			CONCAT(`first_name`,' ',`last_name`) LIKE '%".$this->db->escape_like_str($search)."%' or 
-			CONCAT(`last_name`,', ',`first_name`) LIKE '%".$this->db->escape_like_str($search)."%') and deleted=0");		
+			order_id LIKE '%".($search)."%' or 
+			first_name LIKE '%".($search)."%' or 
+			last_name LIKE '%".($search)."%' or 
+			email LIKE '%".($search)."%' or 
+			phone LIKE '%".($search)."%' or 
+			CONCAT(`first_name`,' ',`last_name`) LIKE '%".($search)."%' or 
+			CONCAT(`last_name`,', ',`first_name`) LIKE '%".($search)."%') and deleted=0");		
 			$this->db->order_by($column,$orderby);
 			$this->db->limit($limit);
 			$this->db->offset($offset);
@@ -346,13 +346,13 @@ class Order extends Person
 			$this->db->from('orders');	
 			$this->db->join('orders_clients', 'orders_clients.for_id = orders.id');
 			$this->db->where("(
-			order_id LIKE '%".$this->db->escape_like_str($search)."%' or 
-			first_name LIKE '%".$this->db->escape_like_str($search)."%' or 
-			last_name LIKE '%".$this->db->escape_like_str($search)."%' or 
-			email LIKE '%".$this->db->escape_like_str($search)."%' or 
-			phone LIKE '%".$this->db->escape_like_str($search)."%' or 
-			CONCAT(`first_name`,' ',`last_name`) LIKE '%".$this->db->escape_like_str($search)."%' or 
-			CONCAT(`last_name`,', ',`first_name`) LIKE '%".$this->db->escape_like_str($search)."%') and deleted=0");		
+			order_id LIKE '%".($search)."%' or 
+			first_name LIKE '%".($search)."%' or 
+			last_name LIKE '%".($search)."%' or 
+			email LIKE '%".($search)."%' or 
+			phone LIKE '%".($search)."%' or 
+			CONCAT(`first_name`,' ',`last_name`) LIKE '%".($search)."%' or 
+			CONCAT(`last_name`,', ',`first_name`) LIKE '%".($search)."%') and deleted=0");		
 			$this->db->limit($limit);
 			$result=$this->db->get();				
 			return $result->num_rows();
