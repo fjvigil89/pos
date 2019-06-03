@@ -42,7 +42,7 @@ class Viewer_file extends CI_Model
     function delete($id,$path_long)
     {
         
-        $img_info = $this->get_info($img_id);
+        $img_info = $this->get_info($id);
 
         unlink($path_long."/". $img_info->new_name);
 

@@ -558,6 +558,35 @@ class Sale_lib
 		}
 		$this->set_payments(array_values($payments));
 	}
+	function get_ivas($item_id)
+	{
+		$ivas=$this->CI->Item_taxes_finder->get_info($item_id);
+		foreach ($ivas as $key=> $iva) 
+		{
+			unset($ivas[$key]["id"]);
+			unset($ivas[$key]["item_id"]);
+		}
+		return 	$ivas;
+	}
+	
+	function precio_con_iva($item_id)
+	{
+		$item = array(
+			"price"=>$this->get_price_for_item($item_id),
+			"item_id"=>$item_id
+		);
+
+		$tax_info = $this->get_ivas($item_id);
+		$price_to_use = $this->_get_price_for_item_in_cart($item);
+		$tax_amount = 0;		
+
+		foreach($tax_info as $key=>$tax)
+		{	
+			$tax_amount += ($price_to_use)*(($tax['percent'])/100);
+		}
+
+		return $price_to_use + $tax_amount;
+	}
 	
 	function get_price_for_item($item_id, $tier_id = FALSE)
 	{

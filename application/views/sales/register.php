@@ -78,11 +78,12 @@
 				<div class="table-toolbar">
 					<div class="row">
 						<div class="col-lg-9 col-md-12">
-							<?php if(count($cart) > 0){ ?>
-								<div class="sale-buttons">
-									<!-- Cancel and suspend buttons -->
-									<?php echo form_open("sales/cancel_sale",array('id'=>'cancel_sale_form', 'autocomplete'=> 'off')); ?>
-										<div class="btn-group btn-group-sm btn-group-solid btn-group-justified ">
+							<div class="sale-buttons">
+								<!-- Cancel and suspend buttons -->
+								<?php echo form_open("sales/cancel_sale",array('id'=>'cancel_sale_form', 'autocomplete'=> 'off')); ?>
+									<div class="btn-group btn-group-sm btn-group-solid btn-group-justified ">
+							
+										<?php if(count($cart) > 0){ ?>
 											<?php if ($mode != 'store_account_payment') { ?>
 												<a type="button" class="btn yellow-gold letter-space" id="quotes"><?php echo lang('sales_quotes_create');?></a>
 												<a type="button" class="btn yellow-gold letter-space" id="suspend_sale_button"><?php echo lang('sales_suspend_sale');?></a>
@@ -95,10 +96,21 @@
 													<a type="button" class="btn red-thunderbird" id="cancel_sale_button"><?php echo lang('sales_cancel_sale');?></a>
 												<?php endif; ?>
 											<?php } ?>
-										</div>
-									</form>
-								</div>
-							<?php } ?>
+								
+										<?php } ?>
+										<?php
+											if($this->config->item("activate_sales_with_balance") == 1)
+											{
+												echo anchor(site_url('sales/balance_modal'),
+													"Balanza",
+													array('class'=>'btn yellow-gold letter-space', "id"=>"balance-modal", 'data-toggle'=>"modal",
+													'data-target'=>'#myModal'));
+											}
+										?>
+
+									</div>
+								</form>
+							</div>
 						</div>
 						<div class="col-lg-2 col-md-12 pull-right">
 							<div class="btn-group pull-right">
@@ -1841,7 +1853,8 @@
 		$(document).keydown(function(event)
 		{
 			var mycode = event.keyCode;
-
+			add_peso_a_storange(event.key);
+			
 			if (mycode == 113)
 			{
 				$("#item").focus();
@@ -2353,5 +2366,18 @@
 		 	ComponentsDropdowns.init();
 		});
 		//$('.selectpicker').selectpicker();
+		localStorage.setItem("peso", "");
 
+		function add_peso_a_storange(char)
+		{
+			try{
+				var number = "";
+				if($.isNumeric(localStorage.getItem("peso")))
+					number = localStorage.getItem("peso")
+				if($.isNumeric(char)|| char ==".")
+					number = number+""+char;					
+				localStorage.setItem("peso", number);	
+			}catch(e){}
+			
+		}
 	</script>

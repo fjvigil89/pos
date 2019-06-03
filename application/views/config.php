@@ -2840,6 +2840,28 @@
 						</div>
 
 						<div class="form-group">	
+							<?php echo form_label('<a class="help_config_options tooltips"  data-placement="left"  title="Activar venta con balanza electrónica">Activar venta con balanza electrónica</a>'.':', 'activate_sales_with_balance',array('class'=>'col-md-3 control-label required')); ?>
+
+							<div class="col-md-8">
+								<div class="md-checkbox-inline">
+									<div class="md-checkbox">
+										<?php echo form_checkbox(array(
+											'name'=>'activate_sales_with_balance',
+											'id'=>'activate_sales_with_balance',
+											'value'=>1,
+											'checked'=>$this->config->item('activate_sales_with_balance')));
+										?>
+										<label for="activate_sales_with_balance">
+										<span></span>
+										<span class="check"></span>
+										<span class="box"></span>
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">	
 							<?php echo form_label(lang('config_active_keyboard').':', 'active_keyboard',array('class'=>'col-md-3 control-label')); ?>
 							<div class="col-md-8">
 								<div class="md-checkbox-inline">
@@ -3161,6 +3183,7 @@
 							</div>						
 						</div>
 						<div class="form-group">	
+						
 								<?php echo form_label('<a class="help_config_options  tooltips " data-placement="left" title="'.lang("").'">'.lang('config_product_rank').'</a>'.':', 'monitor_product_rank', array('class'=>'col-md-3 control-label')); ?> 						
 						
 									<div class="col-md-1">
@@ -3182,6 +3205,16 @@
 										</div>
 									</div>							
 							</div>
+
+							<div class="form-group">	
+						
+								<?php echo form_label('<a class="help_config_options  tooltips " data-placement="left" title="'.lang("").'">Categorías</a>'.':', 'categories', array('class'=>'col-md-3 control-label')); ?> 						
+						
+									<div class="col-md-1">
+									<a href="<?=site_url("config/categories_modal")?>" class="btn btn-medium green-seagreen effect" id="modal-serial" data-toggle="modal" data-target="#myModal" title="Perzonalizar número de factura"><i class="fa fa-pencil hidden-lg fa fa-2x tip-bottom" data-original-title=""></i> <span class="visible-lg">Perzonalizar</span></a>
+									</div>							
+							</div>
+
 						<div class="form-group">	
 							<?php echo form_label(lang('config_price_tiers').':', 'tiers',array('class'=>'col-md-3 control-label')); ?>
 							<div class="col-md-9 table-responsive">

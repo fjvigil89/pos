@@ -1730,7 +1730,8 @@ var val_quantity_transfer = $('input[name="locations[' + <?php echo $location->l
 
 //validation and submit handling
 $(document).ready(function() {
-    calcule_price_unit();
+    <?php if($item_info->item_id > 0) echo "calcule_price_unit();"?>
+    
     $('form').on('keyup keypress', function(e) {
         var keyCode = e.keyCode || e.which;
         if (keyCode === 13) {

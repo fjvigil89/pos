@@ -20,6 +20,13 @@ class Sales extends Secure_area
 		
         $this->load->view('sales/prueba');
 	}
+	function add_items_cart()
+	{
+		$items = $this->input->post('items');
+		foreach ($items as $item) {
+			$this->sale_lib->add_item( $item["item_id"],$item["quantity"]);
+		}
+	}
 	function items_sales_search(){
 		session_write_close();		
 		$suggestions = $this->Item->get_items_sales_search_suggestions($this->input->get('term'),30);
@@ -435,6 +442,7 @@ class Sales extends Secure_area
 
 		$this->_reload();
 	}
+	
 
 	function set_comment()
 	{
@@ -594,6 +602,14 @@ class Sales extends Secure_area
 		$this->update_viewer(2);
 		
 
+	}
+	function balance_modal()
+	{
+		$this->load->model('Categories');
+		$path_img =  PATH_RECUSE."/".$this->Employee->get_store()."/img/categories";
+
+		$categories = json_encode($this->Categories->get_all());
+		$this->load->view("sales/balance_modal",array("categories"=>$categories,"path_img"=>$path_img));
 	}
 	
 	//Alain Multiple Payments
@@ -2584,6 +2600,12 @@ class Sales extends Secure_area
 		$this->sale_lib->discount_all($discount_all_percent);
 		$this->_reload();
 	}
+	function categories_new($offset = 0)
+	{
+		$this->load->model('Categories');
+		$data = $this->Categories->get_all();
+		echo json_encode($data);
+	}
 	
 	function categories($offset = 0)
 	{
@@ -2625,10 +2647,36 @@ class Sales extends Secure_area
 
 		echo json_encode($data);
 	}
+	function item()
+	{
+		$item_id = $this->input->get('item_id');	
+		$id_tem = $this->Item->get_item_id($item_id);		
+		$item = $this->Item->get_info($id_tem == false ? $item_id : $id_tem);	
+		$img_src = "";
 
-	function items($offset = 0)
+		if ($item->image_id != 'no_image' && trim($item->image_id) != '') {
+			$img_src = site_url('app_files/view/'.$item->image_id);
+		}
+
+		$item = array(
+			'id' => $item->item_id,
+			'name' => character_limiter($item->name, 58),
+			'image_src' => 	$img_src,
+			"price_tax"=>is_numeric($item->item_id) ? $this->sale_lib->precio_con_iva($item->item_id): 0,
+			"unit"=>$item->unit
+		);
+	
+		$data = array();
+		$data['item'] = $item;	
+		echo json_encode($data);
+	}
+
+	function items($offset = 0, $is_vue = false)
 	{
 		$category = $this->input->post('category');
+		
+		if($category === false)
+			$category = $this->input->get('category');
 
 		$items = array();
 		$items_result = $this->Item->get_all_by_category($category, $offset)->result();
@@ -2644,7 +2692,9 @@ class Sales extends Secure_area
 			$items[] = array(
 				'id' => $item->item_id,
 				'name' => character_limiter($item->name, 58),
-				'image_src' => 	$img_src
+				'image_src' => 	$img_src,
+				"price_tax"=> $is_vue  == false ? "": $this->sale_lib->precio_con_iva($item->item_id),
+				"unit"=>$item->unit
 			);
 		}
 		$items_count = $this->Item->count_all_by_category($category);

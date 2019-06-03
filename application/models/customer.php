@@ -8,7 +8,7 @@ class Customer extends Person
 		if($date!=null){
 			$this->db->where('update_points_customer  > ',$date);
 		}else{
-			$this->db->where('delete',0);	
+			$this->db->where('deleted',0);	
 		}
 		$this->db->join('customers', 'customers.person_id = points.customer_id ');
 		

@@ -154,8 +154,8 @@ class Item extends CI_Model
 		$items_table = $this->db->dbprefix('items');
 		$item_kits_table = $this->db->dbprefix('item_kits');
 		
-		$result = $this->db->query("(SELECT item_id, name, image_id FROM $items_table 
-		WHERE deleted = 0 and category = ".$this->db->escape($category). " ORDER BY name) UNION ALL (SELECT CONCAT('KIT ',item_kit_id), name, 'no_image' as image_id FROM $item_kits_table 
+		$result = $this->db->query("(SELECT item_id, name, image_id,unit FROM $items_table 
+		WHERE deleted = 0 and category = ".$this->db->escape($category). " ORDER BY name) UNION ALL (SELECT CONCAT('KIT ',item_kit_id), name, 'no_image' as image_id ,'' FROM $item_kits_table 
 		WHERE deleted = 0 and category = ".$this->db->escape($category). " ORDER BY name) ORDER BY name LIMIT $offset, $limit");
 		return $result;
 	}
@@ -743,18 +743,24 @@ class Item extends CI_Model
 	function get_category_suggestions($search)
 	{
 		$suggestions = array();
-		$this->db->distinct();
+		/*$this->db->distinct();
 		$this->db->select('category');
 		$this->db->from('items');
 		$this->db->like('category', $search);
 		$this->db->where('deleted', 0);
 		$this->db->limit(25);
 		$by_category = $this->db->get();
+		
 		foreach($by_category->result() as $row)
 		{
 			$suggestions[]=array('label' => $row->category);
+		}*/
+		$this->load->model('Categories');
+		
+		foreach($this->Categories->get_all() as $row)
+		{
+			$suggestions[]=array('label' => $row["name"]);
 		}
-
 		return $suggestions;
 	}
 
