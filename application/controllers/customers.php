@@ -154,6 +154,7 @@ class Customers extends Person_controller
 		
 		$data['controller_name']=strtolower(get_class());
 		$data['tiers']=$tiers;
+		$data['input_otros']=true;
 		$data['person_info']=$this->Customer->get_info($customer_id);
 		$data['person_info_point']=$this->Customer->get_info_points($customer_id);
 		$data['redirect_code']=$redirect_code;
@@ -214,6 +215,7 @@ class Customers extends Person_controller
 			'tier_id' => $this->input->post('tier_id') ? $this->input->post('tier_id') : NULL,
 			'account_number'=>$this->input->post('account_number')=='' ? null:$this->input->post('account_number'),
 			'taxable'=>$this->input->post('taxable')=='' ? 0:1,
+			'other'=>$this->input->post('others')=='' ? null:$this->input->post('others'),
 		);
 	
 	
@@ -509,7 +511,13 @@ class Customers extends Person_controller
 						$company_name = '';
 					}
 					
-					$person_id = $sheet->getCellByColumnAndRow(14, $k)->getValue();
+					$saldo = $sheet->getCellByColumnAndRow(14, $k)->getValue();
+					if (!$saldo)
+					{
+						$saldo = '';
+					}
+					
+					$person_id = $sheet->getCellByColumnAndRow(15, $k)->getValue();
 					
 					
 					$person_data = array(
@@ -528,6 +536,7 @@ class Customers extends Person_controller
 					
 					$customer_data=array(
 					'account_number'=>$account_number,
+					'balance'=>$saldo,
 					'taxable'=> $taxable == 'n' || $taxable == 'no' ? 0 : 1,
 					'company_name' => $company_name,
 					);

@@ -1,4 +1,5 @@
 <?php
+$lang['customers_input_others_help']='Este campo se agrega como refereferencia en los buscadores';
 $lang['customers_new']='Nuevo Cliente';
 $lang['customers_customer']='Cliente';
 $lang['customers_update']='Actualizar Cliente';

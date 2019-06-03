@@ -759,6 +759,20 @@ class Receiving extends CI_Model
         }
 
         return $return;
+	}
+	public function get_es_devolucion($receiving_id,$delete)
+    {
+        $return = array();
+
+        $this->db->select('SUM(quantity_purchased) as items_purchased');
+        $this->db->from('receivings');
+        $this->db->join('receivings_items', 'receivings.receiving_id = receivings_items.receiving_id');
+        $this->db->where('receivings_items.receiving_id', $receiving_id);
+        $this->db->where('deleted', $delete);
+
+        $query = $this->db->get();
+
+        return $query->row_array();
     }
 	
 	 public function get_pay_cash($supplier_id,$location_id=false,$limit=100)

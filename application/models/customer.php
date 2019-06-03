@@ -489,7 +489,8 @@ class Customer extends Person
 		$this->db->where("(first_name LIKE '%".$this->db->escape_like_str($search)."%' or 
 		last_name LIKE '%".$this->db->escape_like_str($search)."%' or 
 		CONCAT(`first_name`,' ',`last_name`) LIKE '%".$this->db->escape_like_str($search)."%' or
-		CONCAT(`last_name`,', ',`first_name`) LIKE '%".$this->db->escape_like_str($search)."%') and deleted=0");			
+		CONCAT(`last_name`,' ',`first_name`) LIKE '%".$this->db->escape_like_str($search)."%' or
+		CONCAT(`other`,' ',`last_name`,' ',`first_name`) LIKE '%".$this->db->escape_like_str($search)."%') and deleted=0");			
 		
 		$this->db->limit($limit);	
 		$by_name = $this->db->get();
@@ -498,7 +499,7 @@ class Customer extends Person
 		
 		foreach($by_name->result() as $row)
 		{
-			$temp_suggestions[$row->person_id] = $row->last_name.', '.$row->first_name;
+			$temp_suggestions[$row->person_id] = $row->last_name.', '.$row->first_name.', '.$row->other;
 		}
 		
 		asort($temp_suggestions);
@@ -518,7 +519,7 @@ class Customer extends Person
 		
 		foreach($by_account_number->result() as $row)
 		{
-			$temp_suggestions[$row->person_id] = $row->account_number;
+			$temp_suggestions[$row->person_id] = $row->account_number.', '.$row->last_name.', '.$row->first_name;
 		}
 		
 		asort($temp_suggestions);
@@ -562,7 +563,7 @@ class Customer extends Person
 		
 		foreach($by_phone_number->result() as $row)
 		{
-			$temp_suggestions[$row->person_id] = $row->phone_number;
+			$temp_suggestions[$row->person_id] = $row->phone_number.', '.$row->last_name.', '.$row->first_name;
 		}
 		
 		asort($temp_suggestions);
