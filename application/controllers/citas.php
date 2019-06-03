@@ -73,6 +73,21 @@ class citas extends Secure_area
         $data['schedule'] = $this->Schedule->get_all()->result();
         return $data['schedule'];
     }
+    
+    /**
+     * 
+     */
+    function setApiSchedule()
+    {
+        $data = array(
+            'title' => $this->input->post('title'),
+            'start' => $this->input->post('start'),
+            'end' => $this->input->post('end'),
+        );        
+        $save_data = $this->Schedule->save($data);
+        //$this->output->set_status_header(200)->set_content_type('application/json')->set_output(json_encode($data));
+       
+    }
 
     /**
      * Returns an authorized API client.

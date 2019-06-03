@@ -69,6 +69,7 @@ class Schedule extends CI_Model
 	*/
 	function save(&$schedule_data,$schedule_id=false)
 	{		
+		
 		if (!$schedule_id or !$this->exists($schedule_id))
 		{
 			if ($this->db->insert('schedule',$schedule_data))
