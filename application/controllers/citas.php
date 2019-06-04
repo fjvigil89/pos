@@ -9,12 +9,15 @@ class citas extends Secure_area
 	{
         parent::__construct();
         $this->load->model('Schedule');
+        $this->load->model('Employee');
         
     }
     function index(){   
         
-        $this->load->library('calendar');
+        
         $data['vistas'] = 'calendar';
+        $data['schedule'] = $this->getSchedule();
+
         //return $this->load->view('calendar/schedule', $data);
         
         /*
@@ -79,12 +82,22 @@ class citas extends Secure_area
      */
     function setApiSchedule()
     {
+        $location_id=$this->Employee->get_logged_in_employee_current_location_id();
+        
         $data = array(
             'title' => $this->input->post('title'),
             'start' => $this->input->post('start'),
             'end' => $this->input->post('end'),
-        );        
-        $save_data = $this->Schedule->save($data);
+            'status'=> $this->input->post('status'),
+            'color'=> $this->input->post('color'),
+            'employee_id'=> $location_id
+        );
+        var_dump($data);
+        if ($this->input->post('update')== "false") {
+            
+            $save_data = $this->Schedule->save($data);
+        }
+        //var_dump($_SESSION['person_id']); hablar con jean para ver la captura de la session
         //$this->output->set_status_header(200)->set_content_type('application/json')->set_output(json_encode($data));
        
     }
