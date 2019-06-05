@@ -10,6 +10,7 @@ class All extends  Secure_area
         $this->load->model('Viewer');
         $this->load->model('Viewer_file');
     }
+   
     function get_item()
     {
 
@@ -59,6 +60,18 @@ class All extends  Secure_area
         $this->load->view("viewer/checker",$data);
     }
 
+    function get_rate($employee_id)
+    {
+        $employee_info = $this->Employee->get_info($employee_id);			
+        $rate = $this->Employee->get_rate($employee_info->id_rate);
+            
+        if($employee_info->id_rate == 2)        
+            $rate = $rate->sale_rate + ( $rate->sale_rate * ($this->config->item("ganancia_distribuidor") / 100));
+        else
+             $rate = $rate->sale_rate;
+
+        echo json_encode((double)$rate);
+    }
     function viewer($id)
     {
         $location_id = $this->Employee->get_logged_in_employee_current_location_id();

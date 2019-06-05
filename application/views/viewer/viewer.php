@@ -127,6 +127,12 @@
         margin: 2px;
         padding: 3px;
     }
+
+    .active-input {
+        border: 2px solid #9E9C9C;
+        background-color: #FBAAA8;
+
+    }
     </style>
 </head>
 
@@ -194,36 +200,47 @@
                     <div class="row" style="padding:2px;">
                         <div class="col-md-12">
                             <h1 class="title-1 text-center">Tasa de hoy
-                                <span><?=$rate?></span>
+                                <span id="rate"><?=$rate?></span>
                             </h1>
                         </div>
-                        
+
                         <div class="col-md-12">
-                            <h1 style="color:red; font-weight: bold; font-size:26px" class=" text-center">CALCULE SU ENVÍO</h1>
+                            <h1 style="color:red; font-weight: bold; font-size:26px" class=" text-center">CALCULE SU
+                                ENVÍO</h1>
                         </div>
                         <!--<div class="col-md-12">
                             <hr>
                         </div>-->
 
+
+
+
+
                         <div class="col-xs-6">
-                            <div class="panel-input form-group">
-                                <label for="email" class="title-2">Cantidad en pesos:</label>
-                                <input   type="hidden" class="form-control" readonly
-                                    id="catidad">
-                                    <input style=" font-weight: bold; font-size:19px; text-align: center"
-                                    placeholder="Ingrese cantidad $" class="form-control" readonly
-                                    id="catidad2">
+                            <div class="input-group">
+                                <label for="cantidad2" id="cantidad2-label" class="title-2">Cantidad en pesos:</label>
+                                <input type="hidden" class="form-control" readonly id="catidad">
+                                <input type="text"  placeholder="Ingresa cantidad" style=" font-weight: bold; font-size:19px; text-align: center"
+                                    readonly class="form-control" id="cantidad2" name="cantidad2">
+                                <h5 for="" class="">&nbsp;</h5>
+                                <div class="input-group-btn">
+                                    <button class="btn default" id="change-divisa">
+                                        <i class="fa fa-exchange"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         <div class="col-xs-6">
-                            <div class="panel-input form-group">
-                                <label for="email" class="title-2">Cantida de BS:</label>
+                            <div class="input-group">
+                                <label for="convertido" id="convertido-label" class="title-2">Cantida de BS:</label>
                                 <input value="" style=" font-size:19px; font-weight: bold; text-align: center"
                                     type="text" class="form-control" readonly id="convertido">
+
+
                             </div>
                         </div>
-                        <div  class="<?=$show_carrousel ?'col-xs-12': 'col-xs-12'?>">
-                            <center  style="margin:0px">
+                        <div class="<?=$show_carrousel ?'col-xs-12': 'col-xs-12'?>">
+                            <center style="margin:0px">
                                 <div>
                                     <input class="btn b1 " name="7" type="button" value="7" />
                                     <input class="btn b1" name="8" type="button" value="8" />
@@ -314,8 +331,10 @@
         show_viewer = "<?=$this->config->item("show_viewer")?>",
         updated = "0000-00-00 00:00:00",
         height_window = $(window).height(),
-        _history = [];
-        time = 0;
+        _history = [],
+        time = 0,
+        rate = "<?=$rate?>",
+        a_bolivar = true;
 
     change_window();
 
@@ -411,7 +430,7 @@
     }
     <?php } 
         else {?>
-    var rate = "<?=$rate?>";
+
     $("input[type='button'").click(function(e) {
         var cant = $("#catidad").val();
         var value = $(this).val();
@@ -430,26 +449,36 @@
         }
 
         if ($("#catidad").val() > 0) {
-            var total = convert($("#catidad").val(), rate);
-            total = accounting.formatMoney(total, "BS ", 0);
-            $("#convertido").val(total);
-        }
-        if ($.isNumeric( $("#catidad").val()))
-            $("#catidad2").val(accounting.formatMoney( $("#catidad").val(),"$ ",0)); 
-        else{
-            $("#convertido").val("BS 0");
-            $("#catidad2").val("");
-        }         
-        
 
+
+            var total = convert($("#catidad").val(), rate, a_bolivar);
+            total = accounting.formatMoney(total, a_bolivar == true ? "BS " : "$ ", 0);
+            $("#convertido").val(total);
+
+
+        }
+        if ($.isNumeric($("#catidad").val()))
+            $("#cantidad2").val(accounting.formatMoney($("#catidad").val(), a_bolivar == false ? "BS " : "$ ",
+                0));
+        else {
+            $("#convertido").val("0");
+            $("#cantidad2").val("");
+        }
+
+        time = 0;
     });
 
-    function convert(cant, tasa = 1) {
+    function convert(cant, tasa = 1, a_bolivar = true) {
         time = 0;
-        return cant / tasa;
+        var total = cant / tasa;
+        if (a_bolivar == true)
+            total = cant / tasa;
+        else
+            total = cant * tasa;
 
+        return total;
     }
-    
+
 
     /*function add_history() {
         _history.unshift( $("#convertido").val());
@@ -462,19 +491,46 @@
             html +="<tr><td>"+_history[key]+"</td></tr>";
         }
         $("#t-history").html(html);
-    }
+    }*/
     setInterval(function() {
-        if(time > 60)
-        {
-            _history.length = 0;
+        if (time > 20) {
+            a_bolivar = true;           
+            change_texto(a_bolivar) 
             time = 0;
-            $("#t-history").html("<tr><td><button onclick='add_history()'; class='btn'>Agregar</button></tr></td>");
-        }            
-        time ++; 
-    }, 1000);*/
+
+        }
+        time++;
+    }, 1000);
+    setInterval(function() {
+       $.get("<?=site_url("all/get_rate/".$id)?>",{},function(rate){          
+            rate = JSON.parse(rate); 
+            $("#rate").html( rate);
+       })
+    }, 900000);
+    $("#change-divisa").click(function() {
+         a_bolivar = !a_bolivar;
+        
+        change_texto(a_bolivar);
+        time = 0;
+    });
+
 
     <?php }?>
 
+    function change_texto(a_bolivar) {
+
+        if (a_bolivar) {
+            $("#cantidad2-label").html("Cantidad en pesos:");
+            $("#convertido-label").html("Cantida en BS:");
+        } else {
+            $("#cantidad2-label").html("Cantidad en Bolívar:");
+            $("#convertido-label").html("Cantida en $:");
+        }
+        $("#catidad").val("");
+        $("#cantidad2").val("");
+        $("#catidad").val("");
+        $("#convertido").val("");
+    }
     jQuery(document).ready(function() {
         Metronic.init(); // init metronic core components
         Layout.init(); // init current layout
@@ -486,7 +542,7 @@
         setInterval(function() {
             $.get('<?php echo site_url('home/keep_alive'); ?>');
         }, 300000);
-        
+
 
         $('.carousel').carousel({
             interval: <?= (int) $this->config->item("interval_img_carousel") ? $this->config->item("interval_img_carousel"):"3000"?>
