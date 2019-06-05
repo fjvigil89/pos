@@ -83,10 +83,10 @@
  					</tr>
  					<tr>
  						<td  width="50%">
- 							<?=$currency_symbol.number_format($amount_register_open, 2, $decimal_separator, $thousand_separator);?>
+ 							<?=$currency_symbol.number_format($amount_register_open, ($this->config->item('remove_decimals')==1?0:2), $decimal_separator, $thousand_separator);?>
  						</td>
  						<td>
- 							<?=$currency_symbol.number_format($amount_register_close, 2, $decimal_separator, $thousand_separator);?>
+ 							<?=$currency_symbol.number_format($amount_register_close, ($this->config->item('remove_decimals')==1?0:2), $decimal_separator, $thousand_separator);?>
  						</td>
  					</tr>
 
@@ -110,7 +110,7 @@
  							<?= $total_sales; ?>
  						</td>
  						<td>
- 							<?= $currency_symbol.number_format($amount_sales, 2, $decimal_separator, $thousand_separator); ?>
+ 							<?= $currency_symbol.number_format($amount_sales, ($this->config->item('remove_decimals')==1?0:2), $decimal_separator, $thousand_separator); ?>
  						</td>
  					</tr>
 
@@ -136,7 +136,7 @@
 								<?= lang("sales_store_account_payment") ?>
 							</td> 
 							<td>
-								<?= $currency_symbol.number_format($payments_petty_cash, 2, $decimal_separator, $thousand_separator); ?>
+								<?= $currency_symbol.number_format($payments_petty_cash, ($this->config->item('remove_decimals')==1?0:2), $decimal_separator, $thousand_separator); ?>
 							</td>
 						</tr>
 
@@ -159,7 +159,7 @@
 								<?= lang("reports_entrada") ?>
 							</td> 
 							<td>
-								<?= $currency_symbol.number_format($entrada, 2, $decimal_separator, $thousand_separator); ?>
+								<?= $currency_symbol.number_format($entrada, ($this->config->item('remove_decimals')==1?0:2), $decimal_separator, $thousand_separator); ?>
 							</td>
 						</tr>
 						<tr>
@@ -167,7 +167,7 @@
 								<?= lang("reports_salida") ?>
 							</td> 
 							<td>
-								<?= $currency_symbol.number_format($salida, 2, $decimal_separator, $thousand_separator); ?>
+								<?= $currency_symbol.number_format($salida, ($this->config->item('remove_decimals')==1?0:2), $decimal_separator, $thousand_separator); ?>
 							</td>
 						</tr>
 						<tr>
@@ -175,7 +175,7 @@
 								<?= lang("move_money_category") ?>
 							</td> 
 							<td>
-								<?= $currency_symbol.number_format($traslado, 2, $decimal_separator, $thousand_separator); ?>
+								<?= $currency_symbol.number_format($traslado, ($this->config->item('remove_decimals')==1?0:2), $decimal_separator, $thousand_separator); ?>
 							</td>
 						</tr>
 					</table>
@@ -208,7 +208,7 @@
  								$total_payments  = $total_payments + $cantidad;
  								$total           = isset($payments[$type]) ? array_sum($payments[$type]) : 0;
  								$amount_payments = $amount_payments + $total;
- 								$total           = number_format($total, 2, $decimal_separator, $thousand_separator);
+ 								$total           = number_format($total, ($this->config->item('remove_decimals')==1?0:2), $decimal_separator, $thousand_separator);
  						?>
 	 							<tr>
 	 								<td>
@@ -234,7 +234,7 @@
  									</td>
  									<td>
  										<b>
- 											<?=$currency_symbol.number_format($amount_payments, 2, $decimal_separator, $thousand_separator);?>
+ 											<?=$currency_symbol.number_format($amount_payments, ($this->config->item('remove_decimals')==1?0:2), $decimal_separator, $thousand_separator);?>
  										</b>
  									</td>
  								</tr>
@@ -289,7 +289,7 @@
 					</tr>					
 					<tr>							 
 						<td>
-							<?= $currency_symbol.number_format($difference, 2, $decimal_separator, $thousand_separator); ?>
+							<?= $currency_symbol.number_format($difference, ($this->config->item('remove_decimals')==1?0:2), $decimal_separator, $thousand_separator); ?>
 						</td>
 					</tr>		
 

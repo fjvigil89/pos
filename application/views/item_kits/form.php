@@ -766,14 +766,14 @@
 						}else{
 							$("#column").hide();
 							$("#item_kit_items").append("<tr class='item_kit_item_row'><td><a  href='#' onclick='return deleteItemKitRow(this);'><i class='fa fa-trash-o fa-2x font-red'></i></a></td><td>"+ui.item.label+"</td><td><input class='quantity' onchange='calculateSuggestedPrices();' id='item_kit_item_"+ui.item.value+"' type='text' size='3' name=item_kit_item["+ui.item.value+"] value='1'/></td></tr>");
-				
+							calculateSuggestedPrices();
 						}
 						
 					});
 					
 				}
 			
-				calculateSuggestedPrices();
+				
 			
 				return false;
 			}
