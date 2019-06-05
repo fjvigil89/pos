@@ -98,11 +98,11 @@
             pathName
             .length));
         $.ajax({
-            url: url + 'citas/setApiSchedule',
+            url: url + 'setApiSchedule',
             data: dataJson,
             type: "POST",
             success: function(result) {
-                console.log(result);
+                //console.log(result);
             },
             error: function(xhr, ajaxOptions, thrownError) {
                 console.log("No se ha podido obtener la informacion");

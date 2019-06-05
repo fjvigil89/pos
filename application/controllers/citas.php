@@ -10,12 +10,9 @@ class citas extends Secure_area
         parent::__construct();
         $this->load->model('Schedule');
         $this->load->model('Employee');
-        
     }
-    function index(){   
-        
-        
-        $data['vistas'] = 'calendar';
+    function index(){           
+        $data['vistas'] = 'schedule';        
         $data['schedule'] = $this->getSchedule();
 
         //return $this->load->view('calendar/schedule', $data);
@@ -49,10 +46,13 @@ class citas extends Secure_area
             }
         }*/
 
-
        return $this->load->view('calendar/index', $data);
     }
-
+    function calendar(){           
+        $data['vistas'] = 'calendar';        
+        
+       return $this->load->view('calendar/index', $data);
+    }
     /**
      * Metodo para cargar todos los schedules y llenar por ajax el calendario
      * A este metodo le hace la petiocion ajax desde el script calendar.min.js
@@ -60,7 +60,8 @@ class citas extends Secure_area
      */
     function getApiSchedule()
     {
-        $data['schedule'] = $this->Schedule->get_all()->result();
+        $location_id=$this->Employee->get_logged_in_employee_current_location_id();
+        $data['schedule'] = $this->Schedule->get_schedule($location_id)->result();
         //header('Content-Type: application/json');        
         //json_encode($data, true);
         $this->output->set_status_header(200)->set_content_type('application/json')->set_output(json_encode($data));
@@ -73,8 +74,11 @@ class citas extends Secure_area
      */
     function getSchedule()
     {
-        $data['schedule'] = $this->Schedule->get_all()->result();
-        return $data['schedule'];
+        $location_id=$this->Employee->get_logged_in_employee_current_location_id();
+        $data = $this->Schedule->get_schedule($location_id)->result_array();
+        return $data;
+        
+         
     }
     
     /**

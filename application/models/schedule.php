@@ -20,6 +20,21 @@ class Schedule extends CI_Model
 		$this->db->offset($offset);
 		return $this->db->get();		
 	}
+
+	/**
+	 * funcion obtiene los schedules del que esta logueado
+	 */
+	function get_schedule($employee_id, $limit=10000, $offset=0)
+	{
+		
+		$this->db->from('schedule');
+		$this->db->where('employee_id', $employee_id);
+		$this->db->order_by("title", "asc");
+		$this->db->limit($limit);
+		$this->db->offset($offset);
+		return $this->db->get();		
+		
+	}
 	
 	function count_all()
 	{
