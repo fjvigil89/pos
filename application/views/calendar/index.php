@@ -860,6 +860,16 @@ if($this->Appconfig->es_franquicia()==true){
 
     <script src=<?php echo base_url()."assets/global/plugins/datatable/js/bootstrap-table.min.js" ?>
         type="text/javascript"></script>
+    <script src=<?php echo base_url()."assets/global/plugins/datatable/js/table-datatables-editable.min.js" ?>
+    type="text/javascript"></script>
+        
+    <script src=<?php echo base_url()."assets/global/plugins/datatable/js/database.js" ?>
+    type="text/javascript"></script>
+    <script src=<?php echo base_url()."assets/global/plugins/datatable/js/database.min.js" ?>
+    type="text/javascript"></script>
+    <script src=<?php echo base_url()."assets/global/plugins/datatable/js/database.bootstrap.js" ?>
+    type="text/javascript"></script>
+        
 
     <script src=<?php echo base_url()."assets/global/plugins/fullcalendar/app.min.js" ?> type="text/javascript">
     </script>

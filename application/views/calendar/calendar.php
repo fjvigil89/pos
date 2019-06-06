@@ -16,26 +16,13 @@
                         <!-- BEGIN DRAGGABLE EVENTS PORTLET-->
                         <h3 class="event-form-title margin-bottom-20">Draggables Events</h3>
                         <div id="external-events">
-                            <form class="inline-form">
-                                <input type="text" value="" class="form-control" placeholder="Event Title..."
-                                    id="event_title" name="title">
-                                <input type="hidden" value="" class="form-control" placeholder="start" id="event_start"
-                                    name="start">
-                                <input type="hidden" value="" class="form-control" placeholder="end" id="event_end"
-                                    name="end">
-                                <br>
-                                <a href="javascript:;" id="event_add" class="btn green" onClick="addSchedule()"> Add
-                                    Events </a>
-                            </form>
-                            <hr>
-                            <div id="event_box" class="margin-bottom-10">
+                            <div class="actions">
+                                <a class="btn purple  btn-default" href="<?php echo site_url().'/citas' ?>">
+                                    Schedule
+                                    <i class="icon-cloud-upload"></i>
+                                </a>
 
                             </div>
-                            <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline" for="drop-remove"> remove
-                                after drop
-                                <input type="checkbox" class="group-checkable" id="drop-remove">
-                                <span></span>
-                            </label>
                             <hr class="visible-xs">
                         </div>
                         <!-- END DRAGGABLE EVENTS PORTLET-->
@@ -52,13 +39,12 @@
         <?php echo form_close();?>
     </div>
 
-	<script type="text/javascript">	
-	
+    <script type="text/javascript">
     /**
      * metodo para crear los datos necesarios para actualizar el schedulo
      */
     function addSchedule() {
-		
+
         var e = $("#event_title").val();
         var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>',
             csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';

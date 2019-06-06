@@ -5,22 +5,45 @@ define ('STDIN', fopen("php://stdin", "r"));
 
 class citas extends Secure_area 
 {
+    private $client_google;
     function __construct()
 	{
         parent::__construct();
         $this->load->model('Schedule');
         $this->load->model('Employee');
+
+        //$client_google = $this->getClient();
     }
     function index(){           
         $data['vistas'] = 'schedule';        
         $data['schedule'] = $this->getSchedule();
-
+        
         //return $this->load->view('calendar/schedule', $data);
         
-        /*
+        
+
+        
+       return $this->load->view('calendar/index', $data);
+    }
+    function calendar(){           
+        $data['vistas'] = 'calendar';        
+        
+       return $this->load->view('calendar/index', $data);
+    }
+    /**
+     * Metodo para cargar todos los schedules y llenar por ajax el calendario
+     * A este metodo le hace la petiocion ajax desde el script calendar.min.js
+     * assets/global/plugins/fullcalendar/calendar.min.js
+     */
+    function getApiSchedule()
+    {
+        $location_id=$this->Employee->get_logged_in_employee_current_location_id();
+        $data['schedule'] = $this->Schedule->get_schedule($location_id)->result();
+        
         // Get the API client and construct the service object.
-        $client = $this->getClient();
-        $service = new Google_Service_Calendar($client);
+        
+        /*
+        $service = new Google_Service_Calendar($this->client_google);
 
         // Print the next 10 events on the user's calendar.
         $calendarId = 'primary';
@@ -46,23 +69,6 @@ class citas extends Secure_area
             }
         }*/
 
-        
-       return $this->load->view('calendar/index', $data);
-    }
-    function calendar(){           
-        $data['vistas'] = 'calendar';        
-        
-       return $this->load->view('calendar/index', $data);
-    }
-    /**
-     * Metodo para cargar todos los schedules y llenar por ajax el calendario
-     * A este metodo le hace la petiocion ajax desde el script calendar.min.js
-     * assets/global/plugins/fullcalendar/calendar.min.js
-     */
-    function getApiSchedule()
-    {
-        $location_id=$this->Employee->get_logged_in_employee_current_location_id();
-        $data['schedule'] = $this->Schedule->get_schedule($location_id)->result();
         //header('Content-Type: application/json');        
         //json_encode($data, true);
         $this->output->set_status_header(200)->set_content_type('application/json')->set_output(json_encode($data));
@@ -89,11 +95,17 @@ class citas extends Secure_area
     {
         $location_id=$this->Employee->get_logged_in_employee_current_location_id();
         
+        $status = '0';
+        if($this->input->post('status')=='on')
+        {
+            $status = '1';
+        }
+
         $data = array(
             'title' => $this->input->post('title'),
             'start' => $this->input->post('start'),
             'end' => $this->input->post('end'),
-            'status'=> $this->input->post('status'),
+            'status'=> $status,
             'color'=> $this->input->post('color'),
             'employee_id'=> $location_id
         );
@@ -101,7 +113,7 @@ class citas extends Secure_area
         if ($this->input->post('update')== "false") {
             
             $save_data = $this->Schedule->save($data);
-        }        
+        }     
        
     }
 
