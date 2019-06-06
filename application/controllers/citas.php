@@ -46,6 +46,7 @@ class citas extends Secure_area
             }
         }*/
 
+        
        return $this->load->view('calendar/index', $data);
     }
     function calendar(){           
@@ -126,6 +127,13 @@ class citas extends Secure_area
             $save_data = $this->Schedule->save($data, $this->input->post('id'));
             
         }
+    }
+
+    function setDelete($id){
+        
+        $item = $this->Schedule->delete($id);        
+        redirect('citas/');
+        
     }
     /**
      * Returns an authorized API client.

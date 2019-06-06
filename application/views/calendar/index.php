@@ -685,6 +685,7 @@
 //aqui va todo el body editable 
 if(isset($schedule))
 {
+    
 $this->load->view('calendar/'.$vistas, $schedule);
 }
 else{
@@ -865,6 +866,7 @@ if($this->Appconfig->es_franquicia()==true){
 
     <script src=<?php echo base_url()."assets/global/plugins/datatable/js/table-bootstrap.min.js" ?>
         type="text/javascript"></script>
+    
     <!-- END THEME LAYOUT SCRIPTS -->
 
     <!--esto es standar-->

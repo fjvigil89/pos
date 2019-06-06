@@ -105,7 +105,9 @@ class Schedule extends CI_Model
 	*/
 	function delete($schedule_id)
 	{
-		return true;; 
+		$this->db->where('id', $schedule_id);
+		return $this->db->delete("schedule");
+		
 	}
 	
 	/*

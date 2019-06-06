@@ -46,6 +46,12 @@
                                     <th style="text-align: center; ">
                                         <div class="th-inner  ">status</div>
                                     </th>
+                                    <th style="text-align: center; ">
+                                        <div class="th-inner  ">Edit</div>
+                                    </th>
+                                    <th style="text-align: center; ">
+                                        <div class="th-inner  ">Delete</div>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -63,6 +69,7 @@
                                     <td style="text-align: center; ">                                    
                                     <?php echo $value['color']; ?>
                                     </td>
+                                    
                                     <td style="text-align: center; ">
                                     <?php if($value['status']==true) { ?>
                                         <div class="onoffswitch">
@@ -87,10 +94,24 @@
                                         </div>
                                     <?php  }; ?>    
                                     </td>
+                                    <td style="text-align: center; ">                                    
+                                        <a href="javascript:;" class="btn btn-outline btn-circle btn-sm-purple">
+                                         <i class="fa fa-edit"></i>
+                                         Edit
+                                        </a>
+                                    </td>
+                                    <td style="text-align: center; ">                                    
+                                        <a href="<?php echo site_url('citas/setDelete/'.$value['id']); ?>" class="btn btn-outline btn-circle btn-sm-purple">
+                                         <i class="fa fa-trash-o"></i>
+                                         Delete
+                                        </a>
+                                        
+                                    </td>
                                 </tr>
                                 <?php } ?>
                             </tbody>
                         </table>
+                        
                     </div>
                     <div class="fixed-table-footer" style="display: none;">
                         <table>
@@ -111,35 +132,41 @@
 </div>
 <script>
 function Habilitar(schedule_id,title, start, end, color)
-{    
-        
+{       
         var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>',
             csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
-        
         
         var dataJson = {
             [csrfName]: csrfHash,
             id: schedule_id,                                          
             update: 'true'
         };
-
-        
-        this.sendEnable(dataJson);
-
+        this.sendEnable(dataJson, 'citas/setEnable');
 }
 
-function sendEnable(dataJson) {
+function Delete(schedule_id)
+{
+    var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>',
+            csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
+        
+    var dataJson = {
+        [csrfName]: csrfHash,
+        id: schedule_id,
+    };
+    this.sendEnable(dataJson, 'setDelete');
+}
+
+function sendEnable(dataJson, metodo) {
         var loc = window.location;
         var pathName = loc.pathname.substring(0, loc.pathname.lastIndexOf('/') + 1);
         var url = loc.href.substring(0, loc.href.length - ((loc.pathname + loc.search + loc.hash).length -
             pathName
-            .length));
-        
+            .length));        
 
 //console.log(JSON.stringify(dataJson));
 
         $.ajax({
-            url: url + 'setEnable',
+            url: url + metodo,
             data: dataJson,
             type: "POST",
             success: function(result) {
