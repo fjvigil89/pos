@@ -18,7 +18,7 @@
 				</div>								
 				
 				<div class="col-lg-2 col-md-2 col-sm-6">
-					<button class="btn btn-success btn-block hidden-print" id="imprimeir" onclick="window.location='<?php echo site_url('technical_supports/view/-1'); ?>'" >
+					<button class="btn btn-success btn-block hidden-print" id="imprimeir" onclick="window.location='<?php echo site_url('technical_supports/nuevo-servicio/-1'); ?>'" >
 						<?php echo lang('technical_supports_new'); ?> 
 					</button>
 				</div>
