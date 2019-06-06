@@ -96,16 +96,37 @@ class citas extends Secure_area
             'color'=> $this->input->post('color'),
             'employee_id'=> $location_id
         );
-        var_dump($data);
+        
         if ($this->input->post('update')== "false") {
             
             $save_data = $this->Schedule->save($data);
-        }
-        //var_dump($_SESSION['person_id']); hablar con jean para ver la captura de la session
-        //$this->output->set_status_header(200)->set_content_type('application/json')->set_output(json_encode($data));
+        }        
        
     }
 
+    function setEnable()
+    {
+        
+        if ($this->input->post('update')== "true") {
+            $item = $this->Schedule->get_info($this->input->post('id'));
+            $data = array();
+            foreach ($item as $key => $value) {
+                # code...
+                $data[$key]= $value;
+            }
+            
+            if($data['status'] == '1')
+            {
+                $data['status']= '0';
+            }
+            else
+            {
+                $data['status']= '1';
+            }
+            $save_data = $this->Schedule->save($data, $this->input->post('id'));
+            
+        }
+    }
     /**
      * Returns an authorized API client.
      * @return Google_Client the authorized client object
