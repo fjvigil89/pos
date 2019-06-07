@@ -9,6 +9,15 @@ class Categories extends CI_Model
 		
 		return $this->db->get()->result_array();
     }
+    function category_exists($name)
+	{
+		$this->db->from('categories');
+        $this->db->where('name',$name);
+        $this->db->where('deleted',0);
+        $query =  $this->db->get();
+        return $query->num_rows() == 1;
+	}
+	
     function save($id = -1, $data)
     {
         $info = $this->info_by_name($data["name"]);

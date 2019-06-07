@@ -25,6 +25,7 @@ class Viewer extends CI_Model
             $this->db->where('is_cart',$type);
 
         $result = $this->db->update('viewer_cart',$data_cart);
+        $error =$this->db->_error_message();
         if($data_cart["is_cart"]== 3)
             $this->db->query("COMMIT");
     }

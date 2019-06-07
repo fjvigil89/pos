@@ -123,13 +123,13 @@
                     <hr>
                     <div class="col-md-12 text-center">
                         <div class="form-actions ">
+                        
                             <?php echo form_button(array(
 								'type'=>'button',								
 								'id'=>'cancelar',
 								'content'=>"Cancelar",
 								'class'=>'btn red-haze')
 							);?>
-
 
                         </div>
                     </div>
@@ -142,6 +142,7 @@
 $("#cancelar").click(function() {
     $("#close").click();
 });
+
 $("#image").fileinput({
     initialPreview: [],
     overwriteInitial: true,
@@ -190,7 +191,8 @@ $("#form_category").submit(function(e) {
 				else
 					toastr.success("Registro actualizado...");
 
-				$('#form_category').attr('action', url_2);
+                $('#form_category').attr('action', url_2);
+                $('#form_category')[0].reset();
             } else {
                 toastr.error(data.message, <?=json_encode(lang('common_error'))?>);
 

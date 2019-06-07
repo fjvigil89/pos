@@ -606,8 +606,16 @@ class Sales extends Secure_area
 	function balance_modal()
 	{
 		$this->load->model('Categories');
+		$this->load->model('Viewer');
 		$path_img =  PATH_RECUSE."/".$this->Employee->get_store()."/img/categories";
-
+		$this->Viewer->update_viewer($this->Employee->get_logged_in_employee_info()->person_id,
+		array(				
+				"is_cart" => 1,
+				"updated" => date('Y-m-d H:i:s'),				
+				"is_scale" => 1,
+				"data_scale" => json_encode([])
+			)
+		);
 		$categories = json_encode($this->Categories->get_all());
 		$this->load->view("sales/balance_modal",array("categories"=>$categories,"path_img"=>$path_img));
 	}
@@ -962,7 +970,7 @@ class Sales extends Secure_area
 	function existe($items,$item_tem){
 		if(isset($item_tem['item_id'])){
 			foreach($items as $item){			
-				if(isset($item['item_id'])){
+				if(isset($item['item_id']) and $item['is_serialized'] == false){
 					if($item['item_id']==$item_tem['item_id'] &&  $item['custom1_subcategory']== $item_tem['custom1_subcategory'] &&
 					$item['custom2_subcategory']==  $item_tem['custom2_subcategory'] ){				
 						return $item['line'];
