@@ -618,7 +618,7 @@ function get_chanche_home_manage_table_data_rows($data,$controller, $show_empty_
 	
 	if($show_empty_message and ($data->num_rows()==0 || $CI->config->item('activar_casa_cambio')==0))
 	{
-		$table_data_rows.="<tr><td colspan='16'><span class='col-md-12 text-center text-warning' >".lang('technical_supports_falla_no_support').($CI->config->item('activar_casa_cambio')==0? ". Debe activar la casa de cambio":"")."</span></tr>";
+		$table_data_rows.="<tr ><td colspan='16'><span class='col-md-12 text-center text-warning' >".lang('technical_supports_falla_no_support').($CI->config->item('activar_casa_cambio')==0? ". Debe activar la casa de cambio":"")."</span></tr>";
 	}
 	
 	return $table_data_rows;
@@ -628,20 +628,21 @@ function get_change_home_data_row($item,$controller)
 	$CI =& get_instance();	
 	$controller_name=strtolower(get_class($CI));
 
-	$class_='class="pendiente"';
+	$class_="pendiente";
 	if($item->transaction_status=="Procesando"){
-		$class_='class="procesando"';
+		$class_='procesando';
 	}	
 	else if($item->transaction_status=="Rechazada"){
-		$class_='class="rechazada"';
+		$class_='rechazada';
 	}
 	else if($item->transaction_status=="Entregado"){
-		$class_='class="entregado"';
+		$class_="entregado";
 	}
 	else if($item->transaction_status=="Aprobada"){
-		$class_='class="aprobada"';
+		$class_='aprobada';
 	}
-	$table_data_row='<tr '. $class_.'>';
+	$code_fil =$item->invoice_number."-".$item->numero_cuenta."-".$item->numero_documento."-".$item->item_id;
+	$table_data_row='<tr index="'.$code_fil.'" class="'. $class_.'">';
 	$table_data_row.='<td width="8%"  align="center">'.$item->invoice_number.'</td>';
 	
 	$table_data_row.='<td width="10%" align="center">'.date(get_time_format(), strtotime($item->sale_time)).'</td>';

@@ -237,6 +237,7 @@ $(document).ready(function() {
 			$("#end_date").val(fechas[1]);
 
 		});
+	
 	});
 	function last_orders(){
 		$.get("<?= site_url("changes_house/last_orders")?>"+"/"+start_date, function(data)
@@ -244,15 +245,33 @@ $(document).ready(function() {
 			data = JSON.parse(data);
 			start_date = data.date;
 
-			if(data.rows > 0 ){
+			if(data.rows > 0 )
 				add_rows(data.data);
-			}
+			
 		});
 	}
-	function add_rows(rows){
+	function add_rows(rows)
+	{
 		var last_rows = $("#sortable_table").find('tbody').html();
-
 		$("#sortable_table").find('tbody').html(rows+last_rows);
+		delete_double();
+	}
+	
+	function delete_double()
+	{
+		var indexs={},
+			fil = $("#sortable_table > tbody").find("tr");
+
+		for (let i = 0; i < fil.length; i++) {
+			
+			var index = $(fil[i]).attr('index');
+			if(index in indexs)
+				$(fil[i]).addClass( "delete-by-class" );
+			else
+				indexs[index] = "";
+			
+		}
+		$(".delete-by-class").remove();
 	}
 </script>
 
