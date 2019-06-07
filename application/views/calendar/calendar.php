@@ -17,7 +17,7 @@
                         <h3 class="event-form-title margin-bottom-20">Draggables Events</h3>
                         <div id="external-events">
                             <div class="actions">
-                                <a class="btn purple  btn-default" href="<?php echo site_url().'/citas' ?>">
+                                <a class="btn purple  btn-default" href="<?php echo site_url().'/schedules' ?>">
                                     Schedule
                                     <i class="icon-cloud-upload"></i>
                                 </a>
@@ -40,6 +40,7 @@
     </div>
 
     <script type="text/javascript">
+    
     /**
      * metodo para crear los datos necesarios para actualizar el schedulo
      */

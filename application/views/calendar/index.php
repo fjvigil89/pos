@@ -69,6 +69,8 @@
 
     <link href=<?php echo base_url()."assets/global/plugins/fullcalendar/fullcalendar.min.css" ?> rel="stylesheet"
         type="text/css" />
+    
+   
 
     <!--comun-->
     <link href=<?php echo base_url()."assets/global/plugins/fullcalendar/components.min.css" ?> rel="stylesheet"
@@ -863,11 +865,8 @@ if($this->Appconfig->es_franquicia()==true){
     <script src=<?php echo base_url()."assets/global/plugins/datatable/js/table-datatables-editable.min.js" ?>
     type="text/javascript"></script>
         
-    <script src=<?php echo base_url()."assets/global/plugins/datatable/js/database.js" ?>
-    type="text/javascript"></script>
-    <script src=<?php echo base_url()."assets/global/plugins/datatable/js/database.min.js" ?>
-    type="text/javascript"></script>
-    <script src=<?php echo base_url()."assets/global/plugins/datatable/js/database.bootstrap.js" ?>
+    
+    <script src=<?php echo base_url()."assets/global/plugins/datatable/js/datatables.min.js" ?>
     type="text/javascript"></script>
         
 
@@ -876,6 +875,8 @@ if($this->Appconfig->es_franquicia()==true){
 
     <script src=<?php echo base_url()."assets/global/plugins/datatable/js/table-bootstrap.min.js" ?>
         type="text/javascript"></script>
+    
+    
     
     <!-- END THEME LAYOUT SCRIPTS -->
 

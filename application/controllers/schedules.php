@@ -3,7 +3,7 @@ require_once ("secure_area.php");
 require __DIR__ . '/../../vendor/autoload.php';
 define ('STDIN', fopen("php://stdin", "r"));
 
-class citas extends Secure_area 
+class schedules extends Secure_area 
 {
     private $client_google;
     function __construct()
@@ -89,6 +89,7 @@ class citas extends Secure_area
     }
     
     /**
+     * Este es para uso de ajax o com API
      * 
      */
     function setApiSchedule()
@@ -113,6 +114,38 @@ class citas extends Secure_area
         if ($this->input->post('update')== "false") {
             
             $save_data = $this->Schedule->save($data);
+            
+        }     
+       
+    }
+
+    /**
+     * 
+     */
+    function setSchedule()
+    {
+        $location_id=$this->Employee->get_logged_in_employee_current_location_id();
+        
+        $status = '0';
+        if($_POST['onoffswitch']=='on')
+        {
+            $status = '1';
+        }
+
+        $data = array(
+            'title' => $_POST['title'],
+            'detail'=>$_POST['detail'],
+            'start' => $_POST['start'],
+            'end' => $_POST['end'],
+            'status'=> $status,
+            'color'=> $_POST['color'],
+            'employee_id'=> $location_id
+        );
+        
+        if ($this->input->post('update')== "false") {
+            
+            //$save_data = $this->Schedule->save($data);
+            
         }     
        
     }
@@ -144,7 +177,7 @@ class citas extends Secure_area
     function setDelete($id){
         
         $item = $this->Schedule->delete($id);        
-        redirect('citas/');
+        redirect('schedules/');
         
     }
     /**
