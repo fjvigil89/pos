@@ -8,15 +8,15 @@
                 </div>
 
                 <div class="actions">
-                    <a class="btn green" href="<?php echo site_url().'/schedules/calendar' ?>">
+                    <a class="btn green" href="<?php echo site_url().'/schedules' ?>">
                         Calendar
                         <i class="fa fa-calendar"></i>
                     </a>
 
                 </div>
                 <div class="actions">
-                    <a class="btn purple" onClick="mostrarTr()">
-                        Add
+                    <a class="btn purple" href="<?php echo site_url().'/schedules/addSchedules' ?>">
+                        Add Schedule
                         <i class="fa fa-plus"></i>
                     </a>
                 </div>
@@ -173,7 +173,7 @@
                                         <?php  }; ?>
                                     </td>
                                     <td style="text-align: center; ">
-                                        <a href="javascript:;" class="btn btn-outline btn-circle btn-sm-purple">
+                                        <a href="<?php echo site_url('schedules/editSchedule/'.$value['id']); ?>" class="btn btn-outline btn-circle btn-sm-purple">
                                             <i class="fa fa-edit"></i>
                                             Edit
                                         </a>

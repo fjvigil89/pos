@@ -1,4 +1,5 @@
 <?php 
+$lang['reports_schedule']="Schedule";
 $lang['reports_move_money']="Detailed report transfer of money";
 $lang['reports_traslado']="Total Transfers";
 $lang['detailed']="detailed";

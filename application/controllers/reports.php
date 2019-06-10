@@ -2120,7 +2120,63 @@ class Reports extends Secure_area {
         $this->load->view("reports/tabular_movement", $data);
 
     }
-    //
+    
+    
+    /**
+     * Schedule
+     */    
+    function summary_schedule($start_date, $end_date,$id_empleado, $export_excel = 0, $export_pdf = 0, $offset = 0)
+    {
+        
+        $this->load->model('Schedule');
+
+        $start_date = rawurldecode($start_date);
+        $end_date = rawurldecode($end_date);
+        //$this->check_action_permission('view_movement_cash');
+
+        $this->load->model('reports/summary_schedule');
+        $model = $this->summary_schedule;
+         $params=array('start_date' => $start_date, 'end_date' => $end_date,'id_empleado'=>$id_empleado,'export_excel' => $export_excel, 'export_pdf' => $export_pdf, 'offset' => $offset);
+
+        $model->setParams(array('start_date' => $start_date, 'end_date' => $end_date,'id_empleado'=>$id_empleado, 'export_excel' => $export_excel, 'export_pdf' => $export_pdf, 'offset' => $offset));
+
+        $this->Schedule->create_schedule_temp_table(array('start_date' => $start_date, 'end_date' => $end_date,'id_empleado'=>$id_empleado,));
+
+        $config = array();
+        $config['base_url'] = site_url("reports/summary_schedule/" . rawurlencode($start_date) . '/' . rawurlencode($end_date) . "/$id_empleado/$export_excel/$export_pdf");
+        $config['total_rows'] = $model->getTotalRows();
+        $config['per_page'] = $this->config->item('number_of_items_per_page') ? (int) $this->config->item('number_of_items_per_page') : 20;
+        $config['uri_segment'] = 10;
+        
+        $this->pagination->initialize($config);
+        
+        $tabular_data = array();
+        $report_data = $model->getData();
+
+        foreach ($report_data["details"] as $row) {
+            $data_row = array();
+            $data_row[] = array('data' => date(get_date_format() , strtotime($row['create_at'])), 'align' => 'left');            
+            $data_row[] = array('data' =>$row['title'], 'align' => 'right');
+            $tabular_data[] = $data_row;
+        }
+        
+        $as=$model->getSummaryData();
+        $data = array(
+            "title" => "Movimiento de caja resumen",
+            "subtitle" => date(get_date_format(), strtotime($start_date)) . '-' . date(get_date_format(), strtotime($end_date)),
+            "headers" => $model->getDataColumns(),
+            "data" => $tabular_data,
+            "summary_data" => array(),//$model->getSummaryData(),
+            "summary_data_date"=>$model->getSummaryData(),
+            "export_excel" => $export_excel,
+            "export_pdf" => $export_pdf,
+            "pagination" => $this->pagination->create_links(),
+        );
+
+        $this->load->view("reports/tabular_movement", $data);
+
+    }//end schedule
+
     function movement_cash_date_input_excel_export() {
         $data = $this->_get_common_report_data(TRUE);
         $cajas=array("all"=>"Todo");

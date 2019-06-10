@@ -44,6 +44,7 @@ $route['404_override'] = '';
 $route['no_access/(:any)'] = "no_access/index/$1";
 
 //Summary reports inputs
+$route['reports/summary_schedule'] = "reports/summary_schedule_input_excel_export";
 $route['reports/summary_sales'] = "reports/date_input_excel_export";
 $route['reports/summary_categories'] = "reports/summary_categories_input";
 $route['reports/summary_customers'] = "reports/date_input_excel_export";

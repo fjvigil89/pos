@@ -26,7 +26,7 @@ class Schedule extends CI_Model
 	 */
 	function get_schedule($employee_id, $limit=10000, $offset=0)
 	{
-		
+
 		$this->db->from('schedule');
 		$this->db->where('employee_id', $employee_id);
 		$this->db->order_by("title", "asc");
@@ -36,6 +36,20 @@ class Schedule extends CI_Model
 		
 	}
 	
+	/**
+	 * retorna todos los schedules que tienen ese id
+	 */
+	function get_scheduleID($schedule_id, $limit=10000, $offset=0)
+	{
+		
+		$this->db->from('schedule');
+		$this->db->where('id', $schedule_id);
+		$this->db->order_by("title", "asc");
+		$this->db->limit($limit);
+		$this->db->offset($offset);
+		return $this->db->get();		
+		
+	}
 	function count_all()
 	{
 		$this->db->from('schedule');		
@@ -90,7 +104,7 @@ class Schedule extends CI_Model
 			if ($this->db->insert('schedule',$schedule_data))
 			{
 				$schedule_data['id']=$this->db->insert_id();
-				return true;
+				return $schedule_data['id'];
 			}
 			
 			return false;
@@ -99,6 +113,8 @@ class Schedule extends CI_Model
 		$this->db->where('id', $schedule_id);
 		return $this->db->update('schedule',$schedule_data);
 	}
+
+	
 	
 	/*
 	Deletes one schedule (doesn't actually do anything)
@@ -118,7 +134,40 @@ class Schedule extends CI_Model
 		return true;	
  	}
 
-	
+	 public function create_schedule_temp_table($params)
+	 {
+		 set_time_limit(0);
+		 
+		 $location_id = $this->Employee->get_logged_in_employee_current_location_id();
+ 
+		 $where = '';
+		 
+		 if (isset($params['start_date']) && isset($params['end_date']))
+		 {
+			 $where = 'WHERE create_at BETWEEN "'.$params['start_date'].'" and "'.$params['end_date'].'"'.
+			 ' and '.$this->db->dbprefix('schedule').'.location_id='.$this->db->escape($location_id);
+		 }
+		 
+		 
+		 if(isset($params['id_empleado']) && $params['id_empleado']!="all"){
+			 $where .= ' and '.$this->db->dbprefix('schedule').'.id_employee='.$this->db->escape($params["id_empleado"]);
+ 
+		 }
+		 
+		 $this->db->query("CREATE TEMPORARY TABLE ".$this->db->dbprefix('schedule_temp')."
+ 
+		 (SELECT ".$this->db->dbprefix('schedule').".id as schedule_id, register_date, 
+		 ".$this->db->dbprefix('schedule').".detail as description, 		 		 		 
+		 ".$this->db->dbprefix('schedule').".employee_id as id_employee,		 		 		 
+		 FROM ".$this->db->dbprefix('schedule')."				 
+		 JOIN ".$this->db->dbprefix('employees')." ON  ".$this->db->dbprefix('employees').'.person_id='.$this->db->dbprefix('schedule').'.id_employee'."
+		 JOIN ".$this->db->dbprefix('people')." ON  ".$this->db->dbprefix('people').'.person_id='.$this->db->dbprefix('employees').'.person_id'."   
+		 
+		 $where )");
+ 
+	 
+	 }
+	 	
 	
 }
 ?>

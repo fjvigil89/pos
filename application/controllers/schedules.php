@@ -8,25 +8,41 @@ class schedules extends Secure_area
     private $client_google;
     function __construct()
 	{
-        parent::__construct();
-        $this->load->model('Schedule');
-        $this->load->model('Employee');
+        parent::__construct();        
+        $this->load->model(array('Schedule','Employee', 'Item','Schedule_Items'));
 
         //$client_google = $this->getClient();
     }
     function index(){           
+        $data['vistas'] = 'calendar';                
+       return $this->load->view('calendar/index', $data);
+    }
+
+    function listar(){           
         $data['vistas'] = 'schedule';        
         $data['schedule'] = $this->getSchedule();
-        
-        //return $this->load->view('calendar/schedule', $data);
-        
-        
+       return $this->load->view('calendar/index', $data);
+    }
 
+    function addSchedules(){
+        $data['vistas'] = 'save'; 
+        foreach ($this->Item->get_all()->result() as $key => $item) {            
+            $item_id = $item->item_id;
+            $item = $item->category;
+            $data['items'][$key] = $item;
+            $data['items_id'][$key] = $item_id;
+        }
         
        return $this->load->view('calendar/index', $data);
     }
-    function calendar(){           
-        $data['vistas'] = 'calendar';        
+
+    /***
+     * cargar el schedule que este en la lista para su edicion
+     */
+    function editSchedule($id){
+        $data['vistas'] = 'save'; 
+        $data['schedule'] = $this->Schedule->get_scheduleID($id)->result();
+
         
        return $this->load->view('calendar/index', $data);
     }
@@ -83,7 +99,8 @@ class schedules extends Secure_area
     {
         $location_id=$this->Employee->get_logged_in_employee_current_location_id();
         $data = $this->Schedule->get_schedule($location_id)->result_array();
-        return $data;
+        var_dump($data);
+        //return $data;
         
          
     }
@@ -127,26 +144,38 @@ class schedules extends Secure_area
         $location_id=$this->Employee->get_logged_in_employee_current_location_id();
         
         $status = '0';
-        if($_POST['onoffswitch']=='on')
+        if($_POST['status']=='on')
         {
             $status = '1';
         }
-
         $data = array(
             'title' => $_POST['title'],
             'detail'=>$_POST['detail'],
-            'start' => $_POST['start'],
-            'end' => $_POST['end'],
+            'start' => $_POST['start_date'],
+            'end' => $_POST['end_date'],
             'status'=> $status,
             'color'=> $_POST['color'],
-            'employee_id'=> $location_id
+            'employee_id'=> $location_id          
         );
+
+        $save_id = $this->Schedule->save($data);
+
+        //agreagndo en la relacion        
+        foreach ($_POST['products'] as $key => $value) {
+            $data = array(
+                'schedule_id'=>$save_id,
+                'items_id' => $value,
+            );
+
+            $this->Schedule_Items->save($data);
+            
+        }
+        //var_dump(count($_POST['products']));    
+        //$save_data = $this->Schedule->save($data);
         
-        if ($this->input->post('update')== "false") {
-            
-            //$save_data = $this->Schedule->save($data);
-            
-        }     
+        
+        redirect('/schedules', 'refresh');
+        
        
     }
 

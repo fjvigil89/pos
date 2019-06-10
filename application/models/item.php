@@ -129,7 +129,7 @@ class Item extends CI_Model
 		
 		return $this->db->get();
 	}
-		function get_all_id($item_id, $location_id = false)
+	function get_all_id($item_id, $location_id = false)
 	{
 		if (!$location_id)
 		{

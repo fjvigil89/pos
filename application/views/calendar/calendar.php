@@ -17,11 +17,18 @@
                         <h3 class="event-form-title margin-bottom-20">Draggables Events</h3>
                         <div id="external-events">
                             <div class="actions">
-                                <a class="btn purple  btn-default" href="<?php echo site_url().'/schedules' ?>">
+                                <a class="btn purple  btn-default" href="<?php echo site_url().'/schedules/listar' ?>">
                                     Schedule
                                     <i class="icon-cloud-upload"></i>
                                 </a>
 
+                            </div>
+                            <hr class="visible-xs">
+                            <div class="actions">
+                                <a class="btn blue" href="<?php echo site_url().'/schedules/addSchedules' ?>">
+                                    Add Schedule
+                                    <i class="fa fa-plus"></i>
+                                </a>
                             </div>
                             <hr class="visible-xs">
                         </div>
