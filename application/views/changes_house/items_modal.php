@@ -109,7 +109,6 @@
 									<button id="cancel-button" type="button" class="btn default">Cancelar</button>
 									
 									</div>
-
 								</div>
 								
 							</div>						

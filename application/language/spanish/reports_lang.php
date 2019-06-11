@@ -33,6 +33,7 @@ $lang['reports_items_purchased'] = 'Artículos Comprados';
 $lang['reports_sold_by'] = 'Vendido por';
 $lang['reports_sold_to'] = 'Vendido a'; 
 $lang['reports_category'] = 'Categoría';
+$lang['reports_units'] = 'Unidades';
 $lang['reports_customer'] = 'Cliente';
 $lang['reports_employee'] = 'Empleado';
 $lang['reports_item'] = 'Artículo';

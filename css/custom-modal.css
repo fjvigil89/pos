@@ -1,0 +1,23 @@
+#configProfileType .modal-dialog{
+	width: 95%;
+	height: 100px;
+}
+
+#configProfileType h4{
+	text-align: center;
+	font-weight: bold;
+}
+
+#configProfileType h3{
+	text-align: center;
+	font-weight: bold;
+}
+
+#configProfileType .material-icons { 
+	font-size: 70px; 
+}
+
+#configProfileType .portlet-body {
+	text-align: center;
+}
+

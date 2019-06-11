@@ -30,6 +30,7 @@ $platforms = array (
 					'ppc'				=> 'Macintosh',
 					'linux'				=> 'Linux',
 					'debian'			=> 'Debian',
+					'mint'				=> 'Debian',
 					'sunos'				=> 'Sun Solaris',
 					'beos'				=> 'BeOS',
 					'apachebench'		=> 'ApacheBench',

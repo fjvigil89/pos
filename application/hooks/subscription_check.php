@@ -3,7 +3,8 @@
     function subscription_check()
     {
         $CI =& get_instance();
-        $subscription_cancelled=false;
+        $subscription_cancelled = false;
+        
         if($CI->Employee->is_logged_in())
         {
             $current_date  = date("Y-m-d H:i:s");
@@ -11,7 +12,7 @@
             $expire_date   = date('Y-m-d H:i:s' , strtotime ("+1 day" , strtotime ($CI->config->item('expire_date'))));;
             $expire_date_franquicia   = date('Y-m-d H:i:s' , strtotime ("+1 day" , strtotime ($CI->config->item('expire_date_franquicia'))));;
 
-            if($CI->config->item('es_franquicia')==true){
+            if($CI->config->item('es_franquicia') == true){
                 if( $expire_date_franquicia >$current_date && $suspended==0){
                     $start_2      = strtotime($current_date);
                     $end_2      = strtotime($expire_date_franquicia); 

@@ -46,14 +46,51 @@
 	</div>
 	<!-- END TITLE GENERAL -->
 
+<?php if( !$this->config->item('Hide_panel_type_business') && count($profiles) && $this->Employee->es_demo()){ ?>
+<div class="modal fade" id="configProfileType" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+           <div class="modal-header note note-success note-shadow">
+                <h3>SELECCIONE EL SOFTWARE QUE DESEA PROBAR</h3>
+           </div>
+           <div class="modal-body">
+                <div class="form-group row">
+                    <div id="msj"></div>
+			        <div class="col-md-12 perfil">
+			        	<?php 
+			        	$i=0;
+			        	foreach ($profiles as $profiles_columns) { ?>
+				        	<div class="row">
+			        			<?php foreach ($profiles_columns as $profile) { ?>
+			        				<div class="col-md-2 col-sm-2 col-lg-2">
+					        			<div class="portlet box <?=$colors_modal[$i]?>" id="modal-profile-box-<?=$profile->id?>-<?=$i?>">
+					        				<div class="portlet-title">
+					        					<h4 id="profile-name-<?=$i?>"><?=$profile->name_lang_key?></h4>
+											</div>
+											<div class="portlet-body">
+												<i class="material-icons"><?=$profile->icon?></i>
+											</div>
+					        			</div>
+				        			</div> 
+			        			<?php $i++; } ?>
+				        	</div>
+						<?php } ?>
+			        </div>
+                </div>
+	       </div>
+      	</div>
+   </div>
+</div>
+<?php } ?>
+
 <?php if($this->config->item('initial_config') == 0){ ?>
 <div class="modal fade" id="mostrarmodal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
-		<?php echo form_open('',array('id'=>'confi_impuesto_form','class'=>'form-horizontal')); 	?>
+		<?php echo form_open('',array('id'=>'confi_impuesto_form','class'=>'form-horizontal')); ?>
       <div class="modal-dialog">
         <div class="modal-content">
            <div class="modal-header note note-success note-shadow">
-	      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-              <h3>Configuración de Impueto y Moneda</h3>
+	     	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h3>Configuración de Impueto, Moneda</h3>
            </div>
            <div class="modal-body">
                     <div class="form-group row">
@@ -118,11 +155,8 @@
 		            <label>Impuesto %</label>
 		                <input type="number" id="impuesto" class="form-control" name="impuesto" placeholder="Impuesto %" value="<?php echo $this->config->item('default_tax_1_rate'); ?>">
 		            </div>
-
 		        </div>
-
                 </div>
-
 	       </div>
            <div class="modal-footer">
 			<label class="pull-left">
@@ -519,7 +553,7 @@
 		<?php }?>
 	</div>
 	<!-- END CHARTS -->
-
+	<script src="<?php echo base_url();?>js/jquery.blockUI.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		$(document).ready(function()
 		{
@@ -552,15 +586,14 @@
 
 
          });
+
+
          $('#close').click(function(){
 
                $('.modal.fade.in').removeClass('in');
                $('#stack1').css({'display':'none'});
             	$('#maxhome').removeClass('icon fa fa-youtube-play help_button');
                	 $('#maxhome').html("<a href='javascript:;' id='maxhom' rel=1 class='tn-group btn red-haze' ><span class='hidden-sm hidden-xs'>Maximizar&nbsp;</span><i class='icon fa fa-youtube-play help_button'></i></a>");
-
-
-
 
          });
 
@@ -570,9 +603,6 @@
              {show_hide_video1:$(this).is(':checked') ? '1' : '0',video1:'hide_video_stack1'});
 
          });
-
-
-
 
 			$('#weeklysales').datetimepicker({
 			    locale: 'es',
@@ -785,10 +815,10 @@
 			}
 	</script>
 <?php if($this->config->item('initial_config') == 0){ ?>
-                        <script type="text/javascript">$(document).ready(function(){$('#language > option[value="<?php echo $this->Appconfig->get_raw_language_value(); ?>"]').attr('selected', 'selected');});</script>
+ <script type="text/javascript">$(document).ready(function(){$('#language > option[value="<?php echo $this->Appconfig->get_raw_language_value(); ?>"]').attr('selected', 'selected');});</script>
+<?php } ?>
 <script>
-      $(document).ready(function()
-      {
+      $(document).ready(function(){
 
       	var radio;
          $("#mostrarmodal").modal("show");
@@ -803,66 +833,142 @@
          $( ".impuesto" ).hide( "slow" );
          	$('#impuesto').val("");
 	        $('#nombre_impuesto').val("");
-        }
-
-         });
-
-
-	$("select[name=language]").change(function(){
- 	  var fields = $("#confi_impuesto_form").serialize();
- 	  $('#msj').html("");
-	$.ajax({
-	    url:"<?php echo site_url("home/view_language_currency_symbol_modal");?>",
-	    data:fields,
-	    type: "post",
-	    dataType:"json",
-	    success: function(response, textStatus, jqXHR){
-	        $('#moneda').val(response.currency_symbol);
-	        $('#impuesto').val(response.default_tax_1_rate);
-	        $('#nombre_impuesto').val(response.default_tax_1_name);
-	    },
-	    error: function(jqXHR, textStatus, errorThrown){
-	        console.log("The following error occured: "+
-	                    textStatus, errorThrown);
-	    }
+		}
 	});
-
-});
-
-
-$('#button').click(function(e){
-if(radio != "no"){
-if($('#nombre_impuesto').val() == ""){
-$('#msj').html("<div class='alert alert-warning'><button type='button' class='close' data-dismiss='alert'>&times;</button>Campo Nombre Impuesto esta vacio</div>");
-return false;
-}else if($('#impuesto').val() == ""){
-$('#msj').html("<div class='alert alert-warning'><button type='button' class='close' data-dismiss='alert'>&times;</button>Campo Impuesto esta vacio</div>");
-return false;
-}
-}
-
- var fields = $("#confi_impuesto_form").serialize();
-	$.ajax({
-	    url:"<?php echo site_url("home/initial_config");?>",
-	    data:fields,
-	    type: "post",
-	    dataType:"json",
-	    success: function(response, textStatus, jqXHR){
-            if(response){
-              $("#mostrarmodal").modal('hide');
-            }
-	    },
-	    error: function(jqXHR, textStatus, errorThrown){
-	        console.log("The following error occured: "+
-	                    textStatus, errorThrown);
-	    }
-	});
-
-
-});
-
 });
 </script>
+<?php if(count($profiles) && !$this->config->item('Hide_panel_type_business') && $this->Employee->es_demo()){ ?>
+<script type="text/javascript">
+function dialogo(content){
+    $.blockUI({ 
+		message:content,
+		css: { 
+            border: 'none', 
+            padding: '5px', 
+            backgroundColor: '#000', 
+            '-webkit-border-radius': '10px', 
+            '-moz-border-radius': '10px', 
+            opacity: .5, 
+            color: '#fff' 
+		} }); 
+		
+}
+
+
+$(document).ready(function(){
+
+	$('#language > option[value="<?php echo $this->Appconfig->get_raw_language_value(); ?>"]').attr('selected', 'selected');
+	//$("#configProfileType").modal("show");
+	$('#configProfileType').modal({
+	    backdrop: 'static',
+  		keyboard: false
+	})
+
+	$('[id^=modal-profile-box-]').hover(function(e){
+			$(this).css('cursor','pointer');
+		});
+
+	$('[id^=modal-profile-box-]').click(function(e){
+
+		var array_profile = this.id.split("-");
+		var profile = array_profile[3];
+		
+		if(confirm("Desea cargar el perfil: "+$("#profile-name-"+array_profile[4]).html())) {
+			dialogo("<div id='id_sincronizacion_offline_contenido'> <center><img src='"+BASE_URL+"/img/loading_perfil.gif' alt='' width='30%' ></center><br> <h4>Esto podría tardar varios minutos</h4> </div>");
+			$('#configProfileType').modal('toggle'); 
+				
+			$.ajax({
+			    url: "<?php echo site_url("home/cargar_perfil"); ?>",
+			    data: { perfil : profile },
+			    type: "post",
+			    dataType:"text",
+			    success: function(response, textStatus, jqXHR){
+		            if(response){
+		              //console.log(response);
+		            	location.reload();
+		            }
+			    },
+			    error: function(jqXHR, textStatus, errorThrown){
+			        console.log("The following error occured: "+
+			                    textStatus, errorThrown); //+ JSON.stringify(jqXHR)
+			    }
+			});
+		}
+	});
+});
+</script>
+<?php } ?>
+
+<?php if($this->config->item('initial_config') == 0){ ?>
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#language > option[value="<?php echo $this->Appconfig->get_raw_language_value(); ?>"]').attr('selected', 'selected');
+
+	var radio;
+ 	$("#mostrarmodal").modal("show");
+
+ 	$( "input:radio[name=cobra]" ).change(function() {
+		$('#msj').html("");
+		radio=$(this).val();
+		if($(this).val() == "si"){
+			$(".impuesto").show( "slow" );
+		} else {
+		 	$( ".impuesto" ).hide( "slow" );
+		 	$('#impuesto').val("");
+		    $('#nombre_impuesto').val("");
+		}
+ 	});
+
+	$("select[name=language]").change(function(){
+	 	var fields = $("#confi_impuesto_form").serialize();
+	 	$('#msj').html("");
+		$.ajax({
+		    url:"<?php echo site_url("home/view_language_currency_symbol_modal");?>",
+		    data:fields,
+		    type: "post",
+		    dataType:"json",
+		    success: function(response, textStatus, jqXHR){
+		        $('#moneda').val(response.currency_symbol);
+		        $('#impuesto').val(response.default_tax_1_rate);
+		        $('#nombre_impuesto').val(response.default_tax_1_name);
+		    },
+		    error: function(jqXHR, textStatus, errorThrown){
+		        console.log("The following error occured: "+
+		                    textStatus, errorThrown);
+		    }
+		});
+	});
+
+	$('#button').click(function(e){
+		if(radio != "no"){
+			if($('#nombre_impuesto').val() == ""){
+				$('#msj').html("<div class='alert alert-warning'><button type='button' class='close' data-dismiss='alert'>&times;</button>Campo Nombre Impuesto esta vacio</div>");
+				return false;
+			}else if($('#impuesto').val() == ""){
+				$('#msj').html("<div class='alert alert-warning'><button type='button' class='close' data-dismiss='alert'>&times;</button>Campo Impuesto esta vacio</div>");
+				return false;
+			}
+		}
+
+		var fields = $("#confi_impuesto_form").serialize();
+		$.ajax({
+		    url:"<?php echo site_url("home/initial_config");?>",
+		    data:fields,
+		    type: "post",
+		    dataType:"json",
+		    success: function(response, textStatus, jqXHR){
+		        $('#moneda').val(response.currency_symbol);
+		        $('#impuesto').val(response.default_tax_1_rate);
+		        $('#nombre_impuesto').val(response.default_tax_1_name);
+		    },
+		    error: function(jqXHR, textStatus, errorThrown){
+		        console.log("The following error occured: "+ textStatus, errorThrown);
+		    }
+		});
+	});
+});
+</script>
+
 <?php } ?>
 
 <?php $this->load->view("partial/footer"); ?>

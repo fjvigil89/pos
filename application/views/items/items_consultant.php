@@ -149,79 +149,7 @@
 						<div class="col-md-12 ">
 							<div class="pull-right margin-bottom-10">
 								<div class="btn-group">
-									<?php if ($this->Employee->has_module_action_permission($controller_name, 'add_update', $this->Employee->get_logged_in_employee_info()->person_id)) {?>				
-					
-										<?php echo 
-											anchor("$controller_name/view/-1/",
-											'<i class="fa fa-pencil hidden-lg fa fa-2x tip-bottom" data-original-title="'.lang($controller_name.'_new').'"></i> <span class="visible-lg">'.lang($controller_name.'_new').'</span>',
-											array('class'=>'btn btn-medium green-seagreen effect', 
-												'title'=>lang($controller_name.'_new')));
-										?>
-
-										<?php echo
-											anchor("$controller_name/bulk_edit/",
-											'<i class="fa fa-edit   hidden-lg fa fa-2x tip-bottom" data-original-title="'.lang('items_bulk_edit').'"></i><span class="visible-lg">'.lang("items_bulk_edit").'</span>',
-											array('id'=>'bulk_edit','data-toggle'=>'modal','data-target'=>'#myModal',
-												'class' => 'btn hidden-xs btn-medium green-seagreen disabled',
-												'title'=>lang('items_edit_multiple_items'))); 
-										?>													
-									<?php } ?>
-
-									<?php echo 
-										anchor("$controller_name/generate_barcode_labels",
-										'<i class="fa fa-barcode   hidden-lg fa fa-2x tip-bottom" data-original-title="'.lang('common_barcode_labels').'"></i><span class="visible-lg">'.lang("common_barcode_labels").'</span>',
-										array('id'=>'generate_barcode_labels', 
-											'class' => 'btn hidden-xs btn-medium green-seagreen hidden-xs disabled',
-											'target' =>'_blank',
-											'title'=>lang('common_barcode_labels'))); 
-									?>
-									<?php echo 
-										anchor("$controller_name/generate_barcodes",
-										'<i class="fa fa-barcode hidden-lg fa fa-2x tip-bottom" data-original-title="'.lang('common_barcode_sheet').'"></i><span class="visible-lg">'.lang("common_barcode_sheet").'</span>',
-										array('id'=>'generate_barcodes', 
-										  	'class' => 'btn hidden-xs btn-medium green-seagreen hidden-xs disabled',
-										  	'target' =>'_blank',
-										  	'title'=>lang('common_barcode_sheet'))); 
-									?>
-									<?php if ($this->Employee->has_module_action_permission($controller_name, 'add_update', $this->Employee->get_logged_in_employee_info()->person_id)) {?>				
-
-										<?php echo anchor("$controller_name/excel_import/",
-											'<i class="fa fa-upload   hidden-lg fa fa-2x tip-bottom" data-original-title="'.lang('common_excel_import').'"></i><span class="visible-lg">'.lang("common_excel_import").'</span>',
-											array('class'=>'btn hidden-xs btn-medium green-seagreen effect',
-												'title'=>lang('common_excel_import')));
-										?>
-										<?php echo anchor("$controller_name/options_excel_export/",
-											'<i class="fa fa-download   hidden-lg fa fa-2x tip-bottom" data-original-title="'.lang('common_excel_export').'"></i><span class="visible-lg">'.lang("common_excel_export").'</span>',
-											array('class'=>'btn hidden-xs btn-medium green-seagreen',
-												'title'=>lang('common_excel_export'),
-												'data-toggle'=>'modal',
-												'data-target'=>'#myModal'));
-										?>
-										<?php echo anchor("$controller_name/excel_import_compare/",
-											'<i class="fa fa-upload   hidden-lg fa fa-2x tip-bottom" data-original-title="'.lang('items_excel_compare').'"></i><span class="visible-lg">'.lang("items_excel_compare").'</span>',
-											array('class'=>'btn hidden-xs btn-medium green-seagreen effect',
-												'title'=>lang('items_excel_compare')));
-										?>
-									<?php }?>
-
-									<?php if ($this->Employee->has_module_action_permission($controller_name, 'delete', $this->Employee->get_logged_in_employee_info()->person_id)) {?>				
-
-										<?php 
-											if(!$this->Employee->es_demo()){
-											echo 
-											anchor("$controller_name/delete",
-											'<i class="fa fa-trash-o hidden-lg fa fa-2x tip-bottom" data-original-title="'.lang('common_delete').'"></i><span class="visible-lg">'.lang("common_delete").'</span>',
-											array('id'=>'delete', 
-												'class'=>'btn btn-danger disabled','title'=>lang("common_delete"))); 
-											}
-										?>
-										<?php echo 
-											anchor("$controller_name/cleanup",
-											'<i class="fa fa-undo hidden-lg fa fa-2x tip-bottom" data-original-title="'.lang('items_cleanup_old_items').'"></i><span class="visible-lg">'.lang("items_cleanup_old_items").'</span>',
-											array('id'=>'cleanup', 
-												'class'=>'btn btn-warning','title'=>lang("items_cleanup_old_items"))); 
-										?>
-									<?php } ?>
+									
 								</div>
 							</div>
 						</div>
@@ -229,7 +157,7 @@
 
 					<div class="row margin-bottom-10">
 						
-                        <?php echo form_open("$controller_name/search",array('id'=>'search_form', 'autocomplete'=> 'off'),array('search_flag'=>1 , 'consultant'=>FALSE)); ?>
+                        <?php echo form_open("$controller_name/search",array('id'=>'search_form', 'autocomplete'=> 'off'),array('search_flag'=>1 , 'consultant'=>TRUE)); ?>
                             <div class="col-xs-12 col-md-4 col-lg-4 margin-bottom-05">	
                                 <div class="input-group">
                                     <input type="text" name ='search' id='search' class="form-control form-inps" value="<?php echo H($search); ?>"  placeholder="<?php echo lang('common_search'); ?> <?php echo lang('module_'.$controller_name); ?>"/>
@@ -249,12 +177,9 @@
                             </div>							
                         </form>
                         <div class="col-xs-12 col-md-12 col-lg-3 margin-bottom-05 ">
-                            <a href="<?php echo site_url($controller_name.'/clear_state'); ?>" class="btn btn-info btn-block clear-state pull-right effect"><?php echo lang('common_clear_search'); ?></a>
+                            <a href="<?php echo site_url($controller_name.'/clear_state_consultant'); ?>" class="btn btn-info btn-block clear-state pull-right effect"><?php echo lang('common_clear_search'); ?></a>
                         </div>
-					<!--boton de consultor-->
-                        <div class="col-xs-12 col-md-12 col-lg-3 margin-bottom-05 ">
-                            <a href="<?php echo site_url('items/consultant'); ?>" class="btn btn-info btn-block clear-state pull-right effect"><?php echo lang('common_consultant'); ?></a>
-                        </div>
+					
 						
                     </div>
 

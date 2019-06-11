@@ -55,6 +55,51 @@ class Items extends Secure_area implements iData_controller
         $this->load->view('items/manage', $data);
     }
 
+    //esto es solo para que salga la pag de los consultantes
+	//porque no tengo el modulo de home
+	function consultant($offset = 0)
+	{
+		$params = $this->session->userdata('item_search_data') ? $this->session->userdata('item_search_data') : array('offset' => 0, 'order_col' => 'item_id', 'order_dir' => 'asc', 'search' => false, 'category' => false);
+
+        if ($offset != $params['offset']) {
+            redirect('items/index/' . $params['offset']);
+        }
+
+        $this->check_action_permission('search');
+        $config['base_url'] = site_url('items/sorting');
+        $config['per_page'] = $this->config->item('number_of_items_per_page') ? (int) $this->config->item('number_of_items_per_page') : 20;
+        $data['controller_name'] = strtolower(get_class());
+        $data['per_page'] = $config['per_page'];
+        $data['search'] = $params['search'] ? $params['search'] : "";
+        $data['category'] = $params['category'] ? $params['category'] : "";
+
+        if ($data['search'] || $data['category']) {
+
+         
+            $config['total_rows'] = $this->Item->search_count_all($data['search'], $data['category']);
+            $table_data = $this->Item->search($data['search'], $data['category'], $data['per_page'], $params['offset'], $params['order_col'], $params['order_dir']);
+        } else {
+            $config['total_rows'] = $this->Item->count_all();
+            $table_data = $this->Item->get_all($data['per_page'], $params['offset'], $params['order_col'], $params['order_dir']);
+        }
+
+        $data['total_rows'] = $config['total_rows'];
+        $this->pagination->initialize($config);
+        $data['pagination'] = $this->pagination->create_links();
+        $data['order_col'] = $params['order_col'];
+        $data['order_dir'] = $params['order_dir'];
+
+        $data['manage_table'] = get_items_manage_consultant_table($table_data, $this);
+        $data['categories'][''] = '--' . lang('items_select_category_or_all') . '--';
+        foreach ($this->Item->get_all_categories()->result() as $category) {
+            $category = $category->category;
+            $data['categories'][$category] = $category;
+        }
+
+        //$this->load->view('items/manage', $data);
+		$this->load->view("items/items_consultant", $data);
+	}
+
     public function sorting()
     {
         $this->check_action_permission('search');
@@ -154,7 +199,15 @@ class Items extends Secure_area implements iData_controller
         $config['per_page'] = $per_page;
         $this->pagination->initialize($config);
         $data['pagination'] = $this->pagination->create_links();
-        $data['manage_table'] = get_items_manage_table_data_rows($search_data, $this);
+        if ($_POST['consultant'] == FALSE) {
+            $data['manage_table'] = get_items_manage_table_data_rows($search_data, $this);
+        }
+        else{
+            //consultant
+            $data['manage_table'] = get_items_manage_consultant_table_data_rows($search_data, $this);
+
+        }
+        
         echo json_encode(array('manage_table' => $data['manage_table'], 'pagination' => $data['pagination']));
     }
 
@@ -512,14 +565,15 @@ class Items extends Secure_area implements iData_controller
         $error_datos_custom=false;
         $redirect = $this->input->post('redirect');
         $sale_or_receiving = $this->input->post('sale_or_receiving');
-        //valida entrada se debe pasar para un archivo heper
+       
+        //valida entrada se debe pasar para un archivo heper       
         if($this->config->item('subcategory_of_items')==1&&$this->input->post('subcategory') ){
             if ($this->input->post('locations')) {
                 foreach ($this->input->post('locations') as $location_id => $item_location_data) {
                          $subcategory_data_custom1=$item_location_data['subcategory_data_custom1'];
                          $subcategory_data_custom2=$item_location_data['subcategory_data_custom2'];
                          $subcategory_data_quantity=$item_location_data['subcategory_data_quantity'];
-                   
+                    
                         if(count($subcategory_data_custom1)<0|| count($subcategory_data_custom2)<0 || count($subcategory_data_quantity)<0 )
                             $error_datos_custom =true;
                         foreach($subcategory_data_custom1 as $custom){
@@ -919,8 +973,15 @@ class Items extends Secure_area implements iData_controller
 
     public function clear_state()
     {
-        $this->session->unset_userdata('item_search_data');
+        $this->session->unset_userdata('item_search_data');        
         redirect('items');
+    }
+
+    public function clear_state_consultant()
+    {
+        $this->session->unset_userdata('item_search_data');
+        redirect('items/view_consultant');
+        
     }
 
     public function bulk_update()

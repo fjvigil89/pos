@@ -12,6 +12,7 @@ class Summary_categories extends Report
 		$columns = array();
 		
 		$columns[] = array('data'=>lang('reports_category'), 'align'=> 'left');
+		$columns[] = array('data'=>lang('reports_units'), 'align'=> 'left');
 		$columns[] = array('data'=>lang('reports_subtotal'), 'align'=> 'right');
 		$columns[] = array('data'=>lang('reports_total'), 'align'=> 'right');
 		$columns[] = array('data'=>lang('reports_tax'), 'align'=> 'right');
@@ -26,7 +27,7 @@ class Summary_categories extends Report
 	
 	public function getData()
 	{
-		$this->db->select('category, sum(subtotal) as subtotal, sum(total) as total, sum(tax) as tax, sum(profit) as profit, sum(quantity_purchased) as item_sold', false);
+		$this->db->select('category, count(category) as units, sum(subtotal) as subtotal, sum(total) as total, sum(tax) as tax, sum(profit) as profit, sum(quantity_purchased) as item_sold', false);
 		$this->db->from('sales_items_temp');
 		if ($this->params['sale_type'] == 'sales')
 		{

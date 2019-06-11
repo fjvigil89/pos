@@ -550,7 +550,7 @@
 									'name'=>'cost_price',
 									'size'=>'8',
 									'id'=>'cost_price',
-									'class'=>'form-control form-inps',
+									'class'=>'form-control form-inps money',
 									'value'=>$item_info->cost_price ? to_currency_no_money($item_info->cost_price,10) : '')
 								);?>
                 </div>
@@ -1206,7 +1206,7 @@
 												'name'=>'locations['.$location->location_id.'][cost_price]',
 												'size'=>'8',
 												'class'=>'form-control form-inps',
-												'value'=> $location_items[$location->location_id]->item_id !== '' && $location_items[$location->location_id]->cost_price ? to_currency_no_money($location_items[$location->location_id]->cost_price, 10): ''
+												'value'=>$location_items[$location->location_id]->item_id !== '' && $location_items[$location->location_id]->cost_price ? to_currency_no_money($location_items[$location->location_id]->cost_price, 10): ''
 											));?>
             </div>
         </div>

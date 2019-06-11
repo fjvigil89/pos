@@ -19,7 +19,11 @@ class Item extends CI_Model
 		$this->db->from('items');
 		$this->db->where('deleted',0);
 		$this->db->where('activate_range',1);
-		return $this->db->get()->result();
+		if($this->db->get()) {
+			return $this->db->get()->result();	
+		} else {
+			return false;
+		}
 	}
 	function get_items_range($register_log_id){
 		$this->db->select('items.name,items.item_id,range_id,final_range,extra_charge,start_range');
@@ -637,8 +641,6 @@ class Item extends CI_Model
 		{
 			return true;
 		}
-		
-		
 	}
 	
 	function get_item_search_suggestions($search,$limit=25)
@@ -904,7 +906,8 @@ class Item extends CI_Model
 			'allow_alt_description'=> 0,
 			'is_serialized'=> 0,
 			'is_service'=> 1,
-			'override_default_tax' => 1
+			'override_default_tax' => 1,
+			'item_id' => 1
 		);
 		
 		$this->save($item_data, $item_id);

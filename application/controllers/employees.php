@@ -418,5 +418,4 @@ class Employees extends Person_controller
 		echo json_encode(array('success'=>true,'message'=>lang('employees_cleanup_sucessful')));
 	}
 }
-
 ?>
