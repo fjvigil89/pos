@@ -58,9 +58,55 @@ if($this->Appconfig->es_franquicia()==true){
 			   	Layout.init(); // init layout
 			   	Demo.init(); // init demo features
 			 	ComponentsDropdowns.init();
+
+			/*
+			//metodo para hacer que los edit carguen los valores monetarios separados
+			//por miles
+				$('input.money').val(function(index, value) {
+					return value
+						.replace(/\D/g, "")
+						.replace(/([0-9])([0-9]{2})$/, '$1,$2')  
+						.replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ".")
+					;
+				});
+			//fin
+			*/
+
+			Split_by_miles($('input.money'));
 			});
+
+
+		function Split_by_miles(input)
+		{
+			//funcion en Jquery para separar numeros en milles
+			input.keyup(function(event) {
+				// skip for arrow keys
+				if(event.which >= 37 && event.which <= 40){
+					event.preventDefault();
+				}
+
+				input.val(function(index, value) {
+					return value
+						.replace(/\D/g, "")
+						.replace(/([0-9])([0-9]{2})$/, '$1.$2')  
+						.replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",")
+					;
+				});
+			});
+			//fin de separar numeros
+
+
+		}
+
+
+		
+		
+        
+		
 		</script>
-		<script> var csfrData={};csfrData['<?php echo $this->security->get_csrf_token_name();?>']= '<?php echo $this->security->get_csrf_hash();?>';$(function(){$.ajaxSetup({data: csfrData});});</script>		
+		<script> var csfrData={};csfrData['<?php echo $this->security->get_csrf_token_name();?>']= '<?php echo $this->security->get_csrf_hash();?>';$(function(){$.ajaxSetup({data: csfrData});});</script>	
+
+		<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script> -->
         <script src="js/publics.js"></script>
         <script src="js/confirm/jquery-confirm.js"></script>
         <script src="js/bootstrap-validator/bootstrapValidator.min.js"></script>

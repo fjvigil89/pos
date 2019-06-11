@@ -1,4 +1,5 @@
 <?php
+$lang['reports_units_existe'] = 'Unidades existentes';
 $lang['reports_consolidated_shop']="Consolidado";
 $lang['reports_move_money']="Reporte detallado traslado de dinero";
 $lang['reports_traslado']="Total Traslados";
@@ -33,6 +34,7 @@ $lang['reports_items_purchased'] = 'Artículos Comprados';
 $lang['reports_sold_by'] = 'Vendido por';
 $lang['reports_sold_to'] = 'Vendido a'; 
 $lang['reports_category'] = 'Categoría';
+$lang['reports_units'] = 'Unidades';
 $lang['reports_customer'] = 'Cliente';
 $lang['reports_employee'] = 'Empleado';
 $lang['reports_item'] = 'Artículo';

@@ -142,4 +142,5 @@
         });
 </script>
 <script src="<?php echo base_url();?>js/offline/validador.js" type="text/javascript"></script>
+
 <?php $this->load->view("partial/footer"); ?>

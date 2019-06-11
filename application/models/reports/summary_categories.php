@@ -12,6 +12,7 @@ class Summary_categories extends Report
 		$columns = array();
 		
 		$columns[] = array('data'=>lang('reports_category'), 'align'=> 'left');
+		$columns[] = array('data'=>lang('reports_units_existe'), 'align'=> 'left');
 		$columns[] = array('data'=>lang('reports_subtotal'), 'align'=> 'right');
 		$columns[] = array('data'=>lang('reports_total'), 'align'=> 'right');
 		$columns[] = array('data'=>lang('reports_tax'), 'align'=> 'right');
@@ -46,9 +47,13 @@ class Summary_categories extends Report
 			$this->db->limit($this->report_limit);
 			$this->db->offset($this->params['offset']);
 		}
-		
-
-		return $this->db->get()->result_array();		
+		$data=array();
+		foreach ($this->db->get()->result_array() as $value) {
+			$units=$this->Item->count_all_by_category_item($value['category']);
+			$data[]=array('category'=>$value['category'],'units'=>round($units->units),'subtotal'=>$value['subtotal'],'total'=>$value['total'],
+						'tax'=>$value['tax'],'profit'=>$value['profit'],'item_sold'=>$value['item_sold']);
+		}
+		return $data;		
 	}
 	
 	public function getSummaryData()

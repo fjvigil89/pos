@@ -9,6 +9,7 @@ class Reports extends Secure_area {
         $this->load->library('Pdf');
         $this->load->model("Register_movement");        
         $this->load->model("Movement_balance");
+        $this->load->model("Item");
         $this->load->helper('report');
         $this->has_profit_permission = $this->Employee->has_module_action_permission('reports', 'show_profit', $this->Employee->get_logged_in_employee_info()->person_id);
         $this->has_cost_price_permission = $this->Employee->has_module_action_permission('reports', 'show_cost_price', $this->Employee->get_logged_in_employee_info()->person_id);
@@ -840,9 +841,12 @@ class Reports extends Secure_area {
         $report_data = $model->getData();
 
         foreach ($report_data as $row) {
+            
+
             $data_row = array();
 
             $data_row[] = array('data' => $row['category'], 'align' => 'left');
+            $data_row[] = array('data' => $row['units'], 'align' => 'center');
             $data_row[] = array('data' => to_currency($row['subtotal']), 'align' => 'right');
             $data_row[] = array('data' => to_currency($row['total']), 'align' => 'right');
             $data_row[] = array('data' => to_currency($row['tax']), 'align' => 'right');
@@ -851,8 +855,10 @@ class Reports extends Secure_area {
             }
             $data_row[] = array('data' => floatval($row['item_sold']), 'align' => 'center');
             $tabular_data[] = $data_row;
-        }
 
+            
+        }
+        
         $data = array(
             "title" => lang('reports_categories_summary_report'),
             "subtitle" => date(get_date_format(), strtotime($start_date)) . '-' . date(get_date_format(), strtotime($end_date)),

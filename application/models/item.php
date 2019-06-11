@@ -19,7 +19,11 @@ class Item extends CI_Model
 		$this->db->from('items');
 		$this->db->where('deleted',0);
 		$this->db->where('activate_range',1);
-		return $this->db->get()->result();
+		if($this->db->get()) {
+			return $this->db->get()->result();	
+		} else {
+			return false;
+		}
 	}
 	function get_items_range($register_log_id){
 		$this->db->select('items.name,items.item_id,range_id,final_range,extra_charge,start_range');
@@ -173,6 +177,20 @@ class Item extends CI_Model
 		$item_kits_count = $this->db->count_all_results();
 		
 		return $items_count + $item_kits_count;
+
+	}
+	function count_all_by_category_item($category)
+	{
+		$current_location=$this->Employee->get_logged_in_employee_current_location_id();
+
+		$this->db->select('SUM(quantity) as units');
+		$this->db->from('items');
+		$this->db->join('location_items','location_items.item_id=items.item_id');
+		$this->db->where('deleted',0);
+		$this->db->where('location_id',$current_location);
+		$this->db->where('category',$category);
+		
+		return $this->db->get()->row();
 
 	}
 	
@@ -637,8 +655,6 @@ class Item extends CI_Model
 		{
 			return true;
 		}
-		
-		
 	}
 	
 	function get_item_search_suggestions($search,$limit=25)
@@ -904,7 +920,8 @@ class Item extends CI_Model
 			'allow_alt_description'=> 0,
 			'is_serialized'=> 0,
 			'is_service'=> 1,
-			'override_default_tax' => 1
+			'override_default_tax' => 1,
+			'item_id' => 1
 		);
 		
 		$this->save($item_data, $item_id);

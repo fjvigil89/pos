@@ -1,4 +1,5 @@
 <?php
+$lang['employee_consultant_price_item']='Permitir ver consultor de precios';
 $lang['employees_employee']='Empleado';
 $lang['employees_new']='Nuevo Empleado';
 $lang['employees_update']='Actualizar Empleado';

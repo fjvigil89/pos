@@ -513,10 +513,10 @@ class Employee extends Person
 			$max_registers       = $row->max_registers;
 			$suspended= $row->suspended;
 
-			$license=  $row->license;			
+			$license =  $row->license;			
 			$resellers_id=$row->reseller_id;
 			$expire_date_franquicia= "0000-00-00 00:00:00";
-			$es_franquicia= $resellers_id==1 ? false :true;
+			$es_franquicia= $resellers_id == 1 ? false :true;
 			$query2 = $this->db->query("SELECT rl.* FROM phppos_reseller_licenses rl, 
 			phppos_resellers r ,phppos_stores s WHERE rl.`reseller_id`=".$resellers_id." AND r.id=rl.reseller_id and ".
 			" s.reseller_id=r.id and s.store_name='".$row->store."' and rl.license='".$row->license."'");
@@ -541,6 +541,9 @@ class Employee extends Person
 	function logout()
 	{
 		$this->session->sess_destroy();
+		if($this->Employee->es_demo()){
+			$this->Appconfig->batch_save(array('Hide_panel_type_business'=>0));
+		}
 		redirect('login');
 	}
     
@@ -1046,22 +1049,24 @@ class Employee extends Person
 		$query = $this->Cajas_empleados-> get_cajas_ubicacion_por_persona($person_id,$location_id);
 		return $query->num_rows() >0;
 	}
-	function es_demo(){
-		 $login_db = $this->load->database('login',true);
-		 $db_name=$this->db->database;
-		 $login_db->select('is_demo');
-		 $login_db->from('stores');
-		 $login_db->where('store_name', $db_name);
-		 $query = $login_db->get();
-		 if($query->num_rows()==1)
-		{
-			return (int)$query->row()->is_demo;
-		}else{
+	function es_demo()
+	{
+		$login_db = $this->load->database('login',true);
+		$db_name=$this->db->database;
+		$login_db->select('is_demo');
+		$login_db->from('stores');
+		$login_db->where('store_name', $db_name);
+		$query = $login_db->get();
+
+		if($query->num_rows()==1)		
+			return (int)$query->row()->is_demo;		
+		else
 			return 0;
-		}
+		
 	}
-	function get_store(){
-		$db=$this->db->database;
+	function get_store()
+	{
+		$db = $this->db->database;
 		$store = explode("_", $db);
 		return $store[1];
 	}

@@ -627,6 +627,7 @@
                $("#total-noti").hide();
             });
         });
+
         </script>
         <!-- BEGIN CONTENT -->
         <div class="page-content-wrapper">

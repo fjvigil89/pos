@@ -121,6 +121,6 @@ $config['config_template'] = array(
         'value_max_cash_flow'            => '',
         'value_point'            => 1000,
         'value_tax'             => 2,
-        'version' => '4.6.0',
+        'version' => '5.6.40',
         'website' => 'www.ingeniandoweb.com'
 );

@@ -7,6 +7,8 @@ class Home extends Secure_area
         parent::__construct();
         $this->load->model('Statistics');
         $this->load->model('reports/Summary_profit_and_loss');	
+        $this->load->model('Profile');
+
 	}
 	
 	function index($start_date=false,$end_date=false)
@@ -80,7 +82,33 @@ class Home extends Secure_area
         $pnl_start_date = date("Y-m-d H:i:s",strtotime("-1 day"));
         $pnl_end_date   = date("Y-m-d H:i:s");
         
+        $profile = $this->Profile->get_profiles_admin();
+        $profles_array = array_chunk($profile, 6, true);
 
+        $colors = [ 0 => "red-thunderbird",
+                    1 => "purple-seance",
+                    2 => "yellow-lemon",
+                    3 => "purple-medium",
+                    4 => "blue",
+                    5 => "red-pink",
+                    6 => "yellow",
+                    7 => "blue-hoki",
+                    8 => "red-intense",
+                    9 => "green-jungle",
+                    10 => "yellow-casablanca",
+                    11 => "purple-wisteria",
+                    12 => "blue-steel",
+                    13 => "green-meadow",
+                    14 => "grey-salsa",
+                    15 => "red-mint",
+                    16 => "yellow-soft",
+                    17 => "purple-seanse",
+                    18 => "blue-chambray",
+                    19 => "green-dark",];
+
+        $data['colors_modal'] = $colors;
+
+        $data['profiles'] = $profles_array;
         $profit_and_loss->setParams(array('start_date'=>$pnl_start_date, 'end_date'=>$pnl_end_date));
         $this->Sale->create_sales_items_temp_table(array('start_date'=>$pnl_start_date, 'end_date'=>$pnl_end_date));
         $this->Receiving->create_receivings_items_temp_table(array('start_date'=>$pnl_start_date, 'end_date'=>$pnl_end_date));
@@ -159,7 +187,8 @@ class Home extends Secure_area
 		//Set keep alive session to prevent logging out
 		$this->session->set_userdata("keep_alive",time());
 		echo $this->session->userdata('keep_alive');
-	}
+    }
+
 	function view_item_modal($item_id)
 	{
 
@@ -349,6 +378,19 @@ class Home extends Secure_area
 
 }
 
+function invertir_modal() {
+    $this->load->model('Employee');
+    $hide_modal = $this->input->get('modal');
+    if($hide_modal == 0) {
+        $aux_hide_modal =1;
+    } else {
+        $aux_hide_modal =0;
+    }
+    $data = array('hide_modal'=>$aux_hide_modal);
+    $batch_save_data = $this->Employee->initial_config($data);
+    echo $batch_save_data;  
+}
+
 function initial_config(){
 
 	$data = array(
@@ -356,16 +398,25 @@ function initial_config(){
 	'currency_symbol'=>$this->input->post('moneda'),
 	'default_tax_1_name'=>$this->input->post('nombre_impuesto'),
 	'default_tax_1_rate'=>$this->input->post('impuesto'),
-    'initial_config'=>$this->input->post('initial_config')
+    'initial_config'=>$this->input->post('initial_config'),
+    'profile_store'=>$this->input->post('perfil'),
     );
 
+    $batch_save_data = $this->Employee->initial_config($data);
 
-
-$batch_save_data = $this->Employee->initial_config($data);
-
- echo json_encode ($batch_save_data);  
+    echo json_encode ($batch_save_data);  
 }
 
+
+function cargar_perfil() {
+
+    $this->load->model('Profile');
+    $perfil = $this->input->post('perfil');
+    $exito = $this->Profile->load_profile($perfil);
+    $this->Appconfig->batch_save(array('Hide_panel_type_business'=>1));
+    print_r($exito);
+
+}
 
 }
 ?>

@@ -36,11 +36,11 @@
 <link href="css/layouts/<?php echo $theme_layout; ?>/css/custom.min.css" rel="stylesheet" type="text/css" />
 <link href="css/checkbox_style.css" rel="stylesheet" type="text/css" />
 
-
 <!-- END CSS -->
  
 <!-- BEGIN JAVASCRIPT-->
 
 <script src="<?php echo base_url();?>bin/bin.min.js" type="text/javascript"></script>
+
 <!-- JAVASCRIPT -->
 <?php $this->load->view("partial/metadata_offLine");?>

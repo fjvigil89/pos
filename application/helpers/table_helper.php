@@ -798,8 +798,8 @@ function get_items_manage_table($items,$controller)
 	    $show_inventory_model ? $CI->lang->line('items_model') : NULL,
 	    $show_inventory_colour ? $CI->lang->line('items_colour') : NULL,
 	    $show_inventory_brand ? $CI->lang->line('items_brand') : NULL,
-		$CI->lang->line('items_cost_price'),
-		$CI->lang->line('items_unit_price'),
+		//$CI->lang->line('items_cost_price'),
+		//$CI->lang->line('items_unit_price'),
 		$CI->lang->line('items_quantity'),
 		$CI->lang->line('items_quantity_warehouse'),
 		$CI->lang->line('items_inventory'),
@@ -820,7 +820,7 @@ function get_items_manage_table($items,$controller)
 	    $show_inventory_model ? $CI->lang->line('items_model') : NULL,
 	    $show_inventory_colour ? $CI->lang->line('items_colour') : NULL,
 	    $show_inventory_brand ? $CI->lang->line('items_brand') : NULL,
-		$CI->lang->line('items_unit_price'),
+		//$CI->lang->line('items_unit_price'),
 		$CI->lang->line('items_quantity'),
 		$CI->lang->line('items_inventory'),
 		$CI->lang->line('items_quantity_warehouse'),
@@ -858,6 +858,185 @@ function get_items_manage_table($items,$controller)
 	return $table;
 }
 
+/*
+Gets the html table to manage items.
+*/
+function get_items_manage_consultant_table($items,$controller)
+{ 
+	$CI =& get_instance();
+	$has_cost_price_permission = $CI->Employee->has_module_action_permission('items','see_cost_price', $CI->Employee->get_logged_in_employee_info()->person_id);
+	$table='<table class="table table-bordered table-hover no_margin_bottom" cellspacing="0" width="100%" id="sortable_table">';	
+	//Configuration values for showing/hiding fields in the items grid
+	$show_inventory_isbn=$CI->config->item('show_inventory_isbn');
+	$show_inventory_image=$CI->config->item('show_inventory_image');
+	$show_inventory_size=$CI->config->item('show_inventory_size');
+	$show_inventory_model=$CI->config->item('show_inventory_model');
+	$show_inventory_colour=$CI->config->item('show_inventory_colour');
+	$show_inventory_brand=$CI->config->item('show_inventory_brand');
+
+	if ($has_cost_price_permission)
+	{
+		$headers = array('<input type="checkbox" id="select_all" class="css-checkbox"/><label for="select_all" class="css-label cb0"></label>', 
+		$CI->lang->line('items_item_id'),
+		//$show_inventory_isbn ? $CI->lang->line('items_item_number') : NULL,
+		$show_inventory_image ? $CI->lang->line('reports_imagen'): NULL,
+		$CI->lang->line('items_name'),
+		//$CI->lang->line('items_category'),
+		//$show_inventory_size ? $CI->lang->line('items_size') : NULL,
+	    //$show_inventory_model ? $CI->lang->line('items_model') : NULL,
+	    //$show_inventory_colour ? $CI->lang->line('items_colour') : NULL,
+	    //$show_inventory_brand ? $CI->lang->line('items_brand') : NULL,
+		//$CI->lang->line('items_cost_price'),
+		$CI->lang->line('items_unit_price'),
+		$CI->lang->line('items_quantity'),
+		$CI->lang->line('items_quantity_warehouse'),
+		//$CI->lang->line('items_inventory'),
+		//$CI->lang->line('items_clone'),
+		//$CI->lang->line('common_edit'),
+	
+		);
+	}
+	else 
+	{
+		$headers = array('<input type="checkbox" id="select_all" class="css-checkbox"/><label for="select_all" class="css-label cb0"></label>', 
+		$CI->lang->line('items_item_id'),
+		//$show_inventory_isbn ? $CI->lang->line('items_item_number') : NULL,
+		$show_inventory_image ? $CI->lang->line('reports_imagen'): NULL,
+		$CI->lang->line('items_name'),
+		//$CI->lang->line('items_category'),
+		//$show_inventory_size ? $CI->lang->line('items_size') : NULL,
+	    //$show_inventory_model ? $CI->lang->line('items_model') : NULL,
+	    //$show_inventory_colour ? $CI->lang->line('items_colour') : NULL,
+	    //$show_inventory_brand ? $CI->lang->line('items_brand') : NULL,
+		$CI->lang->line('items_unit_price'),
+		$CI->lang->line('items_quantity'),
+		//$CI->lang->line('items_inventory'),
+		$CI->lang->line('items_quantity_warehouse'),
+		//$CI->lang->line('items_clone'),
+		//$CI->lang->line('common_edit'),
+	
+		);
+		
+	}
+		
+	$table.='<thead><tr>';
+	$count = 0;
+	foreach($headers as $header)
+	{
+		$count++;
+		if ($header != '') 
+		{
+			if ($count == 1)
+			{
+				$table.="<th class='leftmost'>$header</th>";
+			}
+			elseif ($count == count($headers))
+			{
+				$table.="<th class='rightmost'>$header</th>";
+			}
+			else
+			{
+				$table.="<th>$header</th>";		
+			}
+		}
+	}
+	$table.='</tr></thead><tbody>';
+	$table.=get_items_manage_consultant_table_data_rows($items,$controller);
+	$table.='</tbody></table>';
+	return $table;
+}
+/*
+Gets the html data rows for the items.
+*/
+function get_items_manage_consultant_table_data_rows($items,$controller)
+{
+	$CI =& get_instance();
+	$table_data_rows='';
+	
+	foreach($items->result() as $item)
+	{
+		$table_data_rows.=get_item_consultant_data_row($item,$controller);
+	}
+	
+	if($items->num_rows()==0)
+	{
+		$table_data_rows.="<tr><td colspan='16'><span class='col-md-12 text-center text-warning' >".lang('items_no_items_to_display')."</span></tr>";
+	}
+	
+	return $table_data_rows;
+}
+
+function get_item_consultant_data_row($item,$controller)
+{
+	$CI =& get_instance();
+	static $has_cost_price_permission;	
+	$item_location_info = $CI->Item_location->get_info($item->item_id);
+
+	//Configuration values for showing/hiding fields in the items grid
+	$show_inventory_isbn=$CI->config->item('show_inventory_isbn');	
+	$show_inventory_image=$CI->config->item('show_inventory_image');
+	$show_inventory_size=$CI->config->item('show_inventory_size');
+	$show_inventory_model=$CI->config->item('show_inventory_model');
+	$show_inventory_colour=$CI->config->item('show_inventory_colour');
+	$show_inventory_brand=$CI->config->item('show_inventory_brand');
+	//echo '<pre>'.print_r($item_location_info,true).'</pre>'; exit();
+	if (!$has_cost_price_permission)
+	{
+		$has_cost_price_permission = $CI->Employee->has_module_action_permission('items','see_cost_price', $CI->Employee->get_logged_in_employee_info()->person_id);
+	}
+	
+	$controller_name=strtolower(get_class($CI));
+	$avatar_url=$item->image_id ?  site_url('app_files/view/'.$item->image_id) :(base_url().'img/no-image.png');
+	//var_dump(site_url('img/icons/16/tag.png')); exit();
+	$table_data_row='<tr>';
+	$table_data_row.="<td width='1%'><input type='checkbox' class='css-checkbox' id='item_$item->item_id' value='".$item->item_id."'/><label for='".$item->item_id."' class='css-label cb0'></label></td>";
+	$table_data_row.='<td width="10%">'.$item->item_id.'</td>';
+		
+	if ($avatar_url && $show_inventory_image)
+	{	
+		$table_data_row.="<td width='55px' align='center'>
+							<a href='$avatar_url' class='fancybox rollover'>
+								<img id='avatar' src='".$avatar_url."' width='40' height='35' class='img-polaroid'/>
+							</a>
+						</td>";
+	}
+	$table_data_row.='<td width="13%"><a href="'.site_url('home/view_item_modal').'/'.$item->item_id.'" data-toggle="modal" data-target="#myModal">'.H($item->name).'</a></td>';
+	
+	/*
+	if($has_cost_price_permission)
+	{
+		$table_data_row.='<td width="9%" align="right">'.to_currency($item->location_cost_price ? $item->location_cost_price: $item->cost_price, 10).'</td>';
+	}
+	*/
+	$table_data_row.='<td width="9%" align="right">'.to_currency($item->location_unit_price ? $item->location_unit_price : $item->unit_price, 10).'</td>';
+	
+	$table_data_row.='<td width="9%" align="center">'.to_quantity($item->quantity).'</td>';
+    
+    if ( $CI->Employee->has_module_action_permission('items','see_quantity_defect', $CI->Employee->get_logged_in_employee_info()->person_id) ) { 
+        $table_data_row.='<td width="9%" align="center">'.to_quantity($item_location_info->quantity_warehouse).'&nbsp;&nbsp;'.anchor($controller_name."/defective_item/$item->item_id", "<i class='fa fa-warning font-red'></i>", array('data-toggle'=>'modal','data-target'=>'#myModal', 'class'=>'tooltips', 'data-original-title'=>'Dar baja de productos')).'</td>';
+    }else{
+        $table_data_row.='<td width="9%" align="center">'.to_quantity($item_location_info->quantity_warehouse).'</td>';
+    }
+	
+	/*if (!$item->is_service)
+	{
+		$table_data_row.='<td width="12%">'.anchor($controller_name."/inventory/$item->item_id/", "<i class='fa fa-cubes'></i>".lang('common_inv'),array('class'=>'btn btn-xs btn-block default btn-inventory','title'=>lang($controller_name.'_count'))).'</td>';//inventory details	
+	
+	}
+	else
+	{
+		$table_data_row.='<td width="12%">&nbsp;</td>';
+		
+	}*/
+
+	//$table_data_row.='<td width="4%" class="rightmost">'.anchor($controller_name."/clone_item/$item->item_id", "<i class='fa fa-copy'></i>".lang('items_clone'),array('class'=>'btn btn-xs btn-block default btn-clon','title'=>lang($controller_name.'_update'))).'</td>';			
+	//$table_data_row.='<td width="4%" class="rightmost">'.anchor($controller_name."/view/$item->item_id/2", "<i class='fa fa-pencil'></i>".lang('common_edit'),array('class'=>'btn btn-xs btn-block default update-items','title'=>lang($controller_name.'_update'))).'</td>';		
+	
+
+	
+	$table_data_row.='</tr>';
+	return $table_data_row;
+}
 /*
 Gets the html data rows for the items.
 */
@@ -937,11 +1116,14 @@ function get_item_data_row($item,$controller)
 		$table_data_row.='<td width="9%">'.$item->marca.'</td>';
 	}
 	
+	//eliminar de las tablas los valores de precio y costo
+	/*
 	if($has_cost_price_permission)
 	{
 		$table_data_row.='<td width="9%" align="right">'.to_currency($item->location_cost_price ? $item->location_cost_price: $item->cost_price, 10).'</td>';
 	}
 	$table_data_row.='<td width="9%" align="right">'.to_currency($item->location_unit_price ? $item->location_unit_price : $item->unit_price, 10).'</td>';
+	*/
 	$table_data_row.='<td width="9%" align="center">'.to_quantity($item->quantity).'</td>';
     
     if ( $CI->Employee->has_module_action_permission('items','see_quantity_defect', $CI->Employee->get_logged_in_employee_info()->person_id) ) { 

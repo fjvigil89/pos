@@ -11,7 +11,8 @@
 <link href="js/bootstrap-validator/bootstrapValidator.min.css" rel="stylesheet">
 <link href="<?php echo base_url();?>bin/bin.min.css" rel="stylesheet" type="text/css"/>	<!-- IMPORTANTE -->
 <script src="<?php echo base_url();?>js/vue.js"></script>
-
+<link href="css/custom-modal.css" rel="stylesheet" type="text/css" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 <!-- END CSS -->
  
