@@ -206,7 +206,7 @@ class schedules extends Secure_area
             'employee_id'=> $location_id          
         );
 
-        //$save_id = $this->Schedule->save($data, $id);
+        $save_id = $this->Schedule->save($data, $id);
 
 
         
