@@ -110,4 +110,7 @@ $lang ["config_custom1_subcategory_help"] = "Indicates one of the names that ide
 $lang ["items_quantity_stock_subcategory_help"] = "Enter the corresponding amount of this subcategory in the store NOTE: The sum of all subcategory quantities can not exceed or be less than the amount available in the store";
 $lang["common_title"] ="Title";
 $lang["common_new_img"]="New image";
+$lang["common_notifications"]="Notifications";
+$lang["common_pending"]="Pending";
+$lang["common_view_all"]="View all";
 ?>

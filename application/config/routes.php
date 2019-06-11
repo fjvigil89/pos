@@ -130,4 +130,3 @@ $route['tienda/category'] = "template/category";
 $route['tienda/shop-item'] = "template/shop_item";
 $route['tienda/contact'] = "template/contact";
 $route['tienda/img/view/(:any)'] = "img/view/$1";
-

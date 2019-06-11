@@ -46,8 +46,6 @@
     var objCustomer = new Customer();
     </script>
 
-
-
     <script type="text/javascript">
     validation_indexedDB_browser();
     validation_session_employee();
@@ -285,15 +283,14 @@
                                 html = "";
 
                             list.forEach(customer => {
-                                html = '<tr>';
-
-                                html += '<td style="width: 2%">' + customer.person_id + '</td>';
-                                html += '<td style="width: 5%">' + customer.account_number + '</td>';
-                                html += '<td style="width: 15%">' + customer.last_name + '</td>';
-                                html += '<td style="width: 14%">' + customer.first_name + '</td>';
-                                html += '<td style="width: 10%">' + customer.email + '</td>';
-                                html += '<td style="width: 10%">' + customer.phone_number + '</td>';
-                               
+                                html = `<tr>
+                                    <td style="width: 2%">${customer.person_id}</td>
+                                    <td style="width: 5%">${(customer.account_number == null ? "" :  customer.account_number)}</td>';
+                                    <td style="width: 15%">${customer.last_name}</td>';
+                                    <td style="width: 14%">${customer.first_name}</td>';
+                                    <td style="width: 10%">${(customer.email == null ? "" : customer.email)}</td>';
+                                    <td style="width: 10%">${(customer.phone_number == null ? "" : customer.phone_number)}</td>';
+                               `;
                                 if(customer.is_new == 1)
                                 {
                                     html += '<td style="width: 2%">';
@@ -307,7 +304,9 @@
                                 $("#tableBody-list").append(html);
 
                             });
-                            $('#tableBody').DataTable();
+                            $('#table-list_sales').DataTable({
+                                "order": [[ 0, "desc" ]]
+                            });
                         }
                        
                         function show_modal_customer(url,person_id = -1) 
