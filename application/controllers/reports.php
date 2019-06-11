@@ -9,6 +9,7 @@ class Reports extends Secure_area {
         $this->load->library('Pdf');
         $this->load->model("Register_movement");        
         $this->load->model("Movement_balance");
+        $this->load->model("Item");
         $this->load->helper('report');
         $this->has_profit_permission = $this->Employee->has_module_action_permission('reports', 'show_profit', $this->Employee->get_logged_in_employee_info()->person_id);
         $this->has_cost_price_permission = $this->Employee->has_module_action_permission('reports', 'show_cost_price', $this->Employee->get_logged_in_employee_info()->person_id);
