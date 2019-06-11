@@ -1,10 +1,10 @@
 <?php
 	$controller_name = $this->router->fetch_class();
-
-	$tutorials = $this->Tutorial->get_tutorial($controller_name);
-	
+	$hide_video = true;
+	$tutorials = $this->Tutorial->get_tutorial($controller_name, $this->config->item("profile_id"));
  if(!empty($tutorials))
  {
+	$hide_video = $this->Tutorial->is_hide_video($controller_name, $this->Employee->person_id_logged_in());
 	//$previous = $this->Tutorial->previous($tutorial->module_id, $tutorial->tutorial_id);
 	$tutorial = $tutorials[0];
 	 ?>
@@ -25,10 +25,10 @@
                     <?=$tutorial->video?>
                 </div>
                 <p id="description-tutorial"><?=H($tutorial->description)?></p>
-                <div class="md-checkbox"><input type="checkbox" name="scheckBoxStack" value="1" id="checkBoxStack2"
+                <div class="md-checkbox"><input type="checkbox" name="scheckBoxStack" value="1" id="checkBoxStack"
                         class="md-check"
-                        <?php echo $this->config->item('hide_video_stack2') == '1'? "checked":"";?> /><label
-                        id="show_comment_on_receipt_label" for="checkBoxStack2"><span></span><span
+                        <?= $hide_video== true ? "checked":"";?> /><label
+                        id="show_comment_on_receipt_label" for="checkBoxStack"><span></span><span
                             class="check"></span><span class="box"></span>No volver mostrar este video</label>
                 </div>
                 <label class="pull-right">
@@ -46,12 +46,12 @@
 
 </div>
 <script>
-<?php //if($this->config->item('hide_video_stack2') == '0'){?>
-$('.modal.fade').addClass('in');
-$('#stack').css({
-    'display': 'block'
-});
-<?php // } ?>
+<?php if(!$hide_video){?>
+	$('.modal.fade').addClass('in');
+	$('#stack').css({
+		'display': 'block'
+	});
+<?php  } ?>
 </script>
 <?php } ?>
 <script>
@@ -78,10 +78,9 @@ $('#close-modal').click(function() {
 });
 
 $('#checkBoxStack').click(function(e) {
-
     $.post('<?php echo site_url("config/show_hide_video_help");?>', {
-        show_hide_video2: $(this).is(':checked') ? '1' : '0',
-        video2: 'hide_video_stack'
+        "show_hide_video": $(this).is(':checked') ? '1' : '0',
+        "module_id": '<?=$controller_name?>'
     });
 
 });

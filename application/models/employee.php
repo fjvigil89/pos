@@ -514,7 +514,7 @@ class Employee extends Person
 			$suspended= $row->suspended;
 			$profile_id=  $row->profile_id;	
 			$license=  $row->license;			
-			$resellers_id=$row->reseller_id;
+			$resellers_id = $row->reseller_id;
 			$expire_date_franquicia= "0000-00-00 00:00:00";
 			$es_franquicia= $resellers_id==1 ? false :true;
 			$query2 = $this->db->query("SELECT rl.* FROM phppos_reseller_licenses rl, 

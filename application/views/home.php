@@ -29,7 +29,7 @@
 				
 				
 			?>-->
-			<a class="icon fa fa-youtube-play help_button" id='maxhome' rel='0' data-toggle="modal" data-target="#stack1"></a>
+			<a class="icon fa fa-youtube-play help_button" id='modal-video-tutorial' rel='0' data-toggle="modal" data-target="#stack"></a>
 				
 			<small><?php echo lang('module_name'). ' & ' .lang('statistics'); ?></small>
 			</h1>

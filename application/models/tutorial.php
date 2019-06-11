@@ -15,7 +15,30 @@ class Tutorial extends CI_Model
         $query =  $login_db->get();
         return $query->result();
     }
-
+    function is_hide_video($module_id, $employee_id)
+    {
+        // $this->Employee->person_id_logged_in()
+        $this->db->from('hide_video');	
+        $this->db->where('employee_id',$employee_id);
+        $this->db->where('module_id',$module_id);
+        $query = $this->db->get();        		
+        return ($query->num_rows() == 1);
+    }
+    function hide_video($module_id, $employee_id)
+    {
+        // $this->Employee->person_id_logged_in()
+        $this->db->from('hide_video');	
+        $this->db->insert('hide_video', 
+        array(
+            "module_id" => $module_id,
+            "employee_id"=>$employee_id
+        ));       
+    }
+    function show_video($module_id, $employee_id)
+    {
+        $this->db->delete('hide_video', array('module_id' => $module_id,"employee_id"=>$employee_id));
+       
+    }
    /* function previous($module_id,$tutorial_id)
     {
         $login_db = $this->load->database('login',true);

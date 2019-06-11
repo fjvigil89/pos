@@ -1,6 +1,6 @@
 <?php 
  
-class Add_colum_viewer extends CI_Migration
+class Migration_Add_colum_viewer extends CI_Migration
 {
     
     public function up()

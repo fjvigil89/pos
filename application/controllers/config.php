@@ -464,14 +464,19 @@ class Config extends Secure_area
 
 
     function show_hide_video_help()
-
     {
- 
+		$module_id =  $this->input->post('module_id');
+		$hide = $this->input->post('show_hide_video');
+
+		if($hide == 1)		
+			$this->Tutorial->hide_video($module_id,$this->Employee->person_id_logged_in());
+		else
+			$this->Tutorial->show_video($module_id,$this->Employee->person_id_logged_in());
          
      //    $batch_save_data//
      //    $this->Appconfig->batch_save()
       
-       
+       /*
        switch ($_POST) 
        {
 
@@ -511,7 +516,7 @@ class Config extends Secure_area
 	    }       
 	    
        $batch_save_data[$key] = $value;
-       $this->Appconfig->batch_save($batch_save_data);
+       $this->Appconfig->batch_save($batch_save_data);*/
 
 
     }
