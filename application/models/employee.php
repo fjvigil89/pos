@@ -512,7 +512,7 @@ class Employee extends Person
 			$last_login          = date('Y-m-d H:i:s');
 			$max_registers       = $row->max_registers;
 			$suspended= $row->suspended;
-
+			$profile_id=  $row->profile_id;	
 			$license=  $row->license;			
 			$resellers_id=$row->reseller_id;
 			$expire_date_franquicia= "0000-00-00 00:00:00";
@@ -526,7 +526,7 @@ class Employee extends Person
 			}
             
 			$this->update_config($expire_date, $license_type, $last_login, $max_registers,$license,
-			$es_franquicia,	$expire_date_franquicia,$resellers_id,$suspended);
+			$es_franquicia,	$expire_date_franquicia,$resellers_id,$suspended,$profile_id);
 			
 			return true;
 		}
@@ -545,7 +545,7 @@ class Employee extends Person
 	}
     
 	function update_config($expire_date, $license_type, $last_login, $max_registers,$license=0,
-	$es_franquicua=false,$expire_date_franquicia=null,$resellers_id=0,$suspended=false)
+	$es_franquicua=false,$expire_date_franquicia=null,$resellers_id=0,$suspended=false, $profile_id = 4)
     {
         $store_db = $this->load->database('default', TRUE);
         $batch_save_data = array(
@@ -557,7 +557,8 @@ class Employee extends Person
 			"expire_date_franquicia"=>$expire_date_franquicia,
 			"resellers_id"=>$resellers_id,
 			"license"=>$license,
-			"suspended"=>$suspended
+			"suspended"=>$suspended,
+			"profile_id" => $profile_id
 
 		);
 		

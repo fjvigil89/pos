@@ -6,7 +6,7 @@
 			<h1>
 				<i class="icon fa fa-bar-chart-o"></i>
 				<?php echo lang('reports_reports'); ?>
-				<?php 
+				<?php/*
 					$extra=" style='display: none; '";
 					$url_video_ver="";
 					if($this->Appconfig->es_franquicia()){
@@ -21,8 +21,9 @@
 					$a_video= '<a target="_blank" href="'.$url_video_ver.'" '.$extra.' class="icon fa fa-youtube-play help_button" ></a>';
 					echo $a_video;	
 					//<a class="icon fa fa-youtube-play help_button" id='maxreports' rel='0' data-toggle="modal" data-target="#stack7"></a>
-			
+			*/
 				?>
+				<a class="icon fa fa-youtube-play help_button" id='modal-video-tutorial' rel='0' data-toggle="modal" data-target="#stack"></a>
 			</h1>
 		</div>
 		<!-- END PAGE TITLE -->		
@@ -888,44 +889,12 @@
 			</div> <!-- /panel -->
 		</div>
 	</div>
+	<?=$this->load->view("tutorials");?>
+
 
 	<script type="text/javascript">
 		
-
-		<?php if($this->config->item('hide_video_stack7') == '0'){?>
-         $('.modal.fade').addClass('in');
-         $('#stack7').css({'display':'block'});
-         <?php } ?>
-         $('.modal.fade.in').click(function(e){
-       
-         if($(e.target)[0].id == "stack7")
-         {
-               $('.modal.fade.in').removeClass('in');
-               $('#stack7').css({'display':'none'});
-
-         }
-         
-     
-         });
-         $('#closereports').click(function(){
-         	
-               $('.modal.fade.in').removeClass('in');
-               $('#stack7').css({'display':'none'});
-            	$('#maxreports').removeClass('icon fa fa-youtube-play help_button');
-               	 $('#maxreports').html("<a href='javascript:;' id='maxreports' rel=1 class='tn-group btn red-haze' ><span class='hidden-sm hidden-xs'>Maximizar&nbsp;</span><i class='icon fa fa-youtube-play help_button'></i></a>");
-            	
-               
-              
-
-         });
       
-         $('#checkBoxStack7').click(function(e){
-             
-             $.post('<?php echo site_url("config/show_hide_video_help");?>',
-             {show_hide_video7:$(this).is(':checked') ? '1' : '0',video7:'hide_video_stack7'});
-               
-         });
-
 	 	$('.parent-list a').click(function(e){
 	 		e.preventDefault();
 	 		$('.parent-list a').removeClass('active');

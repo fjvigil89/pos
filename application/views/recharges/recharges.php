@@ -2,7 +2,7 @@
 <div id="content-header" class="hidden-print">
 	<h1><i class="icon fa fa-dashboard"></i> 
 	<?php echo lang('common_dashboard'); ?>
-	<?php 
+	<?php /*
 					$extra="style='display: none; '";
 					$url_video_ver="";
 					if($this->Appconfig->es_franquicia()){
@@ -15,9 +15,9 @@
 						}
 					}
 					$a_video= '<a target="_blank" href="'.$url_video_ver.'" '.$extra.' class="icon fa fa-youtube-play help_button" ></a>';
-					echo $a_video;				
+					echo $a_video;	*/			
 				?>
-	
+	<a class="icon fa fa-youtube-play help_button" id='modal-video-tutorial' rel='0' data-toggle="modal" data-target="#stack"></a>
 	</h1>
 </div>
 <div id="breadcrumb" class="hidden-print">
@@ -28,10 +28,7 @@
 <div class="text-center">					
 	<iframe src="https://sirse.bemovil.net/login/?next=/" frameborder="0" height="700" width="100%"></iframe>
 </div>
+<?=$this->load->view("tutorials");?>
+
 <?php $this->load->view("partial/footer"); ?>
 
-guadalupe brito
-
-guacamaya
-
-http://45.55.209.97/pos/index.php/reports/store_account_statements/10/1969-12-31/2017-08-31/0/sale_date
