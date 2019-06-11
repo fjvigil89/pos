@@ -2156,7 +2156,7 @@ class Reports extends Secure_area {
         
 
         foreach ($report_data["details"] as $row) {            
-            var_dump($row);
+            //var_dump($row);
             $data_row = array();
             //$data_row[] = array('data' => date(get_date_format() , strtotime($row['create_at'])), 'align' => 'left');            
             $data_row[] = array('data' =>$row['title'], 'align' => 'right');

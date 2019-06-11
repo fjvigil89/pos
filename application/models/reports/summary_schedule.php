@@ -42,13 +42,13 @@ class summary_schedule extends Report
 
 	public function getTotalRows()
 	{
-	
-		$this->db->select("create_at");
-		$this->db->from('schedule_temp');
-		//$this->where_categoria();
+		
+		//$this->db->select("create_at");
+		$this->db->from('schedule');
+		//$this->db->where($where);
 		$this->db->group_by('create_at, title');
 		$cantidad = $this->db->get()->num_rows();
-		//var_dump($this->db->get()->numrows);
+		
 		return $cantidad;
 		
 

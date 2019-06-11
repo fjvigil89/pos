@@ -121,7 +121,7 @@ class Schedule extends CI_Model
 	*/
 	function delete($schedule_id)
 	{
-		var_dump($schedule_id);
+		//var_dump($schedule_id);
 		$this->db->where('id', $schedule_id);
 		return $this->db->delete("schedule");
 		
@@ -155,9 +155,10 @@ class Schedule extends CI_Model
 			 $where .= ' and '.$this->db->dbprefix('schedule').'.employee_id='.$this->db->escape($params["id_empleado"]);
  
 		 }
-		 var_dump($where);
+		 //var_dump($where);
 		$this->db->query("CREATE TEMPORARY TABLE ".$this->db->dbprefix('schedule_temp')."
-		 (SELECT ".$this->db->dbprefix('schedule')."id $where )");
+		(SELECT * FROM ".$this->db->dbprefix('schedule')."id $where )");
+		 
  
 	 
 	 }
