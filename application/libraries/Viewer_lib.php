@@ -8,7 +8,8 @@ class Viewer_lib
 		$this->CI =& get_instance();		
     }
 
-    function update_viewer_cart($employee_id, $data = false, $is_cart = 1,$payments, $overwrite_tax = 0,$new_tax)
+    function update_viewer_cart($employee_id, $data = false, $is_cart = 1,$payments, $overwrite_tax = 0,$new_tax,
+    $is_scale = false, $data_scale =array())
     {
         $this->CI->Viewer->update_viewer($employee_id,
             array(
@@ -17,7 +18,10 @@ class Viewer_lib
                     "updated" => date('Y-m-d H:i:s'),
                     "overwrite_tax" => $overwrite_tax,
                     "new_tax" => json_encode($new_tax),
-                    "payments" => json_encode($payments)
+                    "payments" => json_encode($payments),
+                    "is_scale" => $is_scale,
+                    "data_scale" => json_encode($data_scale),
+
                 )
             );    
     }

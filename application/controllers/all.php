@@ -10,7 +10,18 @@ class All extends  Secure_area
         $this->load->model('Viewer');
         $this->load->model('Viewer_file');
     }
-   
+    function hide_modal_scale()
+    {       
+		$this->load->model('Viewer');	
+		$this->Viewer->update_viewer($this->Employee->get_logged_in_employee_info()->person_id,
+		array(				
+				"is_cart" => 1,
+				"updated" => date('Y-m-d H:i:s'),				
+				"is_scale" => false,
+				"data_scale" => json_encode([])
+			)
+		);
+    }
     function get_item()
     {
 
@@ -42,6 +53,17 @@ class All extends  Secure_area
             "kit" => $kit
         );
         echo json_encode( $data);
+    }
+
+    function set_item_viewer_scale()
+    {
+        $this->load->library('sale_lib');
+        $data = $this->input->post("data");
+        $this->viewer_lib->update_viewer_cart($this->Employee->person_id_logged_in(),
+					$this->sale_lib->get_cart(),1,$this->sale_lib->get_payments(),
+                    $this->sale_lib->get_overwrite_tax(),$this->sale_lib->get_new_tax(),
+                    true, $data
+                );
     }
 
     function checker()
@@ -129,7 +151,10 @@ class All extends  Secure_area
                 $data["is_cart"] = $_data["is_cart"];
                 $data["cart_data"] = $cart;
                 $data["total"] = to_currency($arrayTotal["total"]);
-                $data["change"] =  to_currency(($arrayTotal["total"]-$payment_total)*-1) ;
+                $data["total"] = to_currency($arrayTotal["total"]);
+                $data["is_scale"] = $_data["is_scale"];
+                $data["data_scale"] = json_decode($_data["data_scale"]) ;
+
                 //$data["subtotal"] = to_currency($arrayTotal["subtotal"]);
                 $data["updated"] = $_data["updated"];
                
@@ -149,7 +174,9 @@ class All extends  Secure_area
                                                 "updated" => date('Y-m-d H:i:s'),
                                                 "overwrite_tax" => 0,
                                                 "new_tax" => "{}",
-                                                "payments" => "{}"
+                                                "payments" => "{}",
+                                                "is_scale" => 0,
+                                                "data_scale" => "{}"
                                             ),3
                             );   
                     

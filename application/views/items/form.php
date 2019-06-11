@@ -128,14 +128,22 @@
 
                 <div class="form-group">
                     <?php echo form_label(lang('items_category').':', 'category',array('class'=>'col-md-3 control-label requireds wide')); ?>
-                    <div class="col-md-8">
-                        <?php echo form_input(array(
+                    <div class="col-md-3">
+                    <?php
+                        if($item_info->category != "")
+                             $categories["$item_info->category"] = $item_info->category;
+                        echo form_dropdown("category",  $categories, 
+		                                				$item_info->category, 'class="form-control"'); ?>
+                       <!-- <?php echo form_input(array(
 									'name'=>'category',
 									'id'=>'category',
 									'class'=>'form-control form-inps',
 									'value'=>$item_info->category)
-								);?>
+								);?>-->
                     </div>
+                    <div class="col-md-1">
+									<a href="<?=site_url("config/categories_modal")?>" class="btn btn-medium green-seagreen effect" id="modal-serial" data-toggle="modal" data-target="#myModal" title="Perzonalizar número de factura"><i class="fa fa-plus hidden-lg fa fa-2x tip-bottom" data-original-title=""></i> <span class="visible-lg">Nueva categoría</span></a>
+									</div>
                 </div>
 
                 <div class="form-group">
@@ -2092,7 +2100,14 @@ $(document).ready(function() {
             name: {
                 required: true
             },
-            category: "required",
+            category: {
+                required: true,
+                remote: {
+                    url: "<?php echo site_url('items/category_exists');?>",
+                    type: "post"
+
+                }
+            },
             cost_price: {
                 required: true,
                 number: true
@@ -2167,7 +2182,11 @@ $(document).ready(function() {
             name: {
                 required: <?php echo json_encode(lang('items_name_required')); ?>
             },
-            category: <?php echo json_encode(lang('items_category_required')); ?>,
+            category: {
+                required:<?php echo json_encode(lang('items_category_required')); ?>,
+                remote: "La categoría no está registrada" 
+            }
+                ,
             cost_price: {
                 required: <?php echo json_encode(lang('items_cost_price_required')); ?>,
                 number: <?php echo json_encode(lang('items_cost_price_number')); ?>

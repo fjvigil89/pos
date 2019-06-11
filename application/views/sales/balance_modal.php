@@ -54,7 +54,7 @@ var categories_new = JSON.parse('<?=$categories?>'),
                     </span>
                 </div>
                 <div class="tools">
-                    <button type="button" class="close" id="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <button type="button" class="close" id="close-modal-scale" data-dismiss="modal" aria-hidden="true"></button>
                 </div>
             </div>
 
@@ -78,7 +78,7 @@ var categories_new = JSON.parse('<?=$categories?>'),
                                 </div>
 
                             </div>
-                            <div class="col-xs-4 col-sm-3">
+                           <div class="col-xs-4 col-sm-3">
                                 <div>
                                     <h2>{{formatMoney(item_to_sell.total)}}<SUB>Total</SUB></h2>
                                 </div>
@@ -212,6 +212,7 @@ $(document).ready(function() {
 
     $(document).keypress(function(event) {
         add_peso(event.key)
+       
     });
     
 });
@@ -224,6 +225,7 @@ function add_peso(char) {
             if (isNaN(Number("0" + scales._data.peso_tem)) == false && scales._data.peso_tem != "") {
                 scales._data.peso = scales._data.peso_tem;
                 scales.set_table();
+                scales.send_data_to_viewer();
             }
             scales._data.peso_tem = "";
             console.log(char)
@@ -255,4 +257,7 @@ $( "#item-scale" ).autocomplete({
 
         }
     });
+    $("#close-modal-scale").click(function(e){
+        $.get("<?=site_url("all/hide_modal_scale")?>");
+    })
 </script>

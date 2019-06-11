@@ -393,6 +393,15 @@
 								</td>
 															
 							</tr>
+							<?php if(!empty($item["celular"])){?>
+								<tr>							
+								
+									<td colspan="5" >
+										<strong><?php echo "Celular(whatsapp): ";?></strong><?php echo $item["celular"];?>
+									</td>
+																
+								</tr>
+							<?php }?>
 							<tr>							
 							
 								<td colspan="5" >
@@ -409,7 +418,7 @@
 										echo to_currency($total2,3,lang("sales_".$divisa)." ")
 									//echo to_currency_no_money($total2,4);
 									?>
-									
+									<?php echo "<strong>&nbsp; &nbsp; &nbsp; &nbsp; Tasa :</strong> ".(double)$item["tasa"];?>
 								</td>
 															
 							</tr>

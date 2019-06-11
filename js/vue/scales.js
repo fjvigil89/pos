@@ -62,7 +62,8 @@ var scales = new Vue({
             price_tax :0,
             name:"",            
             total:0,
-            unit:""
+            unit:"",
+            img : ""
         },
         peso: isNaN(Number("0"+localStorage.getItem("peso"))) == false ? Number("0"+localStorage.getItem("peso")) : 0,
         category :"",
@@ -107,7 +108,10 @@ var scales = new Vue({
                 .get(SITE_URL+'/sales/item?item_id=' +  this.item_id)
                 .then(res => {  
                     if($.isNumeric(res.data.item.id))
-                        this.add_item(res.data.item)
+                    {
+                        this.add_item(res.data.item);
+                       
+                    }
                     else
                         toastr.error("Artículo no encontrado");
      
@@ -123,11 +127,28 @@ var scales = new Vue({
             var data = csfrData;
             data["items"] =  this.cart;            
             $.post(SITE_URL+'/sales/add_items_cart',data,function(response){
-                $("#close").click();
+                $("#close-modal-scale").click();
                 $("#register_container").load(SITE_URL+"/sales/reload");
             });            
             
             this.show = false;
+        },
+        send_data_to_viewer: function()
+        {
+            var data =
+            {
+                "items_cart" : this.cart,
+                "peso" : this.peso,
+                "price_tax" : this.item_to_sell.price_tax,
+                "name" :  this.item_to_sell.name,
+                "total":  this.item_to_sell.total,
+                "unit":  this.item_to_sell.unit,
+                "img": this.item_to_sell.img,
+            };
+            
+            $.post(SITE_URL+'/all/set_item_viewer_scale',{data:data},function(response){              
+            });
+
         },
         set_table(){
             try{
@@ -146,6 +167,7 @@ var scales = new Vue({
         delete_item: function(index)
         {
             this.cart.splice( index, 1 );
+            this.send_data_to_viewer();
         },
         formatMoney: function(number){           
             return accounting.formatMoney(number, currency_symbol, 2, thousand_separator, decimal_separator);
@@ -156,7 +178,9 @@ var scales = new Vue({
             this.item_to_sell.price_tax = item.price_tax;
             this.item_to_sell.name = item.name;
             this.item_to_sell.unit = item.unit;
+            this.item_to_sell.img = item.image_src;
             this.set_table();
+            this.send_data_to_viewer();
         },
        
         add_item(item_new)
@@ -204,7 +228,8 @@ var scales = new Vue({
                 this.peso = 0;
             }
             
-            this.cart = items;     
+            this.cart = items; 
+            this.send_data_to_viewer();    
         }        
      
     },

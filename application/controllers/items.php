@@ -7,6 +7,7 @@ class Items extends Secure_area implements iData_controller
     {
         parent::__construct('items');
         $this->load->model("Item_unit_sell");
+        $this->load->model('Categories');
         
     }
 
@@ -153,6 +154,14 @@ class Items extends Secure_area implements iData_controller
         }
 
     }
+    public function  category_exists()
+    {
+        if ($this->Categories->category_exists($this->input->post('category'))) {
+            echo 'true';
+        } else {
+            echo 'false';
+        }
+    }
 
     public function check_duplicate()
     {
@@ -267,6 +276,14 @@ class Items extends Secure_area implements iData_controller
         $data['location_tier_prices'] = array();
         $data['additional_item_numbers'] = $this->Additional_item_numbers->get_item_numbers($item_id);
         $data['seriales_item'] = $this->Additional_item_seriales->get_item_serales_unsold($item_id);
+        
+        $categories_tem = $this->Categories->get_all();
+        $categories[""]="Seleccione";
+
+        foreach ($categories_tem as $category) 
+            $categories[$category["name"]] = $category["name"];
+        
+        $data["categories"] =  $categories;
 
         if ($item_id != -1) {
             $data['next_item_id'] = $this->Item->get_next_id($item_id);
@@ -337,6 +354,14 @@ class Items extends Secure_area implements iData_controller
         //Unset unique identifiers
         $data['item_info']->item_number = '';
         $data['item_info']->product_id = '';
+
+        $categories_tem = $this->Categories->get_all();
+        $categories[""]="Seleccione";
+
+        foreach ($categories_tem as $category) 
+            $categories[$category["name"]] = $category["name"];
+
+        $data['categories'] = $categories;
 
         $data['item_tax_info'] = $this->Item_taxes->get_info($item_id);
         $data['tiers'] = $this->Tier->get_all()->result();
