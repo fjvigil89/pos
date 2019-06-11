@@ -83,9 +83,9 @@ class Schedule_Items extends CI_Model
 	}
 	
 	/*
-	Get people with specific ids
+	Get people with specific array ids
 	*/
-	function get_multiple_info($schedule_id)
+	function get_multiple_info($schedule_ids)
 	{
 		$this->db->from('schedule_items');
 		$this->db->where_in('schedule_id',$schedule_ids);

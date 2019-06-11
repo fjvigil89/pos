@@ -8,9 +8,11 @@
                     <div class="portlet-body form">
                               <!-- BEGIN FORM-->
 
-                              <?php echo form_open_multipart('/schedules/setSchedule', array('class'=>"form-horizontal")); ?>
+                              <?php echo form_open_multipart('/schedules/updateSchedule', array('class'=>"form-horizontal")); ?>
                               <div class="form-body">
                                         <h3 class="form-section">schedule Info</h3>
+                                        
+                                        <input type="hidden" name="id" value="<?php echo isset($schedule[0]->id)? $schedule[0]->id : '' ?>">
                                         <div class="row">
                                                   <div class="col-md-6">
                                                             <div class="form-group">

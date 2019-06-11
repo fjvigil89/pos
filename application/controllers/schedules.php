@@ -39,10 +39,15 @@ class schedules extends Secure_area
     /***
      * cargar el schedule que este en la lista para su edicion
      */
-    function editSchedule($id){
+    function editSchedule($id){        
         $data['vistas'] = 'save'; 
         $data['schedule'] = $this->Schedule->get_scheduleID($id)->result();
-
+        foreach ($this->Item->get_all()->result() as $key => $item) {            
+            $item_id = $item->item_id;
+            $item = $item->category;
+            $data['items'][$key] = $item;
+            $data['items_id'][$key] = $item_id;
+        }
         
        return $this->load->view('calendar/index', $data);
     }
@@ -99,8 +104,8 @@ class schedules extends Secure_area
     {
         $location_id=$this->Employee->get_logged_in_employee_current_location_id();
         $data = $this->Schedule->get_schedule($location_id)->result_array();
-        var_dump($data);
-        //return $data;
+        //var_dump($data);
+        return $data;
         
          
     }
@@ -137,7 +142,7 @@ class schedules extends Secure_area
     }
 
     /**
-     * 
+     * Agregar un nuevo Schedule
      */
     function setSchedule()
     {
@@ -179,6 +184,56 @@ class schedules extends Secure_area
        
     }
 
+    /**
+     * Actualizar un schedule
+     */
+    function updateSchedule()
+    {
+        $location_id=$this->Employee->get_logged_in_employee_current_location_id();
+        $id = $_POST['id'];
+        $status = '0';
+        if($_POST['status']=='on')
+        {
+            $status = '1';
+        }
+        $data = array(
+            'title' => $_POST['title'],
+            'detail'=>$_POST['detail'],
+            'start' => $_POST['start_date'],
+            'end' => $_POST['end_date'],
+            'status'=> $status,
+            'color'=> $_POST['color'],
+            'employee_id'=> $location_id          
+        );
+
+        //$save_id = $this->Schedule->save($data, $id);
+
+
+        
+        if(isset($_POST['products']))
+        {
+            $producto_update = $_POST['products'];            
+            $producto_existente = $this->Schedule_Items->get_schedule($id)->result();
+            foreach ($producto_existente as $key => $item) {            
+                $this->Schedule_Items->delete($id);                
+            }
+
+            foreach ($producto_update as $key => $value) {           
+                $data = array(
+                    'schedule_id'=>$id,
+                    'items_id' => $value,
+                );
+                //var_dump($value);
+            };
+            $this->Schedule_Items->save($data);
+            
+        }
+                
+        redirect('/schedules', 'refresh');
+        
+       
+    }
+
     function setEnable()
     {
         
@@ -198,6 +253,7 @@ class schedules extends Secure_area
             {
                 $data['status']= '1';
             }
+            //var_dump($data);
             $save_data = $this->Schedule->save($data, $this->input->post('id'));
             
         }
@@ -205,8 +261,9 @@ class schedules extends Secure_area
 
     function setDelete($id){
         
+        
         $item = $this->Schedule->delete($id);        
-        redirect('schedules/');
+        redirect('schedules/listar');
         
     }
     /**

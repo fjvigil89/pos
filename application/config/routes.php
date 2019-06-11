@@ -44,7 +44,6 @@ $route['404_override'] = '';
 $route['no_access/(:any)'] = "no_access/index/$1";
 
 //Summary reports inputs
-$route['reports/summary_schedule'] = "reports/summary_schedule_input_excel_export";
 $route['reports/summary_sales'] = "reports/date_input_excel_export";
 $route['reports/summary_categories'] = "reports/summary_categories_input";
 $route['reports/summary_customers'] = "reports/date_input_excel_export";
@@ -108,6 +107,7 @@ $route['reports/only_cash'] = "reports/specific_movement_cash_input";
 $route['reports/detailed_of_move_money'] = "reports/specific_movement_cash_input_move_money";
 $route['reports/detailed_of_payment'] = "reports/detailed_of_payment_input";
 
+$route['reports/summary_schedule'] = "reports/schedule_input_excel_export";
 $route['reports/summary_movement_cash'] = "reports/movement_cash_date_input_excel_export";
 $route['reports/report_consolidated_shop'] = "reports/consolidated_shop_location_date";
 $route['reports/specific_transfer_location'] = "reports/specific_transfer_location_date_input_excel_export";

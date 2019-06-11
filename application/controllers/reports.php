@@ -2122,6 +2122,7 @@ class Reports extends Secure_area {
     }
     
     
+    
     /**
      * Schedule
      */    
@@ -2136,7 +2137,7 @@ class Reports extends Secure_area {
 
         $this->load->model('reports/summary_schedule');
         $model = $this->summary_schedule;
-         $params=array('start_date' => $start_date, 'end_date' => $end_date,'id_empleado'=>$id_empleado,'export_excel' => $export_excel, 'export_pdf' => $export_pdf, 'offset' => $offset);
+        $params=array('start_date' => $start_date, 'end_date' => $end_date,'id_empleado'=>$id_empleado,'export_excel' => $export_excel, 'export_pdf' => $export_pdf, 'offset' => $offset);
 
         $model->setParams(array('start_date' => $start_date, 'end_date' => $end_date,'id_empleado'=>$id_empleado, 'export_excel' => $export_excel, 'export_pdf' => $export_pdf, 'offset' => $offset));
 
@@ -2152,17 +2153,22 @@ class Reports extends Secure_area {
         
         $tabular_data = array();
         $report_data = $model->getData();
+        
 
-        foreach ($report_data["details"] as $row) {
+        foreach ($report_data["details"] as $row) {            
+            var_dump($row);
             $data_row = array();
-            $data_row[] = array('data' => date(get_date_format() , strtotime($row['create_at'])), 'align' => 'left');            
+            //$data_row[] = array('data' => date(get_date_format() , strtotime($row['create_at'])), 'align' => 'left');            
             $data_row[] = array('data' =>$row['title'], 'align' => 'right');
+            $data_row[] = array('data' =>$row['detail'], 'align' => 'right');
+            $data_row[] = array('data' =>$row['start'], 'align' => 'right');
+            $data_row[] = array('data' =>$row['end'], 'align' => 'right');
             $tabular_data[] = $data_row;
         }
         
         $as=$model->getSummaryData();
         $data = array(
-            "title" => "Movimiento de caja resumen",
+            "title" => "Schedule",
             "subtitle" => date(get_date_format(), strtotime($start_date)) . '-' . date(get_date_format(), strtotime($end_date)),
             "headers" => $model->getDataColumns(),
             "data" => $tabular_data,
@@ -2173,9 +2179,34 @@ class Reports extends Secure_area {
             "pagination" => $this->pagination->create_links(),
         );
 
-        $this->load->view("reports/tabular_movement", $data);
+        $this->load->view("reports/tabular_schedule", $data);
 
     }//end schedule
+    
+
+    function schedule_input_excel_export() {
+        $data = $this->_get_common_report_data(TRUE);
+        
+        $location_id=$this->Employee->get_logged_in_employee_current_location_id();
+        
+            /*$categorias_gastos["Venta"]="Venta";
+            $categorias_gastos["Devolución"]="Devolución";
+            $categorias_gastos[lang("sales_store_account_payment")]=lang("sales_store_account_payment");
+            $categorias_gastos["Venta eliminada"]="Venta eliminada";
+            $categorias_gastos["Cierre de caja"]="Cierre de caja	";
+            $categorias_gastos["Apertura de caja"]="Apertura de caja";
+            $categorias_gastos["Venta"]="Venta";*/
+            $categorias_gastos["all"]="Todo";
+            //$data["categorias_gastos"]=$categorias_gastos;
+            $empleados=array("all"=>"Todo");
+        $employees= $this->Employee->get_all()->result();
+        foreach($employees as $empleado){
+            $empleados[$empleado->person_id]=$empleado->first_name." ".$empleado->last_name;
+        }
+        $data["empleados"]=$empleados;
+        //$data["cajas"]=$cajas;
+        $this->load->view("reports/schedule_input_excel_export", $data);
+    }
 
     function movement_cash_date_input_excel_export() {
         $data = $this->_get_common_report_data(TRUE);

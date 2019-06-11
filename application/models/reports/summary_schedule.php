@@ -15,10 +15,10 @@ class summary_schedule extends Report
 		
 	
 		$columns = array();
-		$columns[] = array('data'=>"Fecha", 'align'=> 'left');		
-		$columns[] = array('data'=>"Entrada", 'align'=> 'left');
-		$columns[] = array('data'=>"Salida", 'align'=> 'left');
-		$columns[] = array('data'=>"Categoría", 'align'=> 'left');
+		$columns[] = array('data'=>"title", 'align'=> 'left');		
+		$columns[] = array('data'=>"detail", 'align'=> 'left');
+		$columns[] = array('data'=>"start", 'align'=> 'left');
+		$columns[] = array('data'=>"end", 'align'=> 'left');
 				
 		
 		return $columns;
@@ -28,10 +28,10 @@ class summary_schedule extends Report
 	{
 		$data = array();
 		$data['details'] = array();		
-		$this->db->select(" title,date(create_at) as register_date ");
-		$this->db->from('schedule_temp');				
-		$this->db->group_by('date(create_at),title');
-		$this->db->order_by('date(create_at) DESC ,title DESC');
+		$this->db->select(" title,detail, start, end");
+		$this->db->from('schedule');				
+		$this->db->group_by('title');
+		$this->db->order_by('title DESC');
 		$ingresos=$this->db->get()->result_array();		
 		$data['details']=	$ingresos;
 		
@@ -43,63 +43,47 @@ class summary_schedule extends Report
 	public function getTotalRows()
 	{
 	
-		$this->db->select("  date(create_at) as date  ");
+		$this->db->select("create_at");
 		$this->db->from('schedule_temp');
 		//$this->where_categoria();
-		$this->db->group_by('date(create_at), title');
+		$this->db->group_by('create_at, title');
 		$cantidad = $this->db->get()->num_rows();
+		//var_dump($this->db->get()->numrows);
 		return $cantidad;
 		
 
 	}
-	/*function where_categoria(){
-		$data=array(
-			"Venta",
-           	"Devolución",
-            lang("sales_store_account_payment"),
-            "Venta eliminada",
-            "Cierre de caja",
-            "Apertura de caja"
-		);
-		
-		foreach($data as $categoria){
-			$this->db->where('categorias_gastos !=', $categoria);
-		}
-	}*/
+	
+
 	
 	public function getSummaryData()
 	{
 		
 		$data=array();
-		$this->db->select(' SUM(mount) as suma, categorias_gastos');
-		$this->db->from('movement_items_temp');
-		$this->db->group_by('categorias_gastos');
-		$this->db->where('type_movement', 0);
+		$this->db->select(' title');
+		$this->db->from('schedule');
+		$this->db->group_by('title');		
 	//	$this->where_categoria();
-		$data["egreos"]= $this->db->get()->result_array();
+		$data["title"]= $this->db->get()->result_array();
 		
-		$this->db->select(' SUM(mount) as suma, categorias_gastos');
-		$this->db->from('movement_items_temp');		
-		$this->db->where('type_movement', 1);
-		$this->db->group_by('categorias_gastos');
+		$this->db->select(' start');
+		$this->db->from('schedule');				
+		$this->db->group_by('start');
 		//$this->where_categoria();
-		$data["ingresos"]= $this->db->get()->result_array();
+		$data["start"]= $this->db->get()->result_array();
 		
 	
-		$this->db->select(' SUM(mount) as suma');
-		$this->db->from('movement_items_temp');
-		$this->db->where('type_movement', 1);
+		$this->db->select(' end');
+		$this->db->from('schedule');				
+		$this->db->group_by('end');
 		//$this->where_categoria();
-		$ret = $this->db->get()->row_array();
-		$data["suma_ingreso"]= $ret["suma"];
+		$data["end"]= $this->db->get()->result_array();
+		
 	
 				
-		$this->db->select(' SUM(mount) as suma');
-		$this->db->from('movement_items_temp');
-		//$this->where_categoria();
-		$this->db->where('type_movement', 0);
-		$ret = $this->db->get()->row_array();
-		$data["suma_egreoso"]= $ret["suma"];		
+		$this->db->select(' detail');
+		$this->db->from('schedule');		
+		$data["detail"]= $this->db->get()->result_array();
 		
 		
 		return $data;
