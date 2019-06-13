@@ -155,9 +155,14 @@ class Schedule extends CI_Model
 			 $where .= ' and '.$this->db->dbprefix('schedule').'.employee_id='.$this->db->escape($params["id_empleado"]);
  
 		 }
-		 //var_dump($where);
+		 var_dump("CREATE TEMPORARY TABLE ".$this->db->dbprefix('schedule_temp')."
+		 (SELECT * FROM ".$this->db->dbprefix('schedule')."$where )");
+
 		$this->db->query("CREATE TEMPORARY TABLE ".$this->db->dbprefix('schedule_temp')."
-		(SELECT * FROM ".$this->db->dbprefix('schedule')."id $where )");
+		(SELECT * FROM ".$this->db->dbprefix('schedule')."$where )");
+
+		
+		 
 		 
  
 	 

@@ -9,7 +9,7 @@ class schedules extends Secure_area
     function __construct()
 	{
         parent::__construct();        
-        $this->load->model(array('Schedule','Employee', 'Item','Schedule_Items'));
+        $this->load->model(array('Schedule','Employee', 'Item','Schedule_Items','Appfile'));
 
         //$client_google = $this->getClient();
     }
@@ -50,6 +50,24 @@ class schedules extends Secure_area
         }
         
        return $this->load->view('calendar/index', $data);
+    }
+
+    /***
+     * enviar email con los datos del schedule creado
+     */
+    function email_schedule($data)
+    {
+        $this->load->library('Email_send');
+        $para=$this->Employee->get_info($this->Employee->get_logged_in_employee_current_location_id());
+        $subject="Calendario";        
+        $company="FacilPos";
+        $name=$company.' | '.$subject;
+        $from='no-reply@FacilPos.com';        
+        $data['receipt_title']= "Information about schedule";
+        $data['total_price'] = array_sum($data['total_price']);
+        $email=$this->email_send->send_($para->email, $subject, $name,
+        $this->load->view('calendar/schedule_email', $data),$from,$company) ;
+        
     }
     /**
      * Metodo para cargar todos los schedules y llenar por ajax el calendario
@@ -166,22 +184,35 @@ class schedules extends Secure_area
         $save_id = $this->Schedule->save($data);
 
         //agreagndo en la relacion        
-        foreach ($_POST['products'] as $key => $value) {
-            $data = array(
-                'schedule_id'=>$save_id,
-                'items_id' => $value,
-            );
+        if (isset($_POST['products'])) {
+            foreach ($_POST['products'] as $key => $value) {
+                $data_item = array(
+                    'schedule_id'=>$save_id,
+                    'items_id' => $value,
+                );
 
-            $this->Schedule_Items->save($data);
-            
+                $items =$this->Item->get_info($value);
+                $data['items'][$key] = $items;                
+                $data['total_price'][$key] = (float)$items->unit_price;
+                $this->Schedule_Items->save($data_item);
+            }
         }
-        //var_dump(count($_POST['products']));    
-        //$save_data = $this->Schedule->save($data);
         
         
+        $this->email_schedule($data);
         redirect('/schedules', 'refresh');
         
        
+    }
+
+    /***
+     * Mostrar imagen del producto
+     */
+    function getImagen($item_id)
+    {
+        $file = $this->Appfile->get($item_id);		
+        header("Content-type: ".get_mime_by_extension($file->file_name));			                
+        echo $file->file_data;
     }
 
     /**
@@ -223,12 +254,14 @@ class schedules extends Secure_area
                     'schedule_id'=>$id,
                     'items_id' => $value,
                 );
-                //var_dump($value);
+                $data['items'][$key] = $items;                
+                $data['total_price'][$key] = (float)$items->unit_price;
             };
             $this->Schedule_Items->save($data);
             
         }
-                
+               
+        $this->email_schedule($data);
         redirect('/schedules', 'refresh');
         
        

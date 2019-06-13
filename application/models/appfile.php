@@ -27,6 +27,7 @@ class Appfile extends CI_Model
 	}
 	function get_logo($file_id)
 	{
+		
 		$login_db = $this->load->database('login',true);
 		$query = $login_db->get_where('resellers', array('id' => $file_id), 1);
 		

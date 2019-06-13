@@ -20,7 +20,7 @@
                         <i class="fa fa-plus"></i>
                     </a>
                 </div>
-                
+         
 
             </div>
             <div class="portlet-body">
@@ -67,7 +67,8 @@
                             <tbody>
                                
                                 <?php foreach ($schedule as $key => $value) { ?>
-                                <tr data-index=<?php echo $key ?>>
+                                   
+                                <tr data-index=<?php echo $key ?> >
 
                                     <td style="text-align: right; ">
                                         <?php echo $value['title']; ?>
