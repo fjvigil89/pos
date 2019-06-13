@@ -9,7 +9,8 @@ class schedules extends Secure_area
     function __construct()
 	{
         parent::__construct();        
-        $this->load->model(array('Schedule','Employee', 'Item','Schedule_Items','Appfile'));
+        $this->load->model(array('Schedule','Employee', 'Item','Schedule_Items','Appfile'));        
+        $this->load->library(array('sale_lib','viewer_lib'));
 
         //$client_google = $this->getClient();
     }
@@ -254,6 +255,7 @@ class schedules extends Secure_area
                     'schedule_id'=>$id,
                     'items_id' => $value,
                 );
+                $items =$this->Item->get_info($value);
                 $data['items'][$key] = $items;                
                 $data['total_price'][$key] = (float)$items->unit_price;
             };
@@ -356,6 +358,25 @@ class schedules extends Secure_area
         }
         return $client;
     }
+
+    /***
+     * funcion para facturar los schedule
+     */
+    function facturar($id)
+    {
+        $data['schedule'] = $this->Schedule->get_scheduleID($id)->result();
+        $producto_facturar = $this->Schedule_Items->get_schedule($id)->result();
+        foreach ($producto_facturar as $key => $value) {                       
+            $items =$this->Item->get_info($value->id);
+            $price = $this->viewer_lib->get_price_item_expe($items);
+            $this->sale_lib->add_item($items->item_id,1,0,$price);    
+        };
+
+        redirect('/sales', 'refresh');
+        
+    }
+    
+    
 
 
 }

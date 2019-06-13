@@ -42,7 +42,7 @@
 
                                     </th>
                                     <th style="text-align: center; ">
-                                        <div class="th-inner  ">start</div>
+                                        <div class="th-inner  ">Start</div>
 
                                     </th>
                                     <th style="text-align: center; ">
@@ -50,11 +50,14 @@
 
                                     </th>
                                     <th style="text-align: center; ">
-                                        <div class="th-inner  ">color</div>
+                                        <div class="th-inner  ">Color</div>
 
                                     </th>
                                     <th style="text-align: center; ">
-                                        <div class="th-inner  ">status</div>
+                                        <div class="th-inner  ">Status</div>
+                                    </th>
+                                    <th style="text-align: center; ">
+                                        <div class="th-inner  ">Facturar</div>
                                     </th>
                                     <th style="text-align: center; ">
                                         <div class="th-inner  ">Edit</div>
@@ -99,6 +102,12 @@
                                             </div>
                                         <?php  }; ?>
                                         
+                                    </td>
+                                    <td style="text-align: center; ">
+                                        <a href="<?php echo site_url('schedules/facturar/'.$value['id']); ?>" class="btn btn-outline btn-circle btn-sm-purple">
+                                            <i class="fa icon-credit-card"></i>
+                                            Facturar
+                                        </a>
                                     </td>
                                     <td style="text-align: center; ">
                                         <a href="<?php echo site_url('schedules/editSchedule/'.$value['id']); ?>" class="btn btn-outline btn-circle btn-sm-purple">
