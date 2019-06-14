@@ -25,6 +25,21 @@ class Appfile extends CI_Model
 		return ""; 
 		
 	}
+	function get_notification($notification_id)
+	{
+		$login_db = $this->load->database('login',true);
+		$login_db->from('notifications');
+		$login_db ->where('id', $notification_id);
+        $query =  $login_db->get();
+		
+		if($query->num_rows()==1)
+		{
+			return $query->row();
+		}
+		
+		return ""; 
+		
+	}
 	function get_logo($file_id)
 	{
 		$login_db = $this->load->database('login',true);

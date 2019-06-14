@@ -14,6 +14,14 @@ class App_files extends CI_Controller
 			echo $file->file_data;
 	
 	}
+	function view_notification($notification_id)
+	{ 
+		$file = $this->Appfile->get_notification($notification_id);
+		
+		header("Content-type: ".get_mime_by_extension("image/*"));
+		echo $file->img;
+	
+	}
 	function view_transfer($file_id)
 	{
 		$file = $this->Appfile->get_transfer($file_id);
