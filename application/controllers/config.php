@@ -26,11 +26,17 @@ class Config extends Secure_area
 		$path_long =  PATH_RECUSE."/".$this->Employee->get_store()."/img/categories";
 		$this->Categories->delete($id,$path_long);
 	}
+	
 	function save_catebory($id = -1)
 	{
 		if (true) {   
             $response = array("success" => true, "message"=>"");
-            $is_guarded = true;
+			$is_guarded = true;
+			if ($id < 0 and $this->Categories->category_exists($this->input->post('name'))) {
+				$response = array("success" => false, "message"=>"Categoría ya existe");
+				echo json_encode($response);
+				return;
+			}
                     
             $path_long =  PATH_RECUSE."/".$this->Employee->get_store()."/img/categories";
             $category_data = $this->Categories->get_info($id);
@@ -38,11 +44,11 @@ class Config extends Secure_area
             $original_name = $category_data->name_img_original;  
             $name = $this->input->post('name') ? $this->input->post('name'): null;
             
-            if($id <= 0 and empty($_FILES["image"]))
+            /*if($id <= 0 and empty($_FILES["image"]))
             {
                     echo json_encode( array("success" => false, "message"=>"Imagen es requerida"));
                     return;
-            }
+            }*/
 
             if(!file_exists( $path_long))
             {        
@@ -57,7 +63,7 @@ class Config extends Secure_area
                     $allowed_extensions = array('png', 'jpg', 'jpeg', 'gif');
                     $extension = strtolower(pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION));            
                     
-                    if($id != -1)           
+                    if($id != -1 and !empty($category_data->img))           
                         unlink($path_long."/". $category_data->img);
 
                     if (in_array($extension, $allowed_extensions))
@@ -71,14 +77,23 @@ class Config extends Secure_area
                             $name_file = time()."-". $rand.".".$extension;
                             $rand = rand(1, 1000);
                         }                          
+						$config['image_library'] = 'gd2';
+						$config['source_image'] = $_FILES["image"]["tmp_name"];
+						$config['create_thumb'] = false;
+						$config['maintain_ratio'] = true;
+						$config['width'] = 500;
+						$config['height'] = 400;
+						$this->load->library('image_lib', $config);
+						
+						$this->image_lib->resize();
 
                         $config['allowed_types'] = 'gif|jpg|jpeg|png';
                         $config['upload_path'] = $path_long;
                         $config['file_name'] = $name_file;
                         $config['max_size'] = "5120";
                         $config['max_width'] = "2000";
-                        $config['max_height'] = "2000";
-                
+						$config['max_height'] = "2000";
+
                         $this->load->library('upload', $config);
                         
                         if (!$this->upload->do_upload("image")) 
@@ -97,7 +112,7 @@ class Config extends Secure_area
                         $is_guarded = false;
                     }           
                 }
-                elseif($id <= 0) 
+                elseif(!empty($_FILES["image"])) 
                 {
                     $response = array(
                         "success" => false,
@@ -128,11 +143,8 @@ class Config extends Secure_area
 
 						$response["data"]=$data;
 
-					}
-					
-                }
-
-            
+					}					
+                }            
             }
             else
                 $response = array(

@@ -957,9 +957,7 @@ $(document).ready(function(){
 		    type: "post",
 		    dataType:"json",
 		    success: function(response, textStatus, jqXHR){
-		        $('#moneda').val(response.currency_symbol);
-		        $('#impuesto').val(response.default_tax_1_rate);
-		        $('#nombre_impuesto').val(response.default_tax_1_name);
+		        $("#mostrarmodal").modal('hide');
 		    },
 		    error: function(jqXHR, textStatus, errorThrown){
 		        console.log("The following error occured: "+ textStatus, errorThrown);

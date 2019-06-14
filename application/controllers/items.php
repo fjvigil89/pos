@@ -282,6 +282,11 @@ class Items extends Secure_area implements iData_controller
 
         foreach ($categories_tem as $category) 
             $categories[$category["name"]] = $category["name"];
+        $item_categories_items_result = $this->Item->get_all_categories()->result();
+        
+        // categorias viejas, borrar cuando esté todo 100% implementado
+        foreach ($item_categories_items_result as $category) 
+            $categories[$category->category] = $category->category;
         
         $data["categories"] =  $categories;
 
@@ -357,7 +362,7 @@ class Items extends Secure_area implements iData_controller
 
         $categories_tem = $this->Categories->get_all();
         $categories[""]="Seleccione";
-
+        $data["units"] = $this->Appconfig->get_all_units();
         foreach ($categories_tem as $category) 
             $categories[$category["name"]] = $category["name"];
 

@@ -133,7 +133,7 @@
                         if($item_info->category != "")
                              $categories["$item_info->category"] = $item_info->category;
                         echo form_dropdown("category",  $categories, 
-		                                				$item_info->category, 'class="form-control"'); ?>
+		                                				$item_info->category, 'id="category" data-live-search="true" class="bs-select form-control"'); ?>
                        <!-- <?php echo form_input(array(
 									'name'=>'category',
 									'id'=>'category',
@@ -1971,12 +1971,12 @@ $(document).ready(function() {
         }
     });
 
-    $("#category").autocomplete({
+    /*$("#category").autocomplete({
         source: "<?php echo site_url('items/suggest_category');?>",
         delay: 300,
         autoFocus: false,
         minLength: 0
-    });
+    });*/
     add_autocomplete();
 
     jQuery.validator.addMethod("quanttity", function(value, element) {
@@ -2008,6 +2008,8 @@ $(document).ready(function() {
 
     $('#item_form').validate({
         submitHandler: function(form) {
+           
+            if($("#category").val() != ""){
             $.post('<?php echo site_url("items/check_duplicate");?>', {
                     term: $('#name').val()
                 }, function(data) {
@@ -2026,6 +2028,7 @@ $(document).ready(function() {
                     }
                 }, "json")
                 .error(function() {});
+            }else  toastr.error("Debe seleccionar una categoría")
         },
         errorClass: "text-danger",
         errorElement: "span",
@@ -2102,11 +2105,11 @@ $(document).ready(function() {
             },
             category: {
                 required: true,
-                remote: {
-                    url: "<?php echo site_url('items/category_exists');?>",
+                /*remote: {
+                    url: "<?php //echo site_url('items/category_exists');?>",
                     type: "post"
 
-                }
+                }*/
             },
             cost_price: {
                 required: true,

@@ -19,8 +19,9 @@ class Item extends CI_Model
 		$this->db->from('items');
 		$this->db->where('deleted',0);
 		$this->db->where('activate_range',1);
-		if($this->db->get()) {
-			return $this->db->get()->result();	
+		$result = $this->db->get();
+		if($result) {
+			return $result->result();	
 		} else {
 			return false;
 		}
