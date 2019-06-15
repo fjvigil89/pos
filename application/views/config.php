@@ -2744,7 +2744,7 @@
 									'50'=>'50',
 									'100'=>'100',
 									'200'=>'200',
-									'500'=>'500'), 
+								/*'500'=>'500'*/), 
 								 	$this->config->item('number_of_items_per_page') ? $this->config->item('number_of_items_per_page') : '20', 'class="bs-select form-control"');
 								?>
 							</div>
@@ -3211,7 +3211,7 @@
 								<?php echo form_label('<a class="help_config_options  tooltips " data-placement="left" title="'.lang("").'">Categorías</a>'.':', 'categories', array('class'=>'col-md-3 control-label')); ?> 						
 						
 									<div class="col-md-1">
-									<a href="<?=site_url("config/categories_modal")?>" class="btn btn-medium green-seagreen effect" id="modal-serial" data-toggle="modal" data-target="#myModal" title="Perzonalizar número de factura"><i class="fa fa-plus hidden-lg fa fa-2x tip-bottom" data-original-title=""></i> <span class="visible-lg">Perzonalizar</span></a>
+									<a href="<?=site_url("category/categories_modal")?>" class="btn btn-medium green-seagreen effect" id="modal-serial" data-toggle="modal" data-target="#myModal" title="Perzonalizar número de factura"><i class="fa fa-plus hidden-lg fa fa-2x tip-bottom" data-original-title=""></i> <span class="visible-lg">Perzonalizar</span></a>
 									</div>							
 							</div>
 
