@@ -1,4 +1,6 @@
+
 <?php
+
 if($this->Appconfig->es_franquicia()==true){
 	$data_commpany= $this->Appconfig->get_data_commpany($this->config->item('resellers_id'));
 	
@@ -78,7 +80,9 @@ if($this->Appconfig->es_franquicia()==true){
 
 		function Split_by_miles(input)
 		{
+
 			/*
+
 			//funcion en Jquery para separar numeros en milles
 			input.keyup(function(event) {
 				// skip for arrow keys
@@ -95,7 +99,9 @@ if($this->Appconfig->es_franquicia()==true){
 				});
 			});
 			//fin de separar numeros
+
 			*/
+
 
 		}
 
@@ -105,9 +111,11 @@ if($this->Appconfig->es_franquicia()==true){
         
 		
 		</script>
+
 		<script> var csfrData={};csfrData['<?php echo $this->security->get_csrf_token_name();?>']= '<?php echo $this->security->get_csrf_hash();?>';$(function(){$.ajaxSetup({data: csfrData});});</script>	
 
 		<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script> -->
+
         <script src="js/publics.js"></script>
         <script src="js/confirm/jquery-confirm.js"></script>
         <script src="js/bootstrap-validator/bootstrapValidator.min.js"></script>
@@ -121,6 +129,26 @@ if($this->Appconfig->es_franquicia()==true){
 			</iframe>
 		<?php endif; ?>
 	
+	<!--Scrip de Calendar-->
+		 <!-- BEGIN CORE PLUGINS -->
+		 <script src=<?php echo base_url()."assets/global/plugins/fullcalendar/jquery.min.js" ?> type="text/javascript"></script>
+        <script src=<?php echo base_url()."assets/global/plugins/fullcalendar/bootstrap.min.js" ?> type="text/javascript"></script>
+        
+        <!-- END CORE PLUGINS -->
+        <!-- BEGIN PAGE LEVEL PLUGINS -->
+        
+        <script  src=<?php echo base_url()."assets/global/plugins/fullcalendar/fullcalendar.min.js" ?> type="text/javascript"></script>
+        <script  src=<?php echo base_url()."assets/global/plugins/fullcalendar/jquery-ui.min.js" ?> type="text/javascript"></script>
+        <!-- END PAGE LEVEL PLUGINS -->
+        <!-- BEGIN THEME GLOBAL SCRIPTS -->
+        <script src=<?php echo base_url()."assets/global/plugins/fullcalendar/app.min.js" ?> type="text/javascript"></script>
+        <!-- END THEME GLOBAL SCRIPTS -->
+        <!-- BEGIN PAGE LEVEL SCRIPTS -->
+        <script  src=<?php echo base_url()."assets/global/plugins/fullcalendar/calendar.min.js" ?> type="text/javascript"></script>
+        <!-- END PAGE LEVEL SCRIPTS -->
+        <!-- BEGIN THEME LAYOUT SCRIPTS -->
+        
+        <!-- END THEME LAYOUT SCRIPTS -->
 	</body>
 
 </html>

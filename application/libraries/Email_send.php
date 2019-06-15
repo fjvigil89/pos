@@ -28,9 +28,10 @@
         $mail->Subject = utf8_decode($subject);
         $mail->MsgHTML(utf8_decode($message));
         //indico destinatario         
-        $address = $receiver_email;
-         
+        $address = $receiver_email;         
         $mail->AddAddress($address, $username);
+
+        
         if(!$mail->Send()) {
             $data['message_display'] = '<p class="error_msg">Invalid Gmail Account or Password !</p>';
         } else {

@@ -1,5 +1,7 @@
 <?php
+
 $lang['reports_units_existe'] = 'Unidades existentes';
+$lang['reports_schedule']="Calendario";
 $lang['reports_consolidated_shop']="Consolidado";
 $lang['reports_move_money']="Reporte detallado traslado de dinero";
 $lang['reports_traslado']="Total Traslados";

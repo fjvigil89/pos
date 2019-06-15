@@ -3,6 +3,8 @@
 <html>
 
 <head>
+
+    
     <?php
 	if($this->Appconfig->es_franquicia()==true){
 		$data_commpany = $this->Appconfig->get_data_commpany($this->config->item('resellers_id'));
@@ -629,6 +631,7 @@
             <?php }?>
             return true;
         }
+
         $("#header_inbox_bar").mouseenter(function(){
             $.post('<?php echo site_url('notifications/seen'); ?>',{},function(data){
                $("#total-noti").hide();

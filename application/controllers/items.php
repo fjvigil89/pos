@@ -59,6 +59,7 @@ class Items extends Secure_area implements iData_controller
     //esto es solo para que salga la pag de los consultantes
 	//porque no tengo el modulo de home
 	function consultant($offset = 0)
+	//function view_consultant($offset = 0)
 	{
 		$params = $this->session->userdata('item_search_data') ? $this->session->userdata('item_search_data') : array('offset' => 0, 'order_col' => 'item_id', 'order_dir' => 'asc', 'search' => false, 'category' => false);
 

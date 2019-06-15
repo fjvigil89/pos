@@ -84,6 +84,8 @@ class Registers_movement extends Secure_area
 		$this->load->view('registers_movement/manage',$data);
 	}
 
+	
+
 	function operations($operation)
 	{	
 		if ($operation == "depositcash" || $operation == "withdrawcash" || $operation == "move_money") {			

@@ -14,6 +14,7 @@ PHP-Point-Of-Sale-Prev
 web.config
 /nbproject/private/
 sftp-config.json
+vendor/*
 
 #-------configuracion-----------
 #application/controllers/config.php

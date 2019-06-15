@@ -1,5 +1,6 @@
 <?php $this->load->view("partial/header"); ?>
 
+
 <!-- BEGIN PAGE TITLE -->
 <div class="page-title">
     <h1>
@@ -42,6 +43,7 @@
 
                 <div class="text-center">
                     <?php
+
 							if (isset($prev_item_id) && $prev_item_id)
 							{
 								echo anchor('items/view/'.$prev_item_id, "<i class='fa fa-chevron-left'></i> &nbsp;".lang('items_prev_item'), array('class' => 'btn btn-circle btn-sm green-jungle'));
@@ -1648,6 +1650,7 @@
 								'class'=>'submit_button btn btn-block btn-primary')
 								);
 							?>
+
             </div>
         </div>
     </div>
@@ -1663,6 +1666,7 @@ function eliminar_subcategoria(elemento) {
         $(padre).remove();
     }
 }
+
 
 function addsubcategory(elemento) {
     var padre = $(elemento).parent().parent().siblings('div');

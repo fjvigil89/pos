@@ -251,12 +251,20 @@
                         <div class="col-xs-12 col-md-12 col-lg-3 margin-bottom-05 ">
                             <a href="<?php echo site_url($controller_name.'/clear_state'); ?>" class="btn btn-info btn-block clear-state pull-right effect"><?php echo lang('common_clear_search'); ?></a>
                         </div>
+
 					<!--boton de consultor con permisos-->
 					<?php if($this->Employee->has_module_action_permission('items','consultant_price_item', $this->Employee->get_logged_in_employee_info()->person_id)){ ?>
                         <div class="col-xs-12 col-md-12 col-lg-3 margin-bottom-05 ">
                             <a href="<?php echo site_url('items/consultant'); ?>" class="btn btn-info btn-block clear-state pull-right effect"><?php echo lang('common_consultant'); ?></a>
                         </div>
 					<?php } ?>
+
+					<!--boton de consultor-->
+ <!--                       <div class="col-xs-12 col-md-12 col-lg-3 margin-bottom-05 ">
+                            <a href="<?php // echo site_url('items/view_consultant'); ?>" class="btn btn-info btn-block clear-state pull-right effect"><?php // echo lang('common_consultant'); ?></a>
+                        </div>
+--->						
+
                     </div>
 
 					<?php if($total_rows > $per_page) { ?>

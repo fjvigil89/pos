@@ -1,6 +1,9 @@
 <?php
+
 require_once("report.php");
+
 class Detailed_profit_and_loss extends Report
+
 {
 	function __construct()
 	{

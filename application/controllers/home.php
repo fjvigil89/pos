@@ -128,7 +128,9 @@ class Home extends Secure_area
 		$data['total_locations']=$this->Location->count_all();
 		$data['total_giftcards']=$this->Giftcard->count_all();
         $data['total_sales']=$this->Sale->count_all();
-		$this->load->view("home",$data);
+        $this->load->view("home",$data);
+        
+        
     }
     function get_sales_store($start_date,$end_date){
         $data = $this->Statistics->get_all_sales_by_store($start_date,$end_date);
