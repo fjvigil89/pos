@@ -25,11 +25,12 @@
                                             <div class="row">
                                                 <div class="col-sm-12 ">
                                                     <div class="form-group">
-                                                        <label for="title" class="col-md-12 control-label wide">
-                                                            <a class="help_config_options tooltips"
-                                                                data-placement="left"
-                                                                title="">Nombre</a>
+                                                        <label for="conetario"
+                                                            class="col-md-12 control-label requireds ">
+                                                            <a class="help_config_required   tooltips"
+                                                                data-placement="left" title="">Nombre:</a>
                                                         </label>
+
                                                         <div class="col-md-12">
                                                             <?php echo form_input(array(
 															'name'=>'name',
@@ -43,11 +44,8 @@
 
                                                 <div class="col-sm-12 ">
                                                     <div class="form-group">
-                                                        <label for="conetario"
-                                                            class="col-md-12 control-label requireds ">
-                                                            <a class="help_config_required   tooltips"
-                                                                data-placement="left"
-                                                                title=""><?=lang("items_image")?>:</a>
+                                                        <label for="conetario" class="col-md-12 control-label ">
+                                                            <?=lang("items_image")?>:
                                                         </label>
                                                         <div class="col-md-12">
                                                             <?php echo form_upload(array(
@@ -62,6 +60,12 @@
 														?>
                                                         </div>
                                                     </div>
+                                                </div>
+                                                <div class="col-sm-12 ">
+                                                    <p style="color:red">
+                                                        *Tamaño máximo por imagen 5MG. - Tipo permitido: .gif, .jpg, .jpeg, o ,png<br>
+                                                        *Ancho y alto máximo 2000px x 2000px
+                                                    </p>
                                                 </div>
 
                                                 <div class="   col-md-4 col-md-offset-5 margin-top-10 ">
@@ -96,15 +100,15 @@
                                         <tr>
                                             <td width="20%"> <?=$category["name"]?> </td>
                                             <td width="15%" align="center">
-                                                <a href="<?=base_url().$img?>"
-                                                    class="" title="<?=$category["name_img_original"]?>">
-                                                    <img id=""
-                                                        src="<?=base_url().$img?>"
-                                                        width="40" height="35" class="img-polaroid">
+                                                <a href="<?=base_url().$img?>" class=""
+                                                    title="<?=$category["name_img_original"]?>">
+                                                    <img id="" src="<?=base_url().$img?>" width="40" height="35"
+                                                        class="img-polaroid">
                                                 </a>
                                             </td>
                                             <td width="12%" class="text-center">
-                                                <a  href="javascript:void(0)"  onclick="editar_category(<?=$category['id']?>,this)"
+                                                <a href="javascript:void(0)"
+                                                    onclick="editar_category(<?=$category['id']?>,this)"
                                                     class="btn btn-xs  default update-items"
                                                     title="Actualizar Artículo"><i class="fa fa-pencil"></i>Editar</a>
                                                 <a onclick=" delete_category(<?=$category['id']?>,this)"
@@ -123,7 +127,7 @@
                     <hr>
                     <div class="col-md-12 text-center">
                         <div class="form-actions ">
-                        
+
                             <?php echo form_button(array(
 								'type'=>'button',								
 								'id'=>'cancelar',
@@ -148,15 +152,26 @@ $("#image").fileinput({
     overwriteInitial: true,
     initialCaption: ""
 });
-var url_img ="<?=base_url().$path_img?>";
-var url_2 =  '<?=site_url("config/save_catebory")?>';
+var url_img = "<?=base_url().$path_img?>";
+var url_2 = '<?=site_url("config/save_catebory")?>';
 $('#table-categories').DataTable();
 
-$("#form_category").submit(function(e) {
-    e.preventDefault();
+
+function delete_category(id, elemento) {
+    var url = '<?=site_url("config/delete_category")?>/' + id;
+    if (confirm("¿Desea eliminar esta categoría?")) {
+        $.post(url, {}, function(data) {
+            $(elemento).closest('tr').remove();
+        });
+    }
+
+}
+
+function send_form_category() {
     $("#submit-button").html("Guardando...");
 
     $("#submit-button").prop('disabled', true);
+        
     var data = new FormData();
     jQuery.each($('input[type=file]')[0].files, function(i, file) {
         data.append('image', file);
@@ -173,23 +188,30 @@ $("#form_category").submit(function(e) {
         processData: false,
         type: 'POST',
         success: function(data) {
+            $("#submit-button").html("Guardar");
+            $("#submit-button").prop('disabled', false);
             data = JSON.parse(data);
-            if (data.success == true) {
-				$("#submit-button").html("Guardar");
-				$("#submit-button").prop('disabled', false);
-				if(data["data"].is_new){
-					$('#table-categories').dataTable().fnAddData( 
-						[
-							data["data"].name,
-							`<div class="text-center"> <img width="40" height="35" class="img-polaroid" src="${url_img+"/"+data["data"].img}"></div>`,
-							""
-						] 
-					);
-					toastr.success("Registro Guardado...");
 
-				}
-				else
-					toastr.success("Registro actualizado...");
+            if (data.success == true) {
+
+                if (data["data"].is_new) {
+                    var _img
+                    if (data["data"].img != "" && data["data"].img != null) {
+                        _img = url_img + "/" + data["data"].img
+                    } else {
+                        _img = "<?=base_url()?>img/no-photo.jpg"
+                    }
+                    $('#table-categories').dataTable().fnAddData(
+                        [
+                            data["data"].name,
+                            `<div class="text-center"> <img width="40" height="35" class="img-polaroid" src="${_img}"></div>`,
+                            ""
+                        ]
+                    );
+                    toastr.success("Registro Guardado...");
+
+                } else
+                    toastr.success("Registro actualizado...");
 
                 $('#form_category').attr('action', url_2);
                 $('#form_category')[0].reset();
@@ -198,33 +220,49 @@ $("#form_category").submit(function(e) {
 
                 $("#submit-button").html("Guardar");
                 $("#submit-button").prop('disabled', false)
-			}
-		}
+            }
+        }
     });
+}
+
+function editar_category(id, elemento) {
+    var url = '<?=site_url("config/get_category")?>/' + id;
+
+    $.get(url, {}, function(data) {
+        data = JSON.parse(data);
+
+        if (data.existe) {
+            $('#form_category').attr('action', url_2 + "/" + id);
+            $("#name").val(data.data.name);
+            $("#name").focus();
+        } else
+            toastr.error("Categoría no no existe ", <?=json_encode(lang('common_error'))?>);
+    });
+}
+
+$('#form_category').validate({
+    submitHandler: function(form) {
+        send_form_category()
+
+    },
+    errorClass: "text-danger",
+    errorElement: "span",
+    highlight: function(element, errorClass, validClass) {
+        $(element).parents('.form-group').removeClass('has-success').addClass('has-error');
+    },
+    unhighlight: function(element, errorClass, validClass) {
+        $(element).parents('.form-group').removeClass('has-error').addClass('has-success');
+    },
+    rules: {
+        name: {
+            required: true,
+        }
+    },
+    messages: {
+
+        name: {
+            required: "Nombre es requerido",
+        }
+    }
 });
-
-function delete_category(id,elemento) {
-	var url = '<?=site_url("config/delete_category")?>/'+id;
-	
-    $.post(url, {}, function(data) {
-		$(elemento).closest('tr').remove();
-	});
-	
-}
-function editar_category(id, elemento)
-{
-	var url = '<?=site_url("config/get_category")?>/'+id;
-
-    $.get(url, {}, function(data) {		
-		data = JSON.parse(data);
-		
-		if(data.existe)
-		{			
-			   $('#form_category').attr('action', url_2+"/"+id);
-			   $("#name").val(data.data.name);			  
-		}else
-			toastr.error("Categoría no no existe ", <?=json_encode(lang('common_error'))?>);
-	});
-}
- 
 </script>

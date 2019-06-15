@@ -248,7 +248,7 @@
                         $("#name").html(data.name);
                         $("#price").html(data.price);
                     }
-                    $("#h-code").html('<B>Code:</B>  <BLINK>' + code_input + '</BLINK>');
+                    $("#h-code").html('<B>Code:</B>  <BLINK>' + data_send.item + '</BLINK>');
                     $("#info-item").show();
                     <?php if($show_carrousel){
                          echo '$("#contenedor-caroousel").hide();';

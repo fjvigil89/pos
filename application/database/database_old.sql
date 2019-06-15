@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-05-2019 a las 19:34:22
+-- Tiempo de generación: 15-05-2019 a las 00:31:30
 -- Versión del servidor: 10.1.28-MariaDB
 -- Versión de PHP: 5.6.32
 
@@ -174,7 +174,7 @@ INSERT INTO `phppos_app_config` (`key`, `value`) VALUES
 ('inhabilitar_subcategory1', '0'),
 ('initial_config', '0'),
 ('language', 'spanish'),
-('last_login', '2019-04-26 23:29:28'),
+('last_login', '2019-05-14 18:30:09'),
 ('legacy_detailed_report_export', '0'),
 ('license', '13e54b2467f91de15325e00fd35abb35'),
 ('license_type', 'lifetime'),
@@ -890,6 +890,7 @@ INSERT INTO `phppos_modules` (`name_lang_key`, `desc_lang_key`, `sort`, `icon`, 
 ('module_sales', 'module_sales_desc', 70, 'shopping-cart', 'sales', 'grey-gallery'),
 ('module_suppliers', 'module_suppliers_desc', 40, 'download', 'suppliers', 'yellow-gold'),
 ('module_technical_supports', 'module_technical_supports_desc', 142, 'wrench', 'technical_supports', 'green-haze'),
+('module_viewers', 'module_viewers_desc', 306, 'eye', 'viewers', 'red-soft'),
 ('module_warehouse', 'module_warehouse_desc', 146, 'university', 'warehouse', 'grey');
 
 -- --------------------------------------------------------
@@ -919,11 +920,13 @@ INSERT INTO `phppos_modules_actions` (`action_id`, `module_id`, `action_name_key
 ('add_update', 'registers_movement', 'module_action_add_update', 213),
 ('add_update', 'suppliers', 'module_action_add_update', 100),
 ('add_update', 'technical_supports', 'module_action_add_update', 308),
+('add_update_img', 'viewers', 'module_action_add_update_img', 200),
 ('agregar_o_sustraer', 'items', 'module_action_agregar_o_sustraer', 502),
 ('allow_graphics_arnings_monsth', 'reports', 'module_allow_graphics_arnings_monsth', 332),
 ('allow_graphics_by_store', 'reports', 'module_allow_graphics_by_store', 311),
 ('assign_all_locations', 'employees', 'module_action_assign_all_locations', 151),
 ('cancel_sale_suspend', 'sales', 'module_cancel_sale_suspend', 313),
+('config_viewer', 'viewers', 'module_action_config_viewer', 201),
 ('delete', 'customers', 'module_action_delete', 20),
 ('delete', 'employees', 'module_action_delete', 140),
 ('delete', 'giftcards', 'module_action_delete', 210),
@@ -1145,6 +1148,7 @@ INSERT INTO `phppos_permissions` (`module_id`, `person_id`) VALUES
 ('sales', 1),
 ('suppliers', 1),
 ('technical_supports', 1),
+('viewers', 1),
 ('warehouse', 1);
 
 -- --------------------------------------------------------
@@ -1254,7 +1258,9 @@ INSERT INTO `phppos_permissions_actions` (`module_id`, `person_id`, `action_id`)
 ('suppliers', 1, 'search'),
 ('technical_supports', 1, 'add_update'),
 ('technical_supports', 1, 'delete'),
-('technical_supports', 1, 'search');
+('technical_supports', 1, 'search'),
+('viewers', 1, 'add_update_img'),
+('viewers', 1, 'config_viewer');
 
 -- --------------------------------------------------------
 
@@ -2007,6 +2013,41 @@ CREATE TABLE `phppos_transfer_files` (
   `date_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `phppos_viewer_cart`
+--
+
+CREATE TABLE `phppos_viewer_cart` (
+  `id` int(11) NOT NULL,
+  `employee_id` int(11) NOT NULL,
+  `cart_data` mediumtext NOT NULL,
+  `payments` mediumtext NOT NULL,
+  `toke` varchar(255) NOT NULL,
+  `is_cart` int(11) NOT NULL,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `overwrite_tax` tinyint(4) NOT NULL DEFAULT '0',
+  `new_tax` mediumtext NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `phppos_viewer_file`
+--
+
+CREATE TABLE `phppos_viewer_file` (
+  `id` int(11) NOT NULL,
+  `original_name` text NOT NULL,
+  `new_name` varchar(80) NOT NULL,
+  `type` int(11) NOT NULL,
+  `location_id` int(11) NOT NULL,
+  `title` text,
+  `description` text,
+  `deleted` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 --
 -- Índices para tablas volcadas
 --
@@ -2675,6 +2716,20 @@ ALTER TABLE `phppos_transfer_files`
   ADD PRIMARY KEY (`file_id`);
 
 --
+-- Indices de la tabla `phppos_viewer_cart`
+--
+ALTER TABLE `phppos_viewer_cart`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `employee_id` (`employee_id`),
+  ADD UNIQUE KEY `toke` (`toke`);
+
+--
+-- Indices de la tabla `phppos_viewer_file`
+--
+ALTER TABLE `phppos_viewer_file`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
@@ -2983,6 +3038,18 @@ ALTER TABLE `phppos_technical_supports_ubi_equipos`
 --
 ALTER TABLE `phppos_transfer_files`
   MODIFY `file_id` bigint(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `phppos_viewer_cart`
+--
+ALTER TABLE `phppos_viewer_cart`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `phppos_viewer_file`
+--
+ALTER TABLE `phppos_viewer_file`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Restricciones para tablas volcadas

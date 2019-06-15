@@ -344,7 +344,7 @@
                 <div class="top-menu">
                     <ul class="nav navbar-nav pull-right">
                         <?php 
-                            $notifications = $this->Notification->get_all();
+                            $notifications = $this->Notification->get_all(8);
                             //$pending ''= count_by_state(1);
                             $total = $this->Notification->count_pending();
                             $icon = "fa-refresh";
@@ -374,7 +374,14 @@
                                             <li style="<?=$color?>">
                                                 <a  href="<?=site_url('notifications/view/'.$notification->id)?>">
                                                     <span class="photo">
-                                                        <img src="<?=base_url()?>/img/actualizar.png" class="img-circle" alt=""> </span>
+                                                        <?php 
+                                                            if($notification->img == null)
+                                                                echo '<img src="'.base_url().'/img/actualizar.png class="img-circle" alt=""> ';
+                                                            else
+                                                                echo '<img src="'.site_url("app_files/view_notification/".$notification->id).'"> ';
+                                                            
+                                                        ?>
+                                                    </span>
                                                     <span  class="subject">
                                                         <span style="color:#7CA0BF"  class="from"><?= H($notification->title);?></span>
                                                         <span class="time"><?= date(get_date_format(), strtotime($notification->created))?></span>

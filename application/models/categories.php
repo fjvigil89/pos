@@ -52,8 +52,8 @@ class Categories extends CI_Model
     {
         
         $info = $this->get_info($id);
-
-        unlink($path_long."/". $info->img);
+        if(!empty( $info->img))
+            unlink($path_long."/". $info->img);
 
         $this->db->where('id',$id);
         $result =  $this->db->update('categories',array("deleted"=>1));
