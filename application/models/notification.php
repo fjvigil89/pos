@@ -80,7 +80,7 @@ class Notification extends CI_Model{
    function count_pending($type = 1 ,  $for_whom = 1)
    {
        
-      $db2 = $this->load->database('login',true);
+      /*$db2 = $this->load->database('login',true);
       $ids_see = $this->ids_see(0,true);  
       $ids_see = count( $ids_see) == 0 ? array(0) : $ids_see;
       $db2->from('notifications');
@@ -91,6 +91,7 @@ class Notification extends CI_Model{
       $total = $db2->count_all_results();
 
       return $total;
+      */
       
    }
    function get_info($id)
@@ -105,7 +106,7 @@ class Notification extends CI_Model{
    function get_all($limit = 12, $offset = 0, $type = 1, $for_whom = 1)
    {
       
-      $db2 = $this->load->database('login',true);      
+     /* $db2 = $this->load->database('login',true);      
       $ids_see = $this->ids_see();
       $inSql = implode(",",$ids_see);
       $inSql = $inSql == "" ? "0" : $inSql;
@@ -121,6 +122,7 @@ class Notification extends CI_Model{
       $result = $db2->get()->result();
 
       return $result;
+      */
    }
 }
 ?>
