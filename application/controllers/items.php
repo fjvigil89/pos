@@ -309,7 +309,7 @@ class Items extends Secure_area implements iData_controller
         $categories_tem = $this->Categories->get_all();
         $categories[""]="Seleccione";
 
-        foreach ($categories_tem as $category) 
+        foreach ($categories_tem as $category)  
             $categories[$category["name"]] = $category["name"];
         //$item_categories_items_result = $this->Item->get_all_categories()->result();
         

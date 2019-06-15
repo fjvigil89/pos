@@ -7,7 +7,7 @@ class Config extends Secure_area
 		parent::__construct('config');
 		$this->load->model('Denomination_currency');
 		$this->load->model('Change_house'); 
-		
+		$this->load->model('Categories');
 	}
 	function get_url_video($name)
 	{
