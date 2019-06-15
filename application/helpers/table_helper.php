@@ -798,8 +798,8 @@ function get_items_manage_table($items,$controller)
 	    $show_inventory_model ? $CI->lang->line('items_model') : NULL,
 	    $show_inventory_colour ? $CI->lang->line('items_colour') : NULL,
 	    $show_inventory_brand ? $CI->lang->line('items_brand') : NULL,
-		//$CI->lang->line('items_cost_price'),
-		//$CI->lang->line('items_unit_price'),
+		$CI->lang->line('items_cost_price'),
+		$CI->lang->line('items_unit_price'),
 		$CI->lang->line('items_quantity'),
 		$CI->lang->line('items_quantity_warehouse'),
 		$CI->lang->line('items_inventory'),
@@ -820,7 +820,7 @@ function get_items_manage_table($items,$controller)
 	    $show_inventory_model ? $CI->lang->line('items_model') : NULL,
 	    $show_inventory_colour ? $CI->lang->line('items_colour') : NULL,
 	    $show_inventory_brand ? $CI->lang->line('items_brand') : NULL,
-		//$CI->lang->line('items_unit_price'),
+		$CI->lang->line('items_unit_price'),
 		$CI->lang->line('items_quantity'),
 		$CI->lang->line('items_inventory'),
 		$CI->lang->line('items_quantity_warehouse'),
@@ -1000,7 +1000,7 @@ function get_item_consultant_data_row($item,$controller)
 							</a>
 						</td>";
 	}
-	$table_data_row.='<td width="13%"><a href="'.site_url('home/view_item_modal').'/'.$item->item_id.'" data-toggle="modal" data-target="#myModal">'.H($item->name).'</a></td>';
+	$table_data_row.='<td width="40%"><a href="'.site_url('home/view_item_modal').'/'.$item->item_id.'" data-toggle="modal" data-target="#myModal">'.H($item->name).'</a></td>';
 	
 	/*
 	if($has_cost_price_permission)
@@ -1115,15 +1115,13 @@ function get_item_data_row($item,$controller)
 	{
 		$table_data_row.='<td width="9%">'.$item->marca.'</td>';
 	}
-	
-	//eliminar de las tablas los valores de precio y costo
-	/*
 	if($has_cost_price_permission)
 	{
 		$table_data_row.='<td width="9%" align="right">'.to_currency($item->location_cost_price ? $item->location_cost_price: $item->cost_price, 10).'</td>';
 	}
+	
 	$table_data_row.='<td width="9%" align="right">'.to_currency($item->location_unit_price ? $item->location_unit_price : $item->unit_price, 10).'</td>';
-	*/
+	
 	$table_data_row.='<td width="9%" align="center">'.to_quantity($item->quantity).'</td>';
     
     if ( $CI->Employee->has_module_action_permission('items','see_quantity_defect', $CI->Employee->get_logged_in_employee_info()->person_id) ) { 

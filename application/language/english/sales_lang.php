@@ -1,4 +1,11 @@
 <?php
+$lang['config_value_point_accumulated']='Accumulated points';
+$lang['sales_value_receiving'] = 'Purchase';
+$lang['sales_base_tax'] = 'Tax base';
+$lang['sales_payment_value'] = 'Value';
+$lang['sales_payment_type'] = 'Type';
+$lang['sales_payment_date'] = 'Date';
+$lang['saleS_total_invoice'] = 'TOTAL INVOICE';
 $lang['sell_lower_cost_price']="Sell ​​at a lower cost price";
 $lang['suspend_notes']="Notes";
 $lang['expenses']="Expenses";

@@ -7,18 +7,18 @@
 			if ($has_cost_price_permission)
 			{
 			?>
-				var table_columns = ["","item_id",'name','category','cost_price','unit_price','quantity','quantity_warehouse','','',''];
+				var table_columns = ["","item_id",'name','unit_price','quantity','quantity_warehouse','','',''];
 				//var table_columns = ["","item_id","item_number","",'name','category','size','','','','cost_price','unit_price','quantity','','','',''];				
 			<?php	
 			}
 			else
 			{
 			?>
-				var table_columns = ["","item_id",'name','category','unit_price','quantity','quantity_warehouse','','',''];	
+				var table_columns = ["","item_id",'name','unit_price','quantity','quantity_warehouse','','',''];	
 			<?php	
 			}
 			?>
-			enable_sorting("<?php echo site_url("$controller_name/sorting"); ?>",table_columns, <?php echo $per_page; ?>, <?php echo json_encode($order_col);?>, <?php echo json_encode($order_dir);?>);
+			enable_sorting("<?php echo site_url("$controller_name/sorting_consult"); ?>",table_columns, <?php echo $per_page; ?>, <?php echo json_encode($order_col);?>, <?php echo json_encode($order_dir);?>);
 		    enable_select_all();
 		    enable_checkboxes();
 		    enable_row_selection();
@@ -178,6 +178,9 @@
                         </form>
                         <div class="col-xs-12 col-md-12 col-lg-3 margin-bottom-05 ">
                             <a href="<?php echo site_url($controller_name.'/clear_state_consultant'); ?>" class="btn btn-info btn-block clear-state pull-right effect"><?php echo lang('common_clear_search'); ?></a>
+                        </div>
+						<div class="col-xs-12 col-md-12 col-lg-3 margin-bottom-05 ">
+                            <a href="<?php echo site_url('items/'); ?>" class="btn btn-info btn-block clear-state pull-right effect"><?php echo lang('module_items'); ?></a>
                         </div>
 					
 						

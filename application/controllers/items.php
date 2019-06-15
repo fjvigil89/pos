@@ -63,11 +63,11 @@ class Items extends Secure_area implements iData_controller
 		$params = $this->session->userdata('item_search_data') ? $this->session->userdata('item_search_data') : array('offset' => 0, 'order_col' => 'item_id', 'order_dir' => 'asc', 'search' => false, 'category' => false);
 
         if ($offset != $params['offset']) {
-            redirect('items/index/' . $params['offset']);
+            redirect('items/consultant/' . $params['offset']);
         }
 
         $this->check_action_permission('search');
-        $config['base_url'] = site_url('items/sorting');
+        $config['base_url'] = site_url('items/sorting_consult');
         $config['per_page'] = $this->config->item('number_of_items_per_page') ? (int) $this->config->item('number_of_items_per_page') : 20;
         $data['controller_name'] = strtolower(get_class());
         $data['per_page'] = $config['per_page'];
@@ -126,6 +126,34 @@ class Items extends Secure_area implements iData_controller
         $this->pagination->initialize($config);
         $data['pagination'] = $this->pagination->create_links();
         $data['manage_table'] = get_items_manage_table_data_rows($table_data, $this);
+        echo json_encode(array('manage_table' => $data['manage_table'], 'pagination' => $data['pagination']));
+    }
+
+    public function sorting_consult()
+    {
+        $this->check_action_permission('search');
+        $search = $this->input->post('search') ? $this->input->post('search') : "";
+        $category = $this->input->post('category');
+
+        $per_page = $this->config->item('number_of_items_per_page') ? (int) $this->config->item('number_of_items_per_page') : 20;
+        $offset = $this->input->post('offset') ? $this->input->post('offset') : 0;
+        $order_col = $this->input->post('order_col') ? $this->input->post('order_col') : 'name';
+        $order_dir = $this->input->post('order_dir') ? $this->input->post('order_dir') : 'asc';
+
+        $item_search_data = array('offset' => $offset, 'order_col' => $order_col, 'order_dir' => $order_dir, 'search' => $search, 'category' => $category);
+        $this->session->set_userdata("item_search_data", $item_search_data);
+        if ($search || $category) {
+            $config['total_rows'] = $this->Item->search_count_all($search, $category);
+            $table_data = $this->Item->search($search, $category, $per_page, $this->input->post('offset') ? $this->input->post('offset') : 0, $this->input->post('order_col') ? $this->input->post('order_col') : 'name', $this->input->post('order_dir') ? $this->input->post('order_dir') : 'asc');
+        } else {
+            $config['total_rows'] = $this->Item->count_all();
+            $table_data = $this->Item->get_all($per_page, $this->input->post('offset') ? $this->input->post('offset') : 0, $this->input->post('order_col') ? $this->input->post('order_col') : 'name', $this->input->post('order_dir') ? $this->input->post('order_dir') : 'asc');
+        }
+        $config['base_url'] = site_url('items/sorting_consult');
+        $config['per_page'] = $per_page;
+        $this->pagination->initialize($config);
+        $data['pagination'] = $this->pagination->create_links();
+        $data['manage_table'] = get_items_manage_consultant_table_data_rows($table_data, $this);
         echo json_encode(array('manage_table' => $data['manage_table'], 'pagination' => $data['pagination']));
     }
 
@@ -1010,7 +1038,7 @@ class Items extends Secure_area implements iData_controller
     public function clear_state_consultant()
     {
         $this->session->unset_userdata('item_search_data');
-        redirect('items/view_consultant');
+        redirect('items/consultant');
         
     }
 
