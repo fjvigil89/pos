@@ -78,6 +78,7 @@ if($this->Appconfig->es_franquicia()==true){
 
 		function Split_by_miles(input)
 		{
+			/*
 			//funcion en Jquery para separar numeros en milles
 			input.keyup(function(event) {
 				// skip for arrow keys
@@ -94,7 +95,7 @@ if($this->Appconfig->es_franquicia()==true){
 				});
 			});
 			//fin de separar numeros
-
+			*/
 
 		}
 
