@@ -140,16 +140,31 @@
 						</div>
 
 						<div class="form-group">
-							<?php echo form_label('<a class="help_config_required tooltips" data-placement="left" title="'.lang("items_category_help").'">'.lang('items_category').'</a>'.':', 'category',array('class'=>'col-md-3 control-label requireds wide')); ?>
-							<div class="col-md-8">
-								<?php echo form_input(array(
-									'class'=>'form-control form-inps',
+                    <?php echo form_label(lang('items_category').':', 'category',array('class'=>'col-md-3 control-label requireds wide')); ?>
+                    <div class="col-md-3">
+                    <?php
+                                     				//$item_info->category, 'id="category" data-live-search="true" class="bs-select form-control"'); ?>
+                       <?php echo form_input(array(
 									'name'=>'category',
-									'id'=>'category',
-									'value'=>$item_kit_info->category)
+                                    'id'=>'category',
+                                    "list"=>"category_2",
+                                    "placeholder"=>"Selecciones una categoría",
+                                    "autocomplete"=> "off",
+									'class'=>'form-control form-inps',
+									'value'=>$item_info->category)
 								);?>
-							</div>
-						</div>
+                               
+                                <datalist id="category_2">
+                                <?php foreach($categories as $category):?>
+                                    <option value="<?=$category?>">
+                                    
+                            <?php endforeach; ?>
+                                </datalist>
+                    </div>
+                    <div class="col-md-1">
+									<a href="<?=site_url("category/categories_modal")?>" class="btn btn-medium green-seagreen effect" id="modal-serial" data-toggle="modal" data-target="#myModal" title="Perzonalizar número de factura"><i class="fa fa-plus hidden-lg fa fa-2x tip-bottom" data-original-title=""></i> <span class="visible-lg">Nueva categoría</span></a>
+									</div>
+                </div>
 
 						<div class="form-group">
 							<?php echo form_label(lang('item_kits_description').':', 'description',array('class'=>'col-md-3 control-label')); ?>
@@ -783,12 +798,6 @@
 		$(document).ready(function()
 		{
 		    setTimeout(function(){$(":input:visible:first","#item_kit_form").focus();},100);
-			$( "#category" ).autocomplete({
-				source: "<?php echo site_url('items/suggest_category');?>",
-				delay: 300,
-				autoFocus: false,
-				minLength: 0
-			});
 			
 			$(".override_default_tax_checkbox, .override_prices_checkbox, .override_default_commission").change(function()
 			{
@@ -854,7 +863,14 @@
 							<?php } ?>				
 						<?php } ?>					
 						name:"required",
-						category:"required",
+						category:{
+							required:true,
+							remote: {
+								url: "<?php echo site_url('items/category_exists');?>",
+								type: "post"
+
+							}
+						},
 						unit_price: "number",
 						cost_price: "number"
 					},
@@ -884,7 +900,10 @@
 							<?php } ?>				
 						<?php } ?>
 						name:<?php echo json_encode(lang('items_name_required')); ?>,
-						category:<?php echo json_encode(lang('items_category_required')); ?>,
+						category: {
+							required:<?php echo json_encode(lang('items_category_required')); ?>,
+							remote: "La categoría no está registrada" 
+						},
 						unit_price: <?php echo json_encode(lang('items_unit_price_number')); ?>,
 						cost_price: <?php echo json_encode(lang('items_cost_price_number')); ?>
 					}

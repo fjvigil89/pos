@@ -6,6 +6,7 @@ class Item_kits extends Secure_area implements iData_controller
 	function __construct()
 	{
 		parent::__construct('item_kits');
+		$this->load->model("Categories");
 	}
 
 	function index($offset=0)
@@ -173,7 +174,13 @@ class Item_kits extends Secure_area implements iData_controller
 		$data['tier_prices'] = array();
 		$data['tier_type_options'] = array('unit_price' => lang('items_fixed_price'), 'percent_off' => lang('items_percent_off'));
 		$data['redirect']=$redirect;
-		
+
+		$categories_tem = $this->Categories->get_all();
+        $categories[""]="Seleccione";
+		foreach ($categories_tem as $category)  
+			$categories[$category["name"]] = $category["name"];
+	
+		$data["categories"] =  $categories;
 		
 		foreach($this->Location->get_all()->result() as $location)
 		{
@@ -325,7 +332,7 @@ class Item_kits extends Secure_area implements iData_controller
 							//If we are overriding prices and we have a price/percent, add..otherwise delete
 							if ($override_prices && $price_or_percent)
 							{				
-								$tier_data=array('tier_id'=>$tier_id);
+								$tier_data = array('tier_id' => $tier_id);
 								$tier_data['item_kit_id'] = isset($item_data['item_kit_id']) ? $item_data['item_kit_id'] : $item_kit_id;
 								$tier_data['location_id'] = $location_id;
 							

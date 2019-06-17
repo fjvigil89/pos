@@ -130,8 +130,7 @@
                     <?php echo form_label(lang('items_category').':', 'category',array('class'=>'col-md-3 control-label requireds wide')); ?>
                     <div class="col-md-3">
                     <?php
-                        if($item_info->category != "")
-                             $categories["$item_info->category"] = $item_info->category;
+                        
                         //echo form_dropdown("category",  $categories, 
 		                                				//$item_info->category, 'id="category" data-live-search="true" class="bs-select form-control"'); ?>
                        <?php echo form_input(array(
