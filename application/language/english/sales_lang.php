@@ -13,11 +13,12 @@ $lang['credito']="Credits";
 $lang['other_media']="Others means";
 $lang['datafonos_tarjetas']="Datafonos (Cards)";
 // movimiento caja gastos 
+$lang["sales_quotes_save"]="Guardar contizacón";
 $lang['deliver_to']="Deliver to";
 $lang['option_register']="Option to register";
 $lang['move_money_category']="Transfer";
 $lang['move_money']="Transfer money";
-
+$lang['sales_editing_quote'] = 'Quotation edition';
 $lang['Nomina']='Payroll';
 $lang['Transporte']='Transportation';
 $lang['Comida']='Foot';

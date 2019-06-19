@@ -27,6 +27,14 @@ class Sales extends Secure_area
 			$this->sale_lib->add_item( $item["item_id"],$item["quantity"]);
 		}
 	}
+	function edit_quote($quote_id)
+	{
+		$this->sale_lib->clear_all();
+		//$this->load->library("quote_lib");
+		$this->sale_lib->set_quote_id($quote_id);
+		$this->sale_lib->copy_entire_sale_quotes($quote_id);
+		redirect('sales'); 
+	}
 	function items_sales_search(){
 		session_write_close();		
 		$suggestions = $this->Item->get_items_sales_search_suggestions($this->input->get('term'),30);
@@ -2023,7 +2031,7 @@ class Sales extends Secure_area
         $data['show_sales_inventory'] = $this->config->item('show_sales_inventory');
 		$data['show_sales_description'] = $this->config->item('show_sales_description');
 		$data['subcategory_of_items']=$this->config->item('subcategory_of_items');
-		
+		$data["change_quote_id"] =  $this->sale_lib->get_quote_id();
 		$data['is_tax_inclusive'] = $this->_is_tax_inclusive();
 		if ($data['is_tax_inclusive'] && count($this->sale_lib->get_deleted_taxes()) > 0)
 		{
@@ -2317,7 +2325,8 @@ class Sales extends Secure_area
 	 
 		if ($suspend_type ==3)
 		{
-			$sale_id = $this->quote->save_quote($data['cart'], $customer_id,$employee_id, $sold_by_employee_id, $comment,$show_comment_on_receipt,$data['payments'], $sale_id, $suspend_type,'','',$this->config->item('change_sale_date_when_suspending') ? date('Y-m-d H:i:s') : FALSE, $data['balance'],0,
+			$quote_id = $this->sale_lib->get_quote_id();
+			$sale_id = $this->quote->save_quote($data['cart'], $customer_id,$employee_id, $sold_by_employee_id, $comment,$show_comment_on_receipt,$data['payments'], $quote_id , $suspend_type,'','',$this->config->item('change_sale_date_when_suspending') ? date('Y-m-d H:i:s') : FALSE, $data['balance'],0,
 			$data["overwrite_tax"],$data["new_tax"]);
 		}
 

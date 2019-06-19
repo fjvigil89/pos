@@ -242,6 +242,14 @@ class Sale_lib
 	{
 		$this->CI->session->set_userdata('change_sale_date',$change_sale_date);
 	}
+	function set_quote_id($quote_id)
+	{
+		$this->CI->session->set_userdata('change_quote_id',$quote_id);
+	}
+	function get_quote_id() 
+	{
+		return $this->CI->session->userdata('change_quote_id') ;
+	}
 	
 	function get_comment() 
 	{
@@ -311,7 +319,11 @@ class Sale_lib
 		$this->CI->session->unset_userdata('previous_tier_id');
 		$this->CI->session->unset_userdata('selected_tier_id');
 	}
-	
+	function clear_quote_id()
+	{
+		$this->CI->session->unset_userdata('change_quote_id');
+		
+	}
 	function set_comment_on_receipt($comment_on_receipt) 
 	{
 		$this->CI->session->set_userdata('show_comment_on_receipt', $comment_on_receipt);
@@ -1241,7 +1253,12 @@ class Sale_lib
 					"tax_included"=>$item_kit_info->tax_included,
 					"has_sales_units" => 0,
 					"name_unit"=>null,
-					"has_selected_unit"=>0
+					"has_selected_unit"=>0,
+				    "unit_quantity_presentation" =>null,
+				    "unit_quantity_item" =>null,
+				    "unit_quantity"	=> null,	
+                    "price_presentation" => null,
+                    "unit_measurement" => null
 					)
 				);
 
@@ -1855,6 +1872,7 @@ class Sale_lib
 		$this->clear_new_tax();
 		$this->clear_currency();
 		$this->clear_generate_txt();
+		$this->clear_quote_id();
 		
 	}
 	

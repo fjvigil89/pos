@@ -163,11 +163,11 @@ class Carrito_lib
 				"precio_e_iva"=>0,	
 				//datos de unidades de ventas
 				"has_sales_units" => $item_info->has_sales_units,
-				"name_unit"=>null,
+				"name_unit" => null,
 				"has_selected_unit" => 0,
 				"unit_quantity_presentation" => null,// cantidad de unidad de la presentacion del producto
 				"unit_quantity_item" => null,//$unit_quantity_item != null ? $unit_quantity_item : $item_info->quantity_unit_sale,// canidad maxima de unidad  que tien el producto, esto solo se modifica por inventario
-				"unit_quantity"	=>null,	//cantidad a vender de la presentacion	
+				"unit_quantity"	=> null,	//cantidad a vender de la presentacion	
 				"price_presentation" => null,
 				"unit_measurement" => null
 				)
@@ -176,9 +176,9 @@ class Carrito_lib
 		if($itemalreadyinsale && ($item_info->is_serialized ==0) and $item_info->is_service==0 )
 		{	
 			$_line= ($line === FALSE ? $updatekey : $line);
-			$new_quantity= $items[$_line]['quantity']+=$quantity;		
-			$items[$_line]['quantity']=$new_quantity;
-			$items[$_line]['precio_e_iva']=$this->precio_con_iva($items[$_line]);
+			$new_quantity= $items[$_line]['quantity'] += $quantity;		
+			$items[$_line]['quantity'] = $new_quantity;
+			$items[$_line]['precio_e_iva'] = $this->precio_con_iva($items[$_line]);
 		}
 		else
 		{

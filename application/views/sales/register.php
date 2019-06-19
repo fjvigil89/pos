@@ -19,6 +19,10 @@
 					?>
 				</b>
 		</small>
+	<?php }else if($change_quote_id){?>
+		<b>
+			<?php echo lang('sales_editing_quote')." : ".$change_quote_id; ?>			
+		</b>
 	<?php } ?>
 
 	<div class="row">
@@ -85,7 +89,7 @@
 							
 										<?php if(count($cart) > 0){ ?>
 											<?php if ($mode != 'store_account_payment') { ?>
-												<a type="button" class="btn yellow-gold letter-space" id="quotes"><?php echo lang('sales_quotes_create');?></a>
+												<a type="button" class="btn yellow-gold letter-space" id="quotes"><?= $change_quote_id ? lang('sales_quotes_save'): lang('sales_quotes_create') ;?></a>
 												<a type="button" class="btn yellow-gold letter-space" id="suspend_sale_button"><?php echo lang('sales_suspend_sale');?></a>
 												<?php if($this->appconfig->get('enabled_for_Restaurant') == 1):?>
 													<a type="button" class="btn yellow-casablanca letter-space" id="print_sale_button"><i id="icon-print" class="fa fa-print"></i>Comanda</a>

@@ -1,4 +1,6 @@
 <?php
+$lang['config_value_point_accumulated']='Accumulated points';
+$lang['saleS_total_invoice'] = 'TOTAL INVOICE';
 $lang['sell_lower_cost_price']="Vender a menor precio del costo";
 $lang['suspend_notes']="Notas";
 $lang['expenses']="Gastos";
@@ -175,6 +177,8 @@ $lang['sales_use_saved_cc_info'] = 'Usar CC #';
 $lang['sales_charging_card_failed_please_try_again'] = 'Tarjeta de Crédito de carga favor, inténtalo de nuevo';
 $lang['sales_change_date'] = 'Cambie Fecha de Venta';
 $lang['sales_editing_sale'] = 'Edición de Venta';
+$lang['sales_editing_quote'] = 'Edición de cotización';
+$lang["sales_quotes_save"]="Guardar contizacón";
 $lang['sales_store_account'] = 'Línea de crédito';
 $lang['sales_customer_required_store_account'] = 'El cliente debe agregar este pago';
 $lang['sales_deleted_by'] = 'Eliminado por';
