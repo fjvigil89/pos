@@ -2617,17 +2617,19 @@ class Sales extends Secure_area
 	
 	function categories($offset = 0)
 	{
-		$categories = array();
-
+		$categories = array();		
 		$item_categories = array();
-		$item_categories_items_result = $this->Item->get_all_categories()->result();
+
+		$this->load->model("Categories");
+		$item_categories_items_result = $this->Categories->get_all(); //$this->Item->get_all_categories()->result();
 
 		foreach($item_categories_items_result as $category)
-		{
-			if ($category->category != lang('sales_giftcard') && $category->category != lang('sales_store_account_payment'))
+		{			
+			if ($category["name"] != lang('sales_giftcard') && $category["name"] != lang('sales_store_account_payment'))
 			{
-				$item_categories[] = $category->category;
+				$item_categories[] = $category["name"];
 			}
+
 		}
 
 		$item_kit_categories = array();

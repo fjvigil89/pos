@@ -18,7 +18,7 @@
                     <div class="col-md-12">
                         <div class="portlet light bordered">
                             <div class="portlet-body">
-                                <?php echo form_open('config/save_catebory',array('id'=>'form_category','class'=>'')); ?>
+                                <?php echo form_open('category/save_catebory',array('id'=>'form_category','class'=>'')); ?>
                                 <div class="portlet-body form ">
                                     <div class="form-body">
                                         <div class="form-group">
@@ -153,12 +153,12 @@ $("#image").fileinput({
     initialCaption: ""
 });
 var url_img = "<?=base_url().$path_img?>";
-var url_2 = '<?=site_url("config/save_catebory")?>';
+var url_2 = '<?=site_url("category/save_catebory")?>';
 $('#table-categories').DataTable();
 
 
 function delete_category(id, elemento) {
-    var url = '<?=site_url("config/delete_category")?>/' + id;
+    var url = '<?=site_url("category/delete_category")?>/' + id;
     if (confirm("¿Desea eliminar esta categoría?")) {
         $.post(url, {}, function(data) {
             $(elemento).closest('tr').remove();
@@ -226,7 +226,7 @@ function send_form_category() {
 }
 
 function editar_category(id, elemento) {
-    var url = '<?=site_url("config/get_category")?>/' + id;
+    var url = '<?=site_url("category/get_category")?>/' + id;
 
     $.get(url, {}, function(data) {
         data = JSON.parse(data);

@@ -47,11 +47,12 @@ class Items extends Secure_area implements iData_controller
         $data['order_dir'] = $params['order_dir'];
 
         $data['manage_table'] = get_items_manage_table($table_data, $this);
-        $data['categories'][''] = '--' . lang('items_select_category_or_all') . '--';
+       
         foreach ($this->Item->get_all_categories()->result() as $category) {
             $category = $category->category;
             $data['categories'][$category] = $category;
         }
+        $data['categories'][''] = '--' . lang('items_select_category_or_all') . '--';
 
         $this->load->view('items/manage', $data);
     }
@@ -308,13 +309,13 @@ class Items extends Secure_area implements iData_controller
         $categories_tem = $this->Categories->get_all();
         $categories[""]="Seleccione";
 
-        foreach ($categories_tem as $category) 
+        foreach ($categories_tem as $category)  
             $categories[$category["name"]] = $category["name"];
-        $item_categories_items_result = $this->Item->get_all_categories()->result();
+        //$item_categories_items_result = $this->Item->get_all_categories()->result();
         
         // categorias viejas, borrar cuando esté todo 100% implementado
-        foreach ($item_categories_items_result as $category) 
-            $categories[$category->category] = $category->category;
+        /*foreach ($item_categories_items_result as $category) 
+            $categories[$category->category] = $category->category;*/
         
         $data["categories"] =  $categories;
 

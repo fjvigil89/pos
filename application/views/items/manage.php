@@ -239,7 +239,22 @@
                                 </div>
                             </div>
                             <div class="col-xs-12 col-md-4 col-lg-3 margin-bottom-05">
-                                <?php echo form_dropdown('category', $categories, $category, 'id="category" class="bs-select form-control"'); ?>
+                                <?php //echo form_dropdown('category', $categories, $category, 'id="category" class="bs-select form-control"'); ?>
+								<?php echo form_input(array(
+									'name'=>'category',
+                                    'id'=>'category',
+                                    "list"=>"category_2",
+                                    "placeholder"=>"Seleccione una categoría",
+                                    "autocomplete"=> "off",
+									'class'=>'form-control form-inps',
+									'value'=>$category)
+								);?>
+                               
+                                <datalist id="category_2">
+                                <?php foreach($categories as $category):?>
+                                    <option value="<?=$category?>">
+                            	<?php endforeach; ?>
+                                </datalist>
                             </div>
                             <div class="col-xs-12 col-md-2 col-lg-3 margin-bottom-05">
                                 <?php echo form_dropdown('order_dir', array('asc'=>lang('minor_price'),'desc'=>lang('major_price')), '','id="filter_price" class="bs-select form-control"'); ?>
@@ -341,6 +356,7 @@
 	        });	         	  
 			
 		}); 
+		
       
   	</script>
 

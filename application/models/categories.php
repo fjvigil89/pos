@@ -4,7 +4,8 @@ class Categories extends CI_Model
     function  get_all()
     {
         $this->db->select('name,img,id,name_img_original');		
-		$this->db->from('categories');
+        $this->db->from('categories');
+        $this->db->order_by("name", "asc");
 		$this->db->where('deleted',0);
 		
 		return $this->db->get()->result_array();

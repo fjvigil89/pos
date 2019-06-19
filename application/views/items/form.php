@@ -130,19 +130,28 @@
                     <?php echo form_label(lang('items_category').':', 'category',array('class'=>'col-md-3 control-label requireds wide')); ?>
                     <div class="col-md-3">
                     <?php
-                        if($item_info->category != "")
-                             $categories["$item_info->category"] = $item_info->category;
-                        echo form_dropdown("category",  $categories, 
-		                                				$item_info->category, 'id="category" data-live-search="true" class="bs-select form-control"'); ?>
-                       <!-- <?php echo form_input(array(
+                        
+                        //echo form_dropdown("category",  $categories, 
+		                                				//$item_info->category, 'id="category" data-live-search="true" class="bs-select form-control"'); ?>
+                       <?php echo form_input(array(
 									'name'=>'category',
-									'id'=>'category',
+                                    'id'=>'category',
+                                    "list"=>"category_2",
+                                    "placeholder"=>"Selecciones una categoría",
+                                    "autocomplete"=> "off",
 									'class'=>'form-control form-inps',
 									'value'=>$item_info->category)
-								);?>-->
+								);?>
+                               
+                                <datalist id="category_2">
+                                <?php foreach($categories as $category):?>
+                                    <option value="<?=$category?>">
+                                    
+                            <?php endforeach; ?>
+                                </datalist>
                     </div>
                     <div class="col-md-1">
-									<a href="<?=site_url("config/categories_modal")?>" class="btn btn-medium green-seagreen effect" id="modal-serial" data-toggle="modal" data-target="#myModal" title="Perzonalizar número de factura"><i class="fa fa-plus hidden-lg fa fa-2x tip-bottom" data-original-title=""></i> <span class="visible-lg">Nueva categoría</span></a>
+									<a href="<?=site_url("category/categories_modal")?>" class="btn btn-medium green-seagreen effect" id="modal-serial" data-toggle="modal" data-target="#myModal" title="Perzonalizar número de factura"><i class="fa fa-plus hidden-lg fa fa-2x tip-bottom" data-original-title=""></i> <span class="visible-lg">Nueva categoría</span></a>
 									</div>
                 </div>
 
@@ -2009,7 +2018,7 @@ $(document).ready(function() {
     $('#item_form').validate({
         submitHandler: function(form) {
            
-            if($("#category").val() != ""){
+           
             $.post('<?php echo site_url("items/check_duplicate");?>', {
                     term: $('#name').val()
                 }, function(data) {
@@ -2028,7 +2037,7 @@ $(document).ready(function() {
                     }
                 }, "json")
                 .error(function() {});
-            }else  toastr.error("Debe seleccionar una categoría")
+           
         },
         errorClass: "text-danger",
         errorElement: "span",
@@ -2105,11 +2114,11 @@ $(document).ready(function() {
             },
             category: {
                 required: true,
-                /*remote: {
-                    url: "<?php //echo site_url('items/category_exists');?>",
+                remote: {
+                    url: "<?php echo site_url('items/category_exists');?>",
                     type: "post"
 
-                }*/
+                }
             },
             cost_price: {
                 required: true,
