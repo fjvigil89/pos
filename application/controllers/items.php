@@ -1157,6 +1157,7 @@ class Items extends Secure_area implements iData_controller
         $header_row[] = lang('reports_profit');
         foreach ($this->Tier->get_all()->result() as $tier) {
             $header_row[] = $tier->name;
+            $header_row[] = $tier->name.' porcentaje';
         }
         $header_row[] = lang('items_override_default_tax');
         for ($i = 1; $i < 6; $i++) {
@@ -1258,12 +1259,19 @@ class Items extends Secure_area implements iData_controller
                 $tier_id = $tier->id;
                 $tier_row = $this->Item->get_tier_price_row($tier_id, $r->item_id);
                 $value = '';
+                $value_porc = '';
 
                 if (is_object($tier_row) && property_exists($tier_row, 'tier_id')) {
-                    $value = $tier_row->unit_price !== null ? to_currency_no_money($tier_row->unit_price) : $tier_row->percent_off . '%';
+                    //$value = $tier_row->unit_price !== null ? to_currency_no_money($tier_row->unit_price) : $tier_row->percent_off . '%';
+                    if($tier_row->unit_price>=0 && $tier_row->percent_off<=0 ){
+                        $value=to_currency_no_money($tier_row->unit_price);
+                    }else{
+                        $value_porc = $tier_row->percent_off . '%'; 
+                    }
                 }
 
                 $row[] = $value;
+                $row[] = $value_porc;
             }
 
             $row[] = $r->override_default_tax ? 'y' : '';
@@ -1411,7 +1419,7 @@ class Items extends Secure_area implements iData_controller
                 $objPHPExcel = file_to_obj_php_excel($_FILES['file_path']['tmp_name']);
                 $sheet = $objPHPExcel->getActiveSheet();
                 $num_rows = $objPHPExcel->setActiveSheetIndex(0)->getHighestRow();
-                $price_tiers_count = $this->Tier->count_all();
+                $price_tiers_count = $this->Tier->count_all()*2; // por 2, porque se agrego una nueva columna de porcentaje
 
                 $price_taxes_count = 5;
                 $tax_included_prices = 0;
@@ -1614,13 +1622,13 @@ class Items extends Secure_area implements iData_controller
                             $tier_data = array('tier_id' => $tier_id);
                             $tier_data['item_id'] = isset($item_data['item_id']) ? $item_data['item_id'] : $item_id;
                             $tier_value = $sheet->getCellByColumnAndRow($item_unit_price_col_index + ($counter + 1), $k)->getValue();
-
-                            if ($tier_value) {
-                                if (strpos($tier_value, '%') === false) {
+                            $tier_value_porc = $sheet->getCellByColumnAndRow($item_unit_price_col_index + ($counter + 2), $k)->getValue();
+                            if ($tier_value || $tier_value_porc) {
+                                if ($tier_value) {
                                     $tier_data['unit_price'] = $tier_value;
                                     $tier_data['percent_off'] = null;
                                 } else {
-                                    $tier_data['percent_off'] = (int) $tier_value;
+                                    $tier_data['percent_off'] = (int) $tier_value_porc;
                                     $tier_data['unit_price'] = null;
                                 }
 

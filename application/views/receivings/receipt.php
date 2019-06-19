@@ -9,7 +9,7 @@
 
 	<div class="portlet light">
 		<div class="portlet-body">
-			<div id="receipt_wrapper" class="receipt_<?php echo $this->config->item('receipt_text_size');?>">				
+			<div id="receipt_wrapper"  style="padding:<?php echo $this->config->item('padding_ticket')?>px !important;"	class="receipt_<?php echo $this->config->item('receipt_text_size')?>";>				
 				<div id="receipt_header">
 					<div id="company_name">
 						<?php echo $this->config->item('company'); ?>
@@ -57,13 +57,13 @@
 				<!-- <div class="table-responsive">  -->
 				<table id="receipt_items">
 					<tr style="border-bottom: 1px solid #000000;border-top: 1px solid #000000;">
-						<th class="left_text_align" style="width:30%;"><?php echo lang('items_item'); ?></th>
-						<th class="left_text_align" style="width:15%;"><?php echo lang('receivings_cost_without_tax'); ?></th>
-						<th class="left_text_align" style="width:12%;"><?php echo lang('receivings_item_tax'); ?></th>
+						<th class="left_text_align" style="width:25%;"><?php echo lang('items_item'); ?></th>
+						<th class="left_text_align" style="width:20%;"><?php echo lang('receivings_cost_without_tax_short'); ?></th>
+						<th class="left_text_align" style="width:12%;"><?php echo lang('receivings_item_tax_short'); ?></th>
 						<th class="left_text_align" style="width:12%;"><?php echo lang('receivings_cost'); ?></th>
-						<th class="left_text_align" style="width:10%;"><?php echo lang('sales_quantity'); ?></th>
-						<th class="left_text_align" style="width:10%;"><?php echo lang('sales_discount'); ?></th>
-						<th class="left_text_align" style="width:10%;"><?php echo lang('receivings_cost_transport'); ?></th>
+						<th class="left_text_align" style="width:10%;"><?php echo lang('sales_quantity_short'); ?></th>
+						<th class="left_text_align" style="width:10%;"><?php echo lang('sales_discount_short'); ?></th>
+						<th class="left_text_align" style="width:10%;"><?php echo lang('receivings_cost_transport_short'); ?></th>
 						<th class="right_text_align" style="width:25%;"><?php echo lang('sales_total'); ?></th>
 					</tr>
 

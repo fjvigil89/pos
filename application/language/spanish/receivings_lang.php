@@ -1,4 +1,7 @@
 <?php
+$lang['receivings_cost_transport_short'] = 'Cost transp';
+$lang['receivings_item_tax_short']='Impu';
+$lang['receivings_cost_without_tax_short']='Cost sin impu';
 $lang['receivings_register']='Compra de Productos';
 $lang['receivings_mode']='Modo de Compras';
 $lang['receivings_receiving']='Recibir';
