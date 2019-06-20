@@ -358,39 +358,45 @@
                                     <span id="total-noti" class="badge badge-danger"> <?=$total?> </span>
                                 <?php } ?>
                             </a>
-                                <ul class="dropdown-menu">
+                                <ul class="dropdown-menu  ">
                                     <li style="color:white" class="external">                                       
                                             <?=lang("common_notifications")?></h3>
                                         <a  style="color:white" style="" href="<?=site_url('notifications/show')?>"><?=lang("common_view_all")?></a>
                                     </li>
                                     <li>
-                                        <div style ="background-color:#34495e;" class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 275px;"><ul class="dropdown-menu-list scroller" style="height: 275px; overflow: hidden; width: auto;" data-handle-color="#637283" data-initialized="1">
-                                        <?php foreach ($notifications as  $notification) {
-                                                $color ="";
-                                                if($notification->is_saw == 1)
-                                                    $color = "background-color:#627282;";
+                                        <div  class="slimScrollDiv" style=" background-color:#34495e; position: relative; overflow: hidden; width: auto; height: 275px;">
+                                            <ul class="dropdown-menu-list scrollable " style="overflow: auto; height: 275px;  width: auto;" data-handle-color="#637283" data-initialized="1">
+                                                <?php foreach ($notifications as  $notification) {
+                                                        $color ="";
+                                                        if($notification->is_saw == 1)
+                                                            $color = "background-color:#627282;";
 
-                                            ?>                                             
-                                            <li style="<?=$color?>">
-                                                <a  href="<?=site_url('notifications/view/'.$notification->id)?>">
-                                                    <span class="photo">
-                                                        <?php 
-                                                            if($notification->img == null)
-                                                                echo '<img src="'.base_url().'/img/actualizar.png class="img-circle" alt=""> ';
-                                                            else
-                                                                echo '<img src="'.site_url("app_files/view_notification/".$notification->id).'"> ';
-                                                            
-                                                        ?>
-                                                    </span>
-                                                    <span  class="subject">
-                                                        <span style="color:#7CA0BF"  class="from"><?= H($notification->title);?></span>
-                                                        <span class="time"><?= date(get_date_format(), strtotime($notification->created))?></span>
-                                                    </span>
-                                                    <span class="message"><?=character_limiter(H($notification->description),80)?></span>
-                                                </a>
-                                            </li>
-                                            <?php } ?>                                            
-                                        </ul><div class="slimScrollBar" style="background: rgb(99, 114, 131); width: 7px; position: absolute; top: 66px; opacity: 0.4; display: none; border-radius: 7px; z-index: 99; right: 1px; height: 160.904px;"></div><div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; background: rgb(234, 234, 234); opacity: 0.2; z-index: 90; right: 1px;"></div></div>
+                                                    ?>                                             
+                                                    <li style="<?=$color?> ">
+                                                        <a  href="<?=site_url('notifications/view/'.$notification->id)?>">
+                                                            <span class="photo">
+                                                                <?php 
+                                                                    if($notification->img == null)
+                                                                        echo '<img src="'.base_url().'img/actualizar.png" class="img-circle" alt=""> ';
+                                                                    else
+                                                                        echo '<img  class="img-circle" src="'.site_url("app_files/view_notification/".$notification->id).'"> ';
+                                                                    
+                                                                ?>
+                                                            </span>
+                                                            <span  class="subject">
+                                                                <span style="color:#7CA0BF"  class="from"><?=character_limiter( H($notification->title),60);?></span>
+                                                                <span class="time"><?= date(get_date_format(), strtotime($notification->created))?></span>
+                                                            </span>
+                                                            <span class="message"><?=character_limiter(H($notification->description),100)?></span>
+                                                        </a>
+                                                    </li>
+                                                <?php } ?>                  
+                                            </ul>
+                                            <div class="slimScrollBar" style="background: rgb(99, 114, 131); width: 7px; position: absolute; top: 66px; opacity: 0.4; display: none; border-radius: 7px; z-index: 99; right: 1px; height: 160.904px;">
+                                            </div>
+                                            <div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; background: rgb(234, 234, 234); opacity: 0.2; z-index: 90; right: 1px;">
+                                            </div>
+                                        </div>
                                     </li>
                                 </ul>
                         </li>
@@ -629,11 +635,11 @@
             <?php }?>
             return true;
         }
-        $("#header_inbox_bar").mouseenter(function(){
+        /*$("#header_inbox_bar").mouseenter(function(){
             $.post('<?php echo site_url('notifications/seen'); ?>',{},function(data){
                $("#total-noti").hide();
             });
-        });
+        });*/
 
         </script>
         <!-- BEGIN CONTENT -->

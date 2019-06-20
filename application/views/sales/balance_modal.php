@@ -9,29 +9,7 @@
 
 }
 
-.scrollable::-webkit-scrollbar {
-    width: 8px;
-    background-color: #F5F5F5;
-}
 
-.scrollable::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    background-color: #F5F5F5;
-}
-
-.scrollable::-webkit-scrollbar-thumb {
-    background-color: #26a69a;
-    background-image: -webkit-linear-gradient(90deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent)
-}
-
-.scrollable {
-    width: 100%;
-    height: 420px;
-    overflow-x: auto;
-    overflow-y: auto;
-    border: 1px solid #ddd;
-    margin: 10px 0 !important;
-}
 </style>
 <script>
 var categories_new = JSON.parse('<?=$categories?>'),

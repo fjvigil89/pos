@@ -736,8 +736,12 @@ class technical_supports extends Secure_area
 		$item = $this->input->get('id');
 		$support_id = $this->input->get('idSupport');
 		//$location = $this->Employee->get_logged_in_employee_current_location_id();
-		$this->carrito_lib->add_item($item);
-		$data=array("support_id"=>$support_id);
+		$this->carrito_lib->add_item($item);		
+		$data = array("support_id"=>$support_id);
+		if($this->carrito_lib->out_of_stock($item) )
+		
+			$data['warning'] = lang('sales_quantity_less_than_zero');
+		
 		$this->reload_cart($data,true);
 
 	}

@@ -188,7 +188,7 @@ class Carrito_lib
 			$items+=$item;
 		}
 		
-		if( $this->CI->config->item('sales_stock_inventory')/* and $this->out_of_stock($item_id) */)
+		if( $this->CI->config->item('sales_stock_inventory') and $this->out_of_stock($item_id) )
 		{
 			$items=$this->get_cart();
 		}
@@ -202,7 +202,68 @@ class Carrito_lib
 
 		return $this->CI->session->userdata('cart_servicio');
 	}
+	function out_of_stock($item_id,$no_valida_por_id=false)
+	{
+		//make sure item exists
+		if(!$this->CI->Item->exists($item_id) || $no_valida_por_id)
+		{
+			//try to get item id given an item_number
+			$item_id = $this->CI->Item->get_item_id($item_id);
 
+			if(!$item_id)
+				return false;
+		}
+		
+		$item_location_quantity = $this->CI->Item_location->get_location_quantity($item_id);
+		$quanity_added = $this->get_quantity_already_added($item_id);
+		
+		//If $item_location_quantity is NULL we don't track quantity
+		if ($item_location_quantity !== NULL && $item_location_quantity - $quanity_added <= 0)
+		{
+			return true;
+		}
+		
+		return false;
+	}
+	function get_quantity_already_added($item_id)
+	{
+		$items = $this->get_cart();
+		$quanity_already_added = 0;
+		foreach ($items as $item)
+		{
+			if(isset($item['item_id']) && $item['item_id'] == $item_id)
+			{
+				$quanity_already_added += $item['quantity'];
+			}
+		}
+		
+		//Check Item Kist for this item
+		$all_kits = $this->CI->Item_kit_items->get_kits_have_item($item_id);
+
+		foreach($all_kits as $kits)
+		{
+			$kit_quantity = $this->get_kit_quantity_already_added($kits['item_kit_id']);
+			if($kit_quantity > 0)
+			{
+				$quanity_already_added += ($kit_quantity * $kits['quantity']);
+			}
+		}
+		return $quanity_already_added;
+	}
+	function get_kit_quantity_already_added($kit_id)
+	{
+		$items = $this->get_cart();
+		$quanity_already_added = 0;
+		foreach ($items as $item)
+		{
+			if(isset($item['item_kit_id']) && $item['item_kit_id']==$kit_id)
+			{
+				$quanity_already_added += $item['quantity'];
+			}
+		}
+
+		return $quanity_already_added;
+	}
 	function set_cart($cart_data)
 	{
 		$this->CI->session->set_userdata('cart_servicio',$cart_data);
