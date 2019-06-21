@@ -1,4 +1,6 @@
 <?php
+$lang['config_activate_pharmacy_mode_help']='Pharmacy mode is activated';
+$lang['config_activate_pharmacy_mode']='Activate pharmacy';
 $lang['show_option_policy_returns_sales']='Show options return policies in sales module';
 $lang['config_control_access_employee']='Activate employee access control';
 $lang['show_payments_ticket'] = 'Show the last payments on the ticket';
