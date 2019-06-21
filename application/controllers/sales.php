@@ -936,11 +936,11 @@ class Sales extends Secure_area
 		if($this->config->item('subcategory_of_items')){
 			$items=array();
 			foreach($this->sale_lib->get_cart() as $item){
-				$line=$this->existe($items,$item);
+				$line = $this->existe($items,$item);
 				if($line==-1){
 					$items[$item["line"]]=$item;
 				}else{
-					$items[$line]['quantity']+=$item['quantity'];
+					$items[$line]['quantity'] += $item['quantity'];
 					$data['warning'] = "Producto(s) funcionados verifique el precio  o descuento.";
 				}
 			}
@@ -949,34 +949,55 @@ class Sales extends Secure_area
 		//	se elemina los item de  con stock bajo en las subcategory
 			$items=array();
 			foreach($this->sale_lib->get_cart() as $item){
-				if($this->sale_lib->is_kit_or_item($item["line"]) == 'item')
+				if($this->sale_lib->is_kit_or_item($item["line"]) == 'item' and $item["has_subcategory"] == 1)
 				{
-					if($this->sale_lib-> out_of_stock_subcategory($item["item_id"],$item["custom1_subcategory"],$item["custom2_subcategory"], $item["quantity"]) &&
-					 $this->config->item('sales_stock_inventory') && $item["custom1_subcategory"] !="" && $item["custom1_subcategory"] !=null
+					if( $this->config->item('sales_stock_inventory') && $this->sale_lib-> out_of_stock_subcategory($item["item_id"],$item["custom1_subcategory"],$item["custom2_subcategory"], $item["quantity"]) &&
+					 $item["custom1_subcategory"] !="" && $item["custom1_subcategory"] !=null
 					  && $item["custom2_subcategory"] !="" && $item["custom2_subcategory"] !=null){					
 						$data['error'] = lang('sales_quantity_stock_less_than_zero')."(Subcategoría)";
-					}else{
-						$items[$item["line"]]=$item;					}
+					}
+					else
+					{
+						$items[$item["line"]]=$item;					
+					}
 					if(!$this->config->item('sales_stock_inventory') && $this->sale_lib->out_of_stock_subcategory($item["item_id"],$item["custom1_subcategory"],$item["custom2_subcategory"], $item["quantity"]) && 
 					 $item["custom1_subcategory"] !="" && $item["custom1_subcategory"] !=null
 					&& $item["custom2_subcategory"] !="" && $item["custom2_subcategory"] !=null)
 					{
-						$data['warning'] = lang('sales_quantity_less_than_zero')."(Subcategoría)";
+						$data['warning'] = lang('sales_quantity_less_than_zero')."(Subcategoría/Lote)";
 					}
 				}else{
 					$items[$item["line"]]=$item;
 				}
+
+			}
+			$current_location_id = $this->Employee->get_logged_in_employee_current_location_id();
+			// elimina los productos vencidos 
+			$items=array();
+			foreach($this->sale_lib->get_cart() as $item){
+				if($item["has_subcategory"] == 1 and $this->config->item('subcategory_of_items') and !empty( $item["custom1_subcategory"]) and !empty($item["custom2_subcategory"]))
+				{
+					$category = $this->items_subcategory->get_info($item["item_id"], $current_location_id, $item["custom1_subcategory"], $item["custom2_subcategory"]);
+
+					$date_category = strtotime($category->expiration_date);
+					$now =	strtotime(date('Y-m-d H:i:s'));
+					if($now >= $date_category)
+						$data['error'] = "El producto está vencido (Subcategoría/Lote)";
+					else
+						$items[$item["line"]]=$item;
+				}else{
+					$items[$item["line"]]=$item;
+				}
+
 			}
 			$this->sale_lib->set_cart($items);
-
-
 		}
 		
 		
 		$this->_reload($data);
 	}
 	function existe($items,$item_tem){
-		if(isset($item_tem['item_id'])){
+		if(isset($item_tem['item_id']) and $item_tem['has_subcategory'] == 1){
 			foreach($items as $item){			
 				if(isset($item['item_id']) and $item['is_serialized'] == false){
 					if($item['item_id']==$item_tem['item_id'] &&  $item['custom1_subcategory']== $item_tem['custom1_subcategory'] &&

@@ -134,6 +134,9 @@
 								<th ><?php echo $this->config->item("custom_subcategory1_name");?></th>
 								<th ><?php echo $this->config->item("custom_subcategory2_name");?></th>
 								<th ><?php echo "Cantidad";?></th>
+								<?php if($this->config->item('activate_pharmacy_mode')){?>
+								 	<th >Fecha de vencimiento</th>
+								<?php } ?>								
 							</tr>
 							</thead>
 							<tbody>
@@ -142,6 +145,9 @@
 									<td style="text-align: center;"><?php echo $subcategoria->custom1 ?></td>
 									<td style="text-align: center;"><?php echo $subcategoria->custom2 ?></td>
 									<td style="text-align: center;"><?php echo (float)$subcategoria->quantity ?></td>
+									<?php if($this->config->item('activate_pharmacy_mode')){?>
+										<td style="text-align: center;"><?= date(get_date_format(), strtotime($subcategoria->expiration_date))?></td>
+									<?php } ?>
 								</tr>
 							<?php } ?>
 							</tbody>

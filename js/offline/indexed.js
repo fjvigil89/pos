@@ -129,7 +129,7 @@ async function agregar_datos_a_db(obj, data, add_all = true){
     console.log(obj+" descargado, agrgando a la db");
     try {      
         if(add_all){
-            await db1[obj].clear()
+            await db1[obj].clear();
             await db1[obj].bulkAdd(data);
         }else if(data.length > 0){
           await db1[obj].bulkPut(data);
@@ -197,7 +197,7 @@ async function descargar_kits_add_db() {
 }
 async function actuliza_register_log(register_log_id_offline,synchronizations_offline_id,register_log_id_origen,data){
     let query=0;
-    if(register_log_id_offline >0 && synchronizations_offline_id>0){
+    if(register_log_id_offline > 0 && synchronizations_offline_id > 0){
          query = await db1.register_log.where(
            {
                "register_log_id_offline": register_log_id_offline,
@@ -634,7 +634,7 @@ function bajar_db(mostrar_dialogo=true) {
                 var url_data_session = SITE_URL + "/sincronizar/datos_sesion";
                 var url_items_locations = SITE_URL + "/sincronizar/backup_location_items/"+last_data_update;
                 // var url_customer = SITE_URL + "/sincronizar/backup_customer";
-                var url_additional_item_numbers = SITE_URL + "/sincronizar/backup_additional_item_numbers"
+                var url_additional_item_numbers = SITE_URL + "/sincronizar/backup_additional_item_numbers";
 
                 //var url_employee = SITE_URL + "/sincronizar/backup_employee";       
                 
@@ -663,9 +663,9 @@ function bajar_db(mostrar_dialogo=true) {
                     $("#icon-offline").addClass(" fa-plug");
                     localStorage.setItem("synchronized",1);
                     if(mostrar_dialogo){
-                    document.getElementById("id_sincronizacion_offline_title").innerHTML="Sincronización Exitosa!";
-                    document.getElementById("id_sincronizacion_offline_contenido").innerHTML="Usted ya puede trabajar en modo Offline";
-                    document.getElementsByClassName("btn_sincronizacion_offline")[0].innerHTML="OK";
+                        document.getElementById("id_sincronizacion_offline_title").innerHTML="Sincronización Exitosa!";
+                        document.getElementById("id_sincronizacion_offline_contenido").innerHTML="Usted ya puede trabajar en modo Offline";
+                        document.getElementsByClassName("btn_sincronizacion_offline")[0].innerHTML="OK";
                     }
                     
                    
@@ -679,15 +679,15 @@ function bajar_db(mostrar_dialogo=true) {
                     $("#icon-offline").addClass(" fa-plug");
                     //alert("error")
                     if(mostrar_dialogo){
-                    document.getElementById("id_sincronizacion_offline_title").innerHTML="<i class='fa fa-warning'></i> Ha ocurrido un error!";
-                    document.getElementById("id_sincronizacion_offline_contenido").innerHTML="Compruebe su conexion a internet e intente nuevamente";
-                    document.getElementsByClassName("btn_sincronizacion_offline")[0].innerHTML="OK";
-                    }
+                        document.getElementById("id_sincronizacion_offline_title").innerHTML="<i class='fa fa-warning'></i> Ha ocurrido un error!";
+                        document.getElementById("id_sincronizacion_offline_contenido").innerHTML="Compruebe su conexion a internet e intente nuevamente";
+                        document.getElementsByClassName("btn_sincronizacion_offline")[0].innerHTML="OK";
+                        }
                     console.log(e);
                     
                 } catch (e) {
                     if(mostrar_dialogo){
-                    location.reload(true);
+                        location.reload(true);
                     }
                 }
                

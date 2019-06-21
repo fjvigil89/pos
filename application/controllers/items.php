@@ -626,17 +626,18 @@ class Items extends Secure_area implements iData_controller
         $sale_or_receiving = $this->input->post('sale_or_receiving');
        
         //valida entrada se debe pasar para un archivo heper       
-        if($this->config->item('subcategory_of_items')==1&&$this->input->post('subcategory') ){
+        if($this->config->item('subcategory_of_items')==1 && $this->input->post('subcategory') ){
             if ($this->input->post('locations')) {
                 foreach ($this->input->post('locations') as $location_id => $item_location_data) {
                          $subcategory_data_custom1=$item_location_data['subcategory_data_custom1'];
                          $subcategory_data_custom2=$item_location_data['subcategory_data_custom2'];
                          $subcategory_data_quantity=$item_location_data['subcategory_data_quantity'];
-                    
-                        if(count($subcategory_data_custom1)<0|| count($subcategory_data_custom2)<0 || count($subcategory_data_quantity)<0 )
+                         $subcategory_data_date=$item_location_data['subcategory_data_date'];
+
+                        if(count($subcategory_data_custom1) < 0|| count($subcategory_data_custom2)<0 || count($subcategory_data_quantity)<0 )
                             $error_datos_custom =true;
                         foreach($subcategory_data_custom1 as $custom){
-                            if($custom=="" || $custom==null){
+                            if( $custom=="" || $custom==null){
                                     $error_datos_custom =true;
                             }
                         }
@@ -645,9 +646,14 @@ class Items extends Secure_area implements iData_controller
                                 $error_datos_custom =true;
                             }
                         }
-                        foreach($subcategory_data_quantity as $custom){
-                            if($custom=="" || $custom==null){
-                                $error_datos_custom =true;
+                        foreach($subcategory_data_quantity as $quantity){
+                            if($quantity=="" || $quantity == null){
+                                $error_datos_custom = true;
+                            }
+                        }
+                        foreach($subcategory_data_date as $date){
+                            if($date=="" || $date == null){
+                                $error_datos_custom = true;
                             }
                         }
                         for ($i = 0; $i < count($subcategory_data_custom1); $i++) {
@@ -783,6 +789,7 @@ class Items extends Secure_area implements iData_controller
                     $subcategory_data_custom1=$item_location_data['subcategory_data_custom1'];
                     $subcategory_data_custom2=$item_location_data['subcategory_data_custom2'];
                     $subcategory_data_quantity=$item_location_data['subcategory_data_quantity'];
+                    $subcategory_data_expiration_date = $item_location_data['subcategory_data_date'];
                     $override_prices = isset($item_location_data['override_prices']) && $item_location_data['override_prices'];
                     $override_defect = isset($item_location_data['override_defect']) && $item_location_data['override_defect'];
                     $item_location_before_save = $this->Item_location->get_info($item_id, $location_id);
@@ -813,16 +820,22 @@ class Items extends Secure_area implements iData_controller
                     if($this->config->item('subcategory_of_items')==1&&$this->input->post('subcategory') ){
                         $data_subcategory=array();
                         for ($i = 0; $i < count($subcategory_data_quantity); $i++) {
-                            $data_aux=array("item_id"=>$item_id,
-                                            "location_id"=>$location_id,
-                                            "custom1"=>strtoupper ($subcategory_data_custom1[$i]),
-                                            "custom2"=>strtoupper($subcategory_data_custom2[$i]),
-                                            "quantity"=>$subcategory_data_quantity[$i]
-                                        );
-                                        $data_subcategory[]=$data_aux;
+                            $data_aux = array(
+                                "item_id"=>$item_id,
+                                "location_id"=>$location_id,
+                                "custom1"=>strtoupper ($subcategory_data_custom1[$i]),
+                                "custom2"=>strtoupper($subcategory_data_custom2[$i]),
+                                "quantity"=>$subcategory_data_quantity[$i],
+                                "expiration_date"=>null
+                                );
+                                if( $this->config->item("activate_pharmacy_mode")){
+                                    $data_aux["expiration_date"] =  $subcategory_data_expiration_date[$i] ? date('Y-m-d 00:00:00', strtotime($subcategory_data_expiration_date[$i])) : null;
+                                }
+                                $data_subcategory[]=$data_aux;
 
                         }
-                        if(count($subcategory_data_quantity)>0){
+                        if(count($subcategory_data_quantity) > 0)
+                        {
                             $result=$this->items_subcategory->save($data_subcategory, $item_id, $location_id);
                             if(!$result)
                             echo json_encode(array('success' => false, 'message' =>  'Error en agregar las categoría(s), no puede duplicar el '.

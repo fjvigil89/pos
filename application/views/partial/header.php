@@ -344,7 +344,7 @@
                 <div class="top-menu">
                     <ul class="nav navbar-nav pull-right">
                         <?php 
-                            $notifications = $this->Notification->get_all(8);
+                            $notifications = $this->Notification->get_all(7);
                             //$pending ''= count_by_state(1);
                             $total = $this->Notification->count_pending();
                             $icon = "fa-refresh";

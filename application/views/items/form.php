@@ -517,7 +517,7 @@
                 <?php } ?>
                 <?php if ($this->config->item('subcategory_of_items')){?>
                 <div class="form-group">
-                    <?php echo form_label('<a class="help_config_options  tooltips " data-placement="left" title="'.lang("config_subcategory_item_help").'">'.lang('config_subcategory_item').'</a>'.':', 'company_logo', array('class'=>'col-md-3 control-label')); ?>
+                    <?php echo form_label('<a class="help_config_options  tooltips " data-placement="left" title="'.lang("config_subcategory_item_help").'">'.lang('config_subcategory_item').'/Lote</a>'.':', 'subcategory', array('class'=>'col-md-3 control-label')); ?>
 
                     <div class="col-md-8">
                         <div class="md-checkbox-inline">
@@ -527,7 +527,7 @@
 												'id'=>'subcategory',
 												'class'=>'delete-checkbox md-check',
 												'value'=>1,
-												'checked'=>($item_info->subcategory)? 1 : 0)
+												'checked'=>($item_info->subcategory || ($this->config->item('activate_pharmacy_mode') and $item_info->item_id < 1 ))? 1 : 0)
 											);?>
                                 <label for="subcategory">
                                     <span></span>
@@ -1528,12 +1528,12 @@
 
 
 <div class="portlet light subcategory_hide"
-    <?php if( !$this->config->item('subcategory_of_items') || !$item_info->subcategory ||$item_info->is_service ) echo"style='display: none'";?>>
+    <?php if( !$this->config->item('subcategory_of_items') || !($item_info->subcategory ) || $item_info->is_service  ) echo"style='display: none'";?>>
     <div class="portlet-title">
         <div class="caption">
             <i class="icon-speech"></i>
             <span class="caption-subject bold">
-                Subcategoría <?php echo $location->name;  ?>
+                Subcategoría/Lote <?php echo $location->name;  ?>
             </span>
         </div>
         <div class="tools">
@@ -1581,9 +1581,7 @@
                     </div>
                 </div>
                 <div class="form-group subcategory-input <?php if ($item_info->is_service){echo 'hidden';} ?>">
-
                     <?php echo form_label('<a class="help_config_options requireds tooltips" data-placement="left" title="'.lang("items_quantity_stock_subcategory_help").'(Cantidad Stock '.$location->name.')">'.lang('items_quantity_stock').'</a>'.':', '', array('class'=>'col-md-3 control-label wide')); ?>
-
                     <div class="col-md-8">
                         <?php echo form_input(array(
 												'name'=>'locations['.$location->location_id.'][subcategory_data_quantity][]',
@@ -1594,6 +1592,20 @@
 											));?>
                     </div>
                 </div>
+                <?php if( $this->config->item("activate_pharmacy_mode")){?>
+                    <div class="form-group subcategory-input <?php if ($item_info->is_service){echo 'hidden';} ?>">
+                        <?php echo form_label('<a class="help_config_options requireds tooltips" data-placement="left" title="">'.lang('items_expiration_date').'</a>'.':', '', array('class'=>'col-md-3 control-label wide')); ?>
+                        <div class="col-md-8">
+                            <?php echo form_input(array(
+                                                    'name'=>'locations['.$location->location_id.'][subcategory_data_date][]',
+                                                    'value'=> $subcategory->expiration_date ? date(get_date_format(), strtotime($subcategory->expiration_date)) : '',
+                                                    
+                                                    "required"=>"required",
+                                                    'class'=>'expiration_date spinner-input form-control form-inps  ',
+                                                ));?>
+                        </div>
+                    </div>
+                <?php } ?>
                 <div class="form-group subcategory-input">
                     <div class=" col-md-offset-3 col-md-8">
                         <hr>
@@ -1697,6 +1709,7 @@ function addsubcategory(elemento) {
 
         });
         add_autocomplete();
+        add_format_data();
 
     } else {
         toastr.error("Solo se permite un máximo de " + cantidad + " subcategoría por producto ",
@@ -1766,6 +1779,9 @@ $(document).ready(function() {
         }
     });
     //
+    <?php if($this->config->item('activate_pharmacy_mode') and $item_info->item_id < 1  ){
+        echo"$('.subcategory_hide').show(600);";
+    }?>
     $(".asign_price").click(function() {
         var val = $(this).attr('rel');
         var price = $('#price_suppliers' + val).val();
@@ -1928,15 +1944,17 @@ $(document).ready(function() {
         format: <?php echo json_encode(strtoupper(get_js_date_format())); ?>,
         locale: "es"
     });
+    $('#expiration_date').datetimepicker({
+        format: <?php echo json_encode(strtoupper(get_js_date_format())); ?>,
+        locale: "es"
+    });
+
 
     $('#end_date').datetimepicker({
         format: <?php echo json_encode(strtoupper(get_js_date_format())); ?>,
         locale: "es"
     });
-    $('#expiration_date').datetimepicker({
-        format: <?php echo json_encode(strtoupper(get_js_date_format())); ?>,
-        locale: "es"
-    });
+   
 
 
     $('.datepicker').datetimepicker({
@@ -1987,7 +2005,7 @@ $(document).ready(function() {
         minLength: 0
     });*/
     add_autocomplete();
-
+    add_format_data();
     jQuery.validator.addMethod("quanttity", function(value, element) {
 
             <?php foreach($locations as $location) { ?>
@@ -2070,20 +2088,27 @@ $(document).ready(function() {
             },
             <?php } ?>
             <?php if ($this->config->item('subcategory_of_items') /*&& $this->Item->get_info($item_id)->subcategory*/){?>
-            <?php	foreach($locations as $location) {?> "<?php echo 'locations['.$location->location_id.'][subcategory_data_custom1][]'; ?>": {
-                required: true,
-                doble: true,
-            },
-            "<?php echo 'locations['.$location->location_id.'][subcategory_data_custom2][]'; ?>": {
-                required: true,
-                doble: true,
-            },
-            "<?php echo 'locations['.$location->location_id.'][subcategory_data_quantity][]'; ?>": {
-                required: true,
-                number: true,
-                quanttity: true,
-            },
-            <?php }	?>
+                <?php	foreach($locations as $location) {?> 
+                        "<?php echo 'locations['.$location->location_id.'][subcategory_data_custom1][]'; ?>": {
+                        required: true,
+                        doble: true,
+                    },
+                    "<?php echo 'locations['.$location->location_id.'][subcategory_data_custom2][]'; ?>": {
+                        required: true,
+                        doble: true,
+                    },
+                    "<?php echo 'locations['.$location->location_id.'][subcategory_data_quantity][]'; ?>": {
+                        required: true,
+                        number: true,
+                        quanttity: true,
+                    },
+                    <?php if( $this->config->item("activate_pharmacy_mode")){?>                    
+                        "<?php echo 'locations['.$location->location_id.'][subcategory_data_date][]'; ?>":
+                         {
+                            required: true
+                        },
+                    <?php }	?>
+                <?php }	?>
             <?php }	?>
 
             <?php foreach($locations as $location) { ?> "<?php echo 'locations['.$location->location_id.'][quantity]'; ?>": {
@@ -2153,18 +2178,24 @@ $(document).ready(function() {
             },
             <?php } ?>
             <?php if ($this->config->item('subcategory_of_items') ){?>
-            <?php	foreach($locations as $location) {?>
+                <?php	foreach($locations as $location) {?>
 
-            "<?php echo 'locations['.$location->location_id.'][subcategory_data_custom1][]'; ?>": {
-                required: "<?php ?> Este dato es requerido "
-            },
-            "<?php echo 'locations['.$location->location_id.'][subcategory_data_custom2][]'; ?>": {
-                required: "Este dato es requerido "
-            },
-            "<?php echo 'locations['.$location->location_id.'][subcategory_data_quantity][]'; ?>": {
-                required: "Este dato es requerido "
-            },
-            <?php }	?>
+                    "<?php echo 'locations['.$location->location_id.'][subcategory_data_custom1][]'; ?>": {
+                        required: "<?php ?> Este dato es requerido "
+                    },
+                    "<?php echo 'locations['.$location->location_id.'][subcategory_data_custom2][]'; ?>": {
+                        required: "Este dato es requerido "
+                    },
+                    "<?php echo 'locations['.$location->location_id.'][subcategory_data_quantity][]'; ?>": {
+                        required: "Este dato es requerido "
+                    },
+                    <?php if( $this->config->item("activate_pharmacy_mode")){?>
+                        "<?php echo 'locations['.$location->location_id.'][subcategory_data_date][]'; ?>": 
+                        {
+                            required: "Este dato es requerido "
+                        },
+                    <?php }	?>
+                <?php }	?>
             <?php }	?>
 
             <?php foreach($locations as $location) { ?> "<?php echo 'locations['.$location->location_id.'][quantity]'; ?>": {
@@ -2269,6 +2300,14 @@ function doItemSubmit(form) {
         resetForm: true,
         <?php } ?>
         dataType: 'json'
+    });
+}
+
+function add_format_data()
+{
+    $('.expiration_date').datetimepicker({
+        format: <?php echo json_encode(strtoupper(get_js_date_format())); ?>,
+        locale: "es"
     });
 }
 
