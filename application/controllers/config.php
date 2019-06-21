@@ -245,6 +245,7 @@ class Config extends Secure_area
 			'custom1_support_name'=>$this->input->post('custom1_support_name') ? $this->input->post('custom1_support_name') : '',
 			'enabled_for_Restaurant'=>$this->input->post('enabled_for_Restaurant') ? 1 : 0,
 			'table_acount' => $this->input->post('table_acount') ? $this->input->post('table_acount') : 0,
+			"activate_pharmacy_mode"=>$this->input->post('activate_pharmacy_mode')? 1 : 0,
 			'subcategory_of_items'=>$this->input->post('subcategory_of_items') ? $this->input->post('subcategory_of_items') : 0,
 			"order_star"=>$this->input->post('order_star') ? $this->input->post('order_star') : 0,
 			"return_policy_support"=>$this->input->post('return_policy_support') ? $this->input->post('return_policy_support') : "",
@@ -283,6 +284,16 @@ class Config extends Secure_area
 			"units_measurement" =>  $this->input->post('units_measurement'),
 			"activate_sales_with_balance"=> (int) $this->input->post('activate_sales_with_balance')
 		);
+		
+
+		// configuracion modo farmacia
+		if($batch_save_data['activate_pharmacy_mode']){
+			$batch_save_data['subcategory_of_items']=1;
+			$batch_save_data['custom_subcategory1_name']='inhabilitado';
+			$batch_save_data['inhabilitar_subcategory1']=1;
+			$batch_save_data['custom_subcategory2_name']='LOTE';
+
+		}
 		
 	//	language
 		if (isset($company_logo))

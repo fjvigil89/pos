@@ -3081,6 +3081,29 @@
 							</div>
 						</div>
 						<div class="form-group">	
+
+							<?php echo form_label('<a class="help_config_options  tooltips " data-placement="left" title="'.lang("config_activate_pharmacy_mode_help").'">'.lang('config_activate_pharmacy_mode').'</a>'.':', 'subcategory_of_items', array('class'=>'col-md-3 control-label')); ?> 						
+							
+							<div class="col-md-1">
+								<div class="md-checkbox-inline">
+									<div class="md-checkbox">
+										<?php echo form_checkbox(array(
+											'name'=>'activate_pharmacy_mode',
+											'id'=>'activate_pharmacy_mode',
+											'value'=>'1',
+											'class'=>'md-check',
+											'checked'=>$this->config->item('activate_pharmacy_mode')));
+										?>
+										<label for="activate_pharmacy_mode">
+										<span></span>
+										<span class="check"></span>
+										<span class="box"></span>
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
 							<?php echo form_label('<a class="help_config_options  tooltips " data-placement="left" title="'.lang("config_subcategory_store_help").'">'.lang('config_subcategory_store').'</a>'.':', 'subcategory_of_items', array('class'=>'col-md-3 control-label')); ?> 						
 						
 							<div class="col-md-1">
@@ -3824,6 +3847,47 @@
 	
 		$(document).ready(function()
 		{	
+			// modo farmacia activado 
+			<?php if($this->config->item('activate_pharmacy_mode')){?>
+					$('#subcategory_of_items').attr('disabled', true);
+
+					$('#custom_subcategory1_name').attr('readonly', true);
+
+					$('#inhabilitar_subcategory1').attr('disabled', true);
+
+					$('#custom_subcategory2_name').attr('readonly', true);
+
+			<?php } ?>
+
+
+			$("#activate_pharmacy_mode").change(function() {
+				if( $(this).is(':checked') ){
+					$('#subcategory_of_items').attr('disabled', true);
+					$('#subcategory_of_items').attr('checked', true);
+
+					$('#custom_subcategory1_name').attr('readonly', true);
+					$('#custom_subcategory1_name').val("inhabilitado");
+
+					$('#inhabilitar_subcategory1').attr('disabled', true);
+					$('#inhabilitar_subcategory1').attr('checked', true);
+
+					$('#custom_subcategory2_name').attr('readonly', true);
+					$('#custom_subcategory2_name').val("LOTE");
+				}else{
+					$('#subcategory_of_items').removeAttr('disabled');
+					$('#subcategory_of_items').attr('checked', false);
+
+					$('#custom_subcategory1_name').attr('readonly', false);
+					$('#custom_subcategory1_name').val('');
+
+					$('#inhabilitar_subcategory1').removeAttr('disabled');
+					$('#inhabilitar_subcategory1').attr('checked', false);
+
+					$('#custom_subcategory2_name').attr('readonly', false);
+
+				}
+			});
+
 			$("#inhabilitar_subcategory1").change( function(){
 			
    			if( $(this).is(':checked') ){
