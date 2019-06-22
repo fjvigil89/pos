@@ -173,7 +173,8 @@ class Receiving extends CI_Model
 						$this->db->query('UNLOCK TABLES');
 						return -1;
 					}
-					if ($this->config->item('subcategory_of_items') && $item['has_subcategory']==1) {
+					if ($this->config->item('subcategory_of_items') && $item['has_subcategory']==1) 
+					{
 						$subcategory = $this->items_subcategory->get_info($item['item_id'], false, $item['custom1_subcategory'], $item['custom2_subcategory']);
 						$quantity_subcategory = $subcategory->quantity;
 						if(!$this->items_subcategory->save_quantity(($quantity_subcategory-$item['quantity_subcategory']), 
@@ -193,11 +194,44 @@ class Receiving extends CI_Model
 						$this->db->query('UNLOCK TABLES');
 						return -1;
 					}	
-					if ($this->config->item('subcategory_of_items') && $item['has_subcategory']==1) {
-						$subcategory = $this->items_subcategory->get_info($item['item_id'], false, $item['custom1_subcategory'], $item['custom2_subcategory']);
+					if ($this->config->item('subcategory_of_items') && $item['has_subcategory']==1) 
+					{
+						$location_id = $this->Employee->get_logged_in_employee_current_location_id();
+						if($this->config->item("activate_pharmacy_mode"))
+						{
+							if(!$this->items_subcategory->exists($item['item_id'], $location_id , $item['custom1_subcategory'], $item['custom2_subcategory'])){
+								$new_data = array(
+									"item_id" => $item['item_id'],
+									"location_id" => $location_id,
+									"custom1" => $item['custom1_subcategory'],
+									"custom2" => $item['custom2_subcategory'],
+									"quantity" => 0,
+									"of_low" => 0,
+									"expiration_date" =>$item['expiration_date'],
+									"deleted" =>0,
+								);
+								if(!$this->items_subcategory->save_one($new_data)){
+									$this->db->query("ROLLBACK");
+									$this->db->query('UNLOCK TABLES');
+									return -1;
+								}
+							}
+							$new_data = array(								
+								"of_low" => 0,
+								"expiration_date" => $item['expiration_date'],
+								"deleted" => 0
+							);
+
+							if(!$this->items_subcategory->update_by_id($item['item_id'], $location_id , $item['custom1_subcategory'], $item['custom2_subcategory'],$new_data)){
+								$this->db->query("ROLLBACK");
+								$this->db->query('UNLOCK TABLES');
+								return -1;
+							}
+						}
+						$subcategory = $this->items_subcategory->get_info($item['item_id'], $location_id, $item['custom1_subcategory'], $item['custom2_subcategory']);
 						$quantity_subcategory = $subcategory->quantity;
 						if(!$this->items_subcategory->save_quantity(($quantity_subcategory+$item['quantity_subcategory']), 
-						$item['item_id'], false, $item['custom1_subcategory'],$item['custom2_subcategory'])){
+							$item['item_id'], $location_id, $item['custom1_subcategory'],$item['custom2_subcategory'])){
 							$this->db->query("ROLLBACK");
 							$this->db->query('UNLOCK TABLES');
 							return -1;
@@ -233,7 +267,7 @@ class Receiving extends CI_Model
 					$this->db->query('UNLOCK TABLES');
 					return -1;
 				}
-				if ($this->config->item('subcategory_of_items') && $item['has_subcategory']==1) {
+				if (  $this->config->item('subcategory_of_items') && $item['has_subcategory']==1) {
 					if(!$this->items_subcategory->exists($item['item_id'], false , $item['custom1_subcategory'],$item['custom2_subcategory'])){
 						$this->db->query("ROLLBACK");
 						$this->db->query('UNLOCK TABLES');
@@ -254,7 +288,9 @@ class Receiving extends CI_Model
 						"custom1"=>strtoupper($item['custom1_subcategory']),
 						"custom2"=> strtoupper ($item['custom2_subcategory']),
 						"deleted"=>0,
-						"quantity"=>0
+						"quantity"=>0,						
+						"of_low" => 0,
+						"expiration_date" =>$item['expiration_date'],
 
 					 );
 					if(!$this->items_subcategory->save_one($new_subcategory)){

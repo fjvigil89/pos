@@ -150,6 +150,7 @@ class Receivings extends Secure_area
 		$custom1_subcategory = $this->input->post("custom1_subcategory");
 		$custom2_subcategory = $this->input->post("custom2_subcategory");
 		$quantity_subcategory = $this->input->post("quantity_subcategory");
+		$expiration_date = $this->input->post("expiration_date");
 
 		$id = $this->input->post("id");
 		$id_item=$this->receiving_lib->get_item_id($id);
@@ -183,16 +184,41 @@ class Receivings extends Secure_area
 
 		if ($this->form_validation->run() != FALSE)
 		{
-			$this->receiving_lib->edit_item($item_id,$description,$serialnumber,$quantity,$discount,$price, $cost_transport,$unit_price,$custom1_subcategory,$custom2_subcategory,$quantity_subcategory);
+			$this->receiving_lib->edit_item($item_id,$description,$serialnumber,$quantity,$discount,$price, $cost_transport,$unit_price,$custom1_subcategory,$custom2_subcategory,$quantity_subcategory,$expiration_date);
 		}
 		else
 		{
 			$data['error']=lang('receivings_error_editing_item');
 		}
 		
-
+		
+		$this->validate($data);
+		
 
 		$this->_reload($data);
+	}
+	function validate(&$data){
+		if($this->config->item("activate_pharmacy_mode"))
+		{
+			$items = $this->receiving_lib->get_cart();
+			foreach ($items as $item) {
+				if($item['has_subcategory'] == 1)
+				{
+					$expiration_date = $item["expiration_date"];
+
+					if(empty($expiration_date))
+						$data['error']="Fecha de vencimiento no válida- LOTE (".$item["custom2_subcategory"].")";
+					else
+					{				
+						$expiration_date = strtotime($expiration_date);
+						$now =	strtotime(date('Y-m-d H:i:s'));
+
+						if($now >= $expiration_date)
+							$data['error'] = "El lote que intenta registrar está vencido (".$item["custom2_subcategory"].")";
+					}
+				}
+			}
+		}
 	}
 
 	function delete_item($item_number)
@@ -502,14 +528,21 @@ class Receivings extends Secure_area
 								}
 								$custom2_subcategory = $sheet->getCellByColumnAndRow((4+$ij+1), $k)->getValue();
 								$quantity_subcategory = $sheet->getCellByColumnAndRow((4+$ij+2 ), $k)->getValue();
-								
+								$date_subcategory = $sheet->getCellByColumnAndRow((4+$ij+3 ), $k)->getValue();
+								if($date_subcategory != "")
+								{
+									$timestamp  = PHPExcel_Shared_Date::ExcelToPHP($date_subcategory+1);
+									$date_subcategory = date("Y-m-d", $timestamp);
+												
+
+								}
 								if($custom1_subcategory!="" &&  $custom2_subcategory!="" && $quantity_subcategory!="" ) {
-									if(!$this->items_subcategory->exists($item_id, false , $custom1_subcategory,$custom2_subcategory)){
+									if(!$this->config->item("activate_pharmacy_mode") and !$this->items_subcategory->exists($item_id, false , $custom1_subcategory,$custom2_subcategory)){
 										$this->receiving_lib->empty_cart();
 										echo json_encode( array('success'=>false,'message'=>lang('batch_receivings_error')));
 										return;
 									}
-									elseif(!$this->receiving_lib->add_item($item_id,$quantity,$discount,$price,null,null,0,0,$custom1_subcategory,$custom2_subcategory,$quantity_subcategory))
+									elseif(!$this->receiving_lib->add_item($item_id,$quantity,$discount,$price,null,null,0,0,$custom1_subcategory,$custom2_subcategory,$quantity_subcategory,$date_subcategory))
 									{	
 										$this->receiving_lib->empty_cart();
 										echo json_encode( array('success'=>false,'message'=>lang('batch_receivings_error')));

@@ -101,7 +101,7 @@ class Receiving_lib
 		return $this->CI->session->userdata('suspended_recv_id');
 	}
 	
-	function add_item($item_id,$quantity=1,$discount=0,$price=null,$description=null,$serialnumber=null, $cost_transport=0,$unit_price=0,$custom1_subcategory=null,$custom2_subcategory=null,$quantity_subcategory=null)
+	function add_item($item_id,$quantity=1,$discount=0,$price=null,$description=null,$serialnumber=null, $cost_transport=0,$unit_price=0,$custom1_subcategory=null,$custom2_subcategory=null,$quantity_subcategory=null, $expiration_date = null)
 	{
 		//make sure item exists in database.
 		if(!$this->CI->Item->exists(is_numeric($item_id) ? (int)$item_id : -1))
@@ -178,7 +178,8 @@ class Receiving_lib
 			"custom1_subcategory"=>$custom1_subcategory,
 			"custom2_subcategory"=>$custom2_subcategory,
 			'has_subcategory'=>$item_info->subcategory,
-			"quantity_subcategory"=>$quantity_subcategory
+			"quantity_subcategory"=>$quantity_subcategory,
+			"expiration_date" => $expiration_date
 			)
 		);
 
@@ -201,7 +202,7 @@ class Receiving_lib
 
 	}
 
-	function edit_item($line,$description = FALSE,$serialnumber = FALSE,$quantity = FALSE,$discount = FALSE,$price = FALSE,$cost_transport = FALSE,$unit_price=false ,$custom1_subcategory=FALSE,$custom2_subcategory=FALSE,$quantity_subcategory=FALSE)
+	function edit_item($line,$description = FALSE,$serialnumber = FALSE,$quantity = FALSE,$discount = FALSE,$price = FALSE,$cost_transport = FALSE,$unit_price=false ,$custom1_subcategory=FALSE,$custom2_subcategory=FALSE,$quantity_subcategory=FALSE,$expiration_date =FALSE)
 	{
 		$items = $this->get_cart();
 
@@ -238,6 +239,9 @@ class Receiving_lib
 			}
 			if ($quantity_subcategory !== FALSE ) {
 				$items[$line]['quantity_subcategory'] = $quantity_subcategory;
+			}
+			if($expiration_date !== FALSE){
+				$items[$line]['expiration_date'] = $expiration_date;
 			}
 			
 			
@@ -340,10 +344,14 @@ class Receiving_lib
 			{
 				if (isset($item['item_id']))
 				{
-					if ( $item['has_subcategory']==1) {
+					if ( $item['has_subcategory'] == 1) 
+					{
 						if($item['custom1_subcategory']=="" || $item['custom1_subcategory']==null || $item['custom2_subcategory']=="" ||
 						 $item['custom2_subcategory']==null || !is_numeric($item['quantity_subcategory'])){
 							 return false;
+						 }
+						 if($this->CI->config->item("activate_pharmacy_mode") and empty($item["expiration_date"])){
+							return false;
 						 }
 					}
 				}

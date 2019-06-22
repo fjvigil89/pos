@@ -4,7 +4,13 @@ class items_subcategory extends CI_Model
     public function save_one($subcategory)
     {
         if($this->exists($subcategory["item_id"], $subcategory["location_id"] , $subcategory['custom1'], $subcategory['custom2'])){
-            $data = array("deleted"=>0,"quantity"=>0);
+           
+            $info = $this->get_info($subcategory["item_id"], $subcategory["location_id"] , $subcategory['custom1'], $subcategory['custom2']);
+            if($info->deleted)
+                $data = array("deleted"=>0,"quantity"=>0, "of_low"=>0);
+            else
+              $data = array("deleted"=>0, "of_low"=>0);
+
             return $this->update_by_id($subcategory["item_id"], $subcategory["location_id"], $subcategory['custom1'], $subcategory['custom2'],  $data);
         }else{
             return $this->db->insert('items_subcategory', $subcategory);
@@ -188,6 +194,7 @@ class items_subcategory extends CI_Model
        
         return ($query->num_rows() == 1);
     }
+    
     public function get_info($item_id, $location_id = false, $custom1, $custom2)
     {
         if (!$location_id) {
