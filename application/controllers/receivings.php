@@ -599,7 +599,9 @@ class Receivings extends Secure_area
 				$header[] = lang('items_subcategory').$i."_". ($this->config->item('custom_subcategory1_name') ?  $this->config->item('custom_subcategory1_name'):'Personalizado1');
                 $header[] = lang('items_subcategory').$i."_". ($this->config->item('custom_subcategory2_name') ?  $this->config->item('custom_subcategory2_name'):'Personalizado2');
 				$header[] = lang('items_subcategory').$i."_". lang('items_quantity');
+				if($this->config->item('activate_pharmacy_mode')){
 				$header[] = lang('items_expiration_date');
+				}
             }
            
         }

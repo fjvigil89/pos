@@ -1199,6 +1199,9 @@ class Items extends Secure_area implements iData_controller
                 $header_row[] = lang('items_subcategory').$i."_". ($this->config->item('custom_subcategory1_name') ?  $this->config->item('custom_subcategory1_name'):'Personalizado1');
                 $header_row[] = lang('items_subcategory').$i."_". ($this->config->item('custom_subcategory2_name') ?  $this->config->item('custom_subcategory2_name'):'Personalizado2');
                 $header_row[] = lang('items_subcategory').$i."_". lang('items_quantity');
+                if($this->config->item('activate_pharmacy_mode')){
+                    $header_row[] = lang('items_expiration_date');
+                }
             }
            
         }
