@@ -880,12 +880,23 @@ class Employee extends Person
 		$employee_data = array('username' => null);
 		$this->db->where('deleted', 1);
 		if($this->db->update('employees',$employee_data)){
-			$employee_data = array('email' => null);
 			$this->db->from('employees');
-    		$this->db->join('people', 'people.person_id = employees.person_id');
 			$this->db->where('deleted', 1);
+			$data=$this->db->get()->result_array();
+			$employee_data = array('email' => null);
+			
+			foreach ($data as $value) {
+				$this->db->where('person_id', $value['person_id']);
+				$this->db->update('people',$employee_data);
+			}
 
-			return $this->db->update('people',$employee_data);
+			$login_db = $this->load->database('login',true);
+			$employee_data = array('employee_email' => null);
+			foreach ($data as $value) {
+				$login_db->where('person_id', $value['person_id']);
+				$login_db->update('employees',$employee_data);
+			}
+				return true;
 		}
 		return false;
 	}
