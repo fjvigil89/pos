@@ -879,7 +879,15 @@ class Employee extends Person
 	{
 		$employee_data = array('username' => null);
 		$this->db->where('deleted', 1);
-		return $this->db->update('employees',$employee_data);
+		if($this->db->update('employees',$employee_data)){
+			$employee_data = array('email' => null);
+			$this->db->from('employees');
+    		$this->db->join('people', 'people.person_id = employees.person_id');
+			$this->db->where('deleted', 1);
+
+			return $this->db->update('people',$employee_data);
+		}
+		return false;
 	}
 		
 	function get_employee_id($username)
