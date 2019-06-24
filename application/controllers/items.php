@@ -1584,14 +1584,17 @@ class Items extends Secure_area implements iData_controller
                     }
                     $subcategory=false;
                    // se mira si tiene alguna subcategoría el producto
-                    $data_subcategory=array();
-                    if($this->config->item('subcategory_of_items')==1 ){
-                        // el for tiene es hata 5 porque solo se permiten 5 subcategorias, 
+                    $data_subcategory = array();
+                    if($this->config->item('subcategory_of_items')==1 )
+                    {
+                       
                         // si en un futuro se quiere agragr nuevas columnas se debe de agregar antes de esta y 
                         //luego sumar la cantida de columa agregada la nuemro 23
                         // 5*3 =15
-                        $cantidad =(int)$this->config->item('quantity_subcategory_of_items')*3;
-                        for($ij=0;$ij<$cantidad;$ij=$ij+3)
+                        $increment = $this->config->item("activate_pharmacy_mode") ? 4: 3; // cantidad de datos de la subcategoría 
+                        $cantidad =(int)$this->config->item('quantity_subcategory_of_items') *  $increment;
+
+                        for($ij = 0;$ij < $cantidad; $ij = $ij + $increment)
                         {
                             if($this->config->item('inhabilitar_subcategory1')==1){
                                 $custom1_subcategory ="»";
@@ -1602,14 +1605,26 @@ class Items extends Secure_area implements iData_controller
                             }
                             $custom2_subcategory = $sheet->getCellByColumnAndRow((23+$ij+1)+ $price_tiers_count + $price_taxes_count, $k)->getValue();
                             $cantidad_subcategory = $sheet->getCellByColumnAndRow((23+$ij+2 )+ $price_tiers_count + $price_taxes_count, $k)->getValue();
+                            $date_subcategory = $sheet->getCellByColumnAndRow((23+$ij+3 )+ $price_tiers_count + $price_taxes_count, $k)->getValue();
+                            
+                            if(!empty( $date_subcategory) and $this->config->item("activate_pharmacy_mode"))
+							{
+								$timestamp  = PHPExcel_Shared_Date::ExcelToPHP($date_subcategory + 1);
+								$date_subcategory = date("Y-m-d", $timestamp);
+							}
+							else  
+								$date_subcategory = null;
+                            
                             if($custom1_subcategory!="" &&  $custom2_subcategory!="" && $cantidad_subcategory!="" ) {
                                 $subcategory=true;
-                                $data_aux=array(
-                                    "item_id"=>$item_id,
-                                    "location_id"=>$this->Employee->get_logged_in_employee_current_location_id(),
-                                    "custom1"=>strtoupper ($custom1_subcategory),
-                                    "custom2"=>strtoupper($custom2_subcategory),
-                                    "quantity"=>is_numeric($cantidad_subcategory) ? $cantidad_subcategory : 0,
+                                $data_aux = array(
+                                    "item_id" => $item_id,
+                                    "location_id" => $this->Employee->get_logged_in_employee_current_location_id(),
+                                    "custom1" => strtoupper ($custom1_subcategory),
+                                    "custom2" => strtoupper($custom2_subcategory),
+                                    "expiration_date" => $date_subcategory,
+                                    "of_low" => 0,
+                                    "quantity" => is_numeric($cantidad_subcategory) ? $cantidad_subcategory : 0,
                                 );
                                  $data_subcategory[]=$data_aux;
                             }

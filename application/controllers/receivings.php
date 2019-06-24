@@ -516,10 +516,11 @@ class Receivings extends Secure_area
 						$custom1_subcategory=null;
 						$custom2_subcategory=null;
 						$quantity_subcategory=null;
-						if ($this->config->item('subcategory_of_items')==1 and $this->do_has_subcategory($sheet,$k,$item_id)){
-							//$item_info= $this->Item->get_info($item_id);
-						   $cantidad =(int)$this->config->item('quantity_subcategory_of_items')*3;
-                     	   for($ij=0;$ij<$cantidad  ;$ij=$ij+3)
+						if ($this->config->item('subcategory_of_items') == 1 and $this->do_has_subcategory($sheet,$k,$item_id)){
+							$increment = $this->config->item("activate_pharmacy_mode") ? 4: 3; // cantidad de datos de sucategría 
+							$cantidad =(int) $this->config->item('quantity_subcategory_of_items') * $increment;
+						   
+                     	  	for($ij=0; $ij< $cantidad  ;$ij= $ij + $increment)
                        		{
 								if($this->config->item('inhabilitar_subcategory1')==1){
 									$custom1_subcategory ="»";
@@ -529,13 +530,15 @@ class Receivings extends Secure_area
 								$custom2_subcategory = $sheet->getCellByColumnAndRow((4+$ij+1), $k)->getValue();
 								$quantity_subcategory = $sheet->getCellByColumnAndRow((4+$ij+2 ), $k)->getValue();
 								$date_subcategory = $sheet->getCellByColumnAndRow((4+$ij+3 ), $k)->getValue();
-								if($date_subcategory != "")
+								
+								if(!empty( $date_subcategory) and $this->config->item("activate_pharmacy_mode"))
 								{
-									$timestamp  = PHPExcel_Shared_Date::ExcelToPHP($date_subcategory+1);
+									$timestamp  = PHPExcel_Shared_Date::ExcelToPHP($date_subcategory + 1);
 									$date_subcategory = date("Y-m-d", $timestamp);
-												
-
 								}
+								else  
+									$date_subcategory = null;
+
 								if($custom1_subcategory!="" &&  $custom2_subcategory!="" && $quantity_subcategory!="" ) {
 									if(!$this->config->item("activate_pharmacy_mode") and !$this->items_subcategory->exists($item_id, false , $custom1_subcategory,$custom2_subcategory)){
 										$this->receiving_lib->empty_cart();
