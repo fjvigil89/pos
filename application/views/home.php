@@ -5,8 +5,8 @@
 
 			<h1>
 			<?php echo lang('common_dashboard'); ?>
-			<?php 
-					$extra="";
+			<!--<?php 
+					/*$extra="";
 					$url_video_ver="https://www.youtube.com/watch?v=PHET-RZfg6c&t=2s";
 					if($this->Appconfig->es_franquicia()){
 						$url_video=	$this->Appconfig->get_video("INICIO Y ESTADÍSTICA");
@@ -25,12 +25,12 @@
 						}
 					}
 					$a_video= '<a target="_blank" href="'.$url_video_ver.'" '.$extra.' class="icon fa fa-youtube-play help_button" ></a>';
-					echo $a_video;				
+					echo $a_video;	*/			
 				
 				
-			?>
-			<!--<a class="icon fa fa-youtube-play help_button" id='maxhome' rel='0' data-toggle="modal" data-target="#stack1"></a>
-				-->
+			?>-->
+			<a class="icon fa fa-youtube-play help_button" id='modal-video-tutorial' rel='0' data-toggle="modal" data-target="#stack"></a>
+				
 			<small><?php echo lang('module_name'). ' & ' .lang('statistics'); ?></small>
 			</h1>
 		</div>
@@ -554,6 +554,9 @@
 	</div>
 	<!-- END CHARTS -->
 	<script src="<?php echo base_url();?>js/jquery.blockUI.js" type="text/javascript"></script>
+	<?=$this->load->view("tutorials");?>
+
+
 	<script type="text/javascript">
 		$(document).ready(function()
 		{
@@ -571,7 +574,7 @@
 			});
 
 
-         <?php if($this->config->item('hide_video_stack1') == '0'){?>
+         /*<?php if($this->config->item('hide_video_stack1') == '0'){?>
          $('.modal.fade').addClass('in');
          $('#stack1').css({'display':'block'});
          <?php } ?>
@@ -602,7 +605,7 @@
              $.post('<?php echo site_url("config/show_hide_video_help");?>',
              {show_hide_video1:$(this).is(':checked') ? '1' : '0',video1:'hide_video_stack1'});
 
-         });
+         });*/
 
 			$('#weeklysales').datetimepicker({
 			    locale: 'es',

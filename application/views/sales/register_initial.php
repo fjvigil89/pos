@@ -50,6 +50,7 @@
 					array( "id"=>"modal-return-ticket", 'data-toggle'=>"modal","style"=>"display:none",
 						'data-target'=>'#myModal'));
 	?>
+
 	<script type="text/javascript">
 		$(document).ready(function()
 		{

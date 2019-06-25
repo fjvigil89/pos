@@ -70,7 +70,7 @@ $(document).ready(function() {
         <i class="icon fa fa-exchange"></i>
         <?= lang('module_'.$controller_name); ?>   
 		<!--<a class="icon fa fa-youtube-play help_button" id='maxitems' data-toggle="modal" data-target="#stack888"></a>-->
-		<?php 
+		<?php /*
 			$extra="";
 			$url_video_ver="https://www.youtube.com/watch?v=OkF8D_69e1E";
 			if($this->Appconfig->es_franquicia()){
@@ -82,7 +82,7 @@ $(document).ready(function() {
 				}
 			}
 			$a_video= '<a target="_blank" href="'.$url_video_ver.'" '.$extra.' class="icon fa fa-youtube-play help_button" ></a>';
-			echo $a_video;				
+			echo $a_video;		*/		
 		?>
     </h1>
 </div>
@@ -215,6 +215,7 @@ $(document).ready(function() {
         <!-- END CONDENSED TABLE PORTLET-->
     </div>
 </div>
+<?=$this->load->view("tutorials");?>
 
 <script type="text/javascript">
 	var start_date = "<?= date('Y-m-d H:i:s'); ?>";

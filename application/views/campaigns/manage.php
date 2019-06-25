@@ -181,6 +181,7 @@
 
         </div>
     </div>
+	<?=$this->load->view("tutorials");?>
 
 
     <script type="text/javascript">

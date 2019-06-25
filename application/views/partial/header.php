@@ -42,7 +42,7 @@
 
 	$this->load->view("partial/".$head_layout, $data);
 
-	$this->load->view("tutorials"); 
+	//$this->load->view("tutorials"); 
 	?>
 
     <script type="text/javascript">

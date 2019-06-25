@@ -5,7 +5,7 @@
 			<h1>
 				<i class='fa fa-shopping-cart'></i>
 				<?php echo lang('sales_opening_amount');?>
-				<a class="icon fa fa-youtube-play help_button" id='maxamount' rel='0' data-toggle="modal" data-target="#stack8"></a>
+				<!--<a class="icon fa fa-youtube-play help_button" id='maxamount' rel='0' data-toggle="modal" data-target="#stack8"></a>-->
 			</h1>
 		</div>
 		<!-- END PAGE TITLE -->		

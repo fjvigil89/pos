@@ -5,7 +5,7 @@
 				<i class="icon fa fa-cogs"></i> 
 				<?php echo lang('module_'.$controller_name); ?>
 				<?php 
-					$extra="";
+					/*$extra="";
 					$url_video_ver="https://www.youtube.com/watch?v=NE4IWySqQc8&t=2s";
 					if($this->Appconfig->es_franquicia()){
 						$url_video=	$this->Appconfig->get_video("CONFIGURACIÓN");
@@ -16,9 +16,9 @@
 						}
 					}
 					$a_video= '<a target="_blank" href="'.$url_video_ver.'" '.$extra.' class="icon fa fa-youtube-play help_button" ></a>';
-					echo $a_video;				
+					echo $a_video;*/				
 				?>
-			<!--<a class="icon fa fa-youtube-play help_button" id='maxconfig' rel='0' data-toggle="modal" data-target="#stack2"></a>-->
+			<a class="icon fa fa-youtube-play help_button" id='modal-video-tutorial' rel='0' data-toggle="modal" data-target="#stack"></a>
 			</h1>
 
 		</div>
@@ -3591,12 +3591,6 @@
 
 
 
-
-
-
-
-
-
 			<div class="col-md-12">
 				<div class="portlet light">
 					<div class="portlet-title">
@@ -3830,6 +3824,8 @@
 			
 		<?php ?>
 	</div>
+
+	<?=$this->load->view("tutorials");?>
 	<!-- END -->
 
 
@@ -3899,42 +3895,7 @@
 				$('#custom_subcategory1_name').val("");
 			   }
 		});				
-			<?php if($this->config->item('hide_video_stack2') == '0'){?>
-         $('.modal.fade').addClass('in');
-         $('#stack2').css({'display':'block'});
-         <?php } ?>
-         $('.modal.fade.in').click(function(e){
-       
-         if($(e.target)[0].id == "stack2")
-         {
-               $('.modal.fade.in').removeClass('in');
-               $('#stack2').css({'display':'none'});
-
-         }
-         
-     
-         });
-          $('#closeconfig').click(function(){
-         	
-               $('.modal.fade.in').removeClass('in');
-               $('#stack3').css({'display':'none'});
-               $('#maxconfig').removeClass('icon fa fa-youtube-play help_button');
-               $('#maxconfig').html("<a href='javascript:;' id='maxhom' rel=1 class='tn-group btn red-haze' ><span class='hidden-sm hidden-xs'>Maximizar&nbsp;</span><i class='icon fa fa-youtube-play help_button'></i></a>");
-         });
-      
-         $('#checkBoxStack2').click(function(e){
-             
-             $.post('<?php echo site_url("config/show_hide_video_help");?>',
-             {show_hide_video2:$(this).is(':checked') ? '1' : '0',video2:'hide_video_stack2'});
-               
-         });
-      	 $('#closeconfig').click(function(){
-         	
-               $('.modal.fade.in').removeClass('in');
-               $('#stack2').css({'display':'none'});
-               $('#maxconfig').removeClass('icon fa fa-youtube-play help_button');
-               $('#maxconfig').html("<a href='javascript:;' id='maxconfig' rel=1 class='tn-group btn red-haze' ><span class='hidden-sm hidden-xs'>Maximizar&nbsp;</span><i class='icon fa fa-youtube-play help_button'></i></a>");
-         });
+			
 
 			$(".portlet-body").css("display","none");
 
