@@ -148,13 +148,19 @@ class Category extends  Secure_area
 
         echo json_encode($response);
 	}
-	function categories_modal()
+	function categories_modal($class = "config")
 	{
 		
 		$path_img =  PATH_RECUSE."/".$this->Employee->get_store()."/img/categories";
 		$data["path_img"] = $path_img;
-		$data["categories"] = $this->Categories->get_all();
+        $data["categories"] = $this->Categories->get_all();
+        $data["class"] = $class;
 		$this->load->view("categories_modal",$data);
-	}
+    }
+    function get_categories_all()
+    {
+        $categories = $this->Categories->get_all();
+        echo json_encode($categories);
+    }
 }
 ?>

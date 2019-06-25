@@ -151,7 +151,7 @@
                                 </datalist>
                     </div>
                     <div class="col-md-1">
-									<a href="<?=site_url("category/categories_modal")?>" class="btn btn-medium green-seagreen effect" id="modal-serial" data-toggle="modal" data-target="#myModal" title="Perzonalizar número de factura"><i class="fa fa-plus hidden-lg fa fa-2x tip-bottom" data-original-title=""></i> <span class="visible-lg">Nueva categoría</span></a>
+									<a href="<?=site_url("category/categories_modal/".$this->router->fetch_class())?>" class="btn btn-medium green-seagreen effect" id="modal-serial" data-toggle="modal" data-target="#myModal" title="Perzonalizar número de factura"><i class="fa fa-plus hidden-lg fa fa-2x tip-bottom" data-original-title=""></i> <span class="visible-lg">Nueva categoría</span></a>
 									</div>
                 </div>
 
