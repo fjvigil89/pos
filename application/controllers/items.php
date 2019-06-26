@@ -278,11 +278,11 @@ class Items extends Secure_area implements iData_controller
         $suggestions = $this->Item->get_category_suggestions($this->input->get('term'));
         echo json_encode($suggestions);
     }
-    public function suggest_category_subcategory($custom="custom1")
+    public function suggest_category_subcategory($custom="custom1",$item_id= false)
     {
         //allow parallel searchs to improve performance.
         session_write_close();
-        $suggestions = $this->items_subcategory->get_category_suggestions_custom($this->input->get('term'),$custom);
+        $suggestions = $this->items_subcategory->get_category_suggestions_custom($this->input->get('term'),$custom,$item_id);
         echo json_encode($suggestions);
     }
 
@@ -632,7 +632,7 @@ class Items extends Secure_area implements iData_controller
                          $subcategory_data_custom1=$item_location_data['subcategory_data_custom1'];
                          $subcategory_data_custom2=$item_location_data['subcategory_data_custom2'];
                          $subcategory_data_quantity=$item_location_data['subcategory_data_quantity'];
-                         $subcategory_data_date=$item_location_data['subcategory_data_date'];
+                         $subcategory_data_date= isset($item_location_data['subcategory_data_date']) ? $item_location_data['subcategory_data_date']: [] ;
 
                         if(count($subcategory_data_custom1) < 0|| count($subcategory_data_custom2)<0 || count($subcategory_data_quantity)<0 )
                             $error_datos_custom =true;
@@ -789,7 +789,7 @@ class Items extends Secure_area implements iData_controller
                     $subcategory_data_custom1=$item_location_data['subcategory_data_custom1'];
                     $subcategory_data_custom2=$item_location_data['subcategory_data_custom2'];
                     $subcategory_data_quantity=$item_location_data['subcategory_data_quantity'];
-                    $subcategory_data_expiration_date = $item_location_data['subcategory_data_date'];
+                    $subcategory_data_expiration_date = isset($item_location_data['subcategory_data_date']) ? $item_location_data['subcategory_data_date']:[];
                     $override_prices = isset($item_location_data['override_prices']) && $item_location_data['override_prices'];
                     $override_defect = isset($item_location_data['override_defect']) && $item_location_data['override_defect'];
                     $item_location_before_save = $this->Item_location->get_info($item_id, $location_id);
@@ -817,9 +817,11 @@ class Items extends Secure_area implements iData_controller
                     }
                     $this->Item_location->save($data, $item_id, $location_id);
                    
-                    if($this->config->item('subcategory_of_items')==1&&$this->input->post('subcategory') ){
-                        $data_subcategory=array();
-                        for ($i = 0; $i < count($subcategory_data_quantity); $i++) {
+                    if($this->config->item('subcategory_of_items')== 1 && $this->input->post('subcategory') )
+                    {
+                        $data_subcategory = array();
+                        for ($i = 0; $i < count($subcategory_data_quantity); $i++) 
+                        {
                             $data_aux = array(
                                 "item_id"=>$item_id,
                                 "location_id"=>$location_id,
@@ -827,11 +829,11 @@ class Items extends Secure_area implements iData_controller
                                 "custom2"=>strtoupper($subcategory_data_custom2[$i]),
                                 "quantity"=>$subcategory_data_quantity[$i],
                                 "expiration_date"=>null
-                                );
-                                if( $this->config->item("activate_pharmacy_mode")){
-                                    $data_aux["expiration_date"] =  $subcategory_data_expiration_date[$i] ? date('Y-m-d 00:00:00', strtotime($subcategory_data_expiration_date[$i])) : null;
-                                }
-                                $data_subcategory[]=$data_aux;
+                            );
+                            if( $this->config->item("activate_pharmacy_mode")){
+                                $data_aux["expiration_date"] =  $subcategory_data_expiration_date[$i] ? date('Y-m-d 00:00:00', strtotime($subcategory_data_expiration_date[$i])) : null;
+                            }
+                            $data_subcategory[]=$data_aux;
 
                         }
                         if(count($subcategory_data_quantity) > 0)
@@ -1032,6 +1034,15 @@ class Items extends Secure_area implements iData_controller
         );
         $this->Inventory->insert($inv_data);
 
+        if($this->config->item('subcategory_of_items') )
+        {
+            $custom1_subcategory = $this->input->post('custom1_subcategory');
+            $custom2_subcategory = $this->input->post('custom2_subcategory');
+            $subcategory = $this->items_subcategory->get_info($item_id, false, $custom1_subcategory, $custom2_subcategory);
+            $quantity_subcategory = $subcategory->quantity;
+            $result = $this->items_subcategory->save_quantity(($quantity_subcategory-$this->input->post('newquantity')), 
+                $item_id, false, $custom1_subcategory,$custom2_subcategory);                            
+        }
         //Update stock quantity
         if ($this->Item_location->save_quantity($cur_item_location_info->quantity + $this->input->post('newquantity'), $item_id)) {
             echo json_encode(array('success' => true, 'message' => lang('items_successful_updating') . ' ' .

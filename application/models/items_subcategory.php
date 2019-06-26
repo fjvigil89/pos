@@ -48,12 +48,15 @@ class items_subcategory extends CI_Model
          return $query->result();
         
     }
-    function get_category_suggestions_custom($search, $custom="custom1")
+    function get_category_suggestions_custom($search, $custom="custom1", $item_id = false)
 	{
 		$suggestions = array();
 		$this->db->distinct();
 		$this->db->select($custom);
-		$this->db->from('items_subcategory');
+        $this->db->from('items_subcategory');
+        if($item_id != false)
+            $this->db->where('item_id',$item_id);
+        
 		$this->db->like($custom, $search);
 		//$this->db->where('deleted', 0);
 		$this->db->limit(25);

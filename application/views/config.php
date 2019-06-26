@@ -3103,6 +3103,28 @@
 								</div>
 							</div>
 						</div>
+						<div class="form-group">	
+								<?php echo form_label('<a class="help_config_options  tooltips " data-placement="left" title="">Alarma de vencimiento para farmacia </a>'.':', 'subcategory_alerts', array('class'=>'col-md-3 control-label')); ?> 						
+								<div class='col-md-9'>
+									<?php echo form_dropdown('subcategory_alerts',
+										array(
+										"1" => "1 día",
+										"2" => "2 días", 
+										"3" => "3 días",
+										"4" => "4 días",
+										"5" => "5 días",
+										"6" => "6 días",
+										"7" => "7 días",
+										"8" => "8 días",
+										"15" =>"15 días",
+										"30"=>"30 días",
+										"60"=>"40 días",
+										"90"=>"90 días",
+										"120"=>"120 días"),
+										$this->config->item('subcategory_alerts')?$this->config->item('subcategory_alerts'):15, 'class="bs-select form-control"'); 
+									?>
+							</div>
+							</div>
 						<div class="form-group">
 							<?php echo form_label('<a class="help_config_options  tooltips " data-placement="left" title="'.lang("config_subcategory_store_help").'">'.lang('config_subcategory_store').'</a>'.':', 'subcategory_of_items', array('class'=>'col-md-3 control-label')); ?> 						
 						

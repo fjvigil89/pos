@@ -16,6 +16,8 @@ class Migration_Farmacia_videos extends CI_Migration
 		$this->db->query("ALTER TABLE `phppos_hide_video` ADD UNIQUE KEY `employee_id` (`employee_id`,`module_id`)");
 
 		$this->db->query("ALTER TABLE `phppos_hide_video` ADD CONSTRAINT `phppos_hide_video_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `phppos_employees` (`person_id`)");
+		$this->db->query("ALTER TABLE `phppos_items_subcategory` ADD FOREIGN KEY (`item_id`) REFERENCES `phppos_location_items`(`item_id`) ON DELETE RESTRICT ON UPDATE RESTRICT");
+
 	}
 
 
@@ -26,6 +28,8 @@ class Migration_Farmacia_videos extends CI_Migration
 		$this->db->query("ALTER TABLE `phppos_items_subcategory`
 		DROP `of_low`");
 		$this->db->query("DROP TABLE phppos_hide_video");	
+		$this->db->query("ALTER TABLE phppos_items_subcategory DROP FOREIGN KEY phppos_items_subcategory_ibfk_2");
+		
 	}
     
 }

@@ -528,6 +528,7 @@ class Employee extends Person
 			$this->update_config($expire_date, $license_type, $last_login, $max_registers,$license,
 			$es_franquicia,	$expire_date_franquicia,$resellers_id,$suspended,$profile_id);
 			
+			
 			return true;
 		}
         

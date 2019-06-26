@@ -644,9 +644,60 @@ class Reports extends Secure_area {
 
         $this->load->view("reports/tabular_details", $data);
     }
+    function expired_subcategory_input() {
+        $data = $this->_get_common_report_data(TRUE);
+        $this->load->view("reports/expired_subcategory_input", $data);
+    }
     function defective_items_input() {
         $data = $this->_get_common_report_data(TRUE);
         $this->load->view("reports/defective_items_input", $data);
+    }
+    function expired_subcategory($start_date, $end_date, $export_excel = 0, $export_pdf = 0, $offset = 0) {
+        $this->check_action_permission('view_register_log');
+        $start_date = rawurldecode($start_date);
+        $end_date = rawurldecode($end_date);
+
+        $this->load->model('reports/Expired_subcategory');
+        $model = $this->Expired_subcategory;
+        $model->setParams(array('start_date' => $start_date, 'end_date' => $end_date, 'offset' => $offset, 'export_excel' => $export_excel, 'export_pdf' => $export_pdf));
+
+        $config = array();
+        $config['base_url'] = site_url("reports/expired_subcategory/" . rawurlencode($start_date) . '/' . rawurlencode($end_date) . "/$export_excel/$export_pdf");
+        $config['total_rows'] = $model->getTotalRows();
+        $config['per_page'] = $this->config->item('number_of_items_per_page') ? (int) $this->config->item('number_of_items_per_page') : 20;
+        $config['uri_segment'] = 6;
+        $this->pagination->initialize($config);
+
+        $headers = $model->getDataColumns();
+        $report_data = $model->getData();
+
+        $summary_data = array();
+        $details_data = array();
+
+        foreach ($report_data as $row) {
+          
+            $summary_data[] = array(
+                array('data' => $row['name'], 'align' => 'left'),
+                array('data' => date(get_date_format(), strtotime($row['expiration_date'])), 'align' => 'center'),
+                array('data' => $row['custom2'] , 'align' => 'center'),
+                array('data' => to_quantity($row['quantity'] ), 'align' => 'center'),
+                array('data' => $row["name_location"],'align' => 'left'),
+               
+            );
+        }
+
+        $data = array(
+            "title" => lang('reports_register_log_title'),
+            "subtitle" => date(get_date_format(), strtotime($start_date)) . '-' . date(get_date_format(), strtotime($end_date)),
+            "headers" => $model->getDataColumns(),
+            "data" => $summary_data,
+            "summary_data" => $model->getSummaryData(),
+            "export_excel" => $export_excel,
+            "export_pdf" => $export_pdf,
+            "pagination" => $this->pagination->create_links(),
+        );
+
+        $this->load->view("reports/tabular", $data);
     }
     function detailed_register_log($start_date, $end_date, $export_excel = 0, $export_pdf = 0, $offset = 0) {
         $this->check_action_permission('view_register_log');

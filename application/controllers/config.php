@@ -282,7 +282,8 @@ class Config extends Secure_area
 			"name_new_tax"=>$this->input->post('name_new_tax'),
 			"no_print_return_policy" =>(int) $this->input->post('no_print_return_policy'),
 			"units_measurement" =>  $this->input->post('units_measurement'),
-			"activate_sales_with_balance"=> (int) $this->input->post('activate_sales_with_balance')
+			"activate_sales_with_balance"=> (int) $this->input->post('activate_sales_with_balance'),
+			"subcategory_alerts" =>$this->input->post('subcategory_alerts')
 		);
 		
 

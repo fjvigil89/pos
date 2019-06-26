@@ -6,7 +6,7 @@
 			<h1>
 				<i class="icon fa fa-bar-chart-o"></i>
 				<?php echo lang('reports_reports'); ?>
-				<?php/*
+				<?php /*
 					$extra=" style='display: none; '";
 					$url_video_ver="";
 					if($this->Appconfig->es_franquicia()){
@@ -353,6 +353,7 @@
 							</a>
 						</div>
 					</div>
+					
 
 					<div class="list-group customers hidden">
 						<div class="btn-group btn-group-justified">
@@ -736,6 +737,12 @@
 								<i class="icon-trash"></i>
 								<div>
 									<?php echo lang('reports_defective_items_log_title'); ?>
+								</div>
+							</a>
+							<a href="<?php echo site_url('reports/expired_subcategory');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-download"></i>
+								<div>
+									<?php echo "vencidos - subcategoría" ?>
 								</div>
 							</a>							
 						</div>						
