@@ -1904,7 +1904,7 @@ $(document).ready(function() {
     $("#add_addtional_suppliers").click(function() {
 
         $("#additional_suppliers tbody").append(
-            "<tr><td><select class='bs-select form-control' name='supplier_id[]' ><?php foreach($suppliers as $name=>$value){?> <option  value='<?php echo $name;?>' selected='selected'><?php echo $value;}?></option></select></td><td><input type='text' class='form-control form-inps price_suppliers' size='50' name='price_suppliers[]' placeholder='Precio del proveedor' /></td></tr>"
+            "<tr><td><select class='bs-select form-control' name='supplier_id[]' ><?php foreach($suppliers as $name=>$value){?> <option  value='<?php echo H($name);?>' selected='selected'><?php echo H($value);}?></option></select></td><td><input type='text' class='form-control form-inps price_suppliers' size='50' name='price_suppliers[]' placeholder='Precio del proveedor' /></td></tr>"
             );
 
     });
