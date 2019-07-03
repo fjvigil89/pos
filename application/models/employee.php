@@ -544,6 +544,8 @@ class Employee extends Person
 		$this->session->sess_destroy();
 		if($this->Employee->es_demo()){
 			$this->Appconfig->batch_save(array('Hide_panel_type_business'=>0));
+		}else{
+			$this->Appconfig->batch_save(array('Hide_panel_type_business'=>1));
 		}
 		redirect('login');
 	}

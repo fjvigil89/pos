@@ -3075,7 +3075,6 @@
 							<?php echo form_label(lang('config_spreadsheet_format').':', 'spreadsheet_format',array('class'=>'col-md-3 control-label')); ?>
 							<div class="col-md-9">
 								<?php echo form_dropdown('spreadsheet_format', array(
-								lang('config_csv') => lang('config_csv'), 
 								lang('config_xlsx') => lang('config_xlsx')), 
 								$this->config->item('spreadsheet_format'), 'class="bs-select form-control"'); ?>
 							</div>

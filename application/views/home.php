@@ -83,7 +83,7 @@
 </div>
 <?php } ?>
 
-<?php if($this->config->item('initial_config') == 0){ ?>
+<?php if($this->config->item('initial_config') == 0 && (!$this->Employee->es_demo() ||  $this->config->item('Hide_panel_type_business'))){ ?>
 <div class="modal fade" id="mostrarmodal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
 		<?php echo form_open('',array('id'=>'confi_impuesto_form','class'=>'form-horizontal')); ?>
       <div class="modal-dialog">
@@ -877,7 +877,7 @@ $(document).ready(function(){
 		var profile = array_profile[3];
 		
 		if(confirm("Desea cargar el perfil: "+$("#profile-name-"+array_profile[4]).html())) {
-			dialogo("<div id='id_sincronizacion_offline_contenido'> <center><img src='"+BASE_URL+"/img/loading_perfil.gif' alt='' width='30%' ></center><br> <h4>Esto podría tardar varios minutos</h4> </div>");
+			dialogo("<div id='id_sincronizacion_offline_contenido'> <center><img src='"+BASE_URL+"/img/loading_perfil.gif' alt='' width='30%' ></center><br><h4>"+$("#profile-name-"+array_profile[4]).html()+"</h4><br> <h4>Esto podría tardar varios minutos</h4>  </div>");
 			$('#configProfileType').modal('toggle'); 
 				
 			$.ajax({
@@ -896,7 +896,7 @@ $(document).ready(function(){
 			                    textStatus, errorThrown); //+ JSON.stringify(jqXHR)
 			    }
 			});
-		}
+		//}
 	});
 });
 </script>
