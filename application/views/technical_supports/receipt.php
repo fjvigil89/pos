@@ -244,11 +244,11 @@
                            <?php echo"<strong>Observaciones </strong>"; ?> : <?php echo $observaciones_entrega; ?>
                         </div>
                      <?php } ?>
-					 <?php if($this->config->item('return_policy_support')!=FALSE){ ?>
+					 <!--<?php if($this->config->item('return_policy_support')!=FALSE){ ?>
                         <div id="sale_return_policy">
 							<?php echo nl2br($this->config->item('return_policy_support')); ?>
                         </div>
-                     <?php } ?>
+                     <?php } ?>-->
 
                     
              </div>
