@@ -2627,8 +2627,22 @@
 										'value'=>$this->config->item('value_point')));
 									?> Ejemplo: Por cada <strong>1000</strong> de dinero generar <strong>1</strong> punto
 								</div>
-							</div>												
-								
+							</div>	
+							<div class="form-group">	
+								<?php echo form_label(lang('config_percent_point'), 'percent_point',array('class'=>'col-md-3 control-label ')); ?>							
+								<div class='col-md-9'>
+									<div class="input-group">
+										<?php echo form_input(array(
+											'name'=>'percent_point',
+											'id'=>'percent_point',
+											'class'=>'form-control',
+											'size'=>'percent_point',
+											'value'=>$this->config->item('percent_point')));
+										?> 
+										<span class="input-group-addon">%</span>
+									</div>
+								</div>
+							</div>											
 							<div class="form-group">	
 								<?php echo form_label('<a class="help_config_options tooltips"  data-placement="left"  title="'.lang("config_categoria_gastos_help"). '">'.lang('config_categoria_gastos').'</a>'.':', 'categoria_gastos',array('class'=>'col-md-3 control-label ')); ?>
 									<div class='col-md-9'>
@@ -2671,21 +2685,7 @@
 								</div>
 							</div>
 							
-							<div class="form-group">	
-								<?php echo form_label(lang('config_percent_point'), 'percent_point',array('class'=>'col-md-3 control-label ')); ?>							
-								<div class='col-md-9'>
-									<div class="input-group">
-										<?php echo form_input(array(
-											'name'=>'percent_point',
-											'id'=>'percent_point',
-											'class'=>'form-control',
-											'size'=>'percent_point',
-											'value'=>$this->config->item('percent_point')));
-										?> 
-										<span class="input-group-addon">%</span>
-									</div>
-								</div>
-							</div>
+							
 						</div>
 
 						<div class="form-group">	
@@ -2989,7 +2989,7 @@
 									'id'=>'resolution',
 									'class'=>'form-textarea form-control',
 									'rows'=>'4',
-									'placeholder'=>'<strng>RESLUIN DE UTRIZIN NÚMER 400001 DEL 2013-07-26 NUMERIN DESDE 02-400001 HST 02-700000</strng>',
+									'placeholder'=>lang('common_resolution_help'),
 									'cols'=>'30',
 									'value'=>$this->config->item('resolution')));
 								?>
@@ -3064,10 +3064,10 @@
 									'name'=>'return_policy_credit',
 									'id'=>'return_policy_credit',
 									'class'=>'form-textarea form-control',
-									'placeholder'=>'Garantía   excepto por golpes  daños eléctricos.',
+									'placeholder'=>'Garantía de 30 días excepto por golpes y daños eléctricos',
 									'rows'=>'4',
 									'cols'=>'30',
-									'value'=>$this->config->item('return_policy_credit')));
+									'value'=>$this->config->item('return_policy_credit')?$this->config->item('return_policy_credit'):lang('common_return_policy_help')));
 								?>
 							</div>
 						</div>
@@ -4016,7 +4016,7 @@
 				$("#container_points").show()
 			};
 
-			$('#system_point').change(function()
+			/*$('#system_point').change(function()
 			{
 				if ($(this).prop('checked')) 
 				{
@@ -4026,7 +4026,7 @@
 			    {
 			        $("#container_points").addClass('hidden');
 			    }
-			});
+			});*/
 
 			//Container limit_cash_flow
 			var s2 = "<?php echo $this->config->item('limit_cash_flow') ?>";
