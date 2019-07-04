@@ -307,7 +307,7 @@ class technical_supports extends Secure_area
 	function save()
 	{
 		$this->check_action_permission('add_update');
-
+		
 		$this->form_validation->set_rules('id_employee', 'Empleado', 'required|numeric');
 		$this->form_validation->set_rules('id_technical', 'Empleado', 'required|numeric');
 		$this->form_validation->set_rules('team_type', 'Equipo', 'required');

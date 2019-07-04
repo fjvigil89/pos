@@ -1,5 +1,4 @@
 <?php
-$lang['config_value_point_accumulated']='Accumulated points';
 $lang['saleS_total_invoice'] = 'TOTAL INVOICE';
 $lang['sell_lower_cost_price']="Vender a menor precio del costo";
 $lang['suspend_notes']="Notas";

@@ -753,7 +753,7 @@
 						</tr>
 					<?php } ?>
 										
-					<?php if (isset($points) && $this->config->item('show_point')==1 && $this->config->item('system_point')==1) { ?>
+					<?php if (isset($points) and $points > 0 && $this->config->item('show_point')==1 and $this->config->item('system_point')==1) { ?>
 						<tr>
 							<td class="right_text_align" colspan="<?php echo $discount_exists ? '4' : '3'; ?>">
 								<?php echo lang('config_value_point_accumulated'); ?>:

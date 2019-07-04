@@ -1646,6 +1646,12 @@ class Items extends Secure_area implements iData_controller
                         }
                     }
                     if ($this->Item->save($item_data, $item_id)) {
+                        $this->Categories->save(-1,array(
+                            "name" => $category,
+                            "img" => "",
+                            "name_img_original"=> "",
+                            "deleted"=> 0,
+                        ));
                         if (!empty($item_data['supplier_id']) && $item_data['supplier_id'] != null) {
                             $item_data_supliers = array(
                                 'item_id' => isset($item_data['item_id']) ? $item_data['item_id'] : $item_id,
