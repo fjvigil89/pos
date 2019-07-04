@@ -304,12 +304,12 @@
                     </div>
                     <div class="btn-group pull-right">
                         <?php 
-							$numero_wsp="573005337719";
+							$numero_wsp="17862013838";
 						
 							if($this->Appconfig->es_franquicia()==true){
 								$numero_wsp= str_replace(array(" ","+"),"",$data_commpany->whatsapp) ;
 							 }
-							 $api_wsp="https://vilmanunez.com/crear-enlace-whatsapp/#httpsapiwhatsappcomsendphone".$numero_wsp."textBienvenido_al_sistema_de_soporte_en_que_le_puedo_servir_y_con_quien_tengo_el_gusto";
+							 $api_wsp="https://api.whatsapp.com/send?phone=".$numero_wsp."&text=Hola%20quiero%20info";
 							?>
                         <a class="btn green-jungle" target="_blank" href="<?php echo $api_wsp ?>">
                             <span class="hidden-sm hidden-xs"><?php echo lang("common_support");?>&nbsp;</span><i

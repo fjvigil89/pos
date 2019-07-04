@@ -57,6 +57,12 @@ class Sale_lib
 	function get_new_tax(){
 		return $this->CI->session->userdata('new_tax');
 	}
+	function set_order($order_id){
+		$this->CI->session->set_userdata('order',$order_id);
+	}
+	function get_order(){
+		return $this->CI->session->userdata('order')?$this->CI->session->userdata('order'):NULL;
+	}
 	function set_overwrite_tax($overwrite_tax){
 		$this->CI->session->set_userdata('overwrite_tax',$overwrite_tax);
 	}
@@ -174,6 +180,10 @@ class Sale_lib
 	function clear_new_tax()
 	{
 		$this->CI->session->unset_userdata('new_tax');
+	}
+	function clear_order()
+	{
+		$this->CI->session->unset_userdata('order');
 	}
 	function clear_rate_price()
 	{
@@ -1862,6 +1872,7 @@ class Sale_lib
 		$this->clear_opcion_sale();
 		$this->clear_divisa();
 		$this->clear_rate();
+		$this->clear_order();
 		$this->clear_rate_price();
 		$this->clear_total_price_transaction_previous();
 		$this->clear_pagar_otra_moneda();

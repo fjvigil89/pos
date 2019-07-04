@@ -130,3 +130,11 @@ $route['tienda/category'] = "template/category";
 $route['tienda/shop-item'] = "template/shop_item";
 $route['tienda/contact'] = "template/contact";
 $route['tienda/img/view/(:any)'] = "img/view/$1";
+
+/* API*/
+$route['api/products/(:any)'] = 'api/Products/index/$1';
+$route['api/img/(:num)'] = 'api/Products/imgview/$1';
+$route['api/imagen/(:num)'] = 'api/Products/imagen/$1';
+$route['api/orders/index/(:any)'] = 'api/OrdersApi/index/$1';
+$route['api/orders/save'] = 'api/OrdersApi/save';
+$route['api/orders/orderstatus'] = 'api/OrdersApi/orderstatus';

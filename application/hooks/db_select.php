@@ -12,6 +12,10 @@
             //Nombre de Base de datos
             $_SESSION['db_name'] = 'login';
         }
-        
+        if( !isset($_SESSION['db_name_api'] ))
+        {
+            //Nombre de Base de datos
+            $_SESSION['db_name_api'] = 'inpos_phppos2';
+        }
     }
 

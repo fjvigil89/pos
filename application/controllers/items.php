@@ -591,7 +591,7 @@ class Items extends Secure_area implements iData_controller
             'activate_range'=>(int) $this->input->post('activate_range'),
             "has_sales_units"=>(int) $this->input->post('has_sales_units'),
             "quantity_unit_sale" => (double) $this->input->post('quantity_unit_sale') ?  $this->input->post('quantity_unit_sale'): 1,
-
+            'shop_online'=>$this->input->post('shop_online') ? $this->input->post('shop_online') : 0
         );
         $unit_sale =$this->input->post('unit_sale');
 
@@ -727,15 +727,37 @@ class Items extends Secure_area implements iData_controller
 
             //New item
             if ($item_id == -1) {
+
                 $success_message = lang('items_successful_adding') . ' ' . $item_data['name'];
                 $this->session->set_flashdata('manage_success_message', $success_message);
                 echo json_encode(array('success' => true, 'message' => $success_message, 'item_id' => $item_data['item_id'], 'redirect' => $redirect, 'sale_or_receiving' => $sale_or_receiving));
                 $item_id = $item_data['item_id'];
+
+                if ($item_data['shop_online']==1) {
+                    $key = $this->config->item('token_api');
+                    $dominio = $this->config->item('dominioapi');                                                
+                    $url= $dominio."/api/products/sicrono";
+                    $datos=array('id' => $item_id, 'keyapi' => $key);
+                    $resul=postcurl($url,$datos);
+                }
+
+
+
             } else //previous item
             {
+
                 $success_message = lang('items_successful_updating') . ' ' . $item_data['name'];
                 $this->session->set_flashdata('manage_success_message', $success_message);
                 echo json_encode(array('success' => true, 'message' => $success_message, 'item_id' => $item_id, 'redirect' => $redirect, 'sale_or_receiving' => $sale_or_receiving));
+
+
+                if ($item_data['shop_online']==1) {
+                    $key = $this->config->item('token_api');
+                    $dominio = $this->config->item('dominioapi');                                                
+                    $url= $dominio."/api/products/sicrono";
+                    $datos=array('id' => $item_id, 'keyapi' => $key);
+                    $resul=postcurl($url,$datos);
+                }
             }
 
             if ($this->input->post('additional_item_numbers') && is_array($this->input->post('additional_item_numbers'))) {
