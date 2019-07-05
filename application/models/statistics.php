@@ -73,7 +73,9 @@ class Statistics extends CI_Model
         $this->db->select('location_items.quantity as cantidad, items.name');
         $this->db->from('location_items');
         $this->db->join('items', 'items.item_id = location_items.item_id');
-        $this->db->where('location_items.reorder_level >= phppos_location_items.quantity');
+        // se comento porque Omar prefiere que se muestren cuando sea 10 la cantidad de productos
+        //$this->db->where('location_items.reorder_level >= phppos_location_items.quantity');
+        $this->db->where('10 >= phppos_location_items.quantity');
         $this->db->where('location_items.location_id',$location_id);
         $this->db->order_by('location_items.quantity','desc');
         $this->db->limit(10);
