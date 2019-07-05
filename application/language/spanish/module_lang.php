@@ -1,4 +1,8 @@
 <?php
+$lang['module_orders']='Pedidos';
+$lang['module_orders_desc']='Agregar, Actualizar, Borrar y Buscar clientes';
+$lang['module_action_search_orders'] = 'Buscar Pedidos';
+
 $lang['module_allow_graphics_arnings_monsth']='Grafica de ganancias';
 $lang['module_allow_graphics_by_store']='Graficas ventas por tienda';
 $lang['module_allow_open_money_box']='Permitir abrir monedero de caja, sin realizar ventas';
