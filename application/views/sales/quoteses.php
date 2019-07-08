@@ -46,6 +46,7 @@
 									<th><?php echo lang('sales_email_receipt'); ?></th>
 									<?php if ($this->Employee->has_module_action_permission('sales', 'delete_suspended_sale', $this->Employee->get_logged_in_employee_info()->person_id)){ ?>
 									<th><?php echo lang('common_delete'); ?></th>
+									<th>Opciones</th>
 									<?php } ?>
 								</tr>
 							</thead>
@@ -84,6 +85,7 @@
 											<?php echo form_open('sales/quotes_receipt/'.$suspended_sale['quote_id'], array('method'=>'get', 'class' => 'form_receipt_suspended_sale')); ?>
 												<button type="submit" name="submit" id="submit_receipt" class="btn btn-success btn-sm"><?php echo lang('sales_recp'); ?></button>
 											</form>
+																
 										</td>
 
 										<td align="center">
@@ -102,6 +104,13 @@
 													<button type="submit" name="submit" id="submit_delete" class="btn btn-danger btn-sm"><?php echo lang('common_delete'); ?></button>
 												</form>
 											<?php //} ?>
+										</td>
+										<td align="center">
+										
+											<?php echo form_open('sales/edit_quote/'.$suspended_sale['quote_id'], array('method'=>'post', 'class' => 'form_receipt_suspended_sale')); ?>
+												<button type="submit" name="submit" id="submit_receipt" class="btn btn-success btn-sm">Editar/Facturar</button>
+											</form>
+											
 										</td>
 									</tr>
 								<?php }?>

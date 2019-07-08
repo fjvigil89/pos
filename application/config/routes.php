@@ -115,7 +115,7 @@ $route['reports/depostos_salidas'] = "reports/depostos_salidas_input_excel_expor
 $route['reports/movement_balance'] = "reports/movement_balance_data_input_excel_export";
 $route['reports/detailed_sales_serial'] = "reports/custom_serial_input_excel_export";
 $route['reports/purchase_provider']="reports/purchase_provider_input";
-
+$route['reports/expired_subcategory'] = 'reports/expired_subcategory_input';
 
 
 //$route['reports/detailed_report_table'] = "reports/tables_report";
@@ -131,3 +131,11 @@ $route['tienda/category'] = "template/category";
 $route['tienda/shop-item'] = "template/shop_item";
 $route['tienda/contact'] = "template/contact";
 $route['tienda/img/view/(:any)'] = "img/view/$1";
+
+/* API*/
+$route['api/products/(:any)'] = 'api/Products/index/$1';
+$route['api/img/(:num)'] = 'api/Products/imgview/$1';
+$route['api/imagen/(:num)'] = 'api/Products/imagen/$1';
+$route['api/orders/index/(:any)'] = 'api/OrdersApi/index/$1';
+$route['api/orders/save'] = 'api/OrdersApi/save';
+$route['api/orders/orderstatus'] = 'api/OrdersApi/orderstatus';

@@ -2,9 +2,31 @@
 
 class Quote extends CI_Model
 {
+public function get_info($quote_id)
+{
+    $this->db->from('quotes');
+    $this->db->where('quote_id', $quote_id);
+    return $this->db->get();
+}
+public function delete($quote_id, $all_data = false)
+{
+	$sale_info = $this->get_info($quote_id)->row_array();
+	
+	$employee_id = $this->Employee->get_logged_in_employee_info()->person_id;
 
-function save_quote($items,$customer_id,$employee_id, $sold_by_employee_id, $comment,$show_comment_on_receipt,$payments,$sale_id=false, $suspended = 0, $cc_ref_no = '', $auth_code = '', $change_sale_date=false,$balance=0, $store_account_payment = 0,
-$overwrite_tax=false,$new_tax=null)
+	if ($all_data) 
+	{
+		$this->db->delete('quotes_payments', array('quote_id' => $quote_id));
+		$this->db->delete('quotes_items_taxes', array('quote_id' => $quote_id));
+		$this->db->delete('quotes_items', array('quote_id' => $quote_id));
+	}
+
+	$this->db->where('quote_id', $quote_id);
+	return $this->db->update('quotes', array('deleted' => 1, 'deleted_by' => $employee_id));
+}
+
+function save_quote($items,$customer_id,$employee_id, $sold_by_employee_id, $comment,$show_comment_on_receipt,$payments,$quote_id=false, $suspended = 0, $cc_ref_no = '', $auth_code = '', $change_sale_date=false,$balance=0, $store_account_payment = 0,
+	$overwrite_tax=false,$new_tax=null)
 	{
 		$this->load->library('sale_lib');
 			
@@ -12,17 +34,16 @@ $overwrite_tax=false,$new_tax=null)
 			return -1;
 
 		$payment_types='';
-		foreach($payments as $payment_id=>$payment)
-		{
+
+		foreach($payments as $payment_id=>$payment)		
 			$payment_types=$payment_types.$payment['payment_type'].': '.to_currency($payment['payment_amount']).'<br />';
-		}
+		
 		
 		$tier_id = $this->sale_lib->get_selected_tier_id();
 		
-		if (!$tier_id)
-		{
+		if (!$tier_id)		
 			$tier_id = NULL;
-		}
+		
 		
 		$sales_data = array(
 			'customer_id'=> $customer_id > 0 ? $customer_id : null,
@@ -43,18 +64,13 @@ $overwrite_tax=false,$new_tax=null)
 			"overwrite_tax"=>$overwrite_tax
 		);
 			
-		if($sale_id)
+		if($quote_id)
 		{
-			$old_date=$this->Sale->get_info($sale_id)->row_array();
-			$sales_data['sale_time']=date('Y-m-d H:i:s');
-			
-			
-			
+			$old_date=$this->get_info($quote_id)->row_array();
+			$sales_data['sale_time'] = date('Y-m-d H:i:s');			
 		}
-		else
-		{
-			$sales_data['sale_time'] = date('Y-m-d H:i:s');
-		}
+		else		
+			$sales_data['sale_time'] = date('Y-m-d H:i:s');		
 
 		$this->db->query("SET autocommit=0");
 		//Lock tables invovled in sale transaction so we don't have deadlock
@@ -65,48 +81,46 @@ $overwrite_tax=false,$new_tax=null)
 		,'.$this->db->dbprefix('employees_locations').' READ,'.$this->db->dbprefix('locations').' READ, '.$this->db->dbprefix('items_tier_prices').' READ');
 			$store_account_payment_amount = 0;
 		
-		if ($store_account_payment)
-		{
+		if ($store_account_payment)		
 			$store_account_payment_amount = $this->sale_lib->get_total();
-		}
+		
 		
 		//Only update balance + store account payments if we are NOT an estimate (suspended = 2)
 		
-		 $previous_store_account_amount = 0;
+		 /*$previous_store_account_amount = 0;
 
-		 if ($sale_id !== FALSE)
+		 if ($quote_id !== FALSE)
 		 {
-			 $previous_store_account_amount = $this->Sale->get_store_account_payment_total($sale_id);
-		 }
+			 $previous_store_account_amount = $this->Sale->get_store_account_payment_total($quote_id);
+		 }*/
 		 
-		if ($sale_id)
-		{
-			//Delete previoulsy sale so we can overwrite data
-			if (!$this->Sale->delete($sale_id, true))
+		if ($quote_id)
+		{			
+			if (!$this->delete($quote_id, true))
 			{
 				$this->db->query("ROLLBACK");
 				$this->db->query('UNLOCK TABLES');
 				return -1;
 			}
 
-			if (!$this->db->insert('quotes',$sales_data))
+			$this->db->where('quote_id', $quote_id);
+			if (!$this->db->update('quotes', $sales_data)) 
 			{
-				$this->db->query("ROLLBACK");
-				$this->db->query('UNLOCK TABLES');
-				return -1;
-			}
-			$sale_id = $this->db->insert_id();
+                $this->db->query("ROLLBACK");
+                $this->db->query('UNLOCK TABLES');
+                return -1;
+            }
+			
 		}
 		else
 		{
-
 			if (!$this->db->insert('quotes',$sales_data))
 			{
 				$this->db->query("ROLLBACK");
 				$this->db->query('UNLOCK TABLES');
 				return -1;
 			}
-			$sale_id = $this->db->insert_id();
+			$quote_id = $this->db->insert_id();
 		}
 		
 		$total_giftcard_payments = 0;
@@ -117,7 +131,7 @@ $overwrite_tax=false,$new_tax=null)
 
 			$sales_payments_data = array
 			(
-				'quote_id'=>$sale_id,
+				'quote_id'=>$quote_id,
 				'payment_type'=>$payment['payment_type'],
 				'payment_amount'=>$payment['payment_amount'],
 				'payment_date' => $payment['payment_date'],
@@ -153,15 +167,14 @@ $overwrite_tax=false,$new_tax=null)
 				else // Set cost price = price so we have no profit
 				{
 					$cost_price = $item['price'];
-				}
-				
+				}				
 				
 				if (!$this->config->item('disable_subtraction_of_giftcard_amount_from_sales'))
 				{
 					//Add to the cost price if we are using a giftcard as we have already recorded profit for sale of giftcard
 					if (!$has_added_giftcard_value_to_cost_price)
 					{
-						$cost_price+= $total_giftcard_payments / $item['quantity'];
+						$cost_price += $total_giftcard_payments / $item['quantity'];
 						$has_added_giftcard_value_to_cost_price = true;
 					}
 				}
@@ -174,7 +187,7 @@ $overwrite_tax=false,$new_tax=null)
 				
 				$sales_items_data = array
 				(
-					'quote_id'=>$sale_id,
+					'quote_id'=>$quote_id,
 					'item_id'=>$item['item_id'],
 					'line'=>$item['line'],
 					'description'=>$item['description'],
@@ -193,69 +206,65 @@ $overwrite_tax=false,$new_tax=null)
 					$this->db->query('UNLOCK TABLES');
 					return -1;
 				}
-				
-			
-				
-		
-				}
 			}
+		}			
 			
-			
-		
 		$customer = $this->Customer->get_info($customer_id); 
- 			if ($customer_id == -1 or $customer->taxable)
- 			{
-				 
-				foreach($items as $line=>$item)
+
+		if ($customer_id == -1 or $customer->taxable)
+		{				
+			foreach($items as $line=>$item)
+			{				
+				if($overwrite_tax==1)
 				{
-					
-					if($overwrite_tax==1){
-                        $query_result = $this->db->insert('quotes_items_taxes', array(
-							'quote_id' 	=>$sale_id,
-							'item_id' 	=>$item['item_id'],
-							'line'      =>$item['line'],
-							'name'		=>$new_tax['name'],
-							'percent' 	=>$new_tax['percent'],
-							'cumulative'=>$new_tax['cumulative']
-						));
-                        if (!$query_result) {
-                            $this->db->query("ROLLBACK");
-                            $this->db->query('UNLOCK TABLES');
-                            return -1;
-                        }                        
-    
-                    }else{
-						foreach($this->Item_taxes_finder->get_info($item['item_id']) as $row)
-						{
-							$tax_name = $row['percent'].'% ' . $row['name'];
-					
-							//Only save sale if the tax has NOT been deleted
-							if (!in_array($tax_name, $this->sale_lib->get_deleted_taxes()))
-							{	
-								$query_result = $this->db->insert('quotes_items_taxes', array(
-									'quote_id' 	=>$sale_id,
-									'item_id' 	=>$item['item_id'],
-									'line'      =>$item['line'],
-									'name'		=>$row['name'],
-									'percent' 	=>$row['percent'],
-									'cumulative'=>$row['cumulative']
-								));
-								
-								if (!$query_result)
-								{
-									$this->db->query("ROLLBACK");
-									$this->db->query('UNLOCK TABLES');
-									return -1;
-								}
+					$query_result = $this->db->insert('quotes_items_taxes', array(
+						'quote_id' 	=>$quote_id,
+						'item_id' 	=>$item['item_id'],
+						'line'      =>$item['line'],
+						'name'		=>$new_tax['name'],
+						'percent' 	=>$new_tax['percent'],
+						'cumulative'=>$new_tax['cumulative']
+					));
+					if (!$query_result) 
+					{
+						$this->db->query("ROLLBACK");
+						$this->db->query('UNLOCK TABLES');
+						return -1;
+					} 
+				}
+				else
+				{
+					foreach($this->Item_taxes_finder->get_info($item['item_id']) as $row)
+					{
+						$tax_name = $row['percent'].'% ' . $row['name'];
+				
+						//Only save sale if the tax has NOT been deleted
+						if (!in_array($tax_name, $this->sale_lib->get_deleted_taxes()))
+						{	
+							$query_result = $this->db->insert('quotes_items_taxes', array(
+								'quote_id' 	=>$quote_id,
+								'item_id' 	=>$item['item_id'],
+								'line'      =>$item['line'],
+								'name'		=>$row['name'],
+								'percent' 	=>$row['percent'],
+								'cumulative'=>$row['cumulative']
+							));
+							
+							if (!$query_result)
+							{
+								$this->db->query("ROLLBACK");
+								$this->db->query('UNLOCK TABLES');
+								return -1;
 							}
 						}
 					}
 				}
 			}
+		}
 		$this->db->query("COMMIT");			
 		$this->db->query('UNLOCK TABLES');	
 	
-		return $sale_id;				
+		return $quote_id;				
 	}
 	
 }

@@ -57,6 +57,12 @@ class Sale_lib
 	function get_new_tax(){
 		return $this->CI->session->userdata('new_tax');
 	}
+	function set_order($order_id){
+		$this->CI->session->set_userdata('order',$order_id);
+	}
+	function get_order(){
+		return $this->CI->session->userdata('order')?$this->CI->session->userdata('order'):NULL;
+	}
 	function set_overwrite_tax($overwrite_tax){
 		$this->CI->session->set_userdata('overwrite_tax',$overwrite_tax);
 	}
@@ -175,6 +181,10 @@ class Sale_lib
 	{
 		$this->CI->session->unset_userdata('new_tax');
 	}
+	function clear_order()
+	{
+		$this->CI->session->unset_userdata('order');
+	}
 	function clear_rate_price()
 	{
 		$this->CI->session->unset_userdata('rate_price');
@@ -241,6 +251,14 @@ class Sale_lib
 	function set_change_sale_date($change_sale_date)
 	{
 		$this->CI->session->set_userdata('change_sale_date',$change_sale_date);
+	}
+	function set_quote_id($quote_id)
+	{
+		$this->CI->session->set_userdata('change_quote_id',$quote_id);
+	}
+	function get_quote_id() 
+	{
+		return $this->CI->session->userdata('change_quote_id') ;
 	}
 	
 	function get_comment() 
@@ -311,7 +329,11 @@ class Sale_lib
 		$this->CI->session->unset_userdata('previous_tier_id');
 		$this->CI->session->unset_userdata('selected_tier_id');
 	}
-	
+	function clear_quote_id()
+	{
+		$this->CI->session->unset_userdata('change_quote_id');
+		
+	}
 	function set_comment_on_receipt($comment_on_receipt) 
 	{
 		$this->CI->session->set_userdata('show_comment_on_receipt', $comment_on_receipt);
@@ -1241,7 +1263,12 @@ class Sale_lib
 					"tax_included"=>$item_kit_info->tax_included,
 					"has_sales_units" => 0,
 					"name_unit"=>null,
-					"has_selected_unit"=>0
+					"has_selected_unit"=>0,
+				    "unit_quantity_presentation" =>null,
+				    "unit_quantity_item" =>null,
+				    "unit_quantity"	=> null,	
+                    "price_presentation" => null,
+                    "unit_measurement" => null
 					)
 				);
 
@@ -1845,6 +1872,7 @@ class Sale_lib
 		$this->clear_opcion_sale();
 		$this->clear_divisa();
 		$this->clear_rate();
+		$this->clear_order();
 		$this->clear_rate_price();
 		$this->clear_total_price_transaction_previous();
 		$this->clear_pagar_otra_moneda();
@@ -1855,6 +1883,7 @@ class Sale_lib
 		$this->clear_new_tax();
 		$this->clear_currency();
 		$this->clear_generate_txt();
+		$this->clear_quote_id();
 		
 	}
 	

@@ -1,12 +1,21 @@
 <?php $this->load->view("partial/header"); ?>
 
 
+<<<<<<< HEAD
 <!-- BEGIN PAGE TITLE -->
 <div class="page-title">
     <h1>
         <i class="icon fa fa-bar-chart-o"></i>
         <?php echo lang('reports_reports'); ?>
         <?php 
+=======
+		<!-- BEGIN PAGE TITLE -->
+		<div class="page-title">
+			<h1>
+				<i class="icon fa fa-bar-chart-o"></i>
+				<?php echo lang('reports_reports'); ?>
+				<?php /*
+>>>>>>> e711984a094b23069d6968b8f9228503b98fac56
 					$extra=" style='display: none; '";
 					$url_video_ver="";
 					if($this->Appconfig->es_franquicia()){
@@ -21,75 +30,76 @@
 					$a_video= '<a target="_blank" href="'.$url_video_ver.'" '.$extra.' class="icon fa fa-youtube-play help_button" ></a>';
 					echo $a_video;	
 					//<a class="icon fa fa-youtube-play help_button" id='maxreports' rel='0' data-toggle="modal" data-target="#stack7"></a>
-			
+			*/
 				?>
-    </h1>
-</div>
-<!-- END PAGE TITLE -->
-</div>
-<!-- END PAGE HEAD -->
-<!-- BEGIN PAGE BREADCRUMB -->
-<div id="breadcrumb" class="hidden-print">
-    <?php echo create_breadcrumb(); ?>
-</div>
-<!-- END PAGE BREADCRUMB -->
+				<a class="icon fa fa-youtube-play help_button" id='modal-video-tutorial' rel='0' data-toggle="modal" data-target="#stack"></a>
+			</h1>
+		</div>
+		<!-- END PAGE TITLE -->		
+	</div>
+	<!-- END PAGE HEAD -->
+	<!-- BEGIN PAGE BREADCRUMB -->
+	<div id="breadcrumb" class="hidden-print">
+		<?php echo create_breadcrumb(); ?>
+	</div>
+	<!-- END PAGE BREADCRUMB -->
 
-<div class="clear"></div>
+	<div class="clear"></div>
 
-<div class="row report-listing">
-    <div class="col-md-6">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title"><strong><?php echo lang('reports_make_a_selection')?></strong></h3>
-            </div>
-            <div class="panel-body">
-                <div class="parent-list">
+	<div class="row report-listing">
+		<div class="col-md-6">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title"><strong><?php echo lang('reports_make_a_selection')?></strong></h3>
+				</div>
+				<div class="panel-body">
+					<div class="parent-list">
+               
+                        <!--artículos-->
+						<?php if ($this->Employee->has_module_action_permission('reports', 'view_items', $this->Employee->get_logged_in_employee_info()->person_id)) { ?>					
+							<a href="#" class="icon-btn" id="items">
+								<i class="fa fa-table"></i>	
+								<div>
+									<?php echo lang('reports_items'); ?>
+								</div>
+							</a>
+						<?php } ?>
+                        
+                        <!--categorias-->
+						<?php if ($this->Employee->has_module_action_permission('reports', 'view_categories', $this->Employee->get_logged_in_employee_info()->person_id)) { ?>
 
-                    <!--artículos-->
-                    <?php if ($this->Employee->has_module_action_permission('reports', 'view_items', $this->Employee->get_logged_in_employee_info()->person_id)) { ?>
-                    <a href="#" class="icon-btn" id="items">
-                        <i class="fa fa-table"></i>
-                        <div>
-                            <?php echo lang('reports_items'); ?>
-                        </div>
-                    </a>
-                    <?php } ?>
+							<a href="#" class="icon-btn" id="categories">
+								<i class="fa fa-th"></i>
+								<div>
+									<?php echo lang('reports_categories'); ?>
+								</div>						
+							</a>						
+						<?php } ?>
+						
+                        
+                        <!--clientes-->
+						<?php if ($this->Employee->has_module_action_permission('reports', 'view_customers', $this->Employee->get_logged_in_employee_info()->person_id)) { ?>
 
-                    <!--categorias-->
-                    <?php if ($this->Employee->has_module_action_permission('reports', 'view_categories', $this->Employee->get_logged_in_employee_info()->person_id)) { ?>
+							<a href="#" class="icon-btn" id="customers">
+								<i class="fa fa-user"></i>	
+								<div>
+									<?php echo lang('reports_customers'); ?>
+								</div>
+							</a>
+						<?php } ?>
+                        
+                        <!--comisión-->
+						<?php if ($this->Employee->has_module_action_permission('reports', 'view_commissions', $this->Employee->get_logged_in_employee_info()->person_id)) { ?>
 
-                    <a href="#" class="icon-btn" id="categories">
-                        <i class="fa fa-th"></i>
-                        <div>
-                            <?php echo lang('reports_categories'); ?>
-                        </div>
-                    </a>
-                    <?php } ?>
-
-
-                    <!--clientes-->
-                    <?php if ($this->Employee->has_module_action_permission('reports', 'view_customers', $this->Employee->get_logged_in_employee_info()->person_id)) { ?>
-
-                    <a href="#" class="icon-btn" id="customers">
-                        <i class="fa fa-user"></i>
-                        <div>
-                            <?php echo lang('reports_customers'); ?>
-                        </div>
-                    </a>
-                    <?php } ?>
-
-                    <!--comisión-->
-                    <?php if ($this->Employee->has_module_action_permission('reports', 'view_commissions', $this->Employee->get_logged_in_employee_info()->person_id)) { ?>
-
-                    <a href="#" class="icon-btn" id="commissions">
-                        <i class="fa fa-money"></i>
-                        <div>
-                            <?php echo lang('reports_commission'); ?>
-                        </div>
-                    </a>
-                    <?php } ?>
-                    <!--compras-->
-                    <?php
+							<a href="#" class="icon-btn" id="commissions">
+								<i class="fa fa-money"></i>	
+								<div>
+									<?php echo lang('reports_commission'); ?>
+								</div>
+							</a>
+						<?php } ?>                        
+                        <!--compras-->
+						<?php
 						if ($this->Employee->has_module_action_permission('reports', 'view_receivings', $this->Employee->get_logged_in_employee_info()->person_id)) { ?>
 
                     <a href="#" class="icon-btn" id="receivings">
@@ -316,6 +326,228 @@
 
                     <?php
 						if ($this->Employee->has_module_action_permission('reports', 'view_tables',  $this->Employee->get_logged_in_employee_info()->person_id) &&  $this->config->item('enabled_for_Restaurant')) { ?>
+							
+								<a href="#" class="icon-btn" id="view_table">
+									<i class="fa fa-table"></i> 
+									<div>
+										<?php echo lang('report_tables'); ?>
+									</div>
+								</a>
+							
+						<?php } ?>
+						<?php
+
+						if ($this->Employee->has_module_action_permission('reports', 'view_change_house',  $this->Employee->get_logged_in_employee_info()->person_id) &&  $this->config->item('activar_casa_cambio')) { ?>
+							
+								<a href="#" class="icon-btn" id="view_change_house">
+									<i class="fa fa-exchange"></i> 
+									<div>
+
+										<?php echo lang('reports_change_house');  ?>
+									</div>
+								</a>
+							
+						<?php } ?>
+						
+                        
+					</div>
+				</div>
+			</div> <!-- /panel -->
+		</div>
+		<div class="col-md-6 hidden" id="report_selection">
+			<div class="panel panel-default">
+				<div class="panel-heading child-list">
+					<h3 class="panel-title text-success"></h3>
+				</div>
+				<div class="panel-body child-list">		
+
+					<div class="list-group custom-report hidden">
+						<div class="btn-group btn-group-justified">
+							<a href="<?php echo site_url('reports/sales_generator');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-search report-icon"></i>  
+								<div>
+									<?php echo lang('reports_sales_search'); ?>
+								</div>
+							</a>
+						</div>
+					</div>
+					
+
+					<div class="list-group customers hidden">
+						<div class="btn-group btn-group-justified">
+							<a href="<?php echo site_url('reports/graphical_summary_customers');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-bar-chart-o"></i>
+								<div>
+									<?php echo lang('reports_graphical_reports'); ?>
+								</div>
+							</a>
+							<a href="<?php echo site_url('reports/summary_customers');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-building-o"></i>
+								<div>
+									<?php echo lang('reports_summary_reports'); ?>
+								</div>
+							</a>
+							<a href="<?php echo site_url('reports/specific_customer');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-calendar"></i>
+								<div>
+									<?php echo lang('reports_detailed_reports'); ?>
+								</div>
+							</a>
+						</div>
+						<div class="btn-group btn-group-justified">
+							<a href="<?php echo site_url('reports/detailed_payments_cash');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-money"></i>
+								<div>
+									<?php echo "ABONOS DETALLADOS" ?>
+								</div>
+							</a>
+							
+						</div>						
+					</div>
+
+					<div class="list-group commissions hidden">
+						<div class="btn-group btn-group-justified">
+							<a href="<?php echo site_url('reports/graphical_summary_commissions');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-bar-chart-o"></i>
+								<div>
+									<?php echo lang('reports_graphical_reports'); ?>
+								</div>
+							</a>
+							<a href="<?php echo site_url('reports/summary_commissions');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-building-o"></i>
+								<div>
+									<?php echo lang('reports_summary_reports'); ?>
+								</div>
+							</a>
+							<a href="<?php echo site_url('reports/detailed_commissions');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-calendar"></i>
+								<div>
+									<?php echo lang('reports_detailed_reports'); ?>
+								</div>
+							</a>
+						</div>						
+					</div>
+					
+					<div class="list-group employees hidden">
+						<div class="btn-group btn-group-justified">
+							<a href="<?php echo site_url('reports/graphical_summary_employees');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-bar-chart-o"></i>
+								<div>
+									<?php echo lang('reports_graphical_reports'); ?>
+								</div>
+							</a>
+							<a href="<?php echo site_url('reports/summary_employees');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-building-o"></i>
+								<div>
+									<?php echo lang('reports_summary_reports'); ?>
+								</div>
+							</a>
+							<a href="<?php echo site_url('reports/specific_employee');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-calendar"></i>
+								<div>
+									<?php echo lang('reports_detailed_reports'); ?>
+								</div>
+							</a>
+						</div>						
+					</div>
+
+					<div class="list-group sales hidden">
+						<div class="btn-group btn-group-justified">
+							<a href="<?php echo site_url('reports/graphical_summary_sales');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-bar-chart-o"></i>
+								<div>
+									<?php echo lang('reports_graphical_reports'); ?>
+								</div>
+							</a>
+							<a href="<?php echo site_url('reports/summary_sales');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-building-o"></i>
+								<div>
+									<?php echo lang('reports_summary_reports'); ?>
+								</div>
+							</a>
+							<a href="<?php echo site_url('reports/detailed_sales');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-calendar"></i>
+								<div>
+									<?php echo lang('reports_detailed_reports'); ?>
+								</div>
+							</a>
+							
+						</div>
+    						<div class="btn-group btn-group-justified">
+							<?php if ($this->Employee->has_module_action_permission('reports', 'view_consolidated', $this->Employee->get_logged_in_employee_info()->person_id)) { ?>
+								
+								<a href="<?php echo site_url('reports/detailed_sales2');?>" class="btn icon-btn letter-space">
+									<i class="fa fa-calendar"></i>
+									<div>
+										<?php echo lang('reports_detailed_reports'); ?> 2
+									</div>
+								</a>
+
+    							<a href="<?php echo site_url('reports/sales_consolidation');?>" class="btn icon-btn letter-space">
+    								<i class="fa fa-file-text"></i>
+    								<div>
+    									<?php echo lang('reports_consolidated'); ?>
+    								</div>
+    							</a>
+								<a href="<?php echo site_url('reports/detailed_sales_serial');?>" class="btn icon-btn letter-space">
+    								<i class="fa fa-barcode"></i>
+    								<div>
+    									Reporte por seriales
+    								</div>
+    							</a>	
+							<?php } ?>		
+											
+    						</div>                      
+							<div class="btn-group btn-group-justified">								
+								<?php if ($this->config->item('activar_casa_cambio')==1) { ?>
+									<a href="<?php echo site_url('reports/detailed_sales_rate');?>" class="btn icon-btn letter-space">
+										<i class="fa fa-exchange"></i>
+										<div>
+											<?php echo "Reporte por tasa" ?>
+										</div>
+									</a>									
+								<?php } ?>						
+    						</div>        						
+					</div>
+
+					<div class="list-group deleted-sales hidden">
+						<div class="btn-group btn-group-justified">							
+							<a href="<?php echo site_url('reports/deleted_sales');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-calendar"></i>
+								<div>
+									<?php echo lang('reports_detailed_reports'); ?>
+								</div>
+							</a>
+						</div>						
+					</div>
+
+					<div class="list-group register-log hidden">
+						<div class="btn-group btn-group-justified">							
+							<a href="<?php echo site_url('reports/detailed_register_log');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-calendar"></i>
+								<div>
+									<?php echo lang('reports_detailed_reports'); ?>
+								</div>
+							</a>
+						</div>							
+					</div>
+
+					<div class="list-group categories hidden">
+						<div class="btn-group btn-group-justified">
+							<a href="<?php echo site_url('reports/graphical_summary_categories');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-bar-chart-o"></i>
+								<div>
+									<?php echo lang('reports_graphical_reports'); ?>
+								</div>
+							</a>
+							<a href="<?php echo site_url('reports/summary_categories');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-building-o"></i>
+								<div>
+									<?php echo lang('reports_summary_reports'); ?>
+								</div>
+							</a>							
+						</div>						
+					</div>
 
                     <a href="#" class="icon-btn" id="view_table">
                         <i class="fa fa-table"></i>
@@ -614,402 +846,332 @@
 									<?php echo lang('reports_graphical_reports'); ?>
 								</div>
 							</a>-->
-                        <a href="<?php echo site_url('reports/summary_store_payments');?>"
-                            class="btn icon-btn letter-space">
-                            <i class="fa fa-building-o"></i>
-                            <div>
-                                <?php echo lang('reports_summary_store_payments'); ?>
-                            </div>
-                        </a>
-                        <a href="<?php echo site_url('reports/specific_supplier_store_payment');?>"
-                            class="btn icon-btn letter-space">
-                            <i class="fa fa-calendar"></i>
-                            <div>
-                                <?php echo lang('reports_detailed_store_payments'); ?>
-                            </div>
-                        </a>
-                    </div>
-                </div>
+							<a href="<?php echo site_url('reports/summary_store_payments');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-building-o"></i>
+								<div>
+									<?php echo lang('reports_summary_store_payments'); ?>
+								</div>
+							</a>							
+							<a href="<?php echo site_url('reports/specific_supplier_store_payment');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-calendar"></i>
+								<div>
+									<?php echo lang('reports_detailed_store_payments'); ?>
+								</div>
+							</a>
+						</div>						
+					</div>
 
-                <div class="list-group suppliers hidden">
-                    <div class="btn-group btn-group-justified">
-                        <a href="<?php echo site_url('reports/graphical_summary_suppliers');?>"
-                            class="btn icon-btn letter-space">
-                            <i class="fa fa-bar-chart-o"></i>
-                            <div>
-                                <?php echo lang('reports_graphical_reports'); ?>
-                            </div>
-                        </a>
-                        <a href="<?php echo site_url('reports/summary_suppliers');?>" class="btn icon-btn letter-space">
-                            <i class="fa fa-building-o"></i>
-                            <div>
-                                <?php echo lang('reports_summary_reports'); ?>
-                            </div>
-                        </a>
-                        <a href="<?php echo site_url('reports/specific_supplier');?>" class="btn icon-btn letter-space">
-                            <i class="fa fa-calendar"></i>
-                            <div>
-                                <?php echo lang('reports_detailed_reports'); ?>
-                            </div>
-                        </a>
-                    </div>
+					<div class="list-group suppliers hidden">
+						<div class="btn-group btn-group-justified">
+							<a href="<?php echo site_url('reports/graphical_summary_suppliers');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-bar-chart-o"></i>
+								<div>
+									<?php echo lang('reports_graphical_reports'); ?>
+								</div>
+							</a>
+							<a href="<?php echo site_url('reports/summary_suppliers');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-building-o"></i>
+								<div>
+									<?php echo lang('reports_summary_reports'); ?>
+								</div>
+							</a>
+							<a href="<?php echo site_url('reports/specific_supplier');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-calendar"></i>
+								<div>
+									<?php echo lang('reports_detailed_reports'); ?>
+								</div>
+							</a>
+						</div>
+						
+						<div class="btn-group btn-group-justified">
+				            <a href="<?php echo site_url('reports/suppliers_credit');?>" class="btn icon-btn letter-space">
+				                <i class="fa fa-money"></i>
+				                <div>
+				                    <?php echo "Credito a proveedores"; ?>
+				                </div>
+				            </a>
+				        </div>							
+					</div>
+					
+						<div class="list-group daily_cut hidden">
+							<div class="btn-group btn-group-justified">
+								<a href="<?php echo site_url('reports/detailed_daily_cut');?>" class="btn icon-btn letter-space">
+									<i class="fa fa-calendar"></i>
+									<div>
+										<?php echo lang('reports_detailed_reports'); ?>
+									</div>
+								</a>
+							</div>						
+						</div>
+					
+					
 
-                    <div class="btn-group btn-group-justified">
-                        <a href="<?php echo site_url('reports/suppliers_credit');?>" class="btn icon-btn letter-space">
-                            <i class="fa fa-money"></i>
-                            <div>
-                                <?php echo "Credito a proveedores"; ?>
-                            </div>
-                        </a>
-                    </div>
-                </div>
+					<div class="list-group view_table hidden">
+						<div class="btn-group btn-group-justified">
+							<a href="<?php echo site_url('reports/tables_report');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-calendar"></i>
+								<div>
+									<?php echo lang('reports_detailed_reports'); ?>
+								</div>
+							</a>
+						</div>						
+					</div>
 
-                <div class="list-group daily_cut hidden">
-                    <div class="btn-group btn-group-justified">
-                        <a href="<?php echo site_url('reports/detailed_daily_cut');?>"
-                            class="btn icon-btn letter-space">
-                            <i class="fa fa-calendar"></i>
-                            <div>
-                                <?php echo lang('reports_detailed_reports'); ?>
-                            </div>
-                        </a>
-                    </div>
-                </div>
+					<div class="list-group suspended_sales hidden">
+						<div class="btn-group btn-group-justified">
+							<a href="<?php echo site_url('reports/detailed_suspended_sales');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-calendar"></i>
+								<div>
+									<?php echo lang('reports_detailed_reports'); ?>
+								</div>
+							</a>
+						</div>						
+					</div>
+					
+					<div class="list-group taxes hidden">
+						<div class="btn-group btn-group-justified">
+							<a href="<?php echo site_url('reports/graphical_summary_taxes');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-bar-chart-o"></i>
+								<div>
+									<?php echo lang('reports_graphical_reports'); ?>
+								</div>
+							</a>
+							<a href="<?php echo site_url('reports/summary_taxes');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-building-o"></i>
+								<div>
+									<?php echo lang('reports_summary_reports'); ?>
+								</div>
+							</a>
+						</div>						
+					</div>
+					
 
+						<div class="list-group receivings hidden">
+							<div class="btn-group btn-group-justified">
+								<a href="<?php echo site_url('reports/detailed_receivings');?>" class="btn icon-btn letter-space">
+									<i class="fa fa-calendar"></i>
+									<div>
+										<?php echo lang('reports_detailed_reports'); ?>
+									</div>
+								</a>
+							
+									<a href="<?php echo site_url('reports/purchase_provider');?>" class="btn icon-btn letter-space">
+										<i class="fa fa-calendar"></i>
+										<div>
+											<?php echo "Compra proveedor" ?>
+										</div>
+									</a>
+														
+							</div>							
+						</div>
+					
 
+					<div class="list-group inventory hidden">
+						<div class="btn-group btn-group-justified">
+							<a href="<?php echo site_url('reports/inventory_low');?>" class="btn icon-btn letter-space">
+								<i class="ion-arrow-graph-down-right"></i>
+								<div>
+									<?php echo lang('reports_low_inventory'); ?>
+								</div>
+							</a>
+							<a href="<?php echo site_url('reports/inventory_summary');?>" class="btn icon-btn letter-space">
+								<i class="ion-clipboard"></i>
+								<div>
+									<?php echo lang('reports_inventory_summary'); ?>
+								</div>
+							</a>
+							<a href="<?php echo site_url('reports/detailed_inventory');?>" class="btn icon-btn letter-space">
+								<i class="ion-calendar"></i>
+								<div>
+									<?php echo lang('reports_detailed_reports'); ?>
+								</div>
+							</a>
+						</div>	
+						<div class="btn-group btn-group-justified">
+							<a href="<?php echo site_url('reports/defective_items_log');?>" class="btn icon-btn letter-space">
+								<i class="icon-trash"></i>
+								<div>
+									<?php echo lang('reports_defective_items_log_title'); ?>
+								</div>
+							</a>
+							<a href="<?php echo site_url('reports/expired_subcategory');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-download"></i>
+								<div>
+									<?php echo "vencidos - subcategoría" ?>
+								</div>
+							</a>							
+						</div>						
+					</div>
 
-                <div class="list-group view_table hidden">
-                    <div class="btn-group btn-group-justified">
-                        <a href="<?php echo site_url('reports/tables_report');?>" class="btn icon-btn letter-space">
-                            <i class="fa fa-calendar"></i>
-                            <div>
-                                <?php echo lang('reports_detailed_reports'); ?>
-                            </div>
-                        </a>
-                    </div>
-                </div>
+					<div class="list-group giftcards hidden">
+						<div class="btn-group btn-group-justified">
+							<a href="<?php echo site_url('reports/summary_giftcards');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-building-o"></i>
+								<div>
+									<?php echo lang('reports_summary_reports'); ?>
+								</div>
+							</a>
+							<a href="<?php echo site_url('reports/detailed_giftcards');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-calendar"></i>
+								<div>
+									<?php echo lang('reports_detailed_reports'); ?>
+								</div>
+							</a>
+						</div>						
+					</div>
 
-                <div class="list-group suspended_sales hidden">
-                    <div class="btn-group btn-group-justified">
-                        <a href="<?php echo site_url('reports/detailed_suspended_sales');?>"
-                            class="btn icon-btn letter-space">
-                            <i class="fa fa-calendar"></i>
-                            <div>
-                                <?php echo lang('reports_detailed_reports'); ?>
-                            </div>
-                        </a>
-                    </div>
-                </div>
+					<div class="list-group store-accounts hidden">
+						<div class="btn-group btn-group-justified">
+							<a href="<?php echo site_url('reports/store_account_statements');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-bar-chart-o"></i>
+								<div>
+									<?php echo lang('reports_store_account_statements'); ?>
+								</div>
+							</a>
+							<a href="<?php echo site_url('reports/summary_store_accounts');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-building-o"></i>
+								<div>
+									<?php echo lang('reports_summary_reports'); ?>
+								</div>
+							</a>
+							<a href="<?php echo site_url('reports/specific_customer_store_account');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-calendar"></i>
+								<div>
+									<?php echo lang('reports_detailed_reports'); ?>
+								</div>
+							</a>
+						</div>						
+					</div>
+					<div class="list-group consolidated hidden">
+						<div class="btn-group btn-group-justified">
+							<a href="<?php echo site_url('reports/detailed_consolidated');?>" class="btn icon-btn letter-space">
+									<i class="fa fa-calendar"></i>
+								<div>
+									<?php echo lang('reports_detailed_reports'); ?>
+								</div>
+							</a>
 
-                <div class="list-group taxes hidden">
-                    <div class="btn-group btn-group-justified">
-                        <a href="<?php echo site_url('reports/graphical_summary_taxes');?>"
-                            class="btn icon-btn letter-space">
-                            <i class="fa fa-bar-chart-o"></i>
-                            <div>
-                                <?php echo lang('reports_graphical_reports'); ?>
-                            </div>
-                        </a>
-                        <a href="<?php echo site_url('reports/summary_taxes');?>" class="btn icon-btn letter-space">
-                            <i class="fa fa-building-o"></i>
-                            <div>
-                                <?php echo lang('reports_summary_reports'); ?>
-                            </div>
-                        </a>
-                    </div>
-                </div>
+						</div>						
+					</div>
 
+					<div class="list-group profit-and-loss hidden">
+						<div class="btn-group btn-group-justified">
+							<a href="<?php echo site_url('reports/summary_profit_and_loss');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-building-o"></i>
+								<div>
+									<?php echo lang('reports_summary_reports'); ?>
+								</div>
+							</a>
+							<a href="<?php echo site_url('reports/detailed_profit_and_loss');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-calendar"></i>
+								<div>
+									<?php echo lang('reports_detailed_reports'); ?>
+								</div>
+							</a>
+						</div>						
+					</div>
 
-                <div class="list-group receivings hidden">
-                    <div class="btn-group btn-group-justified">
-                        <a href="<?php echo site_url('reports/detailed_receivings');?>"
-                            class="btn icon-btn letter-space">
-                            <i class="fa fa-calendar"></i>
-                            <div>
-                                <?php echo lang('reports_detailed_reports'); ?>
-                            </div>
-                        </a>
+					<div class="list-group shop hidden">
+						<div class="btn-group btn-group-justified">
+							<a href="<?php echo site_url('reports/shop');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-home"></i>
+								<div>
+									<?php echo lang('reports_shop_reports'); ?>
+								</div>
+							</a>
 
-                        <a href="<?php echo site_url('reports/purchase_provider');?>" class="btn icon-btn letter-space">
-                            <i class="fa fa-calendar"></i>
-                            <div>
-                                <?php echo "Compra proveedor" ?>
-                            </div>
-                        </a>
+							<a href="<?php echo site_url('reports/specific_transfer_location');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-exchange"></i>
+								<div>
+									<?php echo lang('reports_transfer_location'); ?>
+								</div>
+							</a>
 
-                    </div>
-                </div>
+							<a href="<?php echo site_url('reports/report_consolidated_shop');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-bar-chart-o"></i>
+								<div>
+									<?php echo lang('reports_consolidated_shop'); ?>
+								</div>
+							</a>
+						</div>						
+					</div>
+					
+					
+					<div class="list-group movement_cash hidden">
 
+						<div class="btn-group btn-group-justified">
+							<a href="<?php echo site_url('reports/summary_movement_cash');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-building-o"></i>
+								<div>
+									<?php echo lang('reports_summary_reports')." - " .lang('only_cash'); ?>
+								</div>
+							</a>
+							<a href="<?php echo site_url('reports/only_cash');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-calendar"></i>
+								<div>
+									
+									<?php echo lang('only_cash'); ?>
+								</div>
+							</a>
+							<a href="<?php echo site_url('reports/detailed_of_payment');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-calendar"></i>
+								<div>
 
-                <div class="list-group inventory hidden">
-                    <div class="btn-group btn-group-justified">
-                        <a href="<?php echo site_url('reports/inventory_low');?>" class="btn icon-btn letter-space">
-                            <i class="ion-arrow-graph-down-right"></i>
-                            <div>
-                                <?php echo lang('reports_low_inventory'); ?>
-                            </div>
-                        </a>
-                        <a href="<?php echo site_url('reports/inventory_summary');?>" class="btn icon-btn letter-space">
-                            <i class="ion-clipboard"></i>
-                            <div>
-                                <?php echo lang('reports_inventory_summary'); ?>
-                            </div>
-                        </a>
-                        <a href="<?php echo site_url('reports/detailed_inventory');?>"
-                            class="btn icon-btn letter-space">
-                            <i class="ion-calendar"></i>
-                            <div>
-                                <?php echo lang('reports_detailed_reports'); ?>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="btn-group btn-group-justified">
-                        <a href="<?php echo site_url('reports/defective_items_log');?>"
-                            class="btn icon-btn letter-space">
-                            <i class="icon-trash"></i>
-                            <div>
-                                <?php echo lang('reports_defective_items_log_title'); ?>
-                            </div>
-                        </a>
-                    </div>
-                </div>
+									<?php echo lang('detailed_report_all_means_of_payment');  ?>
+								</div>
+							</a>
+						</div>
+						<div class="btn-group btn-group-justified">
+							<a href="<?php echo site_url('reports/detailed_of_move_money');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-calendar"></i>
+								<div>
 
-                <div class="list-group giftcards hidden">
-                    <div class="btn-group btn-group-justified">
-                        <a href="<?php echo site_url('reports/summary_giftcards');?>" class="btn icon-btn letter-space">
-                            <i class="fa fa-building-o"></i>
-                            <div>
-                                <?php echo lang('reports_summary_reports'); ?>
-                            </div>
-                        </a>
-                        <a href="<?php echo site_url('reports/detailed_giftcards');?>"
-                            class="btn icon-btn letter-space">
-                            <i class="fa fa-calendar"></i>
-                            <div>
-                                <?php echo lang('reports_detailed_reports'); ?>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="list-group store-accounts hidden">
-                    <div class="btn-group btn-group-justified">
-                        <a href="<?php echo site_url('reports/store_account_statements');?>"
-                            class="btn icon-btn letter-space">
-                            <i class="fa fa-bar-chart-o"></i>
-                            <div>
-                                <?php echo lang('reports_store_account_statements'); ?>
-                            </div>
-                        </a>
-                        <a href="<?php echo site_url('reports/summary_store_accounts');?>"
-                            class="btn icon-btn letter-space">
-                            <i class="fa fa-building-o"></i>
-                            <div>
-                                <?php echo lang('reports_summary_reports'); ?>
-                            </div>
-                        </a>
-                        <a href="<?php echo site_url('reports/specific_customer_store_account');?>"
-                            class="btn icon-btn letter-space">
-                            <i class="fa fa-calendar"></i>
-                            <div>
-                                <?php echo lang('reports_detailed_reports'); ?>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="list-group consolidated hidden">
-                    <div class="btn-group btn-group-justified">
-                        <a href="<?php echo site_url('reports/detailed_consolidated');?>"
-                            class="btn icon-btn letter-space">
-                            <i class="fa fa-calendar"></i>
-                            <div>
-                                <?php echo lang('reports_detailed_reports'); ?>
-                            </div>
-                        </a>
-
-                    </div>
-                </div>
-
-                <div class="list-group profit-and-loss hidden">
-                    <div class="btn-group btn-group-justified">
-                        <a href="<?php echo site_url('reports/summary_profit_and_loss');?>"
-                            class="btn icon-btn letter-space">
-                            <i class="fa fa-building-o"></i>
-                            <div>
-                                <?php echo lang('reports_summary_reports'); ?>
-                            </div>
-                        </a>
-                        <a href="<?php echo site_url('reports/detailed_profit_and_loss');?>"
-                            class="btn icon-btn letter-space">
-                            <i class="fa fa-calendar"></i>
-                            <div>
-                                <?php echo lang('reports_detailed_reports'); ?>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="list-group shop hidden">
-                    <div class="btn-group btn-group-justified">
-                        <a href="<?php echo site_url('reports/shop');?>" class="btn icon-btn letter-space">
-                            <i class="fa fa-home"></i>
-                            <div>
-                                <?php echo lang('reports_shop_reports'); ?>
-                            </div>
-                        </a>
-
-                        <a href="<?php echo site_url('reports/specific_transfer_location');?>"
-                            class="btn icon-btn letter-space">
-                            <i class="fa fa-exchange"></i>
-                            <div>
-                                <?php echo lang('reports_transfer_location'); ?>
-                            </div>
-                        </a>
-
-                        <a href="<?php echo site_url('reports/report_consolidated_shop');?>"
-                            class="btn icon-btn letter-space">
-                            <i class="fa fa-bar-chart-o"></i>
-                            <div>
-                                <?php echo lang('reports_consolidated_shop'); ?>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-
-				<!--schedule-->
-                <div class="list-group schedule hidden">
-
-                    <div class="btn-group btn-group-justified">
-                        <a href="<?php echo site_url('reports/summary_schedule');?>"
-                            class="btn icon-btn letter-space">
-                            <i class="fa fa-building-o"></i>
-                            <div>
-                                <?php echo lang('reports_summary_reports')?>
-                            </div>
-                        </a>                        
-                    </div>                    
-                </div>
-				<!-- end schedule-->
-
-                <div class="list-group movement_cash hidden">
-
-                    <div class="btn-group btn-group-justified">
-                        <a href="<?php echo site_url('reports/summary_movement_cash');?>"
-                            class="btn icon-btn letter-space">
-                            <i class="fa fa-building-o"></i>
-                            <div>
-                                <?php echo lang('reports_summary_reports')." - " .lang('only_cash'); ?>
-                            </div>
-                        </a>
-                        <a href="<?php echo site_url('reports/only_cash');?>" class="btn icon-btn letter-space">
-                            <i class="fa fa-calendar"></i>
-                            <div>
-
-                                <?php echo lang('only_cash'); ?>
-                            </div>
-                        </a>
-                        <a href="<?php echo site_url('reports/detailed_of_payment');?>"
-                            class="btn icon-btn letter-space">
-                            <i class="fa fa-calendar"></i>
-                            <div>
-
-                                <?php echo lang('detailed_report_all_means_of_payment');  ?>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="btn-group btn-group-justified">
-                        <a href="<?php echo site_url('reports/detailed_of_move_money');?>"
-                            class="btn icon-btn letter-space">
-                            <i class="fa fa-calendar"></i>
-                            <div>
-
-                                <?php echo lang('reports_move_money');  ?>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="list-group view_change_house hidden">
-                    <div class="btn-group btn-group-justified">
-                        <a href="<?php echo site_url('reports/depostos_salidas');?>" class="btn icon-btn letter-space">
-                            <i class="fa fa-building-o"></i>
-                            <div>
-                                <?php echo "Saldo - depositos y retiros" ?>
-                            </div>
-                        </a>
-                        <a href="<?php echo site_url('reports/movement_balance');?>" class="btn icon-btn letter-space">
-                            <i class="fa fa-calendar"></i>
-                            <div>
-                                <?php echo "Movimientos del saldo" ; ?>
-                            </div>
-                        </a>
-                    </div>
-                </div>
+									<?php echo lang('reports_move_money');  ?>
+								</div>
+							</a>
+						</div>					
+					</div>
+					<div class="list-group view_change_house hidden">
+						<div class="btn-group btn-group-justified">
+							<a href="<?php echo site_url('reports/depostos_salidas');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-building-o"></i>
+								<div>
+									<?php echo "Saldo - depositos y retiros" ?>
+								</div>
+							</a>
+							<a href="<?php echo site_url('reports/movement_balance');?>" class="btn icon-btn letter-space">
+								<i class="fa fa-calendar"></i>
+								<div>
+									<?php echo "Movimientos del saldo" ; ?>
+								</div>
+							</a>
+						</div>						
+					</div>
+				</div>
+			</div> <!-- /panel -->
+		</div>
+	</div>
+	<?=$this->load->view("tutorials");?>
 
 
-            </div>
-        </div> <!-- /panel -->
-    </div>
-</div>
-
-<script type="text/javascript">
-<?php if($this->config->item('hide_video_stack7') == '0'){?>
-$('.modal.fade').addClass('in');
-$('#stack7').css({
-    'display': 'block'
-});
-<?php } ?>
-$('.modal.fade.in').click(function(e) {
-
-    if ($(e.target)[0].id == "stack7") {
-        $('.modal.fade.in').removeClass('in');
-        $('#stack7').css({
-            'display': 'none'
-        });
-
-    }
-
-
-});
-$('#closereports').click(function() {
-
-    $('.modal.fade.in').removeClass('in');
-    $('#stack7').css({
-        'display': 'none'
-    });
-    $('#maxreports').removeClass('icon fa fa-youtube-play help_button');
-    $('#maxreports').html(
-        "<a href='javascript:;' id='maxreports' rel=1 class='tn-group btn red-haze' ><span class='hidden-sm hidden-xs'>Maximizar&nbsp;</span><i class='icon fa fa-youtube-play help_button'></i></a>"
-    );
-
-
-
-
-});
-
-$('#checkBoxStack7').click(function(e) {
-
-    $.post('<?php echo site_url("config/show_hide_video_help");?>', {
-        show_hide_video7: $(this).is(':checked') ? '1' : '0',
-        video7: 'hide_video_stack7'
-    });
-
-});
-
-$('.parent-list a').click(function(e) {
-    e.preventDefault();
-    $('.parent-list a').removeClass('active');
-    $('#report_selection').removeClass('hidden');
-    $(this).addClass('active');
-    var currentClass = '.child-list .' + $(this).attr("id");
-    $('.child-list .panel-title').html($(this).html());
-    $('.child-list .list-group').addClass('hidden');
-    $(currentClass).removeClass('hidden');
-
-    $('html, body').animate({
-        scrollTop: $("#report_selection").offset().top
-    }, 500);
-});
-</script>
+	<script type="text/javascript">
+		
+      
+	 	$('.parent-list a').click(function(e){
+	 		e.preventDefault();
+	 		$('.parent-list a').removeClass('active');
+	 		$('#report_selection').removeClass('hidden');
+	 		$(this).addClass('active');
+	 		var currentClass='.child-list .'+ $(this).attr("id");
+	 		$('.child-list .panel-title').html($(this).html());
+	 		$('.child-list .list-group').addClass('hidden');
+	 		$(currentClass).removeClass('hidden');
+		
+			$('html, body').animate({
+		    scrollTop: $("#report_selection").offset().top
+		 	}, 500);
+	 	});
+ 	</script>
 
 
 <?php $this->load->view("partial/footer"); ?>

@@ -113,7 +113,7 @@
 						if (value == '') {
 							$('#resultado_repuesto').html('');
 						} else {
-							$('#resultado_repuesto').load("<?php echo site_url() ?>/technical_supports/buscarItemsSupport", "idSupport=<?php echo $idSupport ?>&buscar=" + value);
+							$('#resultado_repuesto').load("<?php echo site_url() ?>/technical_supports/buscarItemsSupport", "idSupport=<?= $support_id ?>&buscar=" + value);
 						}
 						return false;
 					});

@@ -15,7 +15,7 @@ class technical_supports extends Secure_area
 
 	}
 
-	function Index()
+	function index()
 	{
 		$this->check_action_permission('search');
 		$edit_support_id= $this->input->get("edit"); 
@@ -307,7 +307,7 @@ class technical_supports extends Secure_area
 	function save()
 	{
 		$this->check_action_permission('add_update');
-
+		
 		$this->form_validation->set_rules('id_employee', 'Empleado', 'required|numeric');
 		$this->form_validation->set_rules('id_technical', 'Empleado', 'required|numeric');
 		$this->form_validation->set_rules('team_type', 'Equipo', 'required');
@@ -496,16 +496,16 @@ class technical_supports extends Secure_area
 		}
 	}
 
-	 public function buscar_cliente_serv_tecnico() {
-            $this->check_action_permission('add_update');  
-            $data['controller_name'] = strtolower(get_class());
-            $t=  $this->input->get('t'); 
-            $searchword =  $this->input->get('ciCont');  
-			$suggestions = $this->Customer->get_customer_search_suggestions($searchword,25);
-            $ListarBusquedaT=$this->technical_support->buscar_servicios_total($searchword);
-            $ListarBusqueda=$this->technical_support->buscar_servicios($searchword,$this->input->get('bas'));            
-            $this->load->view("technical_supports/cliente/buscar_servivios", compact("ListarBusqueda","ListarBusquedaT","t","data","suggestions")); 
-    }
+	public function buscar_cliente_serv_tecnico() {
+		$this->check_action_permission('add_update');  
+		$data['controller_name'] = strtolower(get_class());
+		$t=  $this->input->get('t'); 
+		$searchword =  $this->input->get('ciCont');  
+		$suggestions = $this->Customer->get_customer_search_suggestions($searchword,25);
+		$ListarBusquedaT=$this->technical_support->buscar_servicios_total($searchword);
+		$ListarBusqueda=$this->technical_support->buscar_servicios($searchword,$this->input->get('bas'));            
+		$this->load->view("technical_supports/cliente/buscar_servivios", compact("ListarBusqueda","ListarBusquedaT","t","data","suggestions")); 
+	}
 
 	public function actualizar_diagnostico()
 	{
@@ -516,9 +516,7 @@ class technical_supports extends Secure_area
 		}else{
 			$respuesta=array("respuesta"=>false,"mensaje"=>"Errro");
 		}
-		echo json_encode($respuesta);
-
-		
+		echo json_encode($respuesta);		
 	}
 
 	function ver_servicios_activos_resumen()
@@ -533,7 +531,8 @@ class technical_supports extends Secure_area
 	public function carritoServicio()
 	{
 		$idSupport = $this->input->get('hc');
-		$data ['support_id'] = $this->input->get('hc');
+		$data ['support_id'] = $idSupport;
+		
 		$data["is_cart_reparar"]=0;
 		$this->carrito_lib->cargar_cart($idSupport);
 		$this->carrito_lib->set_comment_ticket($this->config->item('default_sales_type'));
@@ -546,8 +545,7 @@ class technical_supports extends Secure_area
 				}
 			}
 		}
-		$this->reload_cart($data,false);
-		
+		$this->reload_cart($data,false);		
 	}
 
 	public function buscarItems()
@@ -722,7 +720,7 @@ class technical_supports extends Secure_area
 			$data['payment_options'][$additional_payment_type] = $additional_payment_type;
 		}
 
-		$data["is_cart_reparar"]=0;	
+		$data["is_cart_reparar"] = 0;	
 		if($is_ajax ){
 			// solo se carga el cuerpo del carrito del modal de la vista principal
 			$this->load->view("technical_supports/carrito/carrito_cuerpo", $data);
@@ -738,8 +736,12 @@ class technical_supports extends Secure_area
 		$item = $this->input->get('id');
 		$support_id = $this->input->get('idSupport');
 		//$location = $this->Employee->get_logged_in_employee_current_location_id();
-		$this->carrito_lib->add_item($item);
-		$data=array("support_id"=>$support_id);
+		$this->carrito_lib->add_item($item);		
+		$data = array("support_id"=>$support_id);
+		if($this->carrito_lib->out_of_stock($item) )
+		
+			$data['warning'] = lang('sales_quantity_less_than_zero');
+		
 		$this->reload_cart($data,true);
 
 	}
@@ -812,7 +814,7 @@ function _payments_cover_total($support_id)
 	{
 		$data['is_sale'] = TRUE;
 		$data['cart'] = $this->carrito_lib->get_cart();
-		$data['mode']= $this->carrito_lib->get_mode();
+		$data['mode'] = $this->carrito_lib->get_mode();
 		$sale_id_raw=-1;
         $suspended_change_sale_id = $this->carrito_lib->get_edit_support_id();
         $location_id = $this->Employee->get_logged_in_employee_current_location_id();
@@ -924,7 +926,7 @@ function _payments_cover_total($support_id)
 		}
 
 		
-		$customer_id=$support_info->id_customer;
+		$customer_id = $support_info->id_customer;
 
 		$tier_id = $this->carrito_lib->get_selected_tier_id();
 		$tier_info = $this->Tier->get_info($tier_id);
@@ -1040,8 +1042,8 @@ function _payments_cover_total($support_id)
 			}
 			
 		}	
-		$data["sale_id_raw"]=$sale_id_raw;
-		if($sale_id_raw>0){
+		$data["sale_id_raw"] = $sale_id_raw;
+		if($sale_id_raw > 0){
 			$data["support_info"]= $this->technical_support->get_info_by_id($support_id,false);
 			$this->load->View('technical_supports/receipt_final', $data);
 			$this->carrito_lib->clear_all();

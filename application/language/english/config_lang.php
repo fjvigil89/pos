@@ -1,4 +1,6 @@
 <?php
+$lang['config_activate_pharmacy_mode_help']='Pharmacy mode is activated';
+$lang['config_activate_pharmacy_mode']='Activate pharmacy';
 $lang['show_option_policy_returns_sales']='Show options return policies in sales module';
 $lang['config_control_access_employee']='Activate employee access control';
 $lang['show_payments_ticket'] = 'Show the last payments on the ticket';
@@ -44,7 +46,7 @@ $lang['config_optimize_database'] = 'Optimize Database';
 $lang['config_database_optimize_successfully'] = 'Optimized Database Successfully';
 $lang['config_payment_types'] = 'Payment Types';
 $lang['select_sql_file'] = 'select .sql file';
-
+$lang['config_company_tservicio'] = 'Type of team';
 $lang['Generate_simplified_order'] = 'Generate automatic order orders';
 $lang['Generate_simplified_order_help'] = 'If you activate this option, a purchase order will automatically be generated in the warehouse module';
 

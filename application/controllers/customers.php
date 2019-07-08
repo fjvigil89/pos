@@ -2,6 +2,7 @@
 require_once ("person_controller.php");
 class Customers extends Person_controller
 {
+	
 	function __construct()
 	{
 		parent::__construct('customers');

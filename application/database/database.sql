@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-06-2019 a las 01:40:43
+-- Tiempo de generación: 19-06-2019 a las 00:22:43
 -- Versión del servidor: 10.1.28-MariaDB
 -- Versión de PHP: 5.6.32
 
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `inpos_licencia`
+-- Base de datos: `inpos_prueba2`
 --
 
 -- --------------------------------------------------------
@@ -107,7 +107,7 @@ INSERT INTO `phppos_app_config` (`key`, `value`) VALUES
 ('custom2_support_name', ''),
 ('custom3_name', ''),
 ('customers_store_accounts', '0'),
-('database_version', '3'),
+('database_version', '6'),
 ('date_format', 'middle_endian'),
 ('decimal_separator', ','),
 ('default_payment_type', 'Efectivo'),
@@ -306,6 +306,13 @@ CREATE TABLE `phppos_categories` (
   `ordering` int(11) DEFAULT NULL,
   `deleted` tinyint(2) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `phppos_categories`
+--
+
+INSERT INTO `phppos_categories` (`id`, `name`, `img`, `name_img_original`, `ordering`, `deleted`) VALUES
+(1, 'Abono a línea de crédito', '', '', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -903,7 +910,7 @@ CREATE TABLE `phppos_migrations` (
 --
 
 INSERT INTO `phppos_migrations` (`version`) VALUES
-(5);
+(6);
 
 -- --------------------------------------------------------
 
@@ -2863,7 +2870,7 @@ ALTER TABLE `phppos_app_files`
 -- AUTO_INCREMENT de la tabla `phppos_categories`
 --
 ALTER TABLE `phppos_categories`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `phppos_customers`

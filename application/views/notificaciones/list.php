@@ -39,7 +39,8 @@
             <div class="portlet-title">
                 <div class="caption">
                     <i class="icon-edit font-dark"></i>
-                    <span class="caption-subject font-dark bold uppercase"><?=lang("common_list_of")." ".lang("module_notifications");?></span>
+                    <span
+                        class="caption-subject font-dark bold uppercase"><?=lang("common_list_of")." ".lang("module_notifications");?></span>
                 </div>
                 <div class="actions">
 
@@ -50,29 +51,39 @@
             </div>
             <div class="portlet-body">
                 <div class="row">
-                <?php foreach ($notifications as $notification){ ?>
-                
-                <div class="col-md-12">
-                <div class="well">
-                    <h4 class="block"><strong><?= H($notification->title)?></strong>- <span
-                            class="badge"><?=  date(get_date_format(), strtotime($notification->created))?></span>
-                            <?php 
-                                if($notification->is_saw == 1)
-                                    echo '<span > <i style="color:#01CD51;" class=" fa fa-check"></i>  </span>';
-                            ?>
-                            
-                    </h4>
-                    <div ALIGN="justify">
-                        <p><?= H($notification->description) . strlen($notification->description)?></p>
+                    <?php foreach ($notifications as $notification){ ?>
+
+                    <div class="col-md-12">
+                        <div class="well">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <?php if($notification->img == null)
+                                            echo '<img src="'.base_url().'img/actualizar.png" class="img-thumbnail" alt=""> ';
+                                        else
+                                            echo '<img  class="img-thumbnail" src="'.site_url("app_files/view_notification/".$notification->id).'"> ';
+                                    ?>
+                                </div>
+                                <div class="col-md-9">
+                                    <h4 class="block"><strong><?= H($notification->title)?></strong>- <span
+                                            class="badge"><?=  date(get_date_format(), strtotime($notification->created))?></span>
+                                        <?php 
+                                            if($notification->is_saw == 1)
+                                                echo '<span title="Vista"> <i style="color:#01CD51;" class=" fa fa-check"></i>  </span>';
+                                        ?>
+                                    </h4>
+                                    <div ALIGN="justify">
+                                        <p><?= H($notification->description) . strlen($notification->description)?></p>
+                                    </div>
+                                    <ul class="pager">
+                                        <li class="next">
+                                            <a href="<?=site_url('notifications/view/'.$notification->id)?>"> Ver </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <ul class="pager">
-                    
-                        <li class="next">
-                            <a href="<?=site_url('notifications/view/'.$notification->id)?>"> Ver </a>
-                        </li>
-                    </ul>
-                </div></div>
-                <?php   } ?>
+                    <?php   } ?>
                 </div>
 
             </div>

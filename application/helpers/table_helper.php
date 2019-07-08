@@ -242,6 +242,135 @@ function get_people_manage_table_data_rows($people,$controller)
 	
 	return $table_data_rows;
 }
+/*
+Gets the html table to manage pedido.------------------------------------------------------------
+*/
+function get_orders_manage_table($suppliers,$controller)
+{
+	$CI =& get_instance();
+	$table='<table class="table table-bordered table-striped table-hover" id="sortable_table">';	
+	$headers = array('<input type="checkbox" id="select_all" class="css-checkbox"/><label for="select_all" class="css-label cb0"></label>', 
+	'ID',
+	'Fecha',
+	'Nombre',
+	'Telefono',
+	'Estado',
+	lang('common_actions'),
+
+);
+
+	$table.='<thead><tr>';
+	$count = 0;
+	$colspan="";
+	foreach($headers as $header)
+	{
+		$count++;
+
+		if ($header==lang('common_actions')) {
+		$colspan="colspan='2'";
+		}
+		
+		if ($count == 1)
+		{
+			$table.="<th class='leftmost' $colspan>$header</th>";
+		}
+		elseif ($count == count($headers))
+		{
+			$table.="<th class='rightmost' $colspan>$header</th>";
+		}
+		else
+		{
+
+			$table.="<th $colspan>$header</th>";		
+		}
+	}
+	
+	$table.='</tr></thead><tbody>';
+	$table.=get_orders_manage_table_data_rows($suppliers,$controller);
+	$table.='</tbody></table>';
+	return $table;
+}
+
+/*
+Gets the html data rows for the supplier.
+*/
+function get_orders_manage_table_data_rows($suppliers,$controller)
+{
+	$CI =& get_instance();
+	$table_data_rows='';
+	
+	foreach($suppliers->result() as $supplier)
+	{
+		$table_data_rows.=get_orders_data_row($supplier,$controller);
+	}
+	
+	if($suppliers->num_rows()==0)
+	{
+		$table_data_rows.="<tr><td colspan='8'><span class='col-md-12 text-center text-warning' >".lang('common_no_persons_to_display')."</span></tr>";
+	}
+	
+	return $table_data_rows;
+}
+
+function get_orders_data_row($supplier,$controller)
+{
+	$CI =& get_instance();
+	$controller_name=strtolower(get_class($CI));
+	$avatar_url=isset($supplier->image_id) ?  site_url('app_files/view/'.$supplier->image_id) : (base_url().'img/no-image.png');
+
+
+    if ($supplier->processed == 0) {
+        $class = 'bg-danger';
+        $type = 'No Procesado';
+    }
+    if ($supplier->processed == 1) {
+        $class = 'bg-success';
+        $type = 'Procesado';
+    }
+    if ($supplier->processed == 2) {
+        $class = 'bg-warning';
+        $type = 'Rechazado';
+    }	
+
+    $boton="";
+    $boton2="";
+
+	$table_data_row='<tr>';
+	$table_data_row.="<td align='center'><input type='checkbox' class='css-checkbox' id='person_$supplier->id' value='".$supplier->id."'/><label for='".$supplier->id."' class='css-label cb0'></label></td>";
+	$table_data_row.='<td >'.H($supplier->order_id).'</td>';
+	$table_data_row.='<td >'.H(date('d.M.Y / H:i:s', $supplier->date)).'</td>';
+	$table_data_row.='<td >'.H($supplier->first_name).' '.H($supplier->last_name).'</td>';
+	$table_data_row.='<td >'.H($supplier->phone).'</td>';
+	$table_data_row.='<td class="'.$class.'">'.H($type).'</td>';
+
+	
+	
+
+   if ($supplier->processed != 2) {
+	$table_data_row.='<td class="rightmost">'.anchor($controller_name."/orders_invoices/$supplier->order_id", "<i class='fa fa-eye'></i> Inventario", array('class'=>'btn btn-xs btn-block default btn-editable update-supplier', 'title'=>lang($controller_name.'_view'), 'data-toggle' => 'modal', 'data-target'=>'#myModal')).'</td>';
+	}else{
+	$table_data_row.='<td class="rightmost"></td>';		
+	}
+
+
+
+	if (!empty($supplier->sale_id)) {
+	$boton=anchor("sales/receipt/$supplier->sale_id", "<i class='fa fa-eye'></i> Recibo", array('class'=>'btn btn-xs btn-block default btn-editable update-supplier', 'title'=>lang($controller_name.'_view')));
+
+	}else{
+	$boton=anchor($controller_name."/orders_sales/$supplier->order_id", "<i class='fa fa-shopping-cart'></i> Facturación", array('class'=>'btn btn-xs btn-block default btn-editable update-supplier', 'title'=>lang($controller_name.'_view')));
+	
+	}
+
+   if ($supplier->processed != 2) {
+	$table_data_row.='<td class="rightmost">'.$boton.'</td>';	
+	}else{
+	$table_data_row.='<td class="rightmost"></td>';		
+	}	
+
+	$table_data_row.='</tr>';
+	return $table_data_row;
+}
 
 function get_person_data_row($person,$controller)
 {
@@ -798,8 +927,8 @@ function get_items_manage_table($items,$controller)
 	    $show_inventory_model ? $CI->lang->line('items_model') : NULL,
 	    $show_inventory_colour ? $CI->lang->line('items_colour') : NULL,
 	    $show_inventory_brand ? $CI->lang->line('items_brand') : NULL,
-		//$CI->lang->line('items_cost_price'),
-		//$CI->lang->line('items_unit_price'),
+		$CI->lang->line('items_cost_price'),
+		$CI->lang->line('items_unit_price'),
 		$CI->lang->line('items_quantity'),
 		$CI->lang->line('items_quantity_warehouse'),
 		$CI->lang->line('items_inventory'),
@@ -820,7 +949,7 @@ function get_items_manage_table($items,$controller)
 	    $show_inventory_model ? $CI->lang->line('items_model') : NULL,
 	    $show_inventory_colour ? $CI->lang->line('items_colour') : NULL,
 	    $show_inventory_brand ? $CI->lang->line('items_brand') : NULL,
-		//$CI->lang->line('items_unit_price'),
+		$CI->lang->line('items_unit_price'),
 		$CI->lang->line('items_quantity'),
 		$CI->lang->line('items_inventory'),
 		$CI->lang->line('items_quantity_warehouse'),
@@ -1000,7 +1129,7 @@ function get_item_consultant_data_row($item,$controller)
 							</a>
 						</td>";
 	}
-	$table_data_row.='<td width="13%"><a href="'.site_url('home/view_item_modal').'/'.$item->item_id.'" data-toggle="modal" data-target="#myModal">'.H($item->name).'</a></td>';
+	$table_data_row.='<td width="40%"><a href="'.site_url('home/view_item_modal').'/'.$item->item_id.'" data-toggle="modal" data-target="#myModal">'.H($item->name).'</a></td>';
 	
 	/*
 	if($has_cost_price_permission)
@@ -1115,15 +1244,13 @@ function get_item_data_row($item,$controller)
 	{
 		$table_data_row.='<td width="9%">'.$item->marca.'</td>';
 	}
-	
-	//eliminar de las tablas los valores de precio y costo
-	/*
 	if($has_cost_price_permission)
 	{
 		$table_data_row.='<td width="9%" align="right">'.to_currency($item->location_cost_price ? $item->location_cost_price: $item->cost_price, 10).'</td>';
 	}
+	
 	$table_data_row.='<td width="9%" align="right">'.to_currency($item->location_unit_price ? $item->location_unit_price : $item->unit_price, 10).'</td>';
-	*/
+	
 	$table_data_row.='<td width="9%" align="center">'.to_quantity($item->quantity).'</td>';
     
     if ( $CI->Employee->has_module_action_permission('items','see_quantity_defect', $CI->Employee->get_logged_in_employee_info()->person_id) ) { 

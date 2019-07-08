@@ -31,7 +31,7 @@ $lang['locations_add_register'] = 'Añadir Vendedor';
 $lang['locations_registers'] = 'Registros';
 $lang['locations_register_name'] = 'Vendedor';
 $lang['locations_default'] = 'Por defecto';
-
+$lang['locations_shop_name'] = 'Tienda';
 $lang['locations_validate_licenses'] = 'Validar licencia adquirida';
 $lang['locations_name_help'] = 'Ingresar el nombre de la tienda, es obligatorio ';
 $lang['locations_address_help'] = 'Ingresar la dirección de la tienda, es obligatorio  ';

@@ -32,7 +32,7 @@
 						</div>						
 					</div>
 					<div class="portlet-body form">
-						<?php echo form_open('items/save_inventory/'.$item_info->item_id,array('id'=>'item_form', 'class'=>'form-horizontal')); ?>
+						<?php echo form_open('items/save_inventory/'.$item_info->item_id,array('id'=>'item_form','autocomplete'=>'off', 'class'=>'form-horizontal')); ?>
 							<div class="form-body">							
 								
 								<div class="form-group">
@@ -160,10 +160,41 @@
 											<?php echo form_input(array(
 												'name'=>'newquantity',
 												'id'=>'newquantity',
+												'type'=>"number",
 												'class'=>'form-control form-inps'));
 											?>
 										</div>
 									</div>
+									<div class=" subcategory_hide" <?php if( !$this->config->item('subcategory_of_items') || !($item_info->subcategory ) || $item_info->is_service  ) echo"style='display: none'";?>>
+										<div class="form-group subcategory-input <?php if ($item_info->is_service){echo 'hidden';} ?>">
+											<label class="col-md-3 control-label  requireds wide" style=" <?php echo $this->config->item('inhabilitar_subcategory1')==1 ?  "display:none;":"" ?>"><?php echo $this->config->item('custom_subcategory1_name') ?  $this->config->item('custom_subcategory1_name'):'Personalizado1'?>:</label>
+											<div class="col-md-9">
+												<?php echo form_input(array(
+													'name'=>'custom1_subcategory',
+													'value'=> $this->config->item('inhabilitar_subcategory1')==1?"»":"",
+													"onkeyup"=>"mayuscula(this)",
+													"onblur"=>"mayuscula(this)",
+													"required"=>"required",
+													"type"=> $this->config->item('inhabilitar_subcategory1') ?  "hidden":"text",
+																	'class'=>'spinner-input form-control form-inps customs1_subcategory',
+												));?>
+											</div>
+										</div>
+									</div>
+									<div class="form-group subcategory-input <?php if ($item_info->is_service){echo 'hidden';} ?>">
+										<label	class="col-md-3 control-label requireds  wide"><?php echo $this->config->item('custom_subcategory2_name') ?  $this->config->item('custom_subcategory2_name'):'Personalizado2'?>:</label>
+										<div class="col-md-9">
+											<?php echo form_input(array(
+												'name'=>'custom2_subcategory',
+												'value'=>  "",
+												'class'=>'spinner-input form-control form-inps customs2_subcategory',
+												"onkeyup"=>"mayuscula(this)",
+												"onblur"=>"mayuscula(this)",
+												"required"=>"required"
+											));?>
+										</div>
+									</div>
+									
 
 									<div class="form-group hidden-print">
 										<?php echo form_label(lang('items_inventory_comments').':', 'description',array('class'=>'col-md-3 control-label wide')); ?>
@@ -252,30 +283,19 @@
 		$(document).ready(function()
 		{	
 			
-<?php if($this->config->item('hide_video_stack4') == '0'){?>
-         $('.modal.fade').addClass('in');
-         $('#stack4').css({'display':'block'});
-         <?php } ?>
-         $('.modal.fade.in').click(function(e){
-       
-         if($(e.target)[0].id == "stack4")
-         {
-               $('.modal.fade.in').removeClass('in');
-               $('#stack4').css({'display':'none'});
 
-         }
-         
-     
-         });
-      
-         $('#checkBoxStack4').click(function(e){
-             
-             $.post('<?php echo site_url("config/show_hide_video_help");?>',
-             {show_hide_video4:$(this).is(':checked') ? '1' : '0',video4:'hide_video_stack4'});
-
-             
-               
-         });
+				$(".customs1_subcategory").autocomplete({
+					source: "<?php echo site_url('items/suggest_category_subcategory/custom1/'.$item_info->item_id);?>",
+					delay: 300,
+					autoFocus: false,
+					minLength: 0
+				});
+				$(".customs2_subcategory").autocomplete({
+					source: "<?php echo site_url('items/suggest_category_subcategory/custom2/'.$item_info->item_id);?>",
+					delay: 300,
+					autoFocus: false,
+					minLength: 0
+				});
 
 
 			$('#print_button').click(function(e){
@@ -325,6 +345,15 @@
 					{
 						required:true,
 						number:true
+					},
+					
+					custom1_subcategory:{
+						required:true,
+						
+					},
+					custom2_subcategory:{
+						required:true,
+						
 					}
 		   		},
 				messages: 
@@ -334,6 +363,15 @@
 					{
 						required:<?php echo json_encode(lang('items_quantity_required')); ?>,
 						number:<?php echo json_encode(lang('items_quantity_number')); ?>
+					},
+					
+					custom1_subcategory:{
+						required:"Este dato es requerido"
+						
+					},
+					custom2_subcategory:{
+						required:"Este dato es requerido",
+						
 					}
 				}
 			});

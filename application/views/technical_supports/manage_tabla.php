@@ -84,7 +84,7 @@
                 </div>
                 <div class="col-lg-6">
                     <a class="btn btn-xs btn-block btn-success " href="javascript:void(0);"
-                        title="<?php echo lang($controller_name . '_entregar') ?>"
+                        title="Imprimir"
                         onclick="controler('<?php echo site_url() ?>/technical_supports/detalles_serv_tecnico/','hc=<?php echo $servicios->Id_support; ?>','ventanaVer','');">
                         <i class="fa fa-print"></i>
                     </a>
@@ -106,26 +106,9 @@
 <script type="text/javascript">
 $(document).ready(function() {
 
-    <?php if($this->config->item('hide_video_stack4') == '0'){?>
-    $('.modal.fade').addClass('in');
-    $('#stack4').css({
-        'display': 'block'
-    });
-    <?php } ?>
-    $('.modal.fade.in').click(function(e) {
+   
 
-        if ($(e.target)[0].id == "stack4") {
-            $('.modal.fade.in').removeClass('in');
-            $('#stack4').css({
-                'display': 'none'
-            });
-
-        }
-
-
-    });
-
-    $('#closeitems').click(function() {
+    /*$('#closeitems').click(function() {
 
         $('.modal.fade.in').removeClass('in');
         $('#stack1').css({
@@ -135,17 +118,9 @@ $(document).ready(function() {
         $('#maxitems').html(
             "<a href='javascript:;' id='maxhom' rel=1 class='tn-group btn red-haze' ><span class='hidden-sm hidden-xs'>Maximizar&nbsp;</span><i class='icon fa fa-youtube-play help_button'></i></a>"
         );
-    });
+    });*/
 
-
-    $('#checkBoxStack4').click(function(e) {
-
-        $.post('<?php echo site_url("config/show_hide_video_help");?>', {
-            show_hide_video4: $(this).is(':checked') ? '1' : '0',
-            video4: 'hide_video_stack4'
-        });
-
-    });
+    
 
     // Setup - add a text input to each footer cell
     //		$('#table-suppor tfoot th').each( function () {
@@ -183,9 +158,7 @@ $(document).ready(function() {
                 "sSortDescending": ": Activar para ordenar la columna de manera descendente"
             }
         },
-        "order": [
-            [0, "asc"]
-        ],
+        "order": [[ 0, "desc" ]],
         "searching": true
     });
 

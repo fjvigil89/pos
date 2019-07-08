@@ -39,6 +39,7 @@ $lang['common_email_invalid_format']='El e-mail no está en el formato requerido
 $lang['common_confirm_search']='Has seleccionado una o más filas. Éstas no estarán seleccionadas después de tu búsqueda. ¿Seguro(a) que quieres hacer esta búsqueda?';
 $lang['common_no_persons_to_display']='No hay gente que mostrar';
 $lang['common_return_policy']='Política de devoluciones';
+$lang['common_return_policy_help']='Garantía de 30 días excepto por golpes y daños eléctricos';
 $lang['common_price']='Precio';
 $lang['common_welcome_message']= 'Bienvenido(a) al Punto de venta. ¡Haz click en algún módulo!';
 $lang['common_inv']='Inventario';
@@ -88,6 +89,7 @@ $lang['common_fixed_amount'] = 'Una cantidad fija';
 $lang['common_percentage'] = 'Porcentaje';
 $lang['common_commission_help'] = 'Por ciento de comisión se basa en el precio de venta de un artículo';
 
+$lang['common_resolution_help'] = 'Colocar aqui la resolución de facturación de su ente de impuestos';
 $lang['common_resolution'] = 'Resolución';
 $lang['common_switch_user'] = 'Cambiar de usuario';
 $lang['common_more_info'] = 'Más información';

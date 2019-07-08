@@ -18,7 +18,7 @@
                     <div class="col-md-12">
                         <div class="portlet light bordered">
                             <div class="portlet-body">
-                                <?php echo form_open('config/save_catebory',array('id'=>'form_category','class'=>'')); ?>
+                                <?php echo form_open('category/save_catebory',array('id'=>'form_category','class'=>'',"autocomplete"=>"off")); ?>
                                 <div class="portlet-body form ">
                                     <div class="form-body">
                                         <div class="form-group">
@@ -153,15 +153,16 @@ $("#image").fileinput({
     initialCaption: ""
 });
 var url_img = "<?=base_url().$path_img?>";
-var url_2 = '<?=site_url("config/save_catebory")?>';
+var url_2 = '<?=site_url("category/save_catebory")?>';
 $('#table-categories').DataTable();
 
 
 function delete_category(id, elemento) {
-    var url = '<?=site_url("config/delete_category")?>/' + id;
+    var url = '<?=site_url("category/delete_category")?>/' + id;
     if (confirm("¿Desea eliminar esta categoría?")) {
         $.post(url, {}, function(data) {
             $(elemento).closest('tr').remove();
+            load_category_list();
         });
     }
 
@@ -215,6 +216,7 @@ function send_form_category() {
 
                 $('#form_category').attr('action', url_2);
                 $('#form_category')[0].reset();
+                load_category_list();
             } else {
                 toastr.error(data.message, <?=json_encode(lang('common_error'))?>);
 
@@ -226,7 +228,7 @@ function send_form_category() {
 }
 
 function editar_category(id, elemento) {
-    var url = '<?=site_url("config/get_category")?>/' + id;
+    var url = '<?=site_url("category/get_category")?>/' + id;
 
     $.get(url, {}, function(data) {
         data = JSON.parse(data);
@@ -265,4 +267,18 @@ $('#form_category').validate({
         }
     }
 });
+function load_category_list(){
+
+    
+    <?php if($class == "items" ):?>
+        $.get("<?=site_url("category/get_categories_all")?>",{},function(data){
+            data = JSON.parse(data);
+            $("#category_2").html('<option value="Seleccione"></option>');
+            data.forEach(category => {
+                $("#category_2").append(`<option value="${category.name}"></option>`)
+            });
+            
+        });
+    <?php endif; ?>
+}
 </script>

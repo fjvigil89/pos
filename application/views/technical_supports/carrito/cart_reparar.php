@@ -1,5 +1,5 @@
 <div class="portlet light">
-    <input type="text" name="item" id="item" class="form-control" placeholder="<?php echo lang('common_search'); ?>">
+    <input type="text" name="item" autocomplete="off" id="item" class="form-control" placeholder="<?php echo lang('common_search'); ?>">
     <div class="col-sm-10 no-padding" id="resultado_repuesto" style="position: absolute; z-index: 9000;"></div>
 </div>
 <div class="portlet light table-responsive">

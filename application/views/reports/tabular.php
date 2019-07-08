@@ -25,6 +25,10 @@
 		force_download(strip_tags($title) . '.'.($this->config->item('spreadsheet_format') == 'XLSX' ? 'xlsx' : 'csv'), $content);
 		exit;
 	}
+	else if($export_pdf==1){
+		$this->pdf->generar_pdf_reporte($data, $headers,$subtitle,$title,$summary_data);
+	exit;
+	}
 ?>
 
 	<?php $this->load->view("partial/header"); ?>

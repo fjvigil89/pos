@@ -4,7 +4,13 @@ class items_subcategory extends CI_Model
     public function save_one($subcategory)
     {
         if($this->exists($subcategory["item_id"], $subcategory["location_id"] , $subcategory['custom1'], $subcategory['custom2'])){
-            $data=array("deleted"=>0,"quantity"=>0);
+           
+            $info = $this->get_info($subcategory["item_id"], $subcategory["location_id"] , $subcategory['custom1'], $subcategory['custom2']);
+            if($info->deleted)
+                $data = array("deleted"=>0,"quantity"=>0, "of_low"=>0);
+            else
+              $data = array("deleted"=>0, "of_low"=>0);
+
             return $this->update_by_id($subcategory["item_id"], $subcategory["location_id"], $subcategory['custom1'], $subcategory['custom2'],  $data);
         }else{
             return $this->db->insert('items_subcategory', $subcategory);
@@ -16,8 +22,10 @@ class items_subcategory extends CI_Model
         $this->delete_all_by_id($location_id, $item_id);
         foreach($data as $subcategory){
             if($this->exists($item_id, $location_id , $subcategory['custom1'], $subcategory['custom2'])){
-                $subcategory_data["deleted"]=false;
-                $subcategory_data["quantity"]= $subcategory["quantity"];
+                $subcategory_data["deleted"] = false;
+                $subcategory_data["quantity"] = $subcategory["quantity"];
+                $subcategory_data["of_low"] = false;
+                $subcategory_data["expiration_date"]= $subcategory["expiration_date"];
                if(! $this->update_by_id($item_id, $location_id , $subcategory['custom1'],  $subcategory['custom2'],  $subcategory_data))
                $error= true;
             }else{
@@ -35,16 +43,20 @@ class items_subcategory extends CI_Model
         $this->db->where('item_id', $item_id);
         $this->db->where('location_id', $location_id);
         $this->db->where('deleted',0);
+        $this->db->where('of_low',0);
         $query = $this->db->get("items_subcategory");
          return $query->result();
         
     }
-    function get_category_suggestions_custom($search, $custom="custom1")
+    function get_category_suggestions_custom($search, $custom="custom1", $item_id = false)
 	{
 		$suggestions = array();
 		$this->db->distinct();
 		$this->db->select($custom);
-		$this->db->from('items_subcategory');
+        $this->db->from('items_subcategory');
+        if($item_id != false)
+            $this->db->where('item_id',$item_id);
+        
 		$this->db->like($custom, $search);
 		//$this->db->where('deleted', 0);
 		$this->db->limit(25);
@@ -96,6 +108,7 @@ class items_subcategory extends CI_Model
         $this->db->where('custom1', $custom1);
         $this->db->where('location_id', $location_id);
         $this->db->where('deleted',0);
+        $this->db->where('of_low',0);
 
         $query = $this->db->get("items_subcategory");
 
@@ -116,6 +129,7 @@ class items_subcategory extends CI_Model
     public function get_all($location_id, $item_id)
     {      
         $this->db->where('deleted', 0);
+        //$this->db->where('of_low', 0);
         $query = $this->db->get("items_subcategory");
         if($query->num_rows() >0) {
             return $query->result();
@@ -183,6 +197,7 @@ class items_subcategory extends CI_Model
        
         return ($query->num_rows() == 1);
     }
+    
     public function get_info($item_id, $location_id = false, $custom1, $custom2)
     {
         if (!$location_id) {

@@ -1,4 +1,11 @@
 <?php
+$lang['config_value_point_accumulated']='Accumulated points';
+$lang['sales_value_receiving'] = 'Purchase';
+$lang['sales_base_tax'] = 'Tax base';
+$lang['sales_payment_value'] = 'Value';
+$lang['sales_payment_type'] = 'Type';
+$lang['sales_payment_date'] = 'Date';
+$lang['saleS_total_invoice'] = 'TOTAL INVOICE';
 $lang['sell_lower_cost_price']="Sell ​​at a lower cost price";
 $lang['suspend_notes']="Notes";
 $lang['expenses']="Expenses";
@@ -6,11 +13,12 @@ $lang['credito']="Credits";
 $lang['other_media']="Others means";
 $lang['datafonos_tarjetas']="Datafonos (Cards)";
 // movimiento caja gastos 
+$lang["sales_quotes_save"]="Guardar contizacón";
 $lang['deliver_to']="Deliver to";
 $lang['option_register']="Option to register";
 $lang['move_money_category']="Transfer";
 $lang['move_money']="Transfer money";
-
+$lang['sales_editing_quote'] = 'Quotation edition';
 $lang['Nomina']='Payroll';
 $lang['Transporte']='Transportation';
 $lang['Comida']='Foot';
@@ -47,7 +55,7 @@ $lang['sales_customer'] = 'Customer';
 $lang['sales_no_items_in_cart']='There are no items in the cart';
 $lang['sales_total']='Total';
 $lang['sales_tax_percent']='Tax %';
-$lang['sales_price']='Price';
+$lang['sales_price']='Sale Price';
 $lang['sales_quantity']='Quantity';
 $lang['sales_discount']='Disc %';
 $lang['sales_edit']='Edit';

@@ -6,7 +6,9 @@
 	<h1>
 		<i class="icon fa fa-wrench"></i>
 		<?php echo lang('module_' . $controller_name); ?> 
-                <a target="_blank" href="https://www.youtube.com/watch?v=SzJnORvT2vY&feature=youtu.be" class="icon fa fa-youtube-play help_button" id='maxitems' ></a>
+               <!-- <a target="_blank" href="https://www.youtube.com/watch?v=SzJnORvT2vY&feature=youtu.be" class="icon fa fa-youtube-play help_button" id='maxitems' ></a>-->
+               <a class="icon fa fa-youtube-play help_button" id='modal-video-tutorial' rel='0' data-toggle="modal" data-target="#stack"></a>
+
 	</h1>
 </div>
 <!-- END PAGE TITLE -->
@@ -76,6 +78,8 @@
         
     </div>
 </div>
+<?=$this->load->view("tutorials");?>
+
 <?php if($edit_support_id>0) :?>
     <script>
         $(function() 

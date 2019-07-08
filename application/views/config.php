@@ -5,7 +5,7 @@
 				<i class="icon fa fa-cogs"></i> 
 				<?php echo lang('module_'.$controller_name); ?>
 				<?php 
-					$extra="";
+					/*$extra="";
 					$url_video_ver="https://www.youtube.com/watch?v=NE4IWySqQc8&t=2s";
 					if($this->Appconfig->es_franquicia()){
 						$url_video=	$this->Appconfig->get_video("CONFIGURACIÓN");
@@ -16,9 +16,9 @@
 						}
 					}
 					$a_video= '<a target="_blank" href="'.$url_video_ver.'" '.$extra.' class="icon fa fa-youtube-play help_button" ></a>';
-					echo $a_video;				
+					echo $a_video;*/				
 				?>
-			<!--<a class="icon fa fa-youtube-play help_button" id='maxconfig' rel='0' data-toggle="modal" data-target="#stack2"></a>-->
+			<a class="icon fa fa-youtube-play help_button" id='modal-video-tutorial' rel='0' data-toggle="modal" data-target="#stack"></a>
 			</h1>
 
 		</div>
@@ -2627,8 +2627,22 @@
 										'value'=>$this->config->item('value_point')));
 									?> Ejemplo: Por cada <strong>1000</strong> de dinero generar <strong>1</strong> punto
 								</div>
-							</div>												
-								
+							</div>	
+							<div class="form-group">	
+								<?php echo form_label(lang('config_percent_point'), 'percent_point',array('class'=>'col-md-3 control-label ')); ?>							
+								<div class='col-md-9'>
+									<div class="input-group">
+										<?php echo form_input(array(
+											'name'=>'percent_point',
+											'id'=>'percent_point',
+											'class'=>'form-control',
+											'size'=>'percent_point',
+											'value'=>$this->config->item('percent_point')));
+										?> 
+										<span class="input-group-addon">%</span>
+									</div>
+								</div>
+							</div>											
 							<div class="form-group">	
 								<?php echo form_label('<a class="help_config_options tooltips"  data-placement="left"  title="'.lang("config_categoria_gastos_help"). '">'.lang('config_categoria_gastos').'</a>'.':', 'categoria_gastos',array('class'=>'col-md-3 control-label ')); ?>
 									<div class='col-md-9'>
@@ -2671,21 +2685,7 @@
 								</div>
 							</div>
 							
-							<div class="form-group">	
-								<?php echo form_label(lang('config_percent_point'), 'percent_point',array('class'=>'col-md-3 control-label ')); ?>							
-								<div class='col-md-9'>
-									<div class="input-group">
-										<?php echo form_input(array(
-											'name'=>'percent_point',
-											'id'=>'percent_point',
-											'class'=>'form-control',
-											'size'=>'percent_point',
-											'value'=>$this->config->item('percent_point')));
-										?> 
-										<span class="input-group-addon">%</span>
-									</div>
-								</div>
-							</div>
+							
 						</div>
 
 						<div class="form-group">	
@@ -2744,7 +2744,7 @@
 									'50'=>'50',
 									'100'=>'100',
 									'200'=>'200',
-									'500'=>'500'), 
+								/*'500'=>'500'*/), 
 								 	$this->config->item('number_of_items_per_page') ? $this->config->item('number_of_items_per_page') : '20', 'class="bs-select form-control"');
 								?>
 							</div>
@@ -2989,7 +2989,7 @@
 									'id'=>'resolution',
 									'class'=>'form-textarea form-control',
 									'rows'=>'4',
-									'placeholder'=>'<strng>RESLUIN DE UTRIZIN NÚMER 400001 DEL 2013-07-26 NUMERIN DESDE 02-400001 HST 02-700000</strng>',
+									'placeholder'=>lang('common_resolution_help'),
 									'cols'=>'30',
 									'value'=>$this->config->item('resolution')));
 								?>
@@ -3064,10 +3064,10 @@
 									'name'=>'return_policy_credit',
 									'id'=>'return_policy_credit',
 									'class'=>'form-textarea form-control',
-									'placeholder'=>'Garantía   excepto por golpes  daños eléctricos.',
+									'placeholder'=>'Garantía de 30 días excepto por golpes y daños eléctricos',
 									'rows'=>'4',
 									'cols'=>'30',
-									'value'=>$this->config->item('return_policy_credit')));
+									'value'=>$this->config->item('return_policy_credit')?$this->config->item('return_policy_credit'):lang('common_return_policy_help')));
 								?>
 							</div>
 						</div>
@@ -3075,12 +3075,56 @@
 							<?php echo form_label(lang('config_spreadsheet_format').':', 'spreadsheet_format',array('class'=>'col-md-3 control-label')); ?>
 							<div class="col-md-9">
 								<?php echo form_dropdown('spreadsheet_format', array(
-								lang('config_csv') => lang('config_csv'), 
 								lang('config_xlsx') => lang('config_xlsx')), 
 								$this->config->item('spreadsheet_format'), 'class="bs-select form-control"'); ?>
 							</div>
 						</div>
 						<div class="form-group">	
+
+							<?php echo form_label('<a class="help_config_options  tooltips " data-placement="left" title="'.lang("config_activate_pharmacy_mode_help").'">'.lang('config_activate_pharmacy_mode').'</a>'.':', 'subcategory_of_items', array('class'=>'col-md-3 control-label')); ?> 						
+							
+							<div class="col-md-1">
+								<div class="md-checkbox-inline">
+									<div class="md-checkbox">
+										<?php echo form_checkbox(array(
+											'name'=>'activate_pharmacy_mode',
+											'id'=>'activate_pharmacy_mode',
+											'value'=>'1',
+											'class'=>'md-check',
+											'checked'=>$this->config->item('activate_pharmacy_mode')));
+										?>
+										<label for="activate_pharmacy_mode">
+										<span></span>
+										<span class="check"></span>
+										<span class="box"></span>
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">	
+								<?php echo form_label('<a class="help_config_options  tooltips " data-placement="left" title="">Alarma de vencimiento para farmacia </a>'.':', 'subcategory_alerts', array('class'=>'col-md-3 control-label')); ?> 						
+								<div class='col-md-9'>
+									<?php echo form_dropdown('subcategory_alerts',
+										array(
+										"1" => "1 día",
+										"2" => "2 días", 
+										"3" => "3 días",
+										"4" => "4 días",
+										"5" => "5 días",
+										"6" => "6 días",
+										"7" => "7 días",
+										"8" => "8 días",
+										"15" =>"15 días",
+										"30"=>"30 días",
+										"60"=>"40 días",
+										"90"=>"90 días",
+										"120"=>"120 días"),
+										$this->config->item('subcategory_alerts')?$this->config->item('subcategory_alerts'):15, 'class="bs-select form-control"'); 
+									?>
+							</div>
+							</div>
+						<div class="form-group">
 							<?php echo form_label('<a class="help_config_options  tooltips " data-placement="left" title="'.lang("config_subcategory_store_help").'">'.lang('config_subcategory_store').'</a>'.':', 'subcategory_of_items', array('class'=>'col-md-3 control-label')); ?> 						
 						
 							<div class="col-md-1">
@@ -3211,7 +3255,7 @@
 								<?php echo form_label('<a class="help_config_options  tooltips " data-placement="left" title="'.lang("").'">Categorías</a>'.':', 'categories', array('class'=>'col-md-3 control-label')); ?> 						
 						
 									<div class="col-md-1">
-									<a href="<?=site_url("config/categories_modal")?>" class="btn btn-medium green-seagreen effect" id="modal-serial" data-toggle="modal" data-target="#myModal" title="Perzonalizar número de factura"><i class="fa fa-plus hidden-lg fa fa-2x tip-bottom" data-original-title=""></i> <span class="visible-lg">Perzonalizar</span></a>
+									<a href="<?=site_url("category/categories_modal")?>" class="btn btn-medium green-seagreen effect" id="modal-serial" data-toggle="modal" data-target="#myModal" title="Perzonalizar número de factura"><i class="fa fa-plus hidden-lg fa fa-2x tip-bottom" data-original-title=""></i> <span class="visible-lg">Perzonalizar</span></a>
 									</div>							
 							</div>
 
@@ -3338,6 +3382,79 @@
 				</div>
 			</div> 
 
+			<!-- API -->
+			<div class="col-md-12">
+				<div class="portlet light">
+					<div class="portlet-title">
+						<div class="caption">
+							<i class="icon-speech"></i>
+							<span class="caption-subject bold uppercase tooltips"  data-placement="right"  title="<?php  echo lang('config_tax_currency_info_help') ?>">
+								<a class="help_config"><?php echo "API"; ?></a>
+							</span>
+							<span class="caption-helper"><a class="option_api_info"><?php echo lang("config_more_options") ?></a></span>
+						</div>
+						<div class="tools">
+							<a id="icon_api_info" href="" class="expand" data-original-title="" title=""></a>							
+							<a href="javascript:;" class="fullscreen" data-original-title="" title=""></a>								
+						</div>
+					</div>
+					<div id="api_info" class="portlet-body form">
+
+
+								<div class="form-group">	
+									<?php echo form_label("Dominio Api Tienda Online".':', 'dominioapi',array('class'=>'col-md-3 control-label')); ?>						
+									<div class="col-md-9">
+										<?php echo form_input(array(
+											'class'=>'form-control',
+											'name'=>'dominioapi',
+											'id'=>'dominioapi',
+											'value'=>$this->config->item('dominioapi')));
+										?>								
+									</div>
+								</div>							
+
+								<div class="form-group">	
+									<?php echo form_label("Token Api".':', 'token',array('class'=>'col-md-3 control-label')); ?>						
+									<div class="col-md-9">
+										<?php echo form_input(array(
+											'class'=>'form-control',
+											'name'=>'token_api',
+											'id'=>'token_api',
+											'value'=>$this->config->item('token_api')));
+										?>								
+									</div>
+								</div>	
+
+								<div class="form-group">
+									<?php echo form_label("Renovar Token".':', 'renovar',array('class'=>'col-md-3 control-label')); ?>							
+									<div class="col-md-9">
+										<div class="md-checkbox-inline">
+											<div class="md-checkbox">		
+												<?php echo form_checkbox(array('name'=>'renovar', 'id'=>'checkbox40', 'value'=>'1', 'class'=>'md-check'));?>																		
+												<label for="checkbox40">
+												<span></span>
+												<span class="check"></span>
+												<span class="box"></span>
+												</label>
+											</div>									
+										</div>
+									</div>
+								</div>	
+								
+						<div class="form-actions right">
+							<?php echo form_button(array(
+								'name'=>'submitf',
+								'id'=>'submitf',
+								'type' => 'submit',	
+								'class'=>'btn btn-primary pull-right'),
+								lang('common_submit')); 
+							?>							   
+						</div>	
+
+					</div>
+				</div>
+			</div>
+			<!-- End API -->
 
 
 
@@ -3563,13 +3680,7 @@
 			</div>                                                
 
                         <?php ///////////////////////FIN Panel de config de Servicio Tecnico ?>
-
-
-
-
-
-
-
+					
 
 
 
@@ -3807,6 +3918,8 @@
 			
 		<?php ?>
 	</div>
+
+	<?=$this->load->view("tutorials");?>
 	<!-- END -->
 
 
@@ -3824,6 +3937,47 @@
 	
 		$(document).ready(function()
 		{	
+			// modo farmacia activado 
+			<?php if($this->config->item('activate_pharmacy_mode')){?>
+					$('#subcategory_of_items').attr('disabled', true);
+
+					$('#custom_subcategory1_name').attr('readonly', true);
+
+					$('#inhabilitar_subcategory1').attr('disabled', true);
+
+					$('#custom_subcategory2_name').attr('readonly', true);
+
+			<?php } ?>
+
+
+			$("#activate_pharmacy_mode").change(function() {
+				if( $(this).is(':checked') ){
+					$('#subcategory_of_items').attr('disabled', true);
+					$('#subcategory_of_items').attr('checked', true);
+
+					$('#custom_subcategory1_name').attr('readonly', true);
+					$('#custom_subcategory1_name').val("inhabilitado");
+
+					$('#inhabilitar_subcategory1').attr('disabled', true);
+					$('#inhabilitar_subcategory1').attr('checked', true);
+
+					$('#custom_subcategory2_name').attr('readonly', true);
+					$('#custom_subcategory2_name').val("LOTE");
+				}else{
+					$('#subcategory_of_items').removeAttr('disabled');
+					$('#subcategory_of_items').attr('checked', false);
+
+					$('#custom_subcategory1_name').attr('readonly', false);
+					$('#custom_subcategory1_name').val('');
+
+					$('#inhabilitar_subcategory1').removeAttr('disabled');
+					$('#inhabilitar_subcategory1').attr('checked', false);
+
+					$('#custom_subcategory2_name').attr('readonly', false);
+
+				}
+			});
+
 			$("#inhabilitar_subcategory1").change( function(){
 			
    			if( $(this).is(':checked') ){
@@ -3835,42 +3989,7 @@
 				$('#custom_subcategory1_name').val("");
 			   }
 		});				
-			<?php if($this->config->item('hide_video_stack2') == '0'){?>
-         $('.modal.fade').addClass('in');
-         $('#stack2').css({'display':'block'});
-         <?php } ?>
-         $('.modal.fade.in').click(function(e){
-       
-         if($(e.target)[0].id == "stack2")
-         {
-               $('.modal.fade.in').removeClass('in');
-               $('#stack2').css({'display':'none'});
-
-         }
-         
-     
-         });
-          $('#closeconfig').click(function(){
-         	
-               $('.modal.fade.in').removeClass('in');
-               $('#stack3').css({'display':'none'});
-               $('#maxconfig').removeClass('icon fa fa-youtube-play help_button');
-               $('#maxconfig').html("<a href='javascript:;' id='maxhom' rel=1 class='tn-group btn red-haze' ><span class='hidden-sm hidden-xs'>Maximizar&nbsp;</span><i class='icon fa fa-youtube-play help_button'></i></a>");
-         });
-      
-         $('#checkBoxStack2').click(function(e){
-             
-             $.post('<?php echo site_url("config/show_hide_video_help");?>',
-             {show_hide_video2:$(this).is(':checked') ? '1' : '0',video2:'hide_video_stack2'});
-               
-         });
-      	 $('#closeconfig').click(function(){
-         	
-               $('.modal.fade.in').removeClass('in');
-               $('#stack2').css({'display':'none'});
-               $('#maxconfig').removeClass('icon fa fa-youtube-play help_button');
-               $('#maxconfig').html("<a href='javascript:;' id='maxconfig' rel=1 class='tn-group btn red-haze' ><span class='hidden-sm hidden-xs'>Maximizar&nbsp;</span><i class='icon fa fa-youtube-play help_button'></i></a>");
-         });
+			
 
 			$(".portlet-body").css("display","none");
 
@@ -3970,7 +4089,7 @@
 				$("#container_points").show()
 			};
 
-			$('#system_point').change(function()
+			/*$('#system_point').change(function()
 			{
 				if ($(this).prop('checked')) 
 				{
@@ -3980,7 +4099,7 @@
 			    {
 			        $("#container_points").addClass('hidden');
 			    }
-			});
+			});*/
 
 			//Container limit_cash_flow
 			var s2 = "<?php echo $this->config->item('limit_cash_flow') ?>";
