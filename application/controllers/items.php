@@ -47,11 +47,12 @@ class Items extends Secure_area implements iData_controller
         $data['order_dir'] = $params['order_dir'];
 
         $data['manage_table'] = get_items_manage_table($table_data, $this);
-        $data['categories'][''] = '--' . lang('items_select_category_or_all') . '--';
+       
         foreach ($this->Item->get_all_categories()->result() as $category) {
             $category = $category->category;
             $data['categories'][$category] = $category;
         }
+        $data['categories'][''] = '--' . lang('items_select_category_or_all') . '--';
 
         $this->load->view('items/manage', $data);
     }
@@ -64,11 +65,11 @@ class Items extends Secure_area implements iData_controller
 		$params = $this->session->userdata('item_search_data') ? $this->session->userdata('item_search_data') : array('offset' => 0, 'order_col' => 'item_id', 'order_dir' => 'asc', 'search' => false, 'category' => false);
 
         if ($offset != $params['offset']) {
-            redirect('items/index/' . $params['offset']);
+            redirect('items/consultant/' . $params['offset']);
         }
 
         $this->check_action_permission('search');
-        $config['base_url'] = site_url('items/sorting');
+        $config['base_url'] = site_url('items/sorting_consult');
         $config['per_page'] = $this->config->item('number_of_items_per_page') ? (int) $this->config->item('number_of_items_per_page') : 20;
         $data['controller_name'] = strtolower(get_class());
         $data['per_page'] = $config['per_page'];
@@ -127,6 +128,34 @@ class Items extends Secure_area implements iData_controller
         $this->pagination->initialize($config);
         $data['pagination'] = $this->pagination->create_links();
         $data['manage_table'] = get_items_manage_table_data_rows($table_data, $this);
+        echo json_encode(array('manage_table' => $data['manage_table'], 'pagination' => $data['pagination']));
+    }
+
+    public function sorting_consult()
+    {
+        $this->check_action_permission('search');
+        $search = $this->input->post('search') ? $this->input->post('search') : "";
+        $category = $this->input->post('category');
+
+        $per_page = $this->config->item('number_of_items_per_page') ? (int) $this->config->item('number_of_items_per_page') : 20;
+        $offset = $this->input->post('offset') ? $this->input->post('offset') : 0;
+        $order_col = $this->input->post('order_col') ? $this->input->post('order_col') : 'name';
+        $order_dir = $this->input->post('order_dir') ? $this->input->post('order_dir') : 'asc';
+
+        $item_search_data = array('offset' => $offset, 'order_col' => $order_col, 'order_dir' => $order_dir, 'search' => $search, 'category' => $category);
+        $this->session->set_userdata("item_search_data", $item_search_data);
+        if ($search || $category) {
+            $config['total_rows'] = $this->Item->search_count_all($search, $category);
+            $table_data = $this->Item->search($search, $category, $per_page, $this->input->post('offset') ? $this->input->post('offset') : 0, $this->input->post('order_col') ? $this->input->post('order_col') : 'name', $this->input->post('order_dir') ? $this->input->post('order_dir') : 'asc');
+        } else {
+            $config['total_rows'] = $this->Item->count_all();
+            $table_data = $this->Item->get_all($per_page, $this->input->post('offset') ? $this->input->post('offset') : 0, $this->input->post('order_col') ? $this->input->post('order_col') : 'name', $this->input->post('order_dir') ? $this->input->post('order_dir') : 'asc');
+        }
+        $config['base_url'] = site_url('items/sorting_consult');
+        $config['per_page'] = $per_page;
+        $this->pagination->initialize($config);
+        $data['pagination'] = $this->pagination->create_links();
+        $data['manage_table'] = get_items_manage_consultant_table_data_rows($table_data, $this);
         echo json_encode(array('manage_table' => $data['manage_table'], 'pagination' => $data['pagination']));
     }
 
@@ -250,11 +279,11 @@ class Items extends Secure_area implements iData_controller
         $suggestions = $this->Item->get_category_suggestions($this->input->get('term'));
         echo json_encode($suggestions);
     }
-    public function suggest_category_subcategory($custom="custom1")
+    public function suggest_category_subcategory($custom="custom1",$item_id= false)
     {
         //allow parallel searchs to improve performance.
         session_write_close();
-        $suggestions = $this->items_subcategory->get_category_suggestions_custom($this->input->get('term'),$custom);
+        $suggestions = $this->items_subcategory->get_category_suggestions_custom($this->input->get('term'),$custom,$item_id);
         echo json_encode($suggestions);
     }
 
@@ -281,13 +310,13 @@ class Items extends Secure_area implements iData_controller
         $categories_tem = $this->Categories->get_all();
         $categories[""]="Seleccione";
 
-        foreach ($categories_tem as $category) 
+        foreach ($categories_tem as $category)  
             $categories[$category["name"]] = $category["name"];
-        $item_categories_items_result = $this->Item->get_all_categories()->result();
+        //$item_categories_items_result = $this->Item->get_all_categories()->result();
         
         // categorias viejas, borrar cuando esté todo 100% implementado
-        foreach ($item_categories_items_result as $category) 
-            $categories[$category->category] = $category->category;
+        /*foreach ($item_categories_items_result as $category) 
+            $categories[$category->category] = $category->category;*/
         
         $data["categories"] =  $categories;
 
@@ -563,7 +592,7 @@ class Items extends Secure_area implements iData_controller
             'activate_range'=>(int) $this->input->post('activate_range'),
             "has_sales_units"=>(int) $this->input->post('has_sales_units'),
             "quantity_unit_sale" => (double) $this->input->post('quantity_unit_sale') ?  $this->input->post('quantity_unit_sale'): 1,
-
+            'shop_online'=>$this->input->post('shop_online') ? $this->input->post('shop_online') : 0
         );
         $unit_sale =$this->input->post('unit_sale');
 
@@ -598,17 +627,18 @@ class Items extends Secure_area implements iData_controller
         $sale_or_receiving = $this->input->post('sale_or_receiving');
        
         //valida entrada se debe pasar para un archivo heper       
-        if($this->config->item('subcategory_of_items')==1&&$this->input->post('subcategory') ){
+        if($this->config->item('subcategory_of_items')==1 && $this->input->post('subcategory') ){
             if ($this->input->post('locations')) {
                 foreach ($this->input->post('locations') as $location_id => $item_location_data) {
                          $subcategory_data_custom1=$item_location_data['subcategory_data_custom1'];
                          $subcategory_data_custom2=$item_location_data['subcategory_data_custom2'];
                          $subcategory_data_quantity=$item_location_data['subcategory_data_quantity'];
-                    
-                        if(count($subcategory_data_custom1)<0|| count($subcategory_data_custom2)<0 || count($subcategory_data_quantity)<0 )
+                         $subcategory_data_date= isset($item_location_data['subcategory_data_date']) ? $item_location_data['subcategory_data_date']: [] ;
+
+                        if(count($subcategory_data_custom1) < 0|| count($subcategory_data_custom2)<0 || count($subcategory_data_quantity)<0 )
                             $error_datos_custom =true;
                         foreach($subcategory_data_custom1 as $custom){
-                            if($custom=="" || $custom==null){
+                            if( $custom=="" || $custom==null){
                                     $error_datos_custom =true;
                             }
                         }
@@ -617,9 +647,14 @@ class Items extends Secure_area implements iData_controller
                                 $error_datos_custom =true;
                             }
                         }
-                        foreach($subcategory_data_quantity as $custom){
-                            if($custom=="" || $custom==null){
-                                $error_datos_custom =true;
+                        foreach($subcategory_data_quantity as $quantity){
+                            if($quantity=="" || $quantity == null){
+                                $error_datos_custom = true;
+                            }
+                        }
+                        foreach($subcategory_data_date as $date){
+                            if($date=="" || $date == null){
+                                $error_datos_custom = true;
                             }
                         }
                         for ($i = 0; $i < count($subcategory_data_custom1); $i++) {
@@ -693,15 +728,37 @@ class Items extends Secure_area implements iData_controller
 
             //New item
             if ($item_id == -1) {
+
                 $success_message = lang('items_successful_adding') . ' ' . $item_data['name'];
                 $this->session->set_flashdata('manage_success_message', $success_message);
                 echo json_encode(array('success' => true, 'message' => $success_message, 'item_id' => $item_data['item_id'], 'redirect' => $redirect, 'sale_or_receiving' => $sale_or_receiving));
                 $item_id = $item_data['item_id'];
+
+                if ($item_data['shop_online']==1) {
+                    $key = $this->config->item('token_api');
+                    $dominio = $this->config->item('dominioapi');                                                
+                    $url= $dominio."/api/products/sicrono";
+                    $datos=array('id' => $item_id, 'keyapi' => $key);
+                    $resul=postcurl($url,$datos);
+                }
+
+
+
             } else //previous item
             {
+
                 $success_message = lang('items_successful_updating') . ' ' . $item_data['name'];
                 $this->session->set_flashdata('manage_success_message', $success_message);
                 echo json_encode(array('success' => true, 'message' => $success_message, 'item_id' => $item_id, 'redirect' => $redirect, 'sale_or_receiving' => $sale_or_receiving));
+
+
+                if ($item_data['shop_online']==1) {
+                    $key = $this->config->item('token_api');
+                    $dominio = $this->config->item('dominioapi');                                                
+                    $url= $dominio."/api/products/sicrono";
+                    $datos=array('id' => $item_id, 'keyapi' => $key);
+                    $resul=postcurl($url,$datos);
+                }
             }
 
             if ($this->input->post('additional_item_numbers') && is_array($this->input->post('additional_item_numbers'))) {
@@ -755,6 +812,7 @@ class Items extends Secure_area implements iData_controller
                     $subcategory_data_custom1=$item_location_data['subcategory_data_custom1'];
                     $subcategory_data_custom2=$item_location_data['subcategory_data_custom2'];
                     $subcategory_data_quantity=$item_location_data['subcategory_data_quantity'];
+                    $subcategory_data_expiration_date = isset($item_location_data['subcategory_data_date']) ? $item_location_data['subcategory_data_date']:[];
                     $override_prices = isset($item_location_data['override_prices']) && $item_location_data['override_prices'];
                     $override_defect = isset($item_location_data['override_defect']) && $item_location_data['override_defect'];
                     $item_location_before_save = $this->Item_location->get_info($item_id, $location_id);
@@ -782,19 +840,27 @@ class Items extends Secure_area implements iData_controller
                     }
                     $this->Item_location->save($data, $item_id, $location_id);
                    
-                    if($this->config->item('subcategory_of_items')==1&&$this->input->post('subcategory') ){
-                        $data_subcategory=array();
-                        for ($i = 0; $i < count($subcategory_data_quantity); $i++) {
-                            $data_aux=array("item_id"=>$item_id,
-                                            "location_id"=>$location_id,
-                                            "custom1"=>strtoupper ($subcategory_data_custom1[$i]),
-                                            "custom2"=>strtoupper($subcategory_data_custom2[$i]),
-                                            "quantity"=>$subcategory_data_quantity[$i]
-                                        );
-                                        $data_subcategory[]=$data_aux;
+                    if($this->config->item('subcategory_of_items')== 1 && $this->input->post('subcategory') )
+                    {
+                        $data_subcategory = array();
+                        for ($i = 0; $i < count($subcategory_data_quantity); $i++) 
+                        {
+                            $data_aux = array(
+                                "item_id"=>$item_id,
+                                "location_id"=>$location_id,
+                                "custom1"=>strtoupper ($subcategory_data_custom1[$i]),
+                                "custom2"=>strtoupper($subcategory_data_custom2[$i]),
+                                "quantity"=>$subcategory_data_quantity[$i],
+                                "expiration_date"=>null
+                            );
+                            if( $this->config->item("activate_pharmacy_mode")){
+                                $data_aux["expiration_date"] =  $subcategory_data_expiration_date[$i] ? date('Y-m-d 00:00:00', strtotime($subcategory_data_expiration_date[$i])) : null;
+                            }
+                            $data_subcategory[]=$data_aux;
 
                         }
-                        if(count($subcategory_data_quantity)>0){
+                        if(count($subcategory_data_quantity) > 0)
+                        {
                             $result=$this->items_subcategory->save($data_subcategory, $item_id, $location_id);
                             if(!$result)
                             echo json_encode(array('success' => false, 'message' =>  'Error en agregar las categoría(s), no puede duplicar el '.
@@ -991,6 +1057,15 @@ class Items extends Secure_area implements iData_controller
         );
         $this->Inventory->insert($inv_data);
 
+        if($this->config->item('subcategory_of_items') )
+        {
+            $custom1_subcategory = $this->input->post('custom1_subcategory');
+            $custom2_subcategory = $this->input->post('custom2_subcategory');
+            $subcategory = $this->items_subcategory->get_info($item_id, false, $custom1_subcategory, $custom2_subcategory);
+            $quantity_subcategory = $subcategory->quantity;
+            $result = $this->items_subcategory->save_quantity(($quantity_subcategory-$this->input->post('newquantity')), 
+                $item_id, false, $custom1_subcategory,$custom2_subcategory);                            
+        }
         //Update stock quantity
         if ($this->Item_location->save_quantity($cur_item_location_info->quantity + $this->input->post('newquantity'), $item_id)) {
             echo json_encode(array('success' => true, 'message' => lang('items_successful_updating') . ' ' .
@@ -1011,7 +1086,7 @@ class Items extends Secure_area implements iData_controller
     public function clear_state_consultant()
     {
         $this->session->unset_userdata('item_search_data');
-        redirect('items/view_consultant');
+        redirect('items/consultant');
         
     }
 
@@ -1130,6 +1205,7 @@ class Items extends Secure_area implements iData_controller
         $header_row[] = lang('reports_profit');
         foreach ($this->Tier->get_all()->result() as $tier) {
             $header_row[] = $tier->name;
+            $header_row[] = $tier->name.' porcentaje';
         }
         $header_row[] = lang('items_override_default_tax');
         for ($i = 1; $i < 6; $i++) {
@@ -1157,6 +1233,9 @@ class Items extends Secure_area implements iData_controller
                 $header_row[] = lang('items_subcategory').$i."_". ($this->config->item('custom_subcategory1_name') ?  $this->config->item('custom_subcategory1_name'):'Personalizado1');
                 $header_row[] = lang('items_subcategory').$i."_". ($this->config->item('custom_subcategory2_name') ?  $this->config->item('custom_subcategory2_name'):'Personalizado2');
                 $header_row[] = lang('items_subcategory').$i."_". lang('items_quantity');
+                if($this->config->item('activate_pharmacy_mode')){
+                    $header_row[] = lang('items_expiration_date');
+                }
             }
            
         }
@@ -1231,12 +1310,19 @@ class Items extends Secure_area implements iData_controller
                 $tier_id = $tier->id;
                 $tier_row = $this->Item->get_tier_price_row($tier_id, $r->item_id);
                 $value = '';
+                $value_porc = '';
 
                 if (is_object($tier_row) && property_exists($tier_row, 'tier_id')) {
-                    $value = $tier_row->unit_price !== null ? to_currency_no_money($tier_row->unit_price) : $tier_row->percent_off . '%';
+                    //$value = $tier_row->unit_price !== null ? to_currency_no_money($tier_row->unit_price) : $tier_row->percent_off . '%';
+                    if($tier_row->unit_price>=0 && $tier_row->percent_off<=0 ){
+                        $value=to_currency_no_money($tier_row->unit_price);
+                    }else{
+                        $value_porc = $tier_row->percent_off . '%'; 
+                    }
                 }
 
                 $row[] = $value;
+                $row[] = $value_porc;
             }
 
             $row[] = $r->override_default_tax ? 'y' : '';
@@ -1332,8 +1418,8 @@ class Items extends Secure_area implements iData_controller
                 for ($i = 0; $i <= $count_row; $i++) {
                     if (isset($id_supplier[$r->item_id])) {
                         $price_count_tiers = count($this->Tier->get_all()->result());
-                        $row[26 + $price_count_tiers] = $id_supplier[$r->item_id][$i];
-                        $row[27 + $price_count_tiers] = to_currency_no_money($costo_suplier[$r->item_id][$i]);
+                        $row[27 + $price_count_tiers] = $id_supplier[$r->item_id][$i];
+                        $row[28 + $price_count_tiers] = to_currency_no_money($costo_suplier[$r->item_id][$i]);
                     }
 
                     $fila[$i] = $row;
@@ -1384,7 +1470,7 @@ class Items extends Secure_area implements iData_controller
                 $objPHPExcel = file_to_obj_php_excel($_FILES['file_path']['tmp_name']);
                 $sheet = $objPHPExcel->getActiveSheet();
                 $num_rows = $objPHPExcel->setActiveSheetIndex(0)->getHighestRow();
-                $price_tiers_count = $this->Tier->count_all();
+                $price_tiers_count = $this->Tier->count_all()*2; // por 2, porque se agrego una nueva columna de porcentaje
 
                 $price_taxes_count = 5;
                 $tax_included_prices = 0;
@@ -1532,14 +1618,17 @@ class Items extends Secure_area implements iData_controller
                     }
                     $subcategory=false;
                    // se mira si tiene alguna subcategoría el producto
-                    $data_subcategory=array();
-                    if($this->config->item('subcategory_of_items')==1 ){
-                        // el for tiene es hata 5 porque solo se permiten 5 subcategorias, 
+                    $data_subcategory = array();
+                    if($this->config->item('subcategory_of_items')==1 )
+                    {
+                       
                         // si en un futuro se quiere agragr nuevas columnas se debe de agregar antes de esta y 
                         //luego sumar la cantida de columa agregada la nuemro 23
                         // 5*3 =15
-                        $cantidad =(int)$this->config->item('quantity_subcategory_of_items')*3;
-                        for($ij=0;$ij<$cantidad;$ij=$ij+3)
+                        $increment = $this->config->item("activate_pharmacy_mode") ? 4: 3; // cantidad de datos de la subcategoría 
+                        $cantidad =(int)$this->config->item('quantity_subcategory_of_items') *  $increment;
+
+                        for($ij = 0;$ij < $cantidad; $ij = $ij + $increment)
                         {
                             if($this->config->item('inhabilitar_subcategory1')==1){
                                 $custom1_subcategory ="»";
@@ -1550,14 +1639,26 @@ class Items extends Secure_area implements iData_controller
                             }
                             $custom2_subcategory = $sheet->getCellByColumnAndRow((23+$ij+1)+ $price_tiers_count + $price_taxes_count, $k)->getValue();
                             $cantidad_subcategory = $sheet->getCellByColumnAndRow((23+$ij+2 )+ $price_tiers_count + $price_taxes_count, $k)->getValue();
+                            $date_subcategory = $sheet->getCellByColumnAndRow((23+$ij+3 )+ $price_tiers_count + $price_taxes_count, $k)->getValue();
+                            
+                            if(!empty( $date_subcategory) and $this->config->item("activate_pharmacy_mode"))
+							{
+								$timestamp  = PHPExcel_Shared_Date::ExcelToPHP($date_subcategory + 1);
+								$date_subcategory = date("Y-m-d", $timestamp);
+							}
+							else  
+								$date_subcategory = null;
+                            
                             if($custom1_subcategory!="" &&  $custom2_subcategory!="" && $cantidad_subcategory!="" ) {
                                 $subcategory=true;
-                                $data_aux=array(
-                                    "item_id"=>$item_id,
-                                    "location_id"=>$this->Employee->get_logged_in_employee_current_location_id(),
-                                    "custom1"=>strtoupper ($custom1_subcategory),
-                                    "custom2"=>strtoupper($custom2_subcategory),
-                                    "quantity"=>is_numeric($cantidad_subcategory) ? $cantidad_subcategory : 0,
+                                $data_aux = array(
+                                    "item_id" => $item_id,
+                                    "location_id" => $this->Employee->get_logged_in_employee_current_location_id(),
+                                    "custom1" => strtoupper ($custom1_subcategory),
+                                    "custom2" => strtoupper($custom2_subcategory),
+                                    "expiration_date" => $date_subcategory,
+                                    "of_low" => 0,
+                                    "quantity" => is_numeric($cantidad_subcategory) ? $cantidad_subcategory : 0,
                                 );
                                  $data_subcategory[]=$data_aux;
                             }
@@ -1568,6 +1669,12 @@ class Items extends Secure_area implements iData_controller
                         }
                     }
                     if ($this->Item->save($item_data, $item_id)) {
+                        $this->Categories->save(-1,array(
+                            "name" => $category,
+                            "img" => "",
+                            "name_img_original"=> "",
+                            "deleted"=> 0,
+                        ));
                         if (!empty($item_data['supplier_id']) && $item_data['supplier_id'] != null) {
                             $item_data_supliers = array(
                                 'item_id' => isset($item_data['item_id']) ? $item_data['item_id'] : $item_id,
@@ -1587,13 +1694,13 @@ class Items extends Secure_area implements iData_controller
                             $tier_data = array('tier_id' => $tier_id);
                             $tier_data['item_id'] = isset($item_data['item_id']) ? $item_data['item_id'] : $item_id;
                             $tier_value = $sheet->getCellByColumnAndRow($item_unit_price_col_index + ($counter + 1), $k)->getValue();
-
-                            if ($tier_value) {
-                                if (strpos($tier_value, '%') === false) {
+                            $tier_value_porc = $sheet->getCellByColumnAndRow($item_unit_price_col_index + ($counter + 2), $k)->getValue();
+                            if ($tier_value || $tier_value_porc) {
+                                if ($tier_value) {
                                     $tier_data['unit_price'] = $tier_value;
                                     $tier_data['percent_off'] = null;
                                 } else {
-                                    $tier_data['percent_off'] = (int) $tier_value;
+                                    $tier_data['percent_off'] = (int) $tier_value_porc;
                                     $tier_data['unit_price'] = null;
                                 }
 

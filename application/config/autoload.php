@@ -64,7 +64,7 @@ $autoload['libraries'] = array('database','form_validation','session','user_agen
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('form','url','table','text','currency', 'html', 'download', 'base64', 'mailchimp', 'language', 'file', 'assets', 'sale','items','item_kits','breadcrumb','demo', 'spreadsheet');
+$autoload['helper'] = array('form','url','table','text','currency', 'html', 'download', 'base64', 'mailchimp', 'language', 'file', 'assets', 'sale','items','item_kits','breadcrumb','demo', 'spreadsheet','postcurl');
 
 /*
 | -------------------------------------------------------------------
@@ -108,7 +108,7 @@ $autoload['language'] = array('common', 'config', 'customers', 'datetime', 'empl
 |
 */
 
-$autoload['model'] = array('Appconfig','Person','Customer','Employee','Module','Item', 'Item_taxes', 'Sale', 'Supplier','Inventory','Receiving','Giftcard', 'Item_kit', 'Item_kit_taxes', 'Item_kit_items', 'Appfile','Item_location', 'Module_action','Location','Item_location_taxes', 'Tier', 'Item_kit_location','Item_kit_location_taxes', 'Item_taxes_finder', 'Item_kit_taxes_finder', 'Register', 'Additional_item_numbers','Additional_item_seriales','Template_model','items_subcategory','technical_support','Hour_access',"Notification");
+$autoload['model'] = array('Appconfig','Person','Customer','Employee','Module','Item', 'Item_taxes', 'Sale', 'Supplier','Inventory','Receiving','Giftcard', 'Item_kit', 'Item_kit_taxes', 'Item_kit_items', 'Appfile','Item_location', 'Module_action','Location','Item_location_taxes', 'Tier', 'Item_kit_location','Item_kit_location_taxes', 'Item_taxes_finder', 'Item_kit_taxes_finder', 'Register', 'Additional_item_numbers','Additional_item_seriales','Template_model','items_subcategory','technical_support','Hour_access',"Tutorial","Tutorial","Notification");
 
 /* End of file autoload.php */
 /* Location: ./application/config/autoload.php */

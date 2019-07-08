@@ -77,12 +77,16 @@
 								<tr>
 									<th id="reg_item_del"></th>
 									
-									<th id="reg_item_name"><?php echo lang('receivings_item_name'); ?></th>
+									<th id="reg_item_name"  ><?php echo lang('receivings_item_name'); ?></th>
 										<?php if ($subcategory_of_items==true): ?>
 											<?php if ($this->config->item("inhabilitar_subcategory1")==0): ?>
-												<th ><?php echo $this->config->item("custom_subcategory1_name");?></th>
+												<th ><?= $this->config->item("custom_subcategory1_name")?></th>
 											<?php endif; ?>
-											<th ><?php echo $this->config->item("custom_subcategory2_name");?></th>
+											<th ><?= $this->config->item("custom_subcategory2_name"). (strlen($this->config->item("custom_subcategory2_name")) < 6 ? "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;":"");?></th>
+											<?php if($this->config->item("activate_pharmacy_mode")){?>
+												<th ><?=lang('items_expiration_date');?></th>
+											<?php } ?>
+											
 											<th ><?php  echo lang('receivings_quantity')." subcategoría"; ?></th>
 
 										<?php endif; ?>
@@ -186,9 +190,10 @@
 															?>
 														</td>
 													<?php endif;?>
-														<td  width="3%"class="text text-success">
+														<td  width="10%"class="text text-success">
 															<?php
 																if ($subcategory_item ==true) {
+
 																	echo form_open("receivings/edit_item/$line", array('class' => 'line_item_form', 'autocomplete'=> 'off'));
 																	$customs2=$this->items_subcategory-> get_custom2($item['item_id'], false,$item['custom1_subcategory']);
 															 		$data_custom2_subcategory=array(""=>"---------");
@@ -198,24 +203,55 @@
 																	 if (!isset($data_custom2_subcategory[$item['custom2_subcategory']])) {
 																		$data_custom2_subcategory[$item['custom2_subcategory']]=$item['custom2_subcategory']."(No disponible)";
 																	 }
+																	 if($this->config->item("activate_pharmacy_mode")){
+																		
+																		echo form_input(array(
+																			'name'=>'custom2_subcategory',
+																			'value'=> $item['custom2_subcategory'],																			
+																			"required"=>"required",
+																			"size"=>"300",
+																			'class'=>'form-control ',
+																		));
+																		
+																	} 
+																	else
 																	echo form_dropdown('custom2_subcategory',$data_custom2_subcategory,$item['custom2_subcategory'],' style="width: 90px;" class=" form-control select_custom_subcategory"');
 																	echo form_close();
 																}
 															?>
 														</td>
+														<?php if ($this->config->item("activate_pharmacy_mode")) {?>
+														<td  id="reg_item_date">
+															<?php
+																if ($subcategory_item ==true and $this->config->item("activate_pharmacy_mode")) {?>
+																	<?php echo form_open("receivings/edit_item/$line", array('class' => 'line_item_form', 'autocomplete'=> 'off'));
+																		echo form_input(array(
+																			'name'=>'expiration_date',
+																			"type"=>"date",
+																			//"data-date-format"=>get_date_format(),
+																			"min"=>date('Y-m-d'),
+																			'value'=>$item['expiration_date'] ,																			
+																			"required"=>"required",
+																			'class'=>'expiration_date spinner-input form-control form-inps  ',
+																		));?>
+															
+																		<?php echo form_hidden('id',$line); ?>
+																	</form>
+															<?php } ?>
+															</td>
+															<?php } ?>
 														<td id="reg_item_qty">
-														<?php
-															if ($subcategory_item ==true) {?>
+														<?php if ($subcategory_item ==true) {?>
 																<?php echo form_open("receivings/edit_item/$line", array('class' => 'line_item_form', 'autocomplete'=> 'off'));
-																	echo form_input(array('name'=>'quantity_subcategory','value'=>to_quantity($item['quantity_subcategory']),'class'=>'form-control form-inps input-small quantity', 'id' => 'quantity_subcategory'.$line));?>
+																	echo form_input(array('name'=>'quantity_subcategory', 'type'=>'number','value'=>to_quantity($item['quantity_subcategory']),'class'=>'form-control form-inps input-small quantity', 'id' => 'quantity_subcategory'.$line));?>
 														
 																	<?php echo form_hidden('id',$line); ?>
 																</form>
-								<?php } ?>
-								</td>
-								<?php endif; ?>
-								<?php if ($show_receivings_num_item) { ?>
-												<td class="text-center text-info sales_item" id="reg_item_number">
+														<?php } ?>
+														</td>
+														<?php endif; ?>
+														<?php if ($show_receivings_num_item) { ?>
+																		<td class="text-center text-info sales_item" id="reg_item_number">
 													<?php switch($this->config->item('id_to_show_on_sale_interface'))
 													{
 														case 'number':
@@ -987,6 +1023,11 @@
 			{
 				$("body").plainOverlay('show');		
 			});
+			/*$('.expiration_date').datetimepicker({
+				format: <?php echo json_encode(strtoupper(get_js_date_format())); ?>,
+				locale: "es"
+			});*/
+			
 			
 			$("#suspend_recv_button").click(function()
 			{

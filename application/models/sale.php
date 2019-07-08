@@ -824,7 +824,7 @@ class Sale extends CI_Model
             "total_other_currency"=>$total_other_currency,
             "overwrite_tax"=>$overwrite_tax,
             "value_other_currency"=>$value_other_currency,
-            //"support_id"=>$support_id
+            "support_id"=>$support_id
             
         );
 
@@ -850,7 +850,6 @@ class Sale extends CI_Model
             if ($amount_change > 0) {
                 $cash = $cash - $amount_change;
             }
-
 // se registran los movimiento de la caja
             
             $this->Register_movement->save($cash, $description,false,true,$categorias_gastos,false); 
@@ -889,8 +888,8 @@ class Sale extends CI_Model
 
         $previous_store_account_amount = 0;
 
-        if ($sale_id) {
-         
+        if ($sale_id) 
+        {         
             //Delete previoulsy sale so we can overwrite data
             if (!$this->delete($sale_id, true)) {
                 $this->db->query("ROLLBACK");
@@ -905,7 +904,8 @@ class Sale extends CI_Model
                 return -1;
             }
         } else {
-            if (!$this->db->insert('sales', $sales_data)) {
+            $result = $this->db->insert('sales', $sales_data);
+            if (! $result) {
                 $this->db->query("ROLLBACK");
                 $this->db->query('UNLOCK TABLES');
                 return -1;
@@ -1007,7 +1007,6 @@ class Sale extends CI_Model
                 if ($cur_item_info->tax_included) {
                     $item['price'] = get_price_for_item_excluding_taxes($item['item_id'], $item['price']);
                 }
-
                 $sales_items_data = array
                     (
                     'sale_id' => $sale_id,
@@ -1158,7 +1157,14 @@ class Sale extends CI_Model
 
                     if (!$cur_item_info->is_service) {
                         $qty_buy = -$item['quantity'];
-                        $sale_remarks = $this->config->item('sale_prefix') . ' ' . $sale_id;
+
+                        //pedido decuento en tienda online---------------------------------------- 
+                        if (!empty($this->sale_lib->get_order())) {
+                            $sale_remarks = 'PEDIDO ' . $this->sale_lib->get_order();  
+                        }else{
+                           $sale_remarks = $this->config->item('sale_prefix') . ' ' . $sale_id; 
+                        }
+                        //------------------------------------------------------------------------
                         $inv_data = array
                             (
                             'trans_date' => date('Y-m-d H:i:s'),
@@ -1173,6 +1179,7 @@ class Sale extends CI_Model
                             $this->db->query('UNLOCK TABLES');
                             return -1;
                         }
+
                     }
                 }
             } else {//  para los kits
@@ -2808,7 +2815,7 @@ class Sale extends CI_Model
         $this->db->join('customers', 'quotes.customer_id = customers.person_id', 'left');
         $this->db->join('people', 'customers.person_id = people.person_id', 'left');
         $this->db->where('quotes.deleted', 0);
-        $this->db->order_by('quote_id');
+        $this->db->order_by('quote_id',"desc");
         $sales = $this->db->get()->result_array();
 
         for ($k = 0; $k < count($sales); $k++) {

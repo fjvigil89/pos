@@ -3,7 +3,7 @@ class Hour_access extends CI_Model
 {
     public function save( &$hora_acceso,&$employee_id){
         //First lets clear out any access the employee currently has.
-        $this->db->query("SET autocommit=0");
+       // $this->db->query("SET autocommit=0");
 		$success=$this->db->delete('access_employees', array('employee_id' => $employee_id));
        
         if($success){
@@ -27,8 +27,8 @@ class Hour_access extends CI_Model
                 }
             }
         }	
-        $this->db->query("COMMIT");
-        $this->db->query("SET autocommit=1");
+       /* $this->db->query("COMMIT");
+        $this->db->query("SET autocommit=1");*/
         
         
         return $success;
@@ -62,7 +62,7 @@ class Hour_access extends CI_Model
     }
     function save_new_store_acces_admin(&$location,&$employee_id){
         //First lets clear out any access the employee currently has.
-        $this->db->query("SET autocommit=0");
+        //$this->db->query("SET autocommit=0");
 		$success=$this->db->delete('access_employees', array('employee_id' => $employee_id,'location'=>$location));
         
         if($success){
@@ -82,8 +82,8 @@ class Hour_access extends CI_Model
             }
         }
            
-        $this->db->query("COMMIT");
-        $this->db->query("SET autocommit=1");
+        /*$this->db->query("COMMIT");
+        $this->db->query("SET autocommit=1");*/
         
         
         return $success;

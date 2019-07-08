@@ -90,7 +90,8 @@ $lang['common_percentage'] = 'Percentage';
 $lang['common_commission_help'] = 'Percent commission is based on the selling price of an item';
 $lang['common_last_name_help'] = 'EThe surname is a required field';
 
-
+$lang['common_return_policy_help']='30-day warranty except for electric shock and damage';
+$lang['common_resolution_help'] = 'Place here the billing resolution of your tax entity';
 $lang['common_switch_user'] = 'Switch user';
 $lang['common_more_info'] = 'More info';
 $lang['common_actions'] = 'Actions';

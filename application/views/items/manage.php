@@ -92,7 +92,7 @@
 			
 				<i class="icon fa fa-table"></i>
 				<?php echo lang('module_'.$controller_name); ?>
-				<?php 
+				<?php /*
 					$extra="";
 					$url_video_ver="https://www.youtube.com/watch?v=gEHL69sTREw&t=2s";
 					if($this->Appconfig->es_franquicia()){
@@ -107,8 +107,9 @@
 					$a_video= '<a target="_blank" href="'.$url_video_ver.'" '.$extra.' class="icon fa fa-youtube-play help_button" ></a>';
 					echo $a_video;
 					//<a class="icon fa fa-youtube-play help_button" id='maxitems' data-toggle="modal" data-target="#stack4"></a>
-				
+				*/
 				?>
+				<a class="icon fa fa-youtube-play help_button" id='modal-video-tutorial' rel='0' data-toggle="modal" data-target="#stack"></a>
 			</h1>
 		</div>
 		<!-- END PAGE TITLE -->		
@@ -239,7 +240,22 @@
                                 </div>
                             </div>
                             <div class="col-xs-12 col-md-4 col-lg-3 margin-bottom-05">
-                                <?php echo form_dropdown('category', $categories, $category, 'id="category" class="bs-select form-control"'); ?>
+                                <?php //echo form_dropdown('category', $categories, $category, 'id="category" class="bs-select form-control"'); ?>
+								<?php echo form_input(array(
+									'name'=>'category',
+                                    'id'=>'category',
+                                    "list"=>"category_2",
+                                    "placeholder"=>"Seleccione una categoría",
+                                    "autocomplete"=> "off",
+									'class'=>'form-control form-inps',
+									'value'=>$category)
+								);?>
+                               
+                                <datalist id="category_2">
+                                <?php foreach($categories as $category):?>
+                                    <option value="<?=$category?>">
+                            	<?php endforeach; ?>
+                                </datalist>
                             </div>
                             <div class="col-xs-12 col-md-2 col-lg-3 margin-bottom-05">
                                 <?php echo form_dropdown('order_dir', array('asc'=>lang('minor_price'),'desc'=>lang('major_price')), '','id="filter_price" class="bs-select form-control"'); ?>
@@ -311,46 +327,17 @@
 
 	<script type="text/javascript">
 	  	$(document).ready( function (){
-<?php if($this->config->item('hide_video_stack4') == '0'){?>
-         $('.modal.fade').addClass('in');
-         $('#stack4').css({'display':'block'});
-         <?php } ?>
-         $('.modal.fade.in').click(function(e){
-       
-         if($(e.target)[0].id == "stack4")
-         {
-               $('.modal.fade.in').removeClass('in');
-               $('#stack4').css({'display':'none'});
 
-         }
-         
-     
-         });
-          $('#closeitems').click(function(){
-         	
-               $('.modal.fade.in').removeClass('in');
-               $('#stack1').css({'display':'none'});
-               $('#maxitems').removeClass('icon fa fa-youtube-play help_button');
-               $('#maxitems').html("<a href='javascript:;' id='maxhom' rel=1 class='tn-group btn red-haze' ><span class='hidden-sm hidden-xs'>Maximizar&nbsp;</span><i class='icon fa fa-youtube-play help_button'></i></a>");
-         });
-      
-      
-         $('#checkBoxStack4').click(function(e){
-             
-             $.post('<?php echo site_url("config/show_hide_video_help");?>',
-             {show_hide_video4:$(this).is(':checked') ? '1' : '0',video4:'hide_video_stack4'});
-
-             
-               
-         });
 
 		  	$('.fancybox').fancybox({
 	            'type':'image'
 	        });	         	  
 			
 		}); 
+		
       
   	</script>
+	<?=$this->load->view("tutorials");?>
 
 <?php $this->load->view("partial/footer"); ?>
 

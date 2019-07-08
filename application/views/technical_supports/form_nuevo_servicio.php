@@ -94,7 +94,7 @@
                             <label
                                 class="control-label"><?php echo lang('technical_supports_employee_asignado') . ':' ?>
                             </label>
-                            <?php echo form_dropdown('id_technical', $employees, $support->id_employee_register, 'id="id_technical" class="bs-select form-control " required="required"'); ?>
+                            <?php echo form_dropdown('id_technical', $employees, $support->id_technical, 'id="id_technical" class="bs-select form-control " required="required"'); ?>
                         </div>
                     </div>
 

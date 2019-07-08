@@ -1,6 +1,7 @@
 <?php
 $lang['locations_location_id'] = 'Location ID';
 $lang['locations_name'] = 'Name';
+$lang['locations_shop_name'] = 'Shop';
 $lang['locations_address'] = 'Address';
 $lang['locations_phone'] = 'Phone';
 $lang['locations_fax'] = 'Fax';

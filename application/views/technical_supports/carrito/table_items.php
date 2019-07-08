@@ -253,10 +253,7 @@ $("#btn_suspender").click(function(e) {
 
     if (confirm("¿Desea suspender la reparación?, si suspende, todos los repuesto serán guardados.")) {
         let url = '<?php echo site_url("technical_supports/guardar_cart");?>';
-        $.post(url, {
-            "support_id": <?= $support_id?>
-        }, function(data) {
-            console.log(data);
+        $.post(url, { "support_id": <?= $support_id?>}, function(data) {
             data = JSON.parse(data);
             if (data.respuesta == true) {
                 toastr.success(data.mensaje, <?=json_encode(lang('common_success'))?>);

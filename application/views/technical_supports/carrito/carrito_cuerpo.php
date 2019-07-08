@@ -3,7 +3,7 @@
         <div id="cart_body">
             <div class="col-lg-8 table-responsive">
                 <div class="portlet light">
-                    <input type="text" name="item" id="item" value="" class="form-control"
+                    <input type="text" name="item" autocomplete="off" id="item" value="" class="form-control"
                         placeholder="<?php echo lang('common_search'); ?>">
                     <div class="col-sm-10 no-padding" id="resultado_repuesto"
                         style="position: absolute; z-index: 9000;"></div>

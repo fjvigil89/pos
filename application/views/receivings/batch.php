@@ -38,6 +38,7 @@
 							<div class="col-md-12 margin-bottom-05">
 								<a class="btn btn-success" href="<?php echo site_url('receivings/excel'); ?>">
 									<span class="letter-space"><?php echo lang('download_excel_template_batch_receivings'); ?></span>
+									<?php echo lang('download_file_batch_receivings') ?>
 								</a>
 							</div>							
 						</div>

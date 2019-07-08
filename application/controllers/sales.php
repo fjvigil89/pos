@@ -27,6 +27,14 @@ class Sales extends Secure_area
 			$this->sale_lib->add_item( $item["item_id"],$item["quantity"]);
 		}
 	}
+	function edit_quote($quote_id)
+	{
+		$this->sale_lib->clear_all();
+		//$this->load->library("quote_lib");
+		$this->sale_lib->set_quote_id($quote_id);
+		$this->sale_lib->copy_entire_sale_quotes($quote_id);
+		redirect('sales'); 
+	}
 	function items_sales_search(){
 		session_write_close();		
 		$suggestions = $this->Item->get_items_sales_search_suggestions($this->input->get('term'),30);
@@ -471,9 +479,7 @@ class Sales extends Secure_area
 	{
  	  $this->sale_lib->set_comment_on_receipt($this->input->post('show_comment_on_receipt'));
 	}
-	function set_generate_txt(){
-		$this->sale_lib->set_generate_txt($this->input->post('generate_txt'));
-	}
+
 	function set_show_receipt()
 	{
  	  $this->sale_lib->set_show_receipt($this->input->post('show_receipt'));
@@ -928,11 +934,11 @@ class Sales extends Secure_area
 		if($this->config->item('subcategory_of_items')){
 			$items=array();
 			foreach($this->sale_lib->get_cart() as $item){
-				$line=$this->existe($items,$item);
+				$line = $this->existe($items,$item);
 				if($line==-1){
 					$items[$item["line"]]=$item;
 				}else{
-					$items[$line]['quantity']+=$item['quantity'];
+					$items[$line]['quantity'] += $item['quantity'];
 					$data['warning'] = "Producto(s) funcionados verifique el precio  o descuento.";
 				}
 			}
@@ -941,34 +947,55 @@ class Sales extends Secure_area
 		//	se elemina los item de  con stock bajo en las subcategory
 			$items=array();
 			foreach($this->sale_lib->get_cart() as $item){
-				if($this->sale_lib->is_kit_or_item($item["line"]) == 'item')
+				if($this->sale_lib->is_kit_or_item($item["line"]) == 'item' and $item["has_subcategory"] == 1)
 				{
-					if($this->sale_lib-> out_of_stock_subcategory($item["item_id"],$item["custom1_subcategory"],$item["custom2_subcategory"], $item["quantity"]) &&
-					 $this->config->item('sales_stock_inventory') && $item["custom1_subcategory"] !="" && $item["custom1_subcategory"] !=null
+					if( $this->config->item('sales_stock_inventory') && $this->sale_lib-> out_of_stock_subcategory($item["item_id"],$item["custom1_subcategory"],$item["custom2_subcategory"], $item["quantity"]) &&
+					 $item["custom1_subcategory"] !="" && $item["custom1_subcategory"] !=null
 					  && $item["custom2_subcategory"] !="" && $item["custom2_subcategory"] !=null){					
 						$data['error'] = lang('sales_quantity_stock_less_than_zero')."(Subcategoría)";
-					}else{
-						$items[$item["line"]]=$item;					}
+					}
+					else
+					{
+						$items[$item["line"]]=$item;					
+					}
 					if(!$this->config->item('sales_stock_inventory') && $this->sale_lib->out_of_stock_subcategory($item["item_id"],$item["custom1_subcategory"],$item["custom2_subcategory"], $item["quantity"]) && 
 					 $item["custom1_subcategory"] !="" && $item["custom1_subcategory"] !=null
 					&& $item["custom2_subcategory"] !="" && $item["custom2_subcategory"] !=null)
 					{
-						$data['warning'] = lang('sales_quantity_less_than_zero')."(Subcategoría)";
+						$data['warning'] = lang('sales_quantity_less_than_zero')."(Subcategoría/Lote)";
 					}
 				}else{
 					$items[$item["line"]]=$item;
 				}
+
+			}
+			$current_location_id = $this->Employee->get_logged_in_employee_current_location_id();
+			// elimina los productos vencidos 
+			$items=array();
+			foreach($this->sale_lib->get_cart() as $item){
+				if($item["has_subcategory"] == 1 and $this->config->item('subcategory_of_items') and !empty( $item["custom1_subcategory"]) and !empty($item["custom2_subcategory"]))
+				{
+					$category = $this->items_subcategory->get_info($item["item_id"], $current_location_id, $item["custom1_subcategory"], $item["custom2_subcategory"]);
+
+					$date_category = strtotime($category->expiration_date);
+					$now =	strtotime(date('Y-m-d H:i:s'));
+					if($now >= $date_category)
+						$data['error'] = "El producto está vencido (Subcategoría/Lote)";
+					else
+						$items[$item["line"]]=$item;
+				}else{
+					$items[$item["line"]]=$item;
+				}
+
 			}
 			$this->sale_lib->set_cart($items);
-
-
 		}
 		
 		
 		$this->_reload($data);
 	}
 	function existe($items,$item_tem){
-		if(isset($item_tem['item_id'])){
+		if(isset($item_tem['item_id']) and $item_tem['has_subcategory'] == 1){
 			foreach($items as $item){			
 				if(isset($item['item_id']) and $item['is_serialized'] == false){
 					if($item['item_id']==$item_tem['item_id'] &&  $item['custom1_subcategory']== $item_tem['custom1_subcategory'] &&
@@ -1079,6 +1106,8 @@ class Sales extends Secure_area
 				$invoice_type['serie_number_invoice']=$serie_number;
             }
 		}
+		
+
 
         $data['sale_type'] = ($this->sale_lib->get_comment_ticket() == 1) ? lang('sales_ticket_on_receipt') : lang('sales_invoice');
 
@@ -1128,8 +1157,8 @@ class Sales extends Secure_area
 					$cash        = $this->Sale->get_payment_cash($this->sale_lib->get_payments());
 					$amount_diff = $suspended_change_sale_id ? $this->Sale->get_cash_available($suspended_change_sale_id, $cash) : 0;
 
-					if ($amount_diff < 0)
-					{
+					if ($amount_diff < 0) {
+
 						$this->_reload(array('error' => "¡La caja no tiene suficiente efectivo para realizar la operación!"), false);
 
 						return;
@@ -1160,11 +1189,11 @@ class Sales extends Secure_area
 
 		$emp_info=$this->Employee->get_info($employee_id);
 		$sale_emp_info=$this->Employee->get_info($sold_by_employee_id);
-		$data['payments'] = $this->sale_lib->get_payments();
+		$data['payments']=$this->sale_lib->get_payments();
 		$data['is_sale_cash_payment'] = $this->sale_lib->is_sale_cash_payment();
 		$data['amount_change']=$this->sale_lib->get_amount_due() * -1;
-		$data['balance'] = $this->sale_lib->get_payment_amount(lang('sales_store_account'));
-		$data['employee'] = $emp_info->first_name.' '.$emp_info->last_name.($sold_by_employee_id && $sold_by_employee_id != $employee_id ? '/'. $sale_emp_info->first_name.' '.$sale_emp_info->last_name: '');
+		$data['balance']=$this->sale_lib->get_payment_amount(lang('sales_store_account'));
+		$data['employee']=$emp_info->first_name.' '.$emp_info->last_name.($sold_by_employee_id && $sold_by_employee_id != $employee_id ? '/'. $sale_emp_info->first_name.' '.$sale_emp_info->last_name: '');
 		$data['ref_no'] = $this->session->userdata('ref_no') ? $this->session->userdata('ref_no') : '';
 		$data['auth_code'] = $this->session->userdata('auth_code') ? $this->session->userdata('auth_code') : '';
 		$data['discount_exists'] = $this->_does_discount_exists($data['cart']);
@@ -1187,7 +1216,6 @@ class Sales extends Secure_area
 		$data["overwrite_tax"]= $overwrite_tax; 
 		$data["new_tax"]= $new_tax;
 		$data["value_other_currency"]=$this->sale_lib->get_equivalencia_divisa();
-		$data["generate_txt"] = $this->sale_lib->get_generate_txt();
 		if($this->config->item('system_point') && $this->sale_lib->get_mode() == 'sale')
 		{
 			$total=$data['total'];
@@ -1251,18 +1279,22 @@ class Sales extends Secure_area
 		if($this->sale_lib->get_mode() == 'sale'  && isset($data['balance']) && $customer_id)
 		{
 			$add_customer=$this->Sale->add_petty_cash_customer($customer_id, $data['balance']);
+
+			
 		}
 
 		if($data['store_account_payment']==1  && isset($data['balance']) && $customer_id)
 		{				
             $sale_id_raw = $this->Sale->save_petty_cash($data['cart'], $customer_id, $employee_id, $sold_by_employee_id, $data['comment'],$data['show_comment_on_receipt'],$data['payments'], $suspended_change_sale_id, 0,$data['ref_no'],$data['auth_code'], $data['change_sale_date'], $data['balance'], $data['store_account_payment'],$data['total'],$data['amount_change'],-1);
 			if($sale_id_raw<0){
+
 				$this->load->view("sales/error_pagos");
 				return;
 			}
 		}
 		else
 		{
+
 			$mode=$this->sale_lib->get_mode() ;
 			$tier_id = $this->sale_lib->get_selected_tier_id();
 			$deleted_taxes=$this->sale_lib->get_deleted_taxes();
@@ -1278,9 +1310,12 @@ class Sales extends Secure_area
 				$deleted_taxes,
 				$data['store_account_payment'],$data['total'],$data['amount_change'],$invoice_type, null,$data["divisa"],$data["opcion_sale"],
 				$data["transaction_rate"],$data["transaction_cost"],$data["another_currency"],$data["currency"],$data["total_other_currency"],
-				$overwrite_tax,$new_tax,$data["value_other_currency"]);				
+				$overwrite_tax,$new_tax,$data["value_other_currency"]);
+				
            
 			}
+
+
 		}
 		
 		if($data['store_account_payment']==1)
@@ -1290,6 +1325,7 @@ class Sales extends Secure_area
 		else
 		{
 		   $data['sale_id']=$this->config->item('sale_prefix').' '.$sale_id_raw;
+
 		}
 
 		$data['sale_id_raw']=$sale_id_raw;
@@ -1303,6 +1339,45 @@ class Sales extends Secure_area
 				$data['customer_balance_for_sale'] = $cust_info->balance;
 			}
 		}
+
+//pedido---------------------------------------------------------------------------------
+		if($this->sale_lib->get_order() != NULL)
+		{
+			$this->load->model('Order');
+			$order_id=$this->sale_lib->get_order();
+			$this->Order->save_sale_order($order_id,$data['sale_id_raw']);
+
+			foreach(array_keys($data['cart']) as $key)
+			{
+
+				if (isset($data['cart'][$key]['item_id']))
+				{
+
+
+                        //pedido decuento en tienda online---------------------------------------------- 
+                        $key2 = $this->config->item('token_api');
+                        $dominio = $this->config->item('dominioapi');                                              
+                        $url= $dominio."/api/products/sicrono";
+                        $url2= $dominio."/api/products/order";
+                        $datos=array('id' => $data['cart'][$key]['item_id'], 'keyapi' => $key2);
+                        $datos2=array('id' => $this->sale_lib->get_order());
+
+                        if (!postcurl($url,$datos)) {
+                            continue;
+                        }
+                        if (!postcurl($url2,$datos2)) {
+                            continue;
+                        }
+                        //------------------------------------------------------------------------------ 
+                }        
+
+ 			}
+
+
+
+
+		}
+//---------------------------------------------------------------------------------------
 
 		//If we don't have any taxes, run a check for items so we don't show the price including tax on receipt
 		if (empty($data['taxes']))
@@ -1413,15 +1488,6 @@ class Sales extends Secure_area
 		
 		if($customer_id!=-1 and  $data['store_account_payment'] == 1 and $this->config->item('show_payments_ticket') == 1  ){
 			$data['payments_petty_cashes']=$this->Sale->get_petty_cash($customer_id,false,5);			
-		}
-		if($data["generate_txt"])
-		{
-			$txt_receipt_file  = $data['sale_id']."-T".'.txt';
-			$data_txt = $this->load->view("sales/txt_receipt_2",$data, true);
-			$this->load->view("sales/download_txt",array("name"=>$txt_receipt_file,"data_txt"=>$data_txt));	
-			$this->sale_lib->clear_all();	
-			$this->update_viewer(3);
-			return 0;
 		}
       
         if($this->sale_lib->get_show_receipt())
@@ -1729,7 +1795,8 @@ class Sales extends Secure_area
 		$data["total_other_currency"]=$data["another_currency"]==0?null:$sale_info["total_other_currency"];
 		$data["value_other_currency"]=$this->sale_lib->get_equivalencia_divisa();
 		$data["serie_number"] =$this->sale_lib->get_serie_number(); 
-		$data["mode"]=$this->Sale->is_return($sale_id)? "return" : "sale";
+		//$data["mode"]=$this->Sale->is_return($sale_id)? "return" : "sale";
+
 		
 		if($customer_id!=-1)
 		{
@@ -2023,7 +2090,7 @@ class Sales extends Secure_area
         $data['show_sales_inventory'] = $this->config->item('show_sales_inventory');
 		$data['show_sales_description'] = $this->config->item('show_sales_description');
 		$data['subcategory_of_items']=$this->config->item('subcategory_of_items');
-		
+		$data["change_quote_id"] =  $this->sale_lib->get_quote_id();
 		$data['is_tax_inclusive'] = $this->_is_tax_inclusive();
 		if ($data['is_tax_inclusive'] && count($this->sale_lib->get_deleted_taxes()) > 0)
 		{
@@ -2081,7 +2148,7 @@ class Sales extends Secure_area
 		$data["equivalencia"]= $this->sale_lib->get_equivalencia_divisa();
 		$data["currency"]=$this->sale_lib->get_currency();
 		$data["select_seller_during_sale"]=$this->Employee->has_module_action_permission('sales', 'select_seller_during_sale', $person_info->person_id) ;
-		$data["generate_txt"] = $this->sale_lib->get_generate_txt();
+		
 		$data['selected_sold_by_employee_id'] = $this->sale_lib->get_sold_by_employee_id();
 		$tiers = array();
 
@@ -2317,7 +2384,8 @@ class Sales extends Secure_area
 	 
 		if ($suspend_type ==3)
 		{
-			$sale_id = $this->quote->save_quote($data['cart'], $customer_id,$employee_id, $sold_by_employee_id, $comment,$show_comment_on_receipt,$data['payments'], $sale_id, $suspend_type,'','',$this->config->item('change_sale_date_when_suspending') ? date('Y-m-d H:i:s') : FALSE, $data['balance'],0,
+			$quote_id = $this->sale_lib->get_quote_id();
+			$sale_id = $this->quote->save_quote($data['cart'], $customer_id,$employee_id, $sold_by_employee_id, $comment,$show_comment_on_receipt,$data['payments'], $quote_id , $suspend_type,'','',$this->config->item('change_sale_date_when_suspending') ? date('Y-m-d H:i:s') : FALSE, $data['balance'],0,
 			$data["overwrite_tax"],$data["new_tax"]);
 		}
 
@@ -2617,17 +2685,19 @@ class Sales extends Secure_area
 	
 	function categories($offset = 0)
 	{
-		$categories = array();
-
+		$categories = array();		
 		$item_categories = array();
-		$item_categories_items_result = $this->Item->get_all_categories()->result();
+
+		$this->load->model("Categories");
+		$item_categories_items_result = $this->Categories->get_all(); //$this->Item->get_all_categories()->result();
 
 		foreach($item_categories_items_result as $category)
-		{
-			if ($category->category != lang('sales_giftcard') && $category->category != lang('sales_store_account_payment'))
+		{			
+			if ($category["name"] != lang('sales_giftcard') && $category["name"] != lang('sales_store_account_payment'))
 			{
-				$item_categories[] = $category->category;
+				$item_categories[] = $category["name"];
 			}
+
 		}
 
 		$item_kit_categories = array();

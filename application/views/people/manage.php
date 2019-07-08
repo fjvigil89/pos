@@ -33,7 +33,7 @@
 			<h1>
 				<i class="icon fa fa-<?php echo $controller_name=="customers" ? "group" : "user"; ?>"></i>
 				<?php echo lang('module_'.$controller_name); ?>
-				<?php 
+				<?php /*
 					$extra="";
 					$url_video_ver=$controller_name=="customers"? "https://www.youtube.com/watch?v=tD3vBRH02ys":($controller_name=="suppliers"?"https://www.youtube.com/watch?v=800d_w10-DU": "https://www.youtube.com/watch?v=l6x1yFkyqa4&t=14s");
 					if($this->Appconfig->es_franquicia()){
@@ -47,10 +47,11 @@
 						}
 					}
 					$a_video= '<a target="_blank" href="'.$url_video_ver.'" '.$extra.' class="icon fa fa-youtube-play help_button" ></a>';
-					echo $a_video;
-					//<a class="icon fa fa-youtube-play help_button" id='maxsuppliers' data-toggle="modal" data-target="#stack3"></a>
+					echo $a_video;*/
 				
 				?>
+				<a class="icon fa fa-youtube-play help_button" id='modal-video-tutorial' data-toggle="modal" data-target="#stack"></a>
+
 			</h1>
 		</div>
 		<!-- END PAGE TITLE -->		
@@ -163,14 +164,15 @@
 		</div>
 	</div>
 
+	<?=$this->load->view("tutorials");?>
 
 <script type="text/javascript">
   	$(document).ready( function (){
-	<?php if($this->config->item('hide_video_stack3') == '0'){?>
+	<?php /* if($this->config->item('hide_video_stack3') == '0'){?>
          $('.modal.fade').addClass('in');
          $('#stack3').css({'display':'block'});
-         <?php } ?>
-         $('.modal.fade.in').click(function(e){
+         <?php } */?>
+         /*$('.modal.fade.in').click(function(e){
        
          if($(e.target)[0].id == "stack3")
          {
@@ -191,12 +193,12 @@
       
          $('#checkBoxStack3').click(function(e){
              
-             $.post('<?php echo site_url("config/show_hide_video_help");?>',
+             $.post('<?php //echo site_url("config/show_hide_video_help");?>',
              {show_hide_video3:$(this).is(':checked') ? '1' : '0',video3:'hide_video_stack3'});
 
              
                
-         });
+         });*/
 	  	$('.fancybox').fancybox({
             'type':'image'
         });	         	  

@@ -18,7 +18,7 @@ class Offline extends Secure_area
 			'1440' => "24 ".lang('hours'),
 		);			
 		$data["array_time"]=$array_time;*/
-		$data['imployee_info']=$this->Employee->get_logged_in_employee_info();
+		$data['imployee_info'] = $this->Employee->get_logged_in_employee_info();
 		$this->load->view("offline/index",$data);
     
 	}
