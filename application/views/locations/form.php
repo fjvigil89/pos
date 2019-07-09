@@ -357,6 +357,27 @@
 							</div>
 
 							<div class="form-group">	
+								<?php echo form_label('<a class="help_config_options  tooltips " data-placement="left">'.lang('location_receive_expired_alert').'</a>'.':', 'receive_expired_alert',array('class'=>'col-md-3 control-label')); ?>
+								<div class="col-md-8">
+									<div class="md-checkbox-inline">
+										<div class="md-checkbox">
+											<?php echo form_checkbox(array(
+												'name'=>'receive_expired_alert',
+												'id'=>'receive_expired_alert',
+												'value'=>'1',
+												'checked'=>$location_info->receive_expired_alert)
+											);?>
+											<label for="receive_expired_alert">
+											<span></span>
+											<span class="check"></span>
+											<span class="box"></span>
+											</label>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group">	
 								<?php echo form_label('<a class="help_config_options  tooltips " data-placement="left" title="'.lang("stock_alert_email_help").'">'.lang('stock_alert_email').'</a>'.':', 'stock_alert_email',array('class'=>'col-md-3 control-label')); ?>
 								<div class="col-md-8">
 									<?php echo form_input(array(

@@ -11,6 +11,7 @@
 						'class'=>'form-control form-inps',
 						'name'=>'first_name',
 						'id'=>'first_name',
+						"maxlength"=>"70",
 						'value'=>$person_info->first_name)
 					);?>
 				</div>
@@ -23,6 +24,7 @@
 					'class'=>'form-control form-inps',
 					'name'=>'last_name',
 					'id'=>'last_name',
+					"maxlength"=>"80",
 					'value'=>$person_info->last_name)
 				);?>
 				</div>
@@ -49,6 +51,7 @@
 					'class'=>'form-control form-inps',
 					'name'=>'email',
 					'id'=>'email',
+					"maxlength"=>"100",
 					'type' => 'email',
 					'value'=>$person_info->email)
 					);?>
@@ -62,6 +65,7 @@
 					'class'=>'form-control form-inps',
 					'name'=>'phone_number',
 					'id'=>'phone_number',
+					"maxlength"=>"20",
 					'value'=>$person_info->phone_number));?>
 				</div>
 			</div>
@@ -111,6 +115,7 @@
 					'class'=>'form-control form-inps',
 					'name'=>'address_1',
 					'id'=>'address_1',
+					"maxlength"=>"80",
 					'value'=>$person_info->address_1));?>
 				</div>
 			</div>
@@ -122,6 +127,7 @@
 					'class'=>'form-control form-inps',
 					'name'=>'address_2',
 					'id'=>'address_2',
+					"maxlength"=>"80",
 					'value'=>$person_info->address_2));?>
 				</div>
 			</div>
@@ -133,6 +139,7 @@
 					'class'=>'form-control form-inps',
 					'name'=>'city',
 					'id'=>'city',
+					"maxlength"=>"90",
 					'value'=>$person_info->city));?>
 				</div>
 			</div>
@@ -144,6 +151,7 @@
 					'class'=>'form-control form-inps',
 					'name'=>'state',
 					'id'=>'state',
+					"maxlength"=>"90",
 					'value'=>$person_info->state));?>
 				</div>
 			</div>
@@ -155,6 +163,7 @@
 					'class'=>'form-control form-inps',
 					'name'=>'zip',
 					'id'=>'zip',
+					"maxlength"=>"30",
 					'value'=>$person_info->zip));?>
 				</div>
 			</div>
@@ -165,6 +174,7 @@
 				<?php echo form_input(array(
 					'class'=>'form-control form-inps',
 					'name'=>'country',
+					"maxlength"=>"90",
 					'id'=>'country',
 					'value'=>$person_info->country));?>
 				</div>

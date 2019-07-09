@@ -1417,8 +1417,8 @@ class Items extends Secure_area implements iData_controller
                 for ($i = 0; $i <= $count_row; $i++) {
                     if (isset($id_supplier[$r->item_id])) {
                         $price_count_tiers = count($this->Tier->get_all()->result());
-                        $row[27 + $price_count_tiers] = $id_supplier[$r->item_id][$i];
-                        $row[28 + $price_count_tiers] = to_currency_no_money($costo_suplier[$r->item_id][$i]);
+                        $row[28 + $price_count_tiers] = $id_supplier[$r->item_id][$i];
+                        $row[29 + $price_count_tiers] = to_currency_no_money($costo_suplier[$r->item_id][$i]);
                     }
 
                     $fila[$i] = $row;

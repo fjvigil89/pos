@@ -38,6 +38,7 @@ class Item extends CI_Model
 		$this->db->where('phppos_items_subcategory.of_low', 0);
 		$this->db->where('phppos_items_subcategory.quantity >', 0);
 		$this->db->where('phppos_items.deleted', 0);
+		$this->db->limit(1000);
 		
 		
 		return $this->db->get()->result_array();
@@ -139,7 +140,8 @@ class Item extends CI_Model
 		
 		$this->db->from('items');
 		$this->db->join('location_items', 'location_items.item_id = items.item_id and location_id = '.$current_location, 'left');
-		$this->db->where('items.deleted',0);
+		$this->db->where('items.deleted',0);		
+		$this->db->where('items.name !=',lang('sales_store_account_payment'));
 		$this->db->order_by($col, $order);
 		$this->db->limit($limit);
 		$this->db->offset($offset);
@@ -172,12 +174,31 @@ class Item extends CI_Model
 		$this->db->where('location_id',$location_id);
 		return $this->db->get();		
 	}
-	function get_all_alarm($location_id = false)
-	{
-		
-		$this->db->select('item_id,expiration_date', 'expiration_day');
+	function get_all_alarm($location_id = false, $for_email =false)
+	{		
+		$now = date('Y-m-d');
 		$this->db->from('items');
-		return $this->db->get()->result();		
+		if( $for_email)
+		{
+			$this->db->select('DISTINCT(phppos_items.item_id),name,expiration_date');
+			$this->db->join('location_items', 'location_items.item_id = items.item_id ', 'left');
+			$this->db->where('deleted',0);
+			$this->db->where("expiration_date <= DATE_ADD('".$now."', INTERVAL expiration_day DAY)");
+			$this->db->where('expiration_date >=',$now);
+			$this->db->where('phppos_location_items.quantity >',0);
+			$this->db->where('expiration_day !=',"select_day");
+			$this->db->where('expiration_day != ',"");			
+			$this->db->where('expiration_date != ',"null");
+			$this->db->where('expiration_date != ',"0000-00-00");
+			$this->db->limit(1000);
+			
+		}
+		else
+			$this->db->select('item_id,expiration_date, name, expiration_day');
+		
+		$result = $this->db->get();
+		
+		return $result->result();		
 	}
 
 
@@ -863,6 +884,7 @@ class Item extends CI_Model
 			location_items.unit_price as location_unit_price');
 			$this->db->from('items');
 			$this->db->join('location_items', 'location_items.item_id = items.item_id and location_id = '.$current_location, 'left');
+			$this->db->where('items.name !=',lang('sales_store_account_payment'));
 			$this->db->where($cadena);
 			
 			if ($category)

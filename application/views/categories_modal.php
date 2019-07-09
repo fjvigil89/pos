@@ -189,6 +189,7 @@ function send_form_category() {
         processData: false,
         type: 'POST',
         success: function(data) {
+
             $("#submit-button").html("Guardar");
             $("#submit-button").prop('disabled', false);
             data = JSON.parse(data);
@@ -210,6 +211,9 @@ function send_form_category() {
                         ]
                     );
                     toastr.success("Registro Guardado...");
+                    <?php if($class == "items" ):?>
+                            $("#category").val(data["data"].name);
+                    <?php endif;?>
 
                 } else
                     toastr.success("Registro actualizado...");
@@ -267,6 +271,7 @@ $('#form_category').validate({
         }
     }
 });
+
 function load_category_list(){
 
     
