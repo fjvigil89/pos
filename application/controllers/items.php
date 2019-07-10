@@ -296,6 +296,13 @@ class Items extends Secure_area implements iData_controller
         $this->check_action_permission('add_update');
         $this->load->helper('report');
         $data = array();
+        $items_info = $this->Item->get_all_service();
+        $items = array(null => "Seleccione item");
+        
+        foreach ($items_info->result() as $item) {
+            $items[$item->item_id] = $item->name;
+        }
+        $data["items"] = $items;
         $data['controller_name'] = strtolower(get_class());
         $data["units"] = $this->Appconfig->get_all_units();
         $data['item_info'] = $this->Item->get_info($item_id);

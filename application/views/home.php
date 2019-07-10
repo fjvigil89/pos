@@ -7,14 +7,14 @@
 			<?php echo lang('common_dashboard'); ?>
 			<!--<?php 
 					/*$extra="";
-					$url_video_ver="https://www.youtube.com/watch?v=PHET-RZfg6c&t=2s";
+					$url_video_ver="https://www.youtube.com/watch?v=PHET-RZfg6c&t=2s";*/
 					if($this->Appconfig->es_franquicia()){
-						$url_video=	$this->Appconfig->get_video("INICIO Y ESTADÍSTICA");
+						/*$url_video=	$this->Appconfig->get_video("INICIO Y ESTADÍSTICA");
 						if($url_video!=null){
 							$url_video_ver=$url_video;
 						}else{
 							$extra=" style='display: none; '";
-						}
+						}*/
 
 						$dashboard_stat_color = '';
 						$theme_commpany = $this->Appconfig->get_theme_commpany($this->config->item('resellers_id'));
@@ -24,8 +24,8 @@
 					    	}
 						}
 					}
-					$a_video= '<a target="_blank" href="'.$url_video_ver.'" '.$extra.' class="icon fa fa-youtube-play help_button" ></a>';
-					echo $a_video;	*/			
+					//$a_video= '<a target="_blank" href="'.$url_video_ver.'" '.$extra.' class="icon fa fa-youtube-play help_button" ></a>';
+					//echo $a_video;	*/			
 				
 				
 			?>-->
