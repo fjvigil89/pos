@@ -973,7 +973,7 @@ class Sales extends Secure_area
 			// elimina los productos vencidos 
 			$items=array();
 			foreach($this->sale_lib->get_cart() as $item){
-				if($item["has_subcategory"] == 1 and $this->config->item('subcategory_of_items') and !empty( $item["custom1_subcategory"]) and !empty($item["custom2_subcategory"]))
+				if($item["has_subcategory"] == 1 and   $this->config->item('activate_pharmacy_mode') and  $this->config->item('subcategory_of_items') and !empty( $item["custom1_subcategory"]) and !empty($item["custom2_subcategory"]))
 				{
 					$category = $this->items_subcategory->get_info($item["item_id"], $current_location_id, $item["custom1_subcategory"], $item["custom2_subcategory"]);
 

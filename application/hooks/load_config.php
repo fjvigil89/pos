@@ -37,7 +37,7 @@ function load_config()
 	{
 		$version_db = $CI->config->item('database_version');
 
-        if(DATABASE_VERSION != $version_db and $CI->router->class !== 'migrations')
+        if(DATABASE_VERSION != $version_db and $CI->router->class !== 'migrations' and $CI->router->method !== 'subscription_cancelled')
         {
             redirect('migrations'); 
         }

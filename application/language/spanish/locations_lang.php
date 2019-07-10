@@ -3,6 +3,7 @@ $lang['locations_location_id'] = 'Ubicación ID';
 $lang['locations_name'] = 'Nombre';
 $lang['locations_address'] = 'Dirección';
 $lang['locations_phone'] = 'Teléfono';
+$lang["location_receive_expired_alert"]="¿Recibe alertas de inventario a vencerse?";
 $lang['locations_fax'] = 'Fax';
 $lang['locations_email'] = 'Email';
 $lang['locations_code'] = 'Código de la empresa';
