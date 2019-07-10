@@ -1,6 +1,7 @@
 <?php
 $lang['items_item_number']='UPC/EAN/ISBN';
-
+$lang['items_upload_items_shop']='You have updated all the active products with images for online store';
+$lang['items_not_upload_items_shop']='Error the products for the online store were not updated';
 $lang['items_subcategory']="Subcategory";
 $lang['items_retrive_item_info']='Retrive Item Info';
 $lang['items_description']='Description';

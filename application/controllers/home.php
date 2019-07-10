@@ -137,6 +137,7 @@ class Home extends Secure_area
 		}
     }
     function get_sales_store($start_date,$end_date){
+        $end_date = date("Y-m-d",strtotime("1 day"));
         $data = $this->Statistics->get_all_sales_by_store($start_date,$end_date);
         echo json_encode ($data);  
     }
@@ -157,6 +158,7 @@ class Home extends Secure_area
     }
     //ventas totales por tienda en dinero
     function get_sales_store_money($start_date,$end_date){
+        $end_date = date("Y-m-d",strtotime("1 day"));
         $data = $this->Statistics->get_sales_store_money($start_date,$end_date);
         echo json_encode ($data);  
     }	

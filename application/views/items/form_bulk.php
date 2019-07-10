@@ -84,6 +84,28 @@
                                 );?>
                             </div>
                         </div>
+                        <!-- permitir en tienda online -->
+						<div class="form-group">
+							<?php echo form_label('<a class="help_config_options   tooltips"  title="Tienda On-line">Tienda On-line</a>'.':', 'prices_include_tax',array('class'=>'col-md-3 control-label wide')); ?>
+							<div class="col-md-8">
+								<div class="md-checkbox-inline">
+									<div class="md-checkbox">
+										<?php echo form_checkbox(array(
+											'name'=>'shop_online',
+											'id'=>'shop_online',
+											'class'=>'md-check',
+											'value'=>1,
+											'checked'=> 0)
+										);?>
+										<label for="shop_online">
+										<span></span>
+										<span class="check"></span>
+										<span class="box"></span>
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
 
                         <div class="form-group">
                             <?php echo form_label(lang('items_promo_start_date').':', 'start_date',array('class'=>'col-md-3 control-label text-info wide')); ?>

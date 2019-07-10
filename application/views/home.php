@@ -669,7 +669,7 @@
 			$('#sales_store_date_start').on('dp.change', function (e) {
 			    if($("#sales_store_date_start").val()>=$("#sales_store_date_end").val()){
 					value_input = $("#sales_store_date_start").val();
-					date_end = moment(value_input).startOf('day').add(1, 'day').format('YYYY-MM-DD'); 
+					date_end = moment(value_input).startOf('day').add(0, 'day').format('YYYY-MM-DD'); 
 					$("#sales_store_date_end").val(date_end); //Agrega un dia a la fecha fin
 				}
 
@@ -678,7 +678,7 @@
 			$('#sales_store_date_end').on('dp.change', function (e) {
 			    if($("#sales_store_date_end").val()<=$("#sales_store_date_start").val()){
 					value_input = $("#sales_store_date_end").val();
-					date_end = moment(value_input).startOf('day').add(-1, 'day').format('YYYY-MM-DD'); 
+					date_end = moment(value_input).startOf('day').add(0, 'day').format('YYYY-MM-DD'); 
 					$("#sales_store_date_start").val(date_end); //Agrega un dia a la fecha fin
 				}
 
@@ -773,7 +773,7 @@
 			$('#sales_store_date_start_money').on('dp.change', function (e) {
 			    if($("#sales_store_date_start_money").val()>=$("#sales_store_date_end_money").val()){
 					value_input = $("#sales_store_date_start_money").val();
-					date_end = moment(value_input).startOf('day').add(1, 'day').format('YYYY-MM-DD'); 
+					date_end = moment(value_input).startOf('day').add(0, 'day').format('YYYY-MM-DD'); 
 					$("#sales_store_date_end_money").val(date_end); //Agrega un dia a la fecha fin
 				}
 
@@ -782,7 +782,7 @@
 			$('#sales_store_date_end_money').on('dp.change', function (e) {
 			    if($("#sales_store_date_end_money").val()<=$("#sales_store_date_start_money").val()){
 					value_input = $("#sales_store_date_end_money").val();
-					date_end = moment(value_input).startOf('day').add(-1, 'day').format('YYYY-MM-DD'); 
+					date_end = moment(value_input).startOf('day').add(0, 'day').format('YYYY-MM-DD'); 
 					$("#sales_store_date_start_money").val(date_end); //Agrega un dia a la fecha fin
 					
 				}

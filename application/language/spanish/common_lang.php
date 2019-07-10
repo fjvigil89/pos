@@ -81,6 +81,7 @@ $lang['common_person_id'] = 'ID de la persona';
 $lang['common_choose_avatar'] = 'Elija Avatar';
 $lang['common_clear_search'] = 'Reestablecer la búsqueda';
 $lang['common_consultant'] = 'Consultor';
+$lang['common_up_online_item'] = 'Marcar productos para tienda online';
 $lang['common_cancel'] = 'Cancelar';
 $lang['common_session_hijacking_attempt_no_access_allowed'] = 'Sesión intento de secuestro. Se le ha negado el acceso';
 $lang['common_delete_my_session'] = 'Ha actualizado incorrectamente, elimine';

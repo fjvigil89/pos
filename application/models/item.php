@@ -53,6 +53,12 @@ class Item extends CI_Model
 			return false;
 		}
 	}
+	function set_upload_shop_online(){
+		$item_data = array('shop_online' => 1);
+		$this->db->where('deleted', 0);
+		$this->db->where('image_id >=', 1);
+		return $this->db->update('items',$item_data);
+	}
 	function get_items_range($register_log_id){
 		$this->db->select('items.name,items.item_id,range_id,final_range,extra_charge,start_range');
 		$this->db->from('item_range');
@@ -476,15 +482,22 @@ class Item extends CI_Model
 		return $this->db->update('items',$item_data);
 	}
 
-	function update($item_data,$item_ids)
+	function update($item_data,$item_ids,$shop_online=0)
 	{
         $number = 0;
         foreach ($item_data as $item) 
         {
-
-        	$data = array(
-               'unit_price' => $item
-           );
+			if($shop_online){
+				$data = array(
+					'unit_price' => $item,
+					'shop_online' => $shop_online
+				);
+			}else{
+				$data = array(
+					'unit_price' => $item
+				);
+			}
+        	
         	$this->Item->item_round(array($item));
         
             $this->db->where('item_id', $item_ids[$number]);
