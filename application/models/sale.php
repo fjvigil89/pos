@@ -1157,6 +1157,7 @@ class Sale extends CI_Model
 
                     if (!$cur_item_info->is_service) {
                         $qty_buy = -$item['quantity'];
+                        $sale_remarks = $this->config->item('sale_prefix') . ' ' . $sale_id;
 
                         //pedido decuento en tienda online---------------------------------------- 
                         if (!empty($this->sale_lib->get_order())) {

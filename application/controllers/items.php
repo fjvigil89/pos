@@ -100,7 +100,15 @@ class Items extends Secure_area implements iData_controller
 
         //$this->load->view('items/manage', $data);
 		$this->load->view("items/items_consultant", $data);
-	}
+    }
+    
+    public function upload_items_shop_online(){
+        if($this->Item->set_upload_shop_online()){
+            echo json_encode(array('success' => true, 'message' => lang('items_upload_items_shop')));
+        }else{
+            echo json_encode(array('success' => false, 'message' => lang('items_not_upload_items_shop')));
+        }
+    }
 
     public function sorting()
     {
@@ -1102,6 +1110,7 @@ class Items extends Secure_area implements iData_controller
 
         $this->check_action_permission('add_update');
         $items_to_update = $this->input->post('item_ids');
+        $shop_online = $this->input->post('shop_online')?1:0;
         $select_inventory = $this->get_select_inventory();
         //clears the total inventory selection
         $this->clear_select_inventory();
@@ -1117,7 +1126,7 @@ class Items extends Secure_area implements iData_controller
                 $item[$i] = ($precio_total[$i] < 0) ? $price[$i] + $precio_total[$i] : $price[$i] + $precio_total[$i];
                 $i++;
             }
-            $this->Item->update($item, $items_to_update);
+            $this->Item->update($item, $items_to_update,$shop_online);
         }
 
         foreach ($_POST as $key => $value) {

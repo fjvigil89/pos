@@ -9,6 +9,7 @@ $lang["common_remove"]="Remove";
 $lang["common_default"]="Default";
 $lang['common_powered_by']='Powered By';
 $lang['common_welcome']='Welcome';
+$lang['common_up_online_item'] = 'Mark products for online store';
 $lang['common_logout']='Logout';
 $lang['common_list_of']='List of';
 $lang['common_first_name']='First Name';
