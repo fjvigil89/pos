@@ -291,11 +291,13 @@
 
                     <div class="btn-group pull-right">
                         <?php 
-							$url_apk="https://play.google.com/store/apps/details?id=software.posclub&hl=es_CO";
 						
-							/*if($this->Appconfig->es_franquicia()==true){
+							if($this->Appconfig->es_franquicia()==true){
 								$url_apk=$data_commpany->url_apk;
-							 }*/
+							}else{
+							$url_apk="https://play.google.com/store/apps/details?id=software.posclub&hl=es_CO";
+
+                            }
 							
 							?>
                         <a class="btn green" target="_blank" href="<?php echo $url_apk ?>">
