@@ -45,7 +45,7 @@
                // $_SESSION['extra1'] = md5('ingeniando'.$CI->db->database);
                $_SESSION['extra1']= $CI->config->item('license');               
                 
-                if($CI->router->method !== 'subscription_cancelled' and $CI->router->method !== 'logout' and $CI->router->class !== 'payu')
+                if($CI->router->method !== 'subscription_cancelled' and $CI->router->method !== 'logout' and $CI->router->class !== 'payu' and $CI->router->class !== 'migrations')
                 {
                     redirect('login/subscription_cancelled');
                 }

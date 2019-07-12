@@ -275,13 +275,14 @@
                         </div>
 					<?php } ?>
 
-					<!--boton de consultor-->
- <!--                       <div class="col-xs-12 col-md-12 col-lg-3 margin-bottom-05 ">
-                            <a href="<?php // echo site_url('items/view_consultant'); ?>" class="btn btn-info btn-block clear-state pull-right effect"><?php // echo lang('common_consultant'); ?></a>
+					<!--boton de subir inventario tienda online-->
+					<?php if($this->Employee->has_module_action_permission('orders','search', $this->Employee->get_logged_in_employee_info()->person_id)){ ?>
+                        <div class="col-xs-12 col-md-12 col-lg-3 margin-bottom-05 ">
+                            <a href="javascript:void(0);" class="btn btn-info btn-block clear-state pull-right effect" id="upload_shop_online" ><?php echo lang('common_up_online_item'); ?></a>
                         </div>
---->						
-
+					<?php } ?>
                     </div>
+
 
 					<?php if($total_rows > $per_page) { ?>
 						<div id="selectall" class="selectall" onclick="select_inv()" style="text-align: center;display:none;cursor:pointer">
@@ -334,7 +335,31 @@
 	        });	         	  
 			
 		}); 
-		
+		<?php if($this->Employee->has_module_action_permission('orders','search', $this->Employee->get_logged_in_employee_info()->person_id)){ ?>
+		$("#upload_shop_online").click(function() {
+
+        $.ajax({
+            type: 'post',
+            dataType: 'json',
+            data: 1,
+            url: '<?php echo site_url("items/upload_items_shop_online");?>',
+
+            success: function(response) {
+                if (response.success == true) {
+                    $("#form").plainOverlay('hide');
+                    location.reload();
+                    toastr.success(response.message,
+                        <?php echo json_encode(lang('common_success')); ?>);
+                } else {
+                    $("#form").plainOverlay('hide');
+                    toastr.error(response.message,
+                        <?php echo json_encode(lang('common_error')); ?>);
+                }
+				location.reload();
+            },
+        	});
+    	});
+		<?php } ?>	
       
   	</script>
 	<?=$this->load->view("tutorials");?>

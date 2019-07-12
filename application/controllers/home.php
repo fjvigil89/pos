@@ -130,13 +130,22 @@ class Home extends Secure_area
         $data['total_sales']=$this->Sale->count_all();
         
         $this->load->view("home",$data);
-        if($this->config->item("activate_pharmacy_mode"))
-		{
-            $this->load->helper('alert_email');
-            generate_expiration_lerta_subcategory();
-		}
+        if($this->Location->get_info_for_key('receive_expired_alert'))
+        {
+            if($this->config->item("activate_pharmacy_mode"))
+            {
+                $this->load->helper('alert_email');
+                generate_expiration_lerta_subcategory();
+            }
+            else
+            {
+                $this->load->helper('alert_email');
+                generate_expiration_lerta_items(); 
+            }
+        }
     }
     function get_sales_store($start_date,$end_date){
+        $end_date = date("Y-m-d",strtotime("1 day"));
         $data = $this->Statistics->get_all_sales_by_store($start_date,$end_date);
         echo json_encode ($data);  
     }
@@ -157,6 +166,7 @@ class Home extends Secure_area
     }
     //ventas totales por tienda en dinero
     function get_sales_store_money($start_date,$end_date){
+        $end_date = date("Y-m-d",strtotime("1 day"));
         $data = $this->Statistics->get_sales_store_money($start_date,$end_date);
         echo json_encode ($data);  
     }	

@@ -309,6 +309,7 @@ class Locations extends Secure_area implements iData_controller
 		'company_regimen'=>$this->input->post('company_regimen'),
 		'website'=>$this->input->post('website'),
 		"codigo"=>$this->input->post('company_codigo'),
+		"receive_expired_alert"=>$this->input->post('receive_expired_alert'),
 
 	);
 	if(!empty($_FILES["company_logo"]) && $_FILES["company_logo"]["error"] == UPLOAD_ERR_OK && !is_on_demo_host())

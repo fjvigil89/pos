@@ -101,7 +101,15 @@ class Items extends Secure_area implements iData_controller
 
         //$this->load->view('items/manage', $data);
 		$this->load->view("items/items_consultant", $data);
-	}
+    }
+    
+    public function upload_items_shop_online(){
+        if($this->Item->set_upload_shop_online()){
+            echo json_encode(array('success' => true, 'message' => lang('items_upload_items_shop')));
+        }else{
+            echo json_encode(array('success' => false, 'message' => lang('items_not_upload_items_shop')));
+        }
+    }
 
     public function sorting()
     {
@@ -297,6 +305,13 @@ class Items extends Secure_area implements iData_controller
         $this->check_action_permission('add_update');
         $this->load->helper('report');
         $data = array();
+        $items_info = $this->Item->get_all_service();
+        $items = array(null => "Seleccione item");
+        
+        foreach ($items_info->result() as $item) {
+            $items[$item->item_id] = $item->name;
+        }
+        $data["items"] = $items;
         $data['controller_name'] = strtolower(get_class());
         $data["units"] = $this->Appconfig->get_all_units();
         $data['item_info'] = $this->Item->get_info($item_id);
@@ -1096,6 +1111,7 @@ class Items extends Secure_area implements iData_controller
 
         $this->check_action_permission('add_update');
         $items_to_update = $this->input->post('item_ids');
+        $shop_online = $this->input->post('shop_online')?1:0;
         $select_inventory = $this->get_select_inventory();
         //clears the total inventory selection
         $this->clear_select_inventory();
@@ -1111,7 +1127,7 @@ class Items extends Secure_area implements iData_controller
                 $item[$i] = ($precio_total[$i] < 0) ? $price[$i] + $precio_total[$i] : $price[$i] + $precio_total[$i];
                 $i++;
             }
-            $this->Item->update($item, $items_to_update);
+            $this->Item->update($item, $items_to_update,$shop_online);
         }
 
         foreach ($_POST as $key => $value) {
@@ -1418,8 +1434,8 @@ class Items extends Secure_area implements iData_controller
                 for ($i = 0; $i <= $count_row; $i++) {
                     if (isset($id_supplier[$r->item_id])) {
                         $price_count_tiers = count($this->Tier->get_all()->result());
-                        $row[27 + $price_count_tiers] = $id_supplier[$r->item_id][$i];
-                        $row[28 + $price_count_tiers] = to_currency_no_money($costo_suplier[$r->item_id][$i]);
+                        $row[28 + $price_count_tiers] = $id_supplier[$r->item_id][$i];
+                        $row[29 + $price_count_tiers] = to_currency_no_money($costo_suplier[$r->item_id][$i]);
                     }
 
                     $fila[$i] = $row;

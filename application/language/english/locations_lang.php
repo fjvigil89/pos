@@ -5,6 +5,7 @@ $lang['locations_shop_name'] = 'Shop';
 $lang['locations_address'] = 'Address';
 $lang['locations_phone'] = 'Phone';
 $lang['locations_fax'] = 'Fax';
+$lang["location_receive_expired_alert"]="Do you receive inventory alerts to expire?";
 $lang['locations_email'] = 'Email';
 $lang['locations_new'] = 'New Location';
 $lang['locations_code'] = 'Company code';

@@ -479,6 +479,9 @@ class Sales extends Secure_area
 	{
  	  $this->sale_lib->set_comment_on_receipt($this->input->post('show_comment_on_receipt'));
 	}
+	function set_generate_txt(){
+		$this->sale_lib->set_generate_txt($this->input->post('generate_txt'));
+	}
 
 	function set_show_receipt()
 	{
@@ -973,7 +976,7 @@ class Sales extends Secure_area
 			// elimina los productos vencidos 
 			$items=array();
 			foreach($this->sale_lib->get_cart() as $item){
-				if($item["has_subcategory"] == 1 and $this->config->item('subcategory_of_items') and !empty( $item["custom1_subcategory"]) and !empty($item["custom2_subcategory"]))
+				if($item["has_subcategory"] == 1 and   $this->config->item('activate_pharmacy_mode') and  $this->config->item('subcategory_of_items') and !empty( $item["custom1_subcategory"]) and !empty($item["custom2_subcategory"]))
 				{
 					$category = $this->items_subcategory->get_info($item["item_id"], $current_location_id, $item["custom1_subcategory"], $item["custom2_subcategory"]);
 
@@ -1213,6 +1216,7 @@ class Sales extends Secure_area
 		$data["total_other_currency"]=$data["another_currency"]==0?null:((double)$data['total']/(double) $this->sale_lib->get_equivalencia_divisa());
 		$overwrite_tax= $this->sale_lib->get_overwrite_tax();
 		$new_tax= $this->sale_lib->get_new_tax();
+		$data["generate_txt"] = $this->sale_lib->get_generate_txt();
 		$data["overwrite_tax"]= $overwrite_tax; 
 		$data["new_tax"]= $new_tax;
 		$data["value_other_currency"]=$this->sale_lib->get_equivalencia_divisa();
@@ -1488,6 +1492,15 @@ class Sales extends Secure_area
 		
 		if($customer_id!=-1 and  $data['store_account_payment'] == 1 and $this->config->item('show_payments_ticket') == 1  ){
 			$data['payments_petty_cashes']=$this->Sale->get_petty_cash($customer_id,false,5);			
+		}
+		if($data["generate_txt"])
+		{
+			$txt_receipt_file  = $data['sale_id']."-T".'.txt';
+			$data_txt = $this->load->view("sales/txt_receipt_2",$data, true);
+			$this->load->view("sales/download_txt",array("name"=>$txt_receipt_file,"data_txt"=>$data_txt));	
+			$this->sale_lib->clear_all();	
+			$this->update_viewer(3);
+			return 0;
 		}
       
         if($this->sale_lib->get_show_receipt())
@@ -1795,7 +1808,7 @@ class Sales extends Secure_area
 		$data["total_other_currency"]=$data["another_currency"]==0?null:$sale_info["total_other_currency"];
 		$data["value_other_currency"]=$this->sale_lib->get_equivalencia_divisa();
 		$data["serie_number"] =$this->sale_lib->get_serie_number(); 
-		//$data["mode"]=$this->Sale->is_return($sale_id)? "return" : "sale";
+		$data["mode"]=$this->Sale->is_return($sale_id)? "return" : "sale";
 
 		
 		if($customer_id!=-1)
@@ -2149,6 +2162,7 @@ class Sales extends Secure_area
 		$data["currency"]=$this->sale_lib->get_currency();
 		$data["select_seller_during_sale"]=$this->Employee->has_module_action_permission('sales', 'select_seller_during_sale', $person_info->person_id) ;
 		
+		$data["generate_txt"] = $this->sale_lib->get_generate_txt();
 		$data['selected_sold_by_employee_id'] = $this->sale_lib->get_sold_by_employee_id();
 		$tiers = array();
 

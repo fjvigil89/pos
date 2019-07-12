@@ -1,21 +1,12 @@
 <?php $this->load->view("partial/header"); ?>
 
 
-<<<<<<< HEAD
-<!-- BEGIN PAGE TITLE -->
-<div class="page-title">
-    <h1>
-        <i class="icon fa fa-bar-chart-o"></i>
-        <?php echo lang('reports_reports'); ?>
-        <?php 
-=======
 		<!-- BEGIN PAGE TITLE -->
 		<div class="page-title">
 			<h1>
 				<i class="icon fa fa-bar-chart-o"></i>
 				<?php echo lang('reports_reports'); ?>
 				<?php /*
->>>>>>> e711984a094b23069d6968b8f9228503b98fac56
 					$extra=" style='display: none; '";
 					$url_video_ver="";
 					if($this->Appconfig->es_franquicia()){

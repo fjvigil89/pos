@@ -7,14 +7,14 @@
 			<?php echo lang('common_dashboard'); ?>
 			<!--<?php 
 					/*$extra="";
-					$url_video_ver="https://www.youtube.com/watch?v=PHET-RZfg6c&t=2s";
+					$url_video_ver="https://www.youtube.com/watch?v=PHET-RZfg6c&t=2s";*/
 					if($this->Appconfig->es_franquicia()){
-						$url_video=	$this->Appconfig->get_video("INICIO Y ESTADÍSTICA");
+						/*$url_video=	$this->Appconfig->get_video("INICIO Y ESTADÍSTICA");
 						if($url_video!=null){
 							$url_video_ver=$url_video;
 						}else{
 							$extra=" style='display: none; '";
-						}
+						}*/
 
 						$dashboard_stat_color = '';
 						$theme_commpany = $this->Appconfig->get_theme_commpany($this->config->item('resellers_id'));
@@ -24,8 +24,8 @@
 					    	}
 						}
 					}
-					$a_video= '<a target="_blank" href="'.$url_video_ver.'" '.$extra.' class="icon fa fa-youtube-play help_button" ></a>';
-					echo $a_video;	*/			
+					//$a_video= '<a target="_blank" href="'.$url_video_ver.'" '.$extra.' class="icon fa fa-youtube-play help_button" ></a>';
+					//echo $a_video;	*/			
 				
 				
 			?>-->
@@ -670,7 +670,7 @@
 			$('#sales_store_date_start').on('dp.change', function (e) {
 			    if($("#sales_store_date_start").val()>=$("#sales_store_date_end").val()){
 					value_input = $("#sales_store_date_start").val();
-					date_end = moment(value_input).startOf('day').add(1, 'day').format('YYYY-MM-DD'); 
+					date_end = moment(value_input).startOf('day').add(0, 'day').format('YYYY-MM-DD'); 
 					$("#sales_store_date_end").val(date_end); //Agrega un dia a la fecha fin
 				}
 
@@ -679,7 +679,7 @@
 			$('#sales_store_date_end').on('dp.change', function (e) {
 			    if($("#sales_store_date_end").val()<=$("#sales_store_date_start").val()){
 					value_input = $("#sales_store_date_end").val();
-					date_end = moment(value_input).startOf('day').add(-1, 'day').format('YYYY-MM-DD'); 
+					date_end = moment(value_input).startOf('day').add(0, 'day').format('YYYY-MM-DD'); 
 					$("#sales_store_date_start").val(date_end); //Agrega un dia a la fecha fin
 				}
 
@@ -774,7 +774,7 @@
 			$('#sales_store_date_start_money').on('dp.change', function (e) {
 			    if($("#sales_store_date_start_money").val()>=$("#sales_store_date_end_money").val()){
 					value_input = $("#sales_store_date_start_money").val();
-					date_end = moment(value_input).startOf('day').add(1, 'day').format('YYYY-MM-DD'); 
+					date_end = moment(value_input).startOf('day').add(0, 'day').format('YYYY-MM-DD'); 
 					$("#sales_store_date_end_money").val(date_end); //Agrega un dia a la fecha fin
 				}
 
@@ -783,7 +783,7 @@
 			$('#sales_store_date_end_money').on('dp.change', function (e) {
 			    if($("#sales_store_date_end_money").val()<=$("#sales_store_date_start_money").val()){
 					value_input = $("#sales_store_date_end_money").val();
-					date_end = moment(value_input).startOf('day').add(-1, 'day').format('YYYY-MM-DD'); 
+					date_end = moment(value_input).startOf('day').add(0, 'day').format('YYYY-MM-DD'); 
 					$("#sales_store_date_start_money").val(date_end); //Agrega un dia a la fecha fin
 					
 				}
