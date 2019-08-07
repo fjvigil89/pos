@@ -6,18 +6,111 @@ define ('STDIN', fopen("php://stdin", "r"));
 class schedules extends Secure_area 
 {
     private $client_google;
+    public $client;
+
     function __construct()
 	{
         parent::__construct();        
         $this->load->model(array('Schedule','Employee', 'Item','Schedule_Items','Appfile'));        
-        $this->load->library(array('sale_lib','viewer_lib'));
+        $this->load->library(array('sale_lib','viewer_lib','session'));
 
         //$client_google = $this->getClient();
+
+        $auth = 'assets/client_secret.json';
+        $this->client = new Google_Client();
+        $this->client->setAuthConfig($auth);
+        $this->client->setApplicationName('Google Calendar API PHP FacilPos');
+        $this->client->setClientId("44046375111-gikoscmsst1j1r1n9rq5ieg9s64h5irh.apps.googleusercontent.com");
+        $this->client->setClientSecret("8RRSSKByOIFx7ykPTXRPfytq");
+        $this->client->setRedirectUri(base_url().'index.php/schedules/oauth');
+        $this->client->addScope(Google_Service_Calendar::CALENDAR);
+        $this->client->addScope('profile');
+
+        
+        
+
     }
-    function index(){           
-        $data['vistas'] = 'calendar';                
-       return $this->load->view('calendar/index', $data);
+    public function loginUrl() {
+        return $this->client->createAuthUrl();       
     }
+ 
+    public function getAuthenticate() {
+        return $this->client->authenticate();
+    }
+ 
+    public function getAccessToken() {
+        return $this->client->getAccessToken();
+    }
+ 
+    public function setAccessToken($token) {
+        return $this->client->setAccessToken($token);
+    }
+ 
+    public function revokeToken() {
+        return $this->client->revokeToken();
+    }
+ 
+    public function client() {
+        return $this->client;
+    }
+ 
+    public function getUser() {
+        $google_ouath = new Google_Service_Oauth2($this->client);
+        return (object)$google_ouath->userinfo->get();
+    }
+ 
+    public function isAccessTokenExpired() {
+        return $this->client->isAccessTokenExpired();
+    }
+
+      // check login session
+    public function isLogin() {
+        $token = $this->session->userdata('google_calendar_access_token');
+        if ($token) {
+            $this->setAccessToken($token);
+        }
+        if ($this->isAccessTokenExpired()) {
+            return false;
+        }
+        return $token;
+    }
+    
+    // get User Info
+    public function getUserInfo() {
+        return $this->getUser();
+    }
+
+   // oauth method
+    public function oauth() {
+        $code = $this->input->get('code', true);
+        $this->oauthLogin($code);
+        $this->GetGoogleClient(); 
+        //$this->SetGoogleClient();
+        redirect(site_url().'/schedules', 'refresh');
+    }
+     // oauthLogin
+    public function oauthLogin($code) {
+        $login = $this->client->authenticate($code);
+        if ($login) {
+            $token = $this->getAccessToken();
+            $this->session->set_userdata('google_calendar_access_token', $token);
+            $this->session->set_userdata('is_authenticate_user', TRUE);
+            return true;
+        }
+    }
+
+    function index(){    
+        if (!$this->isLogin()) {
+            # code...
+            $this->GetGoogleClient(); 
+
+        }
+        $data['vistas'] = 'calendar';            
+        $data['loginUrl'] = $this->loginUrl();   
+        return $this->load->view('calendar/index', $data);
+    
+        
+    }    
 
     function listar(){           
         $data['vistas'] = 'schedule';        
@@ -78,40 +171,118 @@ class schedules extends Secure_area
     function getApiSchedule()
     {
         $location_id=$this->Employee->get_logged_in_employee_current_location_id();
-        $data['schedule'] = $this->Schedule->get_schedule($location_id)->result();
+        $data['schedule'] = $this->Schedule->get_schedule($location_id)->result();               
+
+        //header('Content-Type: application/json');        
+        //json_encode($data, true);
         
-        // Get the API client and construct the service object.
+        $this->output->set_status_header(200)->set_content_type('application/json')->set_output(json_encode($data));
+
+        
+    }
+
+    // add google calendar event
+    function SetGoogleClient() {        
+        $location_id=$this->Employee->get_logged_in_employee_current_location_id();
+        $post = $this->Schedule->get_schedule_FacilPos($location_id)->result(); 
+        $post = $this->output->set_status_header(200)->set_content_type('application/json')->set_output(json_encode($post));
         
         /*
-        $service = new Google_Service_Calendar($this->client_google);
+
+        $json = array();
+        $calendarId = 'primary';        
+        // start date time validation
+        if(empty(trim($post['startDate'])) && empty($post['startTime'])){
+            $json['error']['startdate'] = 'Please enter start date time';
+        }
+        if(empty(trim($post['endDate'])) && empty($post['endTime'])){
+            $json['error']['enddate'] = 'Please enter end date time';
+        }
+        if(empty(trim($post['description']))){
+            $json['error']['description'] = 'Please enter description';
+        }
+
+        if(empty($json['error'])){
+            $event = array(
+                'summary'     => $post['summary'],
+                'start'       => $post['startDate'].'T'.$post['startTime'].':00+03:00',
+                'end'         => $post['endDate'].'T'.$post['endTime'].':00+03:00',
+                'description' => $post['description'],
+
+            );
+            $data = $this->actionEvent($calendarId, $event);
+            if ($data->status == 'confirmed') {
+                $json['message'] = 1;
+            } else {
+                $json['message'] = 0;
+            }
+        }
+        $this->output->set_header('Content-Type: application/json');
+        echo json_encode($json);
+    
+        */
+    }
+
+    function GetGoogleClient(){
+        // Get the API client and construct the service object.
+        
+        
+        $service = new Google_Service_Calendar($this->client);
 
         // Print the next 10 events on the user's calendar.
         $calendarId = 'primary';
         $optParams = array(
-        'maxResults' => 10,
-        'orderBy' => 'startTime',
-        'singleEvents' => true,
-        'timeMin' => date('c'),
+        'maxResults'    => 100000,
+        'orderBy'       => 'startTime',
+        'singleEvents'  => true,
+        'timeMin'       => date("c", strtotime(date('Y-m-d ').' -1 year')),
+        'timeMax'       => date("c", strtotime(date('Y-m-d ').' +1 year')),
         );
-        $results = $service->events->listEvents($calendarId, $optParams);
-        $events = $results->getItems();
 
-        if (empty($events)) {
-            print "No upcoming events found.\n";
-        } else {
-            print "Upcoming events:\n";
-            foreach ($events as $event) {
-                $start = $event->start->dateTime;
-                if (empty($start)) {
-                    $start = $event->start->date;
-                }
-                printf("%s (%s)\n", $event->getSummary(), $start);
+        $results = $service->events->listEvents($calendarId, $optParams);        
+        //$events = $results->getItems();
+        //var_dump($events);
+
+        
+        $creator = new Google_Service_Calendar_EventCreator();
+
+        foreach ($results->getItems() as $item) {
+ 
+            if(!empty($item->getStart()->date) && !empty($item->getEnd()->date)) {
+                $startDate = date('Y-m-d H:i', strtotime($item->getStart()->date));
+                $endDate = date('Y-m-d H:i', strtotime($item->getEnd()->date));
+            } else {
+                $startDate = date('Y-m-d H:i', strtotime($item->getEnd()->dateTime));
+                $endDate = date('Y-m-d H:i', strtotime($item->getEnd()->dateTime));
             }
-        }*/
+            
+            $created = date('Y-m-d H:i', strtotime($item->getCreated()));
+  
+            $location_id=$this->Employee->get_logged_in_employee_current_location_id();
+            
+            $data= array(
+                    'id_google'     => $item->getId(),
+                    'title'         => trim($item->getSummary()),
+                    'detail'        => trim($item->getDescription()),                    
+                    'start'         => $startDate,
+                    'end'           => $endDate,
+                    'status'        => '1',
+                    'employee_id'   => $location_id,
+                    'create_at'     => $created,
+                    'parent'        => 'Google Calendar'
+                  
+            );            
+            if (!$this->Schedule->exist_Google_FacilPos($item->getId()))
+            {
+                $this->Schedule->save($data);    
+            }
 
-        //header('Content-Type: application/json');        
-        //json_encode($data, true);
-        $this->output->set_status_header(200)->set_content_type('application/json')->set_output(json_encode($data));
+            
+        }
+        
+
+
+
     }
 
     /**
@@ -129,6 +300,8 @@ class schedules extends Secure_area
          
     }
     
+   
+
     /**
      * Este es para uso de ajax o com API
      * 
@@ -144,12 +317,13 @@ class schedules extends Secure_area
         }
 
         $data = array(
-            'title' => $this->input->post('title'),
-            'start' => $this->input->post('start'),
-            'end' => $this->input->post('end'),
-            'status'=> $status,
-            'color'=> $this->input->post('color'),
-            'employee_id'=> $location_id
+            'title'         => $this->input->post('title'),
+            'start'         => $this->input->post('start'),
+            'end'           => $this->input->post('end'),
+            'status'        => $status,
+            'color'         => $this->input->post('color'),
+            'parent'        => 'FacilPos',
+            'employee_id'   => $location_id,
         );
         
         if ($this->input->post('update')== "false") {
@@ -179,7 +353,8 @@ class schedules extends Secure_area
             'end' => $_POST['end_date'],
             'status'=> $status,
             'color'=> $_POST['color'],
-            'employee_id'=> $location_id          
+            'parent'        => 'FacilPos',
+            'employee_id'=> $location_id,        
         );
 
         $save_id = $this->Schedule->save($data);
@@ -301,63 +476,7 @@ class schedules extends Secure_area
         redirect('schedules/listar');
         
     }
-    /**
-     * Returns an authorized API client.
-     * @return Google_Client the authorized client object
-     */
-    function getClient()
-    {
-        $auth = 'assets/client_secret.json';
-
-        $client = new Google_Client();
-        $client->setApplicationName('Google Calendar API PHP Quickstart');
-        $client->setScopes(Google_Service_Calendar::CALENDAR_READONLY);
-        $client->setAuthConfig($auth);
-        $client->setAccessType('offline');
-        $client->setPrompt('select_account consent');
-        $client->setRedirectUri(base_url().'citas');
-
-        // Load previously authorized token from a file, if it exists.
-        // The file token.json stores the user's access and refresh tokens, and is
-        // created automatically when the authorization flow completes for the first
-        // time.
-        $tokenPath = "https://oauth2.googleapis.com/token";
-        if (file_exists($tokenPath)) {
-            $accessToken = json_decode(file_get_contents($tokenPath), true);
-            $client->setAccessToken($accessToken);            
-        }
-
-        // If there is no previous token or it's expired.
-        
-        if ($client->isAccessTokenExpired()) {
-            // Refresh the token if possible, else fetch a new one.
-            echo $client->getRefreshToken();
-            if ($client->getRefreshToken()) {
-                $client->fetchAccessTokenWithRefreshToken($client->getRefreshToken());
-            } else {
-                // Request authorization from the user.
-                $authUrl = $client->createAuthUrl();
-                printf("Open the following link in your browser:\n%s\n", $authUrl);
-                print 'Enter verification code: ';
-                $authCode = trim(fgets(STDIN));
-
-                // Exchange authorization code for an access token.
-                $accessToken = $client->fetchAccessTokenWithAuthCode($authCode);
-                $client->setAccessToken($accessToken);
-
-                // Check to see if there was an error.
-                if (array_key_exists('error', $accessToken)) {
-                    throw new Exception(join(', ', $accessToken));
-                }
-            }
-            // Save the token to a file.
-            if (!file_exists(dirname($tokenPath))) {
-                mkdir(dirname($tokenPath), 0700, true);
-            }
-            file_put_contents($tokenPath, json_encode($client->getAccessToken()));
-        }
-        return $client;
-    }
+  
 
     /***
      * funcion para facturar los schedule

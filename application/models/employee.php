@@ -541,6 +541,8 @@ class Employee extends Person
 	*/
 	function logout()
 	{
+		//$this->revokeToken();
+        $this->session->unset_userdata('is_authenticate_user');        
 		$this->session->sess_destroy();
 		if($this->Employee->es_demo()){
 			$this->Appconfig->batch_save(array('Hide_panel_type_business'=>0));
