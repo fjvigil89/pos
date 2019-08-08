@@ -100,11 +100,11 @@ class schedules extends Secure_area
     }
 
     function index(){    
-        if (!$this->isLogin()) {
+        /**if (!$this->isLogin()) {
             # code...
             $this->GetGoogleClient(); 
 
-        }
+        }*/
         $data['vistas'] = 'calendar';            
         $data['loginUrl'] = $this->loginUrl();   
         return $this->load->view('calendar/index', $data);
