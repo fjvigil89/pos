@@ -45,6 +45,7 @@ class Schedule extends CI_Model
 		$this->db->from('schedule');
 		$this->db->where('employee_id', $employee_id);
 		$this->db->where('parent', 'FacilPos');
+		$this->db->where('sync', '0');
 		$this->db->order_by("title", "asc");
 		$this->db->limit($limit);
 		$this->db->offset($offset);
@@ -55,16 +56,30 @@ class Schedule extends CI_Model
 	/**
 	 * funcion obtiene los schedules del que esta logueado
 	 */
-	function exist_Google_FacilPos($id_google, $limit=10000, $offset=0)
+	function exist_Google_FacilPos($google, $limit=10000, $offset=0)
 	{
 
 		$this->db->from('schedule');	
-		$this->db->where('schedule.id_google',$id_google);
-		$query = $this->db->get();
-		
+		$this->db->where('schedule.id_google',$google->getId());	
+		$query = $this->db->get();		
 		return ($query->num_rows()==1);	
 		
 	}
+
+	/**
+	 * funcion obtiene los schedules del que esta logueado
+	 */
+	function exist_Google_FacilPos_title($google, $limit=10000, $offset=0)
+	{
+
+		$this->db->from('schedule');	
+		$this->db->where('title',$google);		
+		$query = $this->db->get();				
+		return $query->num_rows()==1;
+		
+		
+	}
+
 	/**
 	 * retorna todos los schedules que tienen ese id
 	 */
