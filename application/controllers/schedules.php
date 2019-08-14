@@ -5,7 +5,7 @@ define ('STDIN', fopen("php://stdin", "r"));
 
 class schedules extends Secure_area 
 {
-    private $client_google;
+    public $calendarapi;
     public $client;
 
     function __construct()
@@ -25,6 +25,8 @@ class schedules extends Secure_area
         $this->client->setRedirectUri(base_url().'index.php/schedules/oauth');
         $this->client->addScope(Google_Service_Calendar::CALENDAR);
         $this->client->addScope('profile');
+
+        $this->calendarapi = new Google_Service_Calendar($this->client);
 
         
         
@@ -84,8 +86,8 @@ class schedules extends Secure_area
     public function oauth() {
         $code = $this->input->get('code', true);
         $this->oauthLogin($code);
-        $this->GetGoogleClient(); 
-        //$this->SetGoogleClient();
+        $this->SetGoogleClient();
+        $this->GetGoogleClient();        
         redirect(site_url().'/schedules', 'refresh');
     }
      // oauthLogin
@@ -99,12 +101,10 @@ class schedules extends Secure_area
         }
     }
 
-    function index(){    
-        /**if (!$this->isLogin()) {
-            # code...
-            $this->GetGoogleClient(); 
+    function index(){                    
 
-        }*/
+        
+
         $data['vistas'] = 'calendar';            
         $data['loginUrl'] = $this->loginUrl();   
         return $this->load->view('calendar/index', $data);
@@ -184,50 +184,92 @@ class schedules extends Secure_area
     // add google calendar event
     function SetGoogleClient() {        
         $location_id=$this->Employee->get_logged_in_employee_current_location_id();
-        $post = $this->Schedule->get_schedule_FacilPos($location_id)->result(); 
-        $post = $this->output->set_status_header(200)->set_content_type('application/json')->set_output(json_encode($post));
+        $post = $this->Schedule->get_schedule_FacilPos($location_id)->result_array(); 
         
-        /*
-
         $json = array();
         $calendarId = 'primary';        
         // start date time validation
-        if(empty(trim($post['startDate'])) && empty($post['startTime'])){
-            $json['error']['startdate'] = 'Please enter start date time';
-        }
-        if(empty(trim($post['endDate'])) && empty($post['endTime'])){
-            $json['error']['enddate'] = 'Please enter end date time';
-        }
-        if(empty(trim($post['description']))){
-            $json['error']['description'] = 'Please enter description';
-        }
-
-        if(empty($json['error'])){
+        foreach ($post as $value) {
+            # code...
+            if(empty(trim($value['start'])) ){
+                $value['start'] = Date('now');
+            }
+            if(empty(trim($value['end']))){
+                $value['end'] = Date('now');
+            }
+            if(empty(trim($value['title']))){
+                $value['title'] = 'FacilPos';
+            }
+            if(empty(trim($value['detail']))){
+                $value['detail'] = 'FacilPos';
+            }
+            if(empty(trim($value['status']))== '1'){
+                $value['status'] = 'confirmed';
+            }
+            
+            //creacion de la fecha que utiliza googlecalendar
+            //$conv = date('Y-m-d H:i', strtotime($value['start']));
+            $aux = explode(' ', $value['start']);
+            $start = $aux[0].'T'.$aux[1].'+0500';
+            
+            //$conv = date('Y-m-d H:i', strtotime($value['end']));
+            $aux = explode(' ', $value['end']);
+            $end = $aux[0].'T'.$aux[1].'+0500';
+           
+            
             $event = array(
-                'summary'     => $post['summary'],
-                'start'       => $post['startDate'].'T'.$post['startTime'].':00+03:00',
-                'end'         => $post['endDate'].'T'.$post['endTime'].':00+03:00',
-                'description' => $post['description'],
-
-            );
+                'summary'     => $value['title'],
+                'start'       => $start,
+                'end'         => $end,
+                'description' => $value['detail'],
+           );
+            
             $data = $this->actionEvent($calendarId, $event);
             if ($data->status == 'confirmed') {
-                $json['message'] = 1;
-            } else {
-                $json['message'] = 0;
+                 $data= array(                                        
+                    'sync'          => '1',
+                ); 
+                $this->Schedule->save($data, $value['id']);
             }
+                
+            //}
         }
-        $this->output->set_header('Content-Type: application/json');
-        echo json_encode($json);
-    
-        */
-    }
+        
+        
 
+        
+        //$this->output->set_header('Content-Type: application/json');
+        //echo json_encode($json);
+    
+        
+    }
+    // actionEvent
+    public function actionEvent($calendarId, $data) {
+        //Date Format: 2016-06-18T17:00:00+03:00
+        $event = new Google_Service_Calendar_Event(
+            array(
+                'summary'     => $data['summary'],
+                'description' => $data['description'],
+                'start'       => array(
+                    'dateTime' => $data['start'],
+                    'timeZone' => 'America/Havana',
+                ),
+                'end'         => array(
+                    'dateTime' => $data['end'],
+                    'timeZone' => 'America/Havana',
+                ),
+                'attendees'   => array(
+                    array('email' => 'facilpost@gmail.com'),
+                ),
+            )
+        );
+        return $this->calendarapi->events->insert($calendarId, $event);
+    }
     function GetGoogleClient(){
         // Get the API client and construct the service object.
         
         
-        $service = new Google_Service_Calendar($this->client);
+        //$service = new Google_Service_Calendar($this->client);
 
         // Print the next 10 events on the user's calendar.
         $calendarId = 'primary';
@@ -239,15 +281,15 @@ class schedules extends Secure_area
         'timeMax'       => date("c", strtotime(date('Y-m-d ').' +1 year')),
         );
 
-        $results = $service->events->listEvents($calendarId, $optParams);        
+        $results = $this->calendarapi->events->listEvents($calendarId, $optParams);        
         //$events = $results->getItems();
-        //var_dump($events);
+        
 
         
         $creator = new Google_Service_Calendar_EventCreator();
 
-        foreach ($results->getItems() as $item) {
- 
+        foreach ($results->getItems() as $item) { 
+
             if(!empty($item->getStart()->date) && !empty($item->getEnd()->date)) {
                 $startDate = date('Y-m-d H:i', strtotime($item->getStart()->date));
                 $endDate = date('Y-m-d H:i', strtotime($item->getEnd()->date));
@@ -267,14 +309,20 @@ class schedules extends Secure_area
                     'start'         => $startDate,
                     'end'           => $endDate,
                     'status'        => '1',
+                    'sync'          => '1',
                     'employee_id'   => $location_id,
                     'create_at'     => $created,
                     'parent'        => 'Google Calendar'
                   
-            );            
-            if (!$this->Schedule->exist_Google_FacilPos($item->getId()))
+            );
+            
+            if (!$this->Schedule->exist_Google_FacilPos($item))
             {
-                $this->Schedule->save($data);    
+                $get = $this->Schedule->exist_Google_FacilPos_title(trim($item->getSummary()));
+                if (!$get) {                    
+                    $this->Schedule->save($data);    
+                   }   
+                
             }
 
             

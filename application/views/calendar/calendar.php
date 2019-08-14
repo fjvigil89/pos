@@ -33,7 +33,7 @@
                             <hr class="visible-xs">
                              <div class="actions">
                                 <a class="btn red" href="<?php print $loginUrl ?>">
-                                    Get Google Calendar
+                                    Sync Google Calendar
                                     <i class="fa fa-plus"></i>
                                 </a>
                             </div>
