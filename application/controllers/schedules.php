@@ -103,8 +103,6 @@ class schedules extends Secure_area
 
     function index(){                    
 
-        
-
         $data['vistas'] = 'calendar';            
         $data['loginUrl'] = $this->loginUrl();   
         return $this->load->view('calendar/index', $data);
@@ -250,6 +248,8 @@ class schedules extends Secure_area
             array(
                 'summary'     => $data['summary'],
                 'description' => $data['description'],
+                'location'    => '800 howard st., San Francisco, CA 94103',
+
                 'start'       => array(
                     'dateTime' => $data['start'],
                     'timeZone' => 'America/Havana',
