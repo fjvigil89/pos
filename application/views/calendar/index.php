@@ -620,8 +620,8 @@
                     <!-- BEGIN PAGE TITLE -->
                     <div class="page-title">
                         <h1>
-                            <i class='fa fa-shopping-cart'></i>
-                            <?php echo lang('sales_opening_amount');?>
+                            <i class='fa fa-calendar-check-o'></i>
+                            <?php echo lang('schedules_index');?>
                             <a class="icon fa fa-youtube-play help_button" id='maxamount' rel='0' data-toggle="modal"
                                 data-target="#stack8"></a>
                         </h1>

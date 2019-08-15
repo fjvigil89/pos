@@ -106,9 +106,7 @@ class schedules extends Secure_area
         $data['vistas'] = 'calendar';            
         $data['loginUrl'] = $this->loginUrl();   
         return $this->load->view('calendar/index', $data);
-    
-        
-    }    
+     }    
 
     function listar(){           
         $data['vistas'] = 'schedule';        
@@ -248,7 +246,7 @@ class schedules extends Secure_area
             array(
                 'summary'     => $data['summary'],
                 'description' => $data['description'],
-                'location'    => '800 howard st., San Francisco, CA 94103',
+                'location'    => 'FacilPos',
 
                 'start'       => array(
                     'dateTime' => $data['start'],
@@ -265,6 +263,8 @@ class schedules extends Secure_area
         );
         return $this->calendarapi->events->insert($calendarId, $event);
     }
+
+
     function GetGoogleClient(){
         // Get the API client and construct the service object.
         
@@ -327,10 +327,6 @@ class schedules extends Secure_area
 
             
         }
-        
-
-
-
     }
 
     /**

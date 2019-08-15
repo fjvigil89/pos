@@ -4,7 +4,7 @@
             <div class="portlet-title">
                 <div class="caption">
                     <i class="icon-social-dribbble font-green hide"></i>
-                    <span class="caption-subject font-dark bold uppercase">Table Pagination</span>
+                    <span class="caption-subject font-dark bold uppercase"><?php echo lang('schedules_list'); ?></span>
                 </div>
 
                 <div class="actions">

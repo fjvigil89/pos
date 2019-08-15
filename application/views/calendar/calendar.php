@@ -7,14 +7,14 @@
             <div class="portlet-title">
                 <div class="caption">
                     <i class=" icon-layers "></i>
-                    <span class="caption-subject sbold uppercase">Calendar</span>
+                    <span class="caption-subject sbold uppercase"><?php echo lang('schedules_title_calendar');?></span>
                 </div>
             </div>
             <div class="portlet-body">
                 <div class="row">
                     <div class="col-md-3 col-sm-12">
                         <!-- BEGIN DRAGGABLE EVENTS PORTLET-->
-                        <h3 class="event-form-title margin-bottom-20">Draggables Events</h3>
+                        <h3 class="event-form-title margin-bottom-20"><?php echo lang('schedules_event');?></h3>
                         <div id="external-events">
                             <div class="actions">
                                 <a class="btn purple  btn-default" href="<?php echo site_url().'/schedules/listar' ?>">
@@ -34,7 +34,7 @@
                              <div class="actions">
                                 <a class="btn red" href="<?php print $loginUrl ?>">
                                     Sync Google Calendar
-                                    <i class="fa fa-plus"></i>
+                                    <i class="fa fa-exchange"></i>
                                 </a>
                             </div>
                             <hr class="visible-xs">

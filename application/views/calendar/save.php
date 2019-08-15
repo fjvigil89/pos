@@ -2,7 +2,7 @@
           <div class="portlet box green">
                     <div class="portlet-title">
                               <div class="caption">
-                                        <i class="fa fa-gift"></i>Add Schedule </div>
+                                        <i class="fa fa-gift"></i><?php echo lang('schedules_add'); ?> </div>
 
                     </div>
                     <div class="portlet-body form">
@@ -10,14 +10,14 @@
 
                               <?php echo form_open_multipart( isset($schedule[0]->id)? '/schedules/updateSchedule' : '/schedules/setSchedule', array('class'=>"form-horizontal")); ?>
                               <div class="form-body">
-                                        <h3 class="form-section">schedule Info</h3>
+                                        <h3 class="form-section"><?php echo lang('schedules_info'); ?></h3>
                                         
                                         <input type="hidden" name="id" value="<?php echo isset($schedule[0]->id)? $schedule[0]->id : '' ?>">
                                         <div class="row">
                                                   <div class="col-md-6">
                                                             <div class="form-group">
                                                                       <label
-                                                                                class="control-label col-md-3">Title</label>
+                                                                                class="control-label col-md-3"><?php echo lang('schedules_info_title'); ?></label>
                                                                       <div class="col-md-9">
                                                                                 <input type="text" name="title"
                                                                                           class="form-control"
@@ -30,7 +30,7 @@
                                                   </div>
                                                   <!--/span-->
                                                   <div class="col-md-6">
-                                                            <label class="control-label col-md-3">Date Satart</label>
+                                                            <label class="control-label col-md-3"><?php echo lang('schedules_info_dateStart'); ?></label>
                                                             <div class="col-md-6 margin-bottom-05">
                                                                       <div class="input-group input-daterange"
                                                                                 id="reportrange">
@@ -51,7 +51,7 @@
                                                   <div class="col-md-6">
                                                             <div class="form-group">
                                                                       <label
-                                                                                class="control-label col-md-3">Detail</label>
+                                                                                class="control-label col-md-3"><?php echo lang('schedules_info_detail'); ?></label>
                                                                       <div class="col-md-9">
                                                                                 <textarea class="form-control"
                                                                                           name="detail" id="" cols="30"
@@ -66,7 +66,7 @@
                                                   </div>
                                                   <!--/span-->
                                                   <div class="col-md-6">
-                                                            <label class="control-label col-md-3">Date End</label>
+                                                            <label class="control-label col-md-3"><?php echo lang('schedules_info_dateEnd'); ?></label>
                                                             <div class="col-md-6 margin-bottom-05">
                                                                       <div class="input-group input-daterange"
                                                                                 id="reportrange">
@@ -85,7 +85,7 @@
                                                   <div class="col-md-6">
                                                             <div class="form-group">
                                                                       <label
-                                                                                class="control-label col-md-3">Color</label>
+                                                                                class="control-label col-md-3"><?php echo lang('schedules_info_color'); ?></label>
                                                                       <div class="col-md-9 input-group color colorpicker-default"
                                                                                 data-color="#3865a8"
                                                                                 data-color-format="rgba">
@@ -106,7 +106,7 @@
                                                   <div class="col-md-6">
                                                             <div class="form-group">
                                                                       <label
-                                                                                class="control-label col-md-3">Status</label>
+                                                                                class="control-label col-md-3"><?php echo lang('schedules_info_status'); ?></label>
                                                                       <div class="col-md-9">
                                                                                 <div class="radio-list">
                                                                                           <?php  if (isset($schedule[0]->status) && $schedule[0]->status == 1 ) { ?>
@@ -140,7 +140,7 @@
                                                   </div>
                                                   <!--/span-->
                                         </div>
-                                        <h3 class="form-section">Product & Service</h3>
+                                        <h3 class="form-section"><?php echo lang('schedules_info_product&service'); ?></h3>
                                         <!--/row-->
                                         
                                         
@@ -148,7 +148,7 @@
                                                   <div class="col-md-6">
                                                             <div class="form-group">
                                                                       <label
-                                                                                class="control-label col-md-3">Products</label>
+                                                                                class="control-label col-md-3"><?php echo lang('schedules_info_product'); ?></label>
                                                                       <div class="col-md-9">
                                                                                 <select name="products[]" multiple=""
                                                                                           class="form-control">
