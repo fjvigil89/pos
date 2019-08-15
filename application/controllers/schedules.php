@@ -142,6 +142,26 @@ class schedules extends Secure_area
        return $this->load->view('calendar/index', $data);
     }
 
+        /***
+     * cargar el schedule que este en la lista para su edicion
+     */
+    function listarSchedule($id){        
+        $data['vistas'] = 'list'; 
+        $data['schedule'] = $this->Schedule->get_scheduleID($id)->result();
+        $item_schedules = $this->Schedule_Items->get_schedule($id)->result_array();
+
+        foreach ($item_schedules as $key => $item) {
+            $product = $this->Item->get_id($item['items_id'])->result_array();
+            $item_id = $product[0]['item_id'];
+            $item = $product[0]['category'];
+            $data['items'][$key] = $item;
+            $data['items_id'][$key] = $item_id;
+            //var_dump($product[0]['category']);
+        }
+        
+       return $this->load->view('calendar/index', $data);
+    }
+
     /***
      * enviar email con los datos del schedule creado
      */
@@ -416,10 +436,12 @@ class schedules extends Secure_area
                 $data['total_price'][$key] = (float)$items->unit_price;
                 $this->Schedule_Items->save($data_item);
             }
+
+            $this->email_schedule($data);
         }
         
         
-        $this->email_schedule($data);
+        
         redirect('/schedules', 'refresh');
         
        
@@ -456,8 +478,9 @@ class schedules extends Secure_area
             'color'=> $_POST['color'],
             'employee_id'=> $location_id          
         );
-
+        
         $save_id = $this->Schedule->save($data, $id);
+
 
 
         
@@ -469,20 +492,24 @@ class schedules extends Secure_area
                 $this->Schedule_Items->delete($id);                
             }
 
+           
             foreach ($producto_update as $key => $value) {           
-                $data = array(
+                $data_item = array(
                     'schedule_id'=>$id,
                     'items_id' => $value,
                 );
                 $items =$this->Item->get_info($value);
                 $data['items'][$key] = $items;                
                 $data['total_price'][$key] = (float)$items->unit_price;
+
+                $this->Schedule_Items->save($data_item);
             };
-            $this->Schedule_Items->save($data);
-            
+
+           
+            $this->email_schedule($data);
         }
                
-        $this->email_schedule($data);
+        
         redirect('/schedules', 'refresh');
         
        

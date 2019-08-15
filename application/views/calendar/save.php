@@ -172,10 +172,14 @@
                                                                       <div class="row">
                                                                                 <div class="col-md-offset-3 col-md-9">
                                                                                           <button type="submit"
-                                                                                                    class="btn green">Submit</button>
+                                                                                                    class="btn green">
+                                                                                                    <i class="fa fa-plus"></i>
+                                                                                               Submit</button>
                                                                                           <a href='<?php echo site_url().'/schedules'; ?>'
                                                                                                     id="cancel"
-                                                                                                    class="btn default">Cancel</a>
+                                                                                                    class="btn default">
+                                                                                                    <i class="fa fa-ban"></i>
+                                                                                               Cancel</a>
                                                                                 </div>
                                                                       </div>
                                                             </div>
