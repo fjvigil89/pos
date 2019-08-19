@@ -547,8 +547,7 @@ class Reports extends Secure_area {
     }
 
     /** also added for register log */
-    function purchase_provider($start_date, $end_date, $sale_type, $sale_ticket, $export_pdf = 0,$export_excel = 0, $offset = 0) 
-    {
+    function purchase_provider($start_date, $end_date, $sale_type, $sale_ticket, $export_pdf = 0,$export_excel = 0, $offset = 0) {
 
         $this->check_action_permission('view_receivings');
         $start_date = rawurldecode($start_date);

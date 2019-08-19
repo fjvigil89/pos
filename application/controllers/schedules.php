@@ -116,13 +116,7 @@ class schedules extends Secure_area
 
     function addSchedules(){
         $data['vistas'] = 'save'; 
-        foreach ($this->Item->get_all()->result() as $key => $item) {            
-            $item_id = $item->item_id;
-            $item = $item->category;
-            $data['items'][$key] = $item;
-            $data['items_id'][$key] = $item_id;
-        }
-        
+        $data += $this->getItems();        
        return $this->load->view('calendar/index', $data);
     }
 
@@ -132,14 +126,23 @@ class schedules extends Secure_area
     function editSchedule($id){        
         $data['vistas'] = 'save'; 
         $data['schedule'] = $this->Schedule->get_scheduleID($id)->result();
+        
+        $data += $this->getItems();   
+    
+       return $this->load->view('calendar/index', $data);
+    }
+
+    ///funciona para obtener todos los productos del modelo Item
+    /// devuelve solo el nombre y su id en un array
+    function getItems(){
         foreach ($this->Item->get_all()->result() as $key => $item) {            
             $item_id = $item->item_id;
-            $item = $item->category;
+            $item = $item->name;
             $data['items'][$key] = $item;
             $data['items_id'][$key] = $item_id;
         }
-        
-       return $this->load->view('calendar/index', $data);
+
+        return $data;
     }
 
         /***
@@ -153,7 +156,7 @@ class schedules extends Secure_area
         foreach ($item_schedules as $key => $item) {
             $product = $this->Item->get_id($item['items_id'])->result_array();
             $item_id = $product[0]['item_id'];
-            $item = $product[0]['category'];
+            $item = $product[0]['name'];
             $data['items'][$key] = $item;
             $data['items_id'][$key] = $item_id;
             //var_dump($product[0]['category']);

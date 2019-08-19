@@ -547,7 +547,7 @@
                         </div>
                     </a>
 
-                    <?php } ?>
+                    <?php  ?>
                     <?php
 
 						if ($this->Employee->has_module_action_permission('reports', 'view_change_house',  $this->Employee->get_logged_in_employee_info()->person_id) &&  $this->config->item('activar_casa_cambio')) { ?>
